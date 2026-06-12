@@ -3,22 +3,67 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Input Configurator — Grudge Studio</title>
-  <meta name="description" content="Game input configurator. Bind keyboard and mouse actions, manage hotbar slots, detect conflicts, and export your config."/>
+  <title>Input Configurator — HYDRA · Grudge Studio</title>
+  <meta name="description" content="HYDRA Input Configurator by Grudge Studio. Bind keyboard and mouse actions, manage hotbar slots, detect conflicts, and export your config."/>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: #09090b; color: #f4f4f5; margin: 0; }
+
+    :root {
+      --bg:      #06070b;
+      --surf-1:  #0c0d12;
+      --surf-2:  #12131a;
+      --surf-3:  #191b24;
+      --border:  #1e2030;
+      --border-2:#262840;
+      --text:    #e2e4ef;
+      --muted:   #5a5f78;
+      --subtle:  #9498ad;
+      --hydra:   #4ade80;
+      --hydra-d: #16a34a;
+      --hydra-s: rgba(74,222,128,0.12);
+      --red:     #f43f5e;
+      --amber:   #f59e0b;
+    }
+
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin:0; }
     .font-display { font-family: 'Space Grotesk', system-ui, sans-serif; }
 
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    /* ── Brand bar ── */
+    .brand-bar {
+      background: var(--surf-1);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 44px; flex-shrink: 0;
+    }
+    .hydra-mark {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hydra-wordmark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800; font-size: 1rem;
+      letter-spacing: 0.18em; color: var(--hydra);
+      text-transform: uppercase;
+    }
+    .studio-name {
+      font-size: 0.65rem; color: var(--muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 600;
+    }
+    .brand-divider {
+      width: 1px; height: 16px; background: var(--border-2);
+    }
 
     /* ── Keyboard Keys ── */
     .key {
@@ -26,28 +71,26 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       border-radius: 6px; cursor: pointer; user-select: none; position: relative;
       transition: all 0.07s ease;
-      border: 1px solid #3f3f46; border-bottom: 2px solid #09090b;
-      background: linear-gradient(175deg, #27272a 0%, #18181b 100%);
-      color: #a1a1aa; overflow: hidden; flex-shrink: 0;
+      border: 1px solid var(--border); border-bottom: 2px solid #03040a;
+      background: linear-gradient(175deg, var(--surf-2) 0%, var(--surf-1) 100%);
+      color: var(--muted); overflow: hidden; flex-shrink: 0;
     }
-    .key:hover { border-color: #71717a; color: #e4e4e7; background: linear-gradient(175deg, #3f3f46 0%, #27272a 100%); }
+    .key:hover { border-color: var(--border-2); color: var(--text); background: linear-gradient(175deg, var(--surf-3) 0%, var(--surf-2) 100%); }
     .key:active { transform: translateY(1px); border-bottom-width: 1px; }
     .k-label { font-size: 0.62rem; font-weight: 700; line-height: 1; pointer-events: none; }
     .k-sub   { font-size: 0.46rem; line-height: 1; opacity: 0.75; max-width: 95%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; margin-top: 1px; }
 
-    /* Category color states */
-    .key.kc-movement { background: linear-gradient(175deg,#1e3a5f,#172d4a); border-color:#2563eb; border-bottom-color:#1e3a8a; color:#93c5fd; }
-    .key.kc-combat   { background: linear-gradient(175deg,#4c1d24,#3b1219); border-color:#dc2626; border-bottom-color:#7f1d1d; color:#fca5a5; }
-    .key.kc-skills   { background: linear-gradient(175deg,#3b1d5f,#2a1347); border-color:#9333ea; border-bottom-color:#5b21b6; color:#c4b5fd; }
-    .key.kc-ui       { background: linear-gradient(175deg,#064e3b,#053d2f); border-color:#10b981; border-bottom-color:#065f46; color:#6ee7b7; }
-    .key.kc-conflict { background: linear-gradient(175deg,#451a03,#341905); border-color:#f59e0b; border-bottom-color:#92400e; color:#fcd34d; }
-    .key.kc-selected { outline: 2px solid #3b82f6 !important; outline-offset: 2px; }
-    .key.kc-listen   { outline: 2px solid #f59e0b; outline-offset: 2px; animation: kpulse 0.9s infinite; }
+    .key.kc-movement { background: linear-gradient(175deg,#0d2640,#091d31); border-color:#1d4ed8; border-bottom-color:#1e3a8a; color:#7dd3fc; }
+    .key.kc-combat   { background: linear-gradient(175deg,#3b0d16,#2d0910); border-color:#dc2626; border-bottom-color:#7f1d1d; color:#fca5a5; }
+    .key.kc-skills   { background: linear-gradient(175deg,#1e1408,#170f05); border-color:#d97706; border-bottom-color:#92400e; color:#fcd34d; }
+    .key.kc-ui       { background: linear-gradient(175deg,#0e1f30,#091629); border-color:#7c3aed; border-bottom-color:#4c1d95; color:#c4b5fd; }
+    .key.kc-conflict { background: linear-gradient(175deg,#2a1a02,#1f1301); border-color:var(--amber); border-bottom-color:#78350f; color:#fde68a; animation: cpulse 2s infinite; }
+    .key.kc-selected { outline: 2px solid var(--hydra) !important; outline-offset: 2px; }
+    .key.kc-listen   { outline: 2px solid var(--amber); outline-offset: 2px; animation: lpulse 0.9s infinite; }
 
-    @keyframes kpulse { 0%,100%{ box-shadow:0 0 0 0 rgba(245,158,11,0.4) } 50%{ box-shadow:0 0 0 4px rgba(245,158,11,0) } }
     @keyframes cpulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+    @keyframes lpulse { 0%,100%{ box-shadow:0 0 0 0 rgba(245,158,11,0.4) } 50%{ box-shadow:0 0 0 4px rgba(245,158,11,0) } }
 
-    /* Keyboard row flex system — all rows sum to 18.5 units */
     .kb-row { display: flex; gap: 3px; }
     .ku-1    { flex: 1    0 0; }
     .ku-1h   { flex: 1.5  0 0; }
@@ -57,171 +100,172 @@
     .ku-275  { flex: 2.75 0 0; }
     .ku-7    { flex: 7    0 0; }
     .ku-gap  { flex: 0.5  0 0; flex-shrink: 0; }
-    .ku-void { flex: 1    0 0; }  /* invisible spacer that matches a real key width */
+    .ku-void { flex: 1    0 0; }
 
-    /* Mouse buttons */
     .mbtn {
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
       padding: 10px 6px; border-radius: 10px; cursor: pointer;
-      border: 1px solid #3f3f46; background: #18181b;
-      transition: all 0.08s; color: #a1a1aa;
+      border: 1px solid var(--border); background: var(--surf-1);
+      transition: all 0.08s; color: var(--muted);
     }
-    .mbtn:hover { border-color: #71717a; background: #27272a; color: #e4e4e7; }
-    .mbtn.kc-movement { border-color:#2563eb; background:rgba(37,99,235,0.12); color:#93c5fd; }
-    .mbtn.kc-combat   { border-color:#dc2626; background:rgba(220,38,38,0.12); color:#fca5a5; }
-    .mbtn.kc-skills   { border-color:#9333ea; background:rgba(147,51,234,0.12); color:#c4b5fd; }
-    .mbtn.kc-ui       { border-color:#10b981; background:rgba(16,185,129,0.12); color:#6ee7b7; }
-    .mbtn.kc-selected { outline: 2px solid #3b82f6; outline-offset: 2px; }
-    .mbtn .k-label    { font-size: 0.65rem; }
-    .mbtn .k-sub      { font-size: 0.48rem; max-width: 56px; }
+    .mbtn:hover { border-color: var(--border-2); background: var(--surf-2); color: var(--text); }
+    .mbtn.kc-movement { border-color:#1d4ed8; background:rgba(29,78,216,0.1); color:#7dd3fc; }
+    .mbtn.kc-combat   { border-color:#dc2626; background:rgba(220,38,38,0.1); color:#fca5a5; }
+    .mbtn.kc-skills   { border-color:#d97706; background:rgba(217,119,6,0.1); color:#fcd34d; }
+    .mbtn.kc-ui       { border-color:#7c3aed; background:rgba(124,58,237,0.1); color:#c4b5fd; }
+    .mbtn .k-label { font-size: 0.65rem; }
+    .mbtn .k-sub   { font-size: 0.48rem; max-width: 56px; }
 
-    /* Tab bar */
-    .tab-btn { padding: 10px 20px; font-size: 0.82rem; font-weight: 500; color: #71717a; border-bottom: 2px solid transparent; transition: all 0.12s; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; white-space: nowrap; }
-    .tab-btn:hover { color: #d4d4d8; }
-    .tab-btn.active { color: #fff; border-bottom-color: #3b82f6; }
+    .tab-btn { padding: 10px 20px; font-size: 0.82rem; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.12s; cursor: pointer; background: none; border-top:none; border-left:none; border-right:none; white-space: nowrap; }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--hydra); border-bottom-color: var(--hydra); }
 
-    /* Action table rows */
-    .action-row { border-bottom: 1px solid rgba(39,39,42,0.7); transition: background 0.07s; cursor: pointer; }
-    .action-row:hover  { background: rgba(255,255,255,0.02); }
-    .action-row.is-sel { background: rgba(37,99,235,0.1) !important; }
+    .card { background: var(--surf-1); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+
+    .action-row { border-bottom: 1px solid rgba(30,32,48,0.8); transition: background 0.07s; cursor: pointer; }
+    .action-row:hover  { background: rgba(74,222,128,0.03); }
+    .action-row.is-sel { background: rgba(74,222,128,0.06) !important; border-left: 2px solid var(--hydra); }
     .action-row:last-child { border-bottom: none; }
 
-    /* Key chip (inline display of a bound key) */
     .kchip {
       display: inline-flex; align-items: center; justify-content: center;
-      font-family: 'SFMono-Regular', 'Consolas', monospace; font-size: 0.68rem; font-weight: 700;
+      font-family: 'SFMono-Regular','Consolas',monospace; font-size: 0.68rem; font-weight: 700;
       padding: 2px 7px; border-radius: 5px; min-width: 28px;
-      background: #27272a; border: 1px solid #3f3f46; color: #e4e4e7;
+      background: var(--surf-2); border: 1px solid var(--border-2); color: var(--text);
     }
-    .kchip.unbound  { color: #52525b; border-color: #27272a; font-weight: 400; font-style: italic; font-family: inherit; font-size: 0.65rem; }
-    .kchip.conflict { border-color: #f59e0b; color: #fcd34d; }
+    .kchip.unbound  { color: var(--muted); border-color: var(--border); font-weight: 400; font-style: italic; font-family: inherit; font-size: 0.65rem; }
+    .kchip.conflict { border-color: var(--amber); color: #fde68a; }
 
-    /* Hotbar slot */
     .hslot {
-      border: 1px solid #27272a; border-radius: 10px;
-      background: rgba(24,24,27,0.8);
+      border: 1px solid var(--border); border-radius: 10px;
+      background: rgba(12,13,18,0.8);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 4px; padding: 8px 4px; min-height: 86px;
       cursor: pointer; transition: all 0.1s;
     }
-    .hslot:hover { border-color: #3f3f46; background: rgba(39,39,42,0.8); }
-    .hslot.hs-sel { border-color: #3b82f6 !important; background: rgba(37,99,235,0.08) !important; box-shadow: 0 0 0 1px rgba(59,130,246,0.2); }
-    .hslot.hs-filled { border-color: #3f3f46; }
+    .hslot:hover { border-color: var(--border-2); background: var(--surf-2); }
+    .hslot.hs-sel {
+      border-color: var(--hydra) !important;
+      background: var(--hydra-s) !important;
+      box-shadow: 0 0 0 1px rgba(74,222,128,0.15), inset 0 0 12px rgba(74,222,128,0.05);
+    }
+    .hslot.hs-filled { border-color: var(--border-2); }
 
-    /* Palette item */
     .pal-item {
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       padding: 12px 8px; border-radius: 12px; cursor: pointer;
-      border: 1px solid rgba(63,63,70,0.5); background: rgba(24,24,27,0.6);
+      border: 1px solid rgba(30,32,48,0.6); background: rgba(12,13,18,0.6);
       transition: all 0.09s;
     }
-    .pal-item:hover { border-color: #52525b; background: rgba(39,39,42,0.8); }
-    .pal-item.on-bar { border-color: rgba(16,185,129,0.4); }
+    .pal-item:hover { border-color: var(--border-2); background: var(--surf-2); }
+    .pal-item.on-bar { border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.04); }
 
-    /* Category badge */
-    .cat-badge {
-      font-size: 0.58rem; padding: 1px 6px; border-radius: 99px; border: 1px solid;
-      font-weight: 600; letter-spacing: 0.03em;
-    }
-    .cb-movement { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.35); color: #93c5fd; }
-    .cb-combat   { background: rgba(220,38,38,0.12);  border-color: rgba(220,38,38,0.35);  color: #fca5a5; }
-    .cb-skills   { background: rgba(147,51,234,0.12); border-color: rgba(147,51,234,0.35); color: #c4b5fd; }
-    .cb-ui       { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.35); color: #6ee7b7; }
+    /* Category badge styles */
+    .cat-badge { font-size: 0.58rem; padding: 1px 6px; border-radius: 99px; border: 1px solid; font-weight: 600; letter-spacing: 0.03em; }
+    .cb-movement { background:rgba(29,78,216,0.1);  border-color:rgba(29,78,216,0.3);  color:#7dd3fc; }
+    .cb-combat   { background:rgba(220,38,38,0.1);  border-color:rgba(220,38,38,0.3);  color:#fca5a5; }
+    .cb-skills   { background:rgba(217,119,6,0.1);  border-color:rgba(217,119,6,0.3);  color:#fcd34d; }
+    .cb-ui       { background:rgba(124,58,237,0.1); border-color:rgba(124,58,237,0.3); color:#c4b5fd; }
 
-    /* Category pills */
-    .cpill {
-      padding: 3px 12px; border-radius: 99px; font-size: 0.72rem; font-weight: 500;
-      cursor: pointer; border: 1px solid transparent; transition: all 0.09s;
-      color: #71717a; background: transparent;
-    }
-    .cpill:hover { color: #d4d4d8; }
-    .cpill.cp-movement.active { background:rgba(37,99,235,0.15); border-color:rgba(37,99,235,0.4); color:#93c5fd; }
-    .cpill.cp-combat.active   { background:rgba(220,38,38,0.15);  border-color:rgba(220,38,38,0.4);  color:#fca5a5; }
-    .cpill.cp-skills.active   { background:rgba(147,51,234,0.15); border-color:rgba(147,51,234,0.4); color:#c4b5fd; }
-    .cpill.cp-ui.active       { background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.4); color:#6ee7b7; }
-    .cpill.cp-all.active      { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:#e4e4e7; }
-
-    /* Conflict dot */
-    .cdot { width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block; flex-shrink: 0; }
-
-    /* Listen overlay */
-    #listen-overlay {
-      display: none; position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
-      align-items: center; justify-content: center;
-    }
-    #listen-overlay.active { display: flex; }
-
-    /* Toast */
-    #toast {
-      position: fixed; bottom: 20px; right: 24px; z-index: 300;
-      background: #18181b; border: 1px solid #27272a; border-radius: 10px;
-      padding: 10px 16px; font-size: 0.78rem; color: #e4e4e7;
-      transform: translateY(60px); opacity: 0; transition: transform 0.2s, opacity 0.2s;
-      pointer-events: none;
-    }
-    #toast.show { transform: translateY(0); opacity: 1; }
-
-    /* Modifier select */
-    .mod-sel {
-      background: #18181b; border: 1px solid #3f3f46; color: #a1a1aa;
-      font-size: 0.68rem; border-radius: 6px; padding: 3px 6px;
-      outline: none; cursor: pointer;
-    }
-    .mod-sel:focus { border-color: #52525b; }
-
-    /* Detail panel */
-    .detail-icon-ring {
-      width: 42px; height: 42px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .di-movement { background:rgba(37,99,235,0.15); }
-    .di-combat   { background:rgba(220,38,38,0.15); }
-    .di-skills   { background:rgba(147,51,234,0.15); }
-    .di-ui       { background:rgba(16,185,129,0.15); }
-    .ci-movement { color:#93c5fd; }
+    /* Category icon colors */
+    .ci-movement { color:#7dd3fc; }
     .ci-combat   { color:#fca5a5; }
-    .ci-skills   { color:#c4b5fd; }
-    .ci-ui       { color:#6ee7b7; }
+    .ci-skills   { color:#fcd34d; }
+    .ci-ui       { color:#c4b5fd; }
+
+    /* Category icon rings */
+    .di-movement { background:rgba(29,78,216,0.12); }
+    .di-combat   { background:rgba(220,38,38,0.12); }
+    .di-skills   { background:rgba(217,119,6,0.12); }
+    .di-ui       { background:rgba(124,58,237,0.12); }
+
+    .detail-icon-ring { width:28px; height:28px; border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+    .cpill { padding:3px 12px; border-radius:99px; font-size:0.72rem; font-weight:500; cursor:pointer; border:1px solid transparent; transition:all 0.09s; color:var(--muted); background:transparent; }
+    .cpill:hover { color: var(--text); }
+    .cpill.cp-all.active      { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.12); color:var(--text); }
+    .cpill.cp-movement.active { background:rgba(29,78,216,0.12); border-color:rgba(29,78,216,0.3); color:#7dd3fc; }
+    .cpill.cp-combat.active   { background:rgba(220,38,38,0.12);  border-color:rgba(220,38,38,0.3);  color:#fca5a5; }
+    .cpill.cp-skills.active   { background:rgba(217,119,6,0.12);  border-color:rgba(217,119,6,0.3);  color:#fcd34d; }
+    .cpill.cp-ui.active       { background:rgba(124,58,237,0.12); border-color:rgba(124,58,237,0.3); color:#c4b5fd; }
+
+    .cdot { width:6px; height:6px; border-radius:50%; background:var(--amber); display:inline-block; flex-shrink:0; }
+
+    #listen-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.82); backdrop-filter:blur(8px); align-items:center; justify-content:center; }
+    #listen-overlay.active { display:flex; }
+
+    #toast { position:fixed; bottom:20px; right:24px; z-index:300; background:var(--surf-2); border:1px solid var(--hydra); border-radius:10px; padding:10px 16px; font-size:0.78rem; color:var(--text); transform:translateY(60px); opacity:0; transition:transform 0.2s, opacity 0.2s; pointer-events:none; }
+    #toast.show { transform:translateY(0); opacity:1; }
+
+    .mod-sel { background:var(--surf-1); border:1px solid var(--border-2); color:var(--subtle); font-size:0.68rem; border-radius:6px; padding:3px 6px; outline:none; cursor:pointer; }
+    .mod-sel:focus { border-color:var(--hydra); }
+
+    /* Hydra glow on interactive elements */
+    .btn-hydra { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: var(--hydra); border-radius: 9px; font-weight: 600; font-size: 0.75rem; transition: all 0.1s; cursor: pointer; }
+    .btn-hydra:hover { background: rgba(74,222,128,0.2); border-color: var(--hydra); }
+
+    /* Footer brand */
+    .brand-footer { border-top: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; background: var(--surf-1); }
   </style>
 </head>
-<body class="min-h-screen">
+<body style="min-height:100vh; display:flex; flex-direction:column;">
 
 <!-- Listen overlay -->
 <div id="listen-overlay">
-  <div style="background:#111113; border:1px solid #27272a; border-radius:20px; padding:40px 36px; text-align:center; max-width:340px; width:90%; box-shadow:0 24px 64px rgba(0,0,0,0.6);">
-    <div style="font-size:2.5rem; margin-bottom:12px;">⌨️</div>
-    <div class="font-display" style="font-size:1.15rem; font-weight:600; color:#fff; margin-bottom:6px;">Press any key</div>
-    <div id="listen-label" style="font-size:0.82rem; color:#71717a; margin-bottom:18px;">Binding action…</div>
-    <div style="font-size:0.68rem; color:#3f3f46; line-height:1.6;">ESC to cancel &nbsp;·&nbsp; Backspace to clear</div>
+  <div style="background:var(--surf-2);border:1px solid var(--border-2);border-radius:20px;padding:40px 36px;text-align:center;max-width:340px;width:90%;box-shadow:0 0 60px rgba(74,222,128,0.08);">
+    <svg width="40" height="32" viewBox="0 0 40 32" fill="none" style="margin:0 auto 16px;display:block;">
+      <ellipse cx="9"  cy="9"  rx="6" ry="7" fill="#4ade80" opacity=".7"/>
+      <ellipse cx="20" cy="5"  rx="6" ry="7" fill="#4ade80"/>
+      <ellipse cx="31" cy="9"  rx="6" ry="7" fill="#4ade80" opacity=".7"/>
+      <path d="M9 16 Q14 24 20 26 Q26 24 31 16" stroke="#4ade80" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="font-display" style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:0.02em;">Press any key</div>
+    <div id="listen-label" style="font-size:0.82rem;color:var(--muted);margin-bottom:18px;">Binding action…</div>
+    <div style="font-size:0.68rem;color:var(--border-2);">ESC to cancel &nbsp;·&nbsp; Backspace to clear</div>
   </div>
 </div>
 
-<div style="max-width:1280px; margin:0 auto; padding:24px 20px;">
+<!-- Brand bar -->
+<div class="brand-bar">
+  <div class="hydra-mark">
+    <svg width="22" height="18" viewBox="0 0 40 32" fill="none">
+      <ellipse cx="9"  cy="9"  rx="6" ry="7" fill="#4ade80" opacity=".7"/>
+      <ellipse cx="20" cy="5"  rx="6" ry="7" fill="#4ade80"/>
+      <ellipse cx="31" cy="9"  rx="6" ry="7" fill="#4ade80" opacity=".7"/>
+      <path d="M9 16 Q14 24 20 26 Q26 24 31 16" stroke="#4ade80" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="hydra-wordmark">HYDRA</span>
+    <div class="brand-divider"></div>
+    <span class="studio-name">Grudge Studio</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <a href="/" style="font-size:0.7rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:5px;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
+      <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i> Game UI Kit
+    </a>
+    <span style="font-size:0.65rem;padding:2px 8px;border-radius:5px;background:var(--hydra-s);border:1px solid rgba(74,222,128,0.2);color:var(--hydra);font-weight:600;letter-spacing:0.04em;">TOOL KIT</span>
+  </div>
+</div>
 
-  <!-- Header -->
-  <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
+<div style="flex:1;max-width:1280px;margin:0 auto;width:100%;padding:24px 20px;">
+
+  <!-- Page header -->
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
     <div>
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
-        <a href="/" style="font-size:0.75rem; color:#52525b; text-decoration:none; display:flex; align-items:center; gap:4px;" onmouseover="this.style.color='#a1a1aa'" onmouseout="this.style.color='#52525b'">
-          <i class="fa-solid fa-arrow-left" style="font-size:10px;"></i> Game UI Kit
-        </a>
-      </div>
-      <h1 class="font-display" style="font-size:1.5rem; font-weight:600; color:#fff; margin:0 0 2px 0; letter-spacing:-0.02em;">Input Configurator</h1>
-      <p style="font-size:0.78rem; color:#52525b; margin:0;">Grudge Studio &nbsp;·&nbsp; Keybinding Editor</p>
+      <h1 class="font-display" style="font-size:1.6rem;font-weight:700;color:var(--text);margin:0 0 4px;letter-spacing:-0.02em;">Input Configurator</h1>
+      <p style="font-size:0.78rem;color:var(--muted);margin:0;">Keybinding Editor &nbsp;·&nbsp; 32 game actions &nbsp;·&nbsp; Keyboard + Mouse + Hotbar</p>
     </div>
-    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-      <div id="conflict-badge" style="display:none; align-items:center; gap:6px; padding:6px 12px; background:rgba(120,53,15,0.3); border:1px solid rgba(245,158,11,0.3); border-radius:8px; font-size:0.72rem; color:#fcd34d;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <div id="conflict-badge" style="display:none;align-items:center;gap:6px;padding:6px 12px;background:rgba(120,53,15,0.25);border:1px solid rgba(245,158,11,0.25);border-radius:8px;font-size:0.72rem;color:#fde68a;">
         <i class="fa-solid fa-triangle-exclamation" style="font-size:10px;"></i>
         <span id="conflict-badge-text">0 conflicts</span>
       </div>
-      <button onclick="restoreDefaults()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:#18181b;border:1px solid #27272a;border-radius:10px;font-size:0.72rem;color:#71717a;cursor:pointer;transition:all 0.1s;" onmouseover="this.style.background='#27272a';this.style.color='#e4e4e7'" onmouseout="this.style.background='#18181b';this.style.color='#71717a'">
+      <button onclick="restoreDefaults()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:var(--surf-1);border:1px solid var(--border-2);border-radius:10px;font-size:0.72rem;color:var(--muted);cursor:pointer;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
         <i class="fa-solid fa-rotate-left" style="font-size:10px;"></i> Defaults
       </button>
-      <button onclick="exportConfig()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:#18181b;border:1px solid #27272a;border-radius:10px;font-size:0.72rem;color:#71717a;cursor:pointer;transition:all 0.1s;" onmouseover="this.style.background='#27272a';this.style.color='#e4e4e7'" onmouseout="this.style.background='#18181b';this.style.color='#71717a'">
+      <button onclick="exportConfig()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:var(--surf-1);border:1px solid var(--border-2);border-radius:10px;font-size:0.72rem;color:var(--muted);cursor:pointer;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
         <i class="fa-solid fa-file-export" style="font-size:10px;"></i> Export
       </button>
-      <button onclick="document.getElementById('import-file').click()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:#18181b;border:1px solid #27272a;border-radius:10px;font-size:0.72rem;color:#71717a;cursor:pointer;transition:all 0.1s;" onmouseover="this.style.background='#27272a';this.style.color='#e4e4e7'" onmouseout="this.style.background='#18181b';this.style.color='#71717a'">
+      <button onclick="document.getElementById('import-file').click()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:var(--surf-1);border:1px solid var(--border-2);border-radius:10px;font-size:0.72rem;color:var(--muted);cursor:pointer;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
         <i class="fa-solid fa-file-import" style="font-size:10px;"></i> Import
       </button>
       <input id="import-file" type="file" accept=".json" style="display:none;" onchange="handleImport(this)">
@@ -229,76 +273,66 @@
   </div>
 
   <!-- Tabs -->
-  <div style="display:flex; border-bottom:1px solid #18181b; margin-bottom:20px; overflow-x:auto; gap:0;">
-    <button class="tab-btn active" id="tbtn-bindings"  onclick="switchTab('bindings',this)"><i class="fa-solid fa-list-ul"   style="font-size:11px;margin-right:6px;"></i>Bindings</button>
-    <button class="tab-btn"        id="tbtn-keyboard"  onclick="switchTab('keyboard',this)"><i class="fa-solid fa-keyboard"   style="font-size:11px;margin-right:6px;"></i>Keyboard Map</button>
-    <button class="tab-btn"        id="tbtn-hotbar"    onclick="switchTab('hotbar',this)"  ><i class="fa-solid fa-grip"       style="font-size:11px;margin-right:6px;"></i>Hotbar</button>
+  <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto;gap:0;">
+    <button class="tab-btn active" id="tbtn-bindings" onclick="switchTab('bindings',this)"><i class="fa-solid fa-list-ul" style="font-size:11px;margin-right:6px;"></i>Bindings</button>
+    <button class="tab-btn"        id="tbtn-keyboard" onclick="switchTab('keyboard',this)"><i class="fa-solid fa-keyboard" style="font-size:11px;margin-right:6px;"></i>Keyboard Map</button>
+    <button class="tab-btn"        id="tbtn-hotbar"   onclick="switchTab('hotbar',this)"  ><i class="fa-solid fa-grip"    style="font-size:11px;margin-right:6px;"></i>Hotbar</button>
   </div>
 
-  <!-- ════════════════ BINDINGS TAB ════════════════ -->
+  <!-- ════ BINDINGS TAB ════ -->
   <div id="tab-bindings">
-    <div style="display:grid; grid-template-columns:1fr 280px; gap:16px; align-items:start;">
-
-      <!-- Left: action list -->
-      <div style="background:#111113; border:1px solid #1c1c1f; border-radius:16px; overflow:hidden;">
-        <!-- Filters -->
-        <div style="display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:1px solid #1c1c1f; flex-wrap:wrap;">
-          <button class="cpill cp-all active" id="fpill-all" onclick="setCatFilter('all')">All</button>
+    <div style="display:grid;grid-template-columns:1fr 284px;gap:16px;align-items:start;">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;">
+          <button class="cpill cp-all active" id="fpill-all"      onclick="setCatFilter('all')">All</button>
           <button class="cpill cp-movement"   id="fpill-movement" onclick="setCatFilter('movement')"><i class="fa-solid fa-person-walking" style="font-size:9px;margin-right:4px;"></i>Movement</button>
-          <button class="cpill cp-combat"     id="fpill-combat"   onclick="setCatFilter('combat')"  ><i class="fa-solid fa-hand-fist"      style="font-size:9px;margin-right:4px;"></i>Combat</button>
-          <button class="cpill cp-skills"     id="fpill-skills"   onclick="setCatFilter('skills')"  ><i class="fa-solid fa-wand-sparkles"  style="font-size:9px;margin-right:4px;"></i>Skills</button>
-          <button class="cpill cp-ui"         id="fpill-ui"       onclick="setCatFilter('ui')"      ><i class="fa-solid fa-table-cells"    style="font-size:9px;margin-right:4px;"></i>UI</button>
+          <button class="cpill cp-combat"     id="fpill-combat"   onclick="setCatFilter('combat')"  ><i class="fa-solid fa-hand-fist"     style="font-size:9px;margin-right:4px;"></i>Combat</button>
+          <button class="cpill cp-skills"     id="fpill-skills"   onclick="setCatFilter('skills')"  ><i class="fa-solid fa-wand-sparkles" style="font-size:9px;margin-right:4px;"></i>Skills</button>
+          <button class="cpill cp-ui"         id="fpill-ui"       onclick="setCatFilter('ui')"      ><i class="fa-solid fa-table-cells"   style="font-size:9px;margin-right:4px;"></i>UI</button>
           <div style="margin-left:auto;">
-            <input id="search-box" placeholder="Search…" oninput="renderList()" style="background:#18181b;border:1px solid #27272a;border-radius:8px;padding:5px 12px;font-size:0.72rem;color:#d4d4d8;outline:none;width:160px;" onfocus="this.style.borderColor='#52525b'" onblur="this.style.borderColor='#27272a'">
+            <input id="search-box" placeholder="Search…" oninput="renderList()" style="background:var(--surf-2);border:1px solid var(--border-2);border-radius:8px;padding:5px 12px;font-size:0.72rem;color:var(--text);outline:none;width:160px;" onfocus="this.style.borderColor='var(--hydra)'" onblur="this.style.borderColor='var(--border-2)'">
           </div>
         </div>
-        <!-- Table header -->
-        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 88px;gap:8px;padding:8px 16px;border-bottom:1px solid #18181b;">
-          <div style="font-size:0.62rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;">Action</div>
-          <div style="font-size:0.62rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;">Category</div>
-          <div style="font-size:0.62rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;">Key</div>
-          <div style="font-size:0.62rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;">Modifier</div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 88px;gap:8px;padding:8px 16px;border-bottom:1px solid var(--border);">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Action</div>
+          <div style="font-size:0.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Category</div>
+          <div style="font-size:0.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Key</div>
+          <div style="font-size:0.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Modifier</div>
           <div></div>
         </div>
-        <!-- Rows -->
         <div id="bindings-list" style="overflow-y:auto;max-height:500px;"></div>
       </div>
-
-      <!-- Right: detail panel -->
       <div style="position:sticky;top:20px;">
-        <div id="action-detail" style="background:#111113;border:1px solid #1c1c1f;border-radius:16px;padding:20px;margin-bottom:12px;">
-          <div style="text-align:center;padding:28px 0;color:#3f3f46;">
+        <div id="action-detail" class="card" style="padding:20px;margin-bottom:12px;">
+          <div style="text-align:center;padding:28px 0;color:var(--border-2);">
             <i class="fa-solid fa-hand-pointer" style="font-size:1.5rem;display:block;margin-bottom:8px;"></i>
-            <div style="font-size:0.78rem;">Select an action to edit</div>
+            <div style="font-size:0.78rem;color:var(--muted);">Select an action to edit</div>
           </div>
         </div>
-        <div id="conflicts-panel" style="background:#111113;border:1px solid #1c1c1f;border-radius:16px;padding:16px;">
-          <div style="font-size:0.72rem;font-weight:600;color:#a1a1aa;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
-            <i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;font-size:10px;"></i> Conflicts
+        <div class="card" style="padding:16px;">
+          <div style="font-size:0.72rem;font-weight:600;color:var(--subtle);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:var(--amber);font-size:10px;"></i> Conflicts
           </div>
-          <div id="conflicts-list" style="font-size:0.72rem;color:#52525b;">No conflicts detected</div>
+          <div id="conflicts-list" style="font-size:0.72rem;color:var(--muted);">No conflicts detected</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ════════════════ KEYBOARD TAB ════════════════ -->
+  <!-- ════ KEYBOARD TAB ════ -->
   <div id="tab-keyboard" style="display:none;">
-    <div style="display:grid;grid-template-columns:1fr 240px;gap:16px;align-items:start;">
-
-      <!-- Keyboard visual -->
-      <div style="background:#111113;border:1px solid #1c1c1f;border-radius:16px;padding:20px;">
-        <!-- Legend -->
+    <div style="display:grid;grid-template-columns:1fr 244px;gap:16px;align-items:start;">
+      <div class="card" style="padding:20px;">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
-          <span style="font-size:0.68rem;color:#52525b;font-weight:600;">Legend:</span>
-          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.3);color:#93c5fd;"><i class="fa-solid fa-person-walking" style="font-size:9px;margin-right:3px;"></i>Movement</span>
-          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.3);color:#fca5a5;"><i class="fa-solid fa-hand-fist" style="font-size:9px;margin-right:3px;"></i>Combat</span>
-          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(147,51,234,0.12);border:1px solid rgba(147,51,234,0.3);color:#c4b5fd;"><i class="fa-solid fa-wand-sparkles" style="font-size:9px;margin-right:3px;"></i>Skills</span>
-          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;"><i class="fa-solid fa-table-cells" style="font-size:9px;margin-right:3px;"></i>UI</span>
-          <span style="font-size:0.65rem;color:#52525b;margin-left:auto;">Click a key to inspect</span>
+          <span style="font-size:0.68rem;color:var(--muted);font-weight:600;">Legend:</span>
+          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(29,78,216,0.1);border:1px solid rgba(29,78,216,0.25);color:#7dd3fc;"><i class="fa-solid fa-person-walking" style="font-size:9px;margin-right:3px;"></i>Movement</span>
+          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.25);color:#fca5a5;"><i class="fa-solid fa-hand-fist" style="font-size:9px;margin-right:3px;"></i>Combat</span>
+          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(217,119,6,0.1);border:1px solid rgba(217,119,6,0.25);color:#fcd34d;"><i class="fa-solid fa-wand-sparkles" style="font-size:9px;margin-right:3px;"></i>Skills</span>
+          <span style="font-size:0.65rem;padding:2px 8px;border-radius:6px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.25);color:#c4b5fd;"><i class="fa-solid fa-table-cells" style="font-size:9px;margin-right:3px;"></i>UI</span>
+          <span style="font-size:0.65rem;color:var(--muted);margin-left:auto;">Click a key to inspect</span>
         </div>
 
-        <!-- F row (total = 18.5) -->
+        <!-- F row -->
         <div class="kb-row" style="margin-bottom:3px;">
           <div class="key ku-1" data-key="ESC"><span class="k-label">ESC</span></div>
           <div class="ku-gap"></div>
@@ -321,8 +355,7 @@
           <div class="key ku-1" data-key="SCRLK"><span class="k-label">SCR</span></div>
           <div class="key ku-1" data-key="PAUSE"><span class="k-label">BRK</span></div>
         </div>
-
-        <!-- Number row (15 main + gap + 3 nav = 18.5) -->
+        <!-- Number row -->
         <div class="kb-row" style="margin-bottom:3px;margin-top:6px;">
           <div class="key ku-1" data-key="`"><span class="k-label">`</span></div>
           <div class="key ku-1" data-key="1"><span class="k-label">1</span></div>
@@ -343,8 +376,7 @@
           <div class="key ku-1" data-key="HOME"><span class="k-label">HME</span></div>
           <div class="key ku-1" data-key="PGUP"><span class="k-label">PGU</span></div>
         </div>
-
-        <!-- QWERTY row (TAB=1.5, Q-P=10, []=2, \=1.5 → 15 + gap + 3 nav = 18.5) -->
+        <!-- QWERTY -->
         <div class="kb-row" style="margin-bottom:3px;">
           <div class="key ku-1h" data-key="TAB"><span class="k-label">TAB</span></div>
           <div class="key ku-1" data-key="Q"><span class="k-label">Q</span></div>
@@ -365,8 +397,7 @@
           <div class="key ku-1" data-key="END"><span class="k-label">END</span></div>
           <div class="key ku-1" data-key="PGDN"><span class="k-label">PGD</span></div>
         </div>
-
-        <!-- ASDF row (CAPS=1.75, A-'=11, ENTER=2.25 → 15 + gap + void+void+void = 18.5) -->
+        <!-- ASDF -->
         <div class="kb-row" style="margin-bottom:3px;">
           <div class="key ku-175" data-key="CAPS"><span class="k-label">CAPS</span></div>
           <div class="key ku-1" data-key="A"><span class="k-label">A</span></div>
@@ -384,8 +415,7 @@
           <div class="ku-gap"></div>
           <div class="ku-void"></div><div class="ku-void"></div><div class="ku-void"></div>
         </div>
-
-        <!-- ZXCV row (LSHIFT=2.25, Z-/=10, RSHIFT=2.75 → 15 + gap + void+UP+void = 18.5) -->
+        <!-- ZXCV -->
         <div class="kb-row" style="margin-bottom:3px;">
           <div class="key ku-225" data-key="LSHIFT"><span class="k-label">⇧ SHIFT</span></div>
           <div class="key ku-1" data-key="Z"><span class="k-label">Z</span></div>
@@ -404,8 +434,7 @@
           <div class="key ku-1" data-key="UP"><span class="k-label">▲</span></div>
           <div class="ku-void"></div>
         </div>
-
-        <!-- Bottom row (LCTRL=1.5, LWIN=1, LALT=1, SPACE=7, RALT=1, RWIN=1, MENU=1, RCTRL=1.5 → 15 + gap + LEFT+DOWN+RIGHT = 18.5) -->
+        <!-- Bottom -->
         <div class="kb-row">
           <div class="key ku-1h"  data-key="LCTRL"><span class="k-label">CTRL</span></div>
           <div class="key ku-1"   data-key="LWIN"><span class="k-label">⊞</span></div>
@@ -422,76 +451,52 @@
         </div>
 
         <!-- Mouse -->
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid #18181b;">
-          <div style="font-size:0.68rem;font-weight:600;color:#52525b;margin-bottom:10px;">Mouse</div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+          <div style="font-size:0.68rem;font-weight:600;color:var(--muted);margin-bottom:10px;">Mouse</div>
           <div style="display:flex;gap:8px;">
-            <div class="mbtn" data-mouse="LMB" style="flex:1;" onclick="kbClickKey('LMB')">
-              <i class="fa-solid fa-hand-pointer" style="font-size:1.1rem;"></i>
-              <span class="k-label">LMB</span>
-              <span class="k-sub" id="msub-LMB"></span>
-            </div>
-            <div class="mbtn" data-mouse="RMB" style="flex:1;" onclick="kbClickKey('RMB')">
-              <i class="fa-solid fa-hand-point-right" style="font-size:1.1rem;"></i>
-              <span class="k-label">RMB</span>
-              <span class="k-sub" id="msub-RMB"></span>
-            </div>
-            <div class="mbtn" data-mouse="MB3" style="flex:1;" onclick="kbClickKey('MB3')">
-              <i class="fa-solid fa-circle-dot" style="font-size:1.1rem;"></i>
-              <span class="k-label">MB3</span>
-              <span class="k-sub" id="msub-MB3"></span>
-            </div>
-            <div class="mbtn" data-mouse="MB4" style="flex:1;" onclick="kbClickKey('MB4')">
-              <i class="fa-solid fa-circle-chevron-left" style="font-size:1.1rem;"></i>
-              <span class="k-label">MB4</span>
-              <span class="k-sub" id="msub-MB4"></span>
-            </div>
-            <div class="mbtn" data-mouse="MB5" style="flex:1;" onclick="kbClickKey('MB5')">
-              <i class="fa-solid fa-circle-chevron-right" style="font-size:1.1rem;"></i>
-              <span class="k-label">MB5</span>
-              <span class="k-sub" id="msub-MB5"></span>
-            </div>
+            <div class="mbtn" data-mouse="LMB" style="flex:1;" onclick="kbClickKey('LMB')"><i class="fa-solid fa-hand-pointer" style="font-size:1.1rem;"></i><span class="k-label">LMB</span><span class="k-sub" id="msub-LMB"></span></div>
+            <div class="mbtn" data-mouse="RMB" style="flex:1;" onclick="kbClickKey('RMB')"><i class="fa-solid fa-hand-point-right" style="font-size:1.1rem;"></i><span class="k-label">RMB</span><span class="k-sub" id="msub-RMB"></span></div>
+            <div class="mbtn" data-mouse="MB3" style="flex:1;" onclick="kbClickKey('MB3')"><i class="fa-solid fa-circle-dot" style="font-size:1.1rem;"></i><span class="k-label">MB3</span><span class="k-sub" id="msub-MB3"></span></div>
+            <div class="mbtn" data-mouse="MB4" style="flex:1;" onclick="kbClickKey('MB4')"><i class="fa-solid fa-circle-chevron-left" style="font-size:1.1rem;"></i><span class="k-label">MB4</span><span class="k-sub" id="msub-MB4"></span></div>
+            <div class="mbtn" data-mouse="MB5" style="flex:1;" onclick="kbClickKey('MB5')"><i class="fa-solid fa-circle-chevron-right" style="font-size:1.1rem;"></i><span class="k-label">MB5</span><span class="k-sub" id="msub-MB5"></span></div>
           </div>
         </div>
       </div>
 
-      <!-- Right: key detail + stats -->
+      <!-- Keyboard right panel -->
       <div style="position:sticky;top:20px;display:flex;flex-direction:column;gap:12px;">
-        <div id="kb-detail" style="background:#111113;border:1px solid #1c1c1f;border-radius:16px;padding:18px;">
-          <div style="text-align:center;padding:24px 0;color:#3f3f46;">
+        <div id="kb-detail" class="card" style="padding:18px;">
+          <div style="text-align:center;padding:24px 0;color:var(--border-2);">
             <i class="fa-solid fa-keyboard" style="font-size:1.5rem;display:block;margin-bottom:8px;"></i>
-            <div style="font-size:0.75rem;">Click any key to inspect</div>
+            <div style="font-size:0.75rem;color:var(--muted);">Click any key to inspect</div>
           </div>
         </div>
-        <div style="background:#111113;border:1px solid #1c1c1f;border-radius:16px;padding:16px;">
-          <div style="font-size:0.68rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Overview</div>
+        <div class="card" style="padding:16px;">
+          <div style="font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Overview</div>
           <div id="kb-stats" style="font-size:0.75rem;display:flex;flex-direction:column;gap:6px;"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ════════════════ HOTBAR TAB ════════════════ -->
+  <!-- ════ HOTBAR TAB ════ -->
   <div id="tab-hotbar" style="display:none;">
     <div style="display:flex;flex-direction:column;gap:16px;">
-
-      <!-- Hotbar slots -->
-      <div style="background:#111113;border:1px solid #1c1c1f;border-radius:16px;padding:20px;">
+      <div class="card" style="padding:20px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
           <div>
-            <div style="font-size:0.88rem;font-weight:600;color:#e4e4e7;">Hotbar Slots</div>
-            <div style="font-size:0.72rem;color:#52525b;margin-top:2px;">Select a slot, then click an action in the palette to assign</div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text);">Hotbar Slots</div>
+            <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">Select a slot, then click an action to assign</div>
           </div>
-          <button onclick="clearHotbar()" style="font-size:0.72rem;color:#52525b;background:#18181b;border:1px solid #27272a;border-radius:8px;padding:6px 12px;cursor:pointer;" onmouseover="this.style.color='#fca5a5';this.style.borderColor='rgba(220,38,38,0.3)'" onmouseout="this.style.color='#52525b';this.style.borderColor='#27272a'">
+          <button onclick="clearHotbar()" style="font-size:0.72rem;color:var(--muted);background:var(--surf-2);border:1px solid var(--border-2);border-radius:8px;padding:6px 12px;cursor:pointer;" onmouseover="this.style.color='#fca5a5';this.style.borderColor='rgba(220,38,38,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border-2)'">
             <i class="fa-solid fa-trash-can" style="font-size:10px;margin-right:4px;"></i>Clear All
           </button>
         </div>
         <div id="hotbar-slots" style="display:grid;grid-template-columns:repeat(10,1fr);gap:8px;"></div>
       </div>
-
-      <!-- Action palette -->
-      <div style="background:#111113;border:1px solid #1c1c1f;border-radius:16px;padding:20px;">
+      <div class="card" style="padding:20px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-          <div style="font-size:0.88rem;font-weight:600;color:#e4e4e7;">Actions</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text);">Actions</div>
           <button class="cpill cp-all active" id="ppill-all"      onclick="setPalFilter('all')">All</button>
           <button class="cpill cp-movement"   id="ppill-movement" onclick="setPalFilter('movement')"><i class="fa-solid fa-person-walking" style="font-size:9px;margin-right:3px;"></i>Movement</button>
           <button class="cpill cp-combat"     id="ppill-combat"   onclick="setPalFilter('combat')"  ><i class="fa-solid fa-hand-fist"     style="font-size:9px;margin-right:3px;"></i>Combat</button>
@@ -505,6 +510,15 @@
 
 </div><!-- /container -->
 
+<!-- Brand footer -->
+<div class="brand-footer">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <svg width="16" height="13" viewBox="0 0 40 32" fill="none"><ellipse cx="9" cy="9" rx="6" ry="7" fill="#4ade80" opacity=".7"/><ellipse cx="20" cy="5" rx="6" ry="7" fill="#4ade80"/><ellipse cx="31" cy="9" rx="6" ry="7" fill="#4ade80" opacity=".7"/><path d="M9 16 Q14 24 20 26 Q26 24 31 16" stroke="#4ade80" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+    <span style="font-size:0.65rem;color:var(--muted);">HYDRA Input Configurator &nbsp;·&nbsp; Grudge Studio Tool Kit</span>
+  </div>
+  <span style="font-size:0.65rem;color:var(--border-2);">© 2026 Grudge Studio</span>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -513,14 +527,13 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const CATS = {
-  movement: { label:'Movement', icon:'fa-person-walking',  iconColor:'ci-movement', ring:'di-movement', badge:'cb-movement', pill:'cp-movement', kclass:'kc-movement' },
-  combat:   { label:'Combat',   icon:'fa-hand-fist',       iconColor:'ci-combat',   ring:'di-combat',   badge:'cb-combat',   pill:'cp-combat',   kclass:'kc-combat'   },
-  skills:   { label:'Skills',   icon:'fa-wand-sparkles',   iconColor:'ci-skills',   ring:'di-skills',   badge:'cb-skills',   pill:'cp-skills',   kclass:'kc-skills'   },
-  ui:       { label:'UI',       icon:'fa-table-cells',     iconColor:'ci-ui',       ring:'di-ui',       badge:'cb-ui',       pill:'cp-ui',       kclass:'kc-ui'       },
+  movement: { label:'Movement', icon:'fa-person-walking',  iconColor:'ci-movement', ring:'di-movement', badge:'cb-movement', kclass:'kc-movement' },
+  combat:   { label:'Combat',   icon:'fa-hand-fist',       iconColor:'ci-combat',   ring:'di-combat',   badge:'cb-combat',   kclass:'kc-combat'   },
+  skills:   { label:'Skills',   icon:'fa-wand-sparkles',   iconColor:'ci-skills',   ring:'di-skills',   badge:'cb-skills',   kclass:'kc-skills'   },
+  ui:       { label:'UI',       icon:'fa-table-cells',     iconColor:'ci-ui',       ring:'di-ui',       badge:'cb-ui',       kclass:'kc-ui'       },
 };
 
 const ACTIONS = [
-  // Movement
   { id:'move_fwd',  cat:'movement', label:'Move Forward',    icon:'fa-arrow-up',               def:'W'      },
   { id:'move_bk',   cat:'movement', label:'Move Back',       icon:'fa-arrow-down',             def:'S'      },
   { id:'strafe_l',  cat:'movement', label:'Strafe Left',     icon:'fa-arrow-left',             def:'A'      },
@@ -529,7 +542,6 @@ const ACTIONS = [
   { id:'jump',      cat:'movement', label:'Jump',            icon:'fa-arrow-up-from-bracket',  def:'SPACE'  },
   { id:'crouch',    cat:'movement', label:'Crouch / Slide',  icon:'fa-person-falling',         def:'LCTRL'  },
   { id:'dodge',     cat:'movement', label:'Dodge / Roll',    icon:'fa-rotate',                 def:'LALT'   },
-  // Combat
   { id:'attack',    cat:'combat',   label:'Attack',          icon:'fa-hand-fist',              def:'LMB'    },
   { id:'heavy',     cat:'combat',   label:'Heavy Attack',    icon:'fa-bolt',                   def:'RMB'    },
   { id:'block',     cat:'combat',   label:'Block / Parry',   icon:'fa-shield',                 def:'Q'      },
@@ -538,7 +550,6 @@ const ACTIONS = [
   { id:'aim',       cat:'combat',   label:'Aim / Zoom',      icon:'fa-crosshairs',             def:'MB3'    },
   { id:'melee',     cat:'combat',   label:'Melee Strike',    icon:'fa-burst',                  def:'V'      },
   { id:'ultimate',  cat:'combat',   label:'Ultimate',        icon:'fa-star',                   def:'F'      },
-  // Skills
   { id:'skill_1',   cat:'skills',   label:'Skill Slot 1',    icon:'fa-1',                      def:'1'      },
   { id:'skill_2',   cat:'skills',   label:'Skill Slot 2',    icon:'fa-2',                      def:'2'      },
   { id:'skill_3',   cat:'skills',   label:'Skill Slot 3',    icon:'fa-3',                      def:'3'      },
@@ -547,7 +558,6 @@ const ACTIONS = [
   { id:'skill_6',   cat:'skills',   label:'Skill Slot 6',    icon:'fa-6',                      def:'6'      },
   { id:'emote',     cat:'skills',   label:'Emote',           icon:'fa-face-smile',             def:'G'      },
   { id:'mount',     cat:'skills',   label:'Mount / Dismount',icon:'fa-horse',                  def:'H'      },
-  // UI
   { id:'inventory', cat:'ui',       label:'Inventory',       icon:'fa-bag-shopping',           def:'I'      },
   { id:'map',       cat:'ui',       label:'World Map',       icon:'fa-map',                    def:'M'      },
   { id:'quests',    cat:'ui',       label:'Quest Log',       icon:'fa-scroll',                 def:'J'      },
@@ -565,29 +575,17 @@ const MOD_LABEL = { none:'—', shift:'⇧ Shift', ctrl:'^ Ctrl', alt:'⌥ Alt',
 // STATE
 // ═══════════════════════════════════════════════════════════════════════════
 
-const bindings = {};          // actionId → { key: string|null, modifier: string }
+const bindings = {};
 ACTIONS.forEach(a => { bindings[a.id] = { key: a.def, modifier: 'none' }; });
-
-const hotbar = {};            // slot (1–10) → actionId|null
-
-let activeTab       = 'bindings';
-let selectedAction  = null;   // actionId
-let selectedHSlot   = null;   // 1–10
-let catFilter       = 'all';
-let palFilter       = 'all';
-let listeningFor    = null;   // actionId when in bind mode
+const hotbar = {};
+let activeTab='bindings', selectedAction=null, selectedHSlot=null, catFilter='all', palFilter='all', listeningFor=null;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 
 window.addEventListener('load', () => {
-  renderList();
-  renderHotbar();
-  renderPalette();
-  updateKbMap();
-  updateStats();
-  updateConflicts();
+  renderList(); renderHotbar(); renderPalette(); updateKbMap(); updateStats(); updateConflicts();
   document.addEventListener('keydown', onKeydown);
 });
 
@@ -597,130 +595,89 @@ window.addEventListener('load', () => {
 
 function switchTab(name, btn) {
   ['bindings','keyboard','hotbar'].forEach(t => {
-    document.getElementById('tab-'+t).style.display = t === name ? '' : 'none';
-    document.getElementById('tbtn-'+t).classList.toggle('active', t === name);
+    document.getElementById('tab-'+t).style.display = t===name?'':'none';
+    document.getElementById('tbtn-'+t).classList.toggle('active', t===name);
   });
   activeTab = name;
-  if (name === 'keyboard') { updateKbMap(); updateStats(); }
-  if (name === 'hotbar')   { renderHotbar(); renderPalette(); }
+  if (name==='keyboard') { updateKbMap(); updateStats(); }
+  if (name==='hotbar')   { renderHotbar(); renderPalette(); }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// BINDINGS LIST
+// BINDINGS
 // ═══════════════════════════════════════════════════════════════════════════
 
 function setCatFilter(cat) {
   catFilter = cat;
-  ['all','movement','combat','skills','ui'].forEach(c => {
-    const el = document.getElementById('fpill-'+c);
-    if (el) el.classList.toggle('active', c === cat);
-  });
+  ['all','movement','combat','skills','ui'].forEach(c => { const el=document.getElementById('fpill-'+c); if(el) el.classList.toggle('active', c===cat); });
   renderList();
 }
 
 function renderList() {
-  const q = (document.getElementById('search-box')?.value || '').toLowerCase();
+  const q = (document.getElementById('search-box')?.value||'').toLowerCase();
   const confl = getConflicts();
-  const rows  = ACTIONS.filter(a =>
-    (catFilter === 'all' || a.cat === catFilter) &&
-    (!q || a.label.toLowerCase().includes(q))
-  );
+  const rows = ACTIONS.filter(a => (catFilter==='all'||a.cat===catFilter) && (!q||a.label.toLowerCase().includes(q)));
   const el = document.getElementById('bindings-list');
-  if (!rows.length) { el.innerHTML = '<div style="padding:32px;text-align:center;color:#3f3f46;font-size:0.78rem;">No actions match</div>'; return; }
+  if (!rows.length) { el.innerHTML='<div style="padding:32px;text-align:center;color:var(--muted);font-size:0.78rem;">No actions match</div>'; return; }
 
   el.innerHTML = rows.map(a => {
-    const b   = bindings[a.id];
-    const cat = CATS[a.cat];
-    const hasKey = b && b.key;
-    const cKey   = hasKey ? `${b.modifier}:${b.key}` : null;
-    const isCon  = cKey && confl[cKey] && confl[cKey].length > 1;
-    const isSel  = selectedAction === a.id;
-    const mopts  = MODS.map(m => `<option value="${m}"${b.modifier===m?' selected':''}>${MOD_LABEL[m]}</option>`).join('');
-
+    const b=bindings[a.id], cat=CATS[a.cat];
+    const hasKey=b&&b.key, cKey=hasKey?`${b.modifier}:${b.key}`:null;
+    const isCon=cKey&&confl[cKey]&&confl[cKey].length>1, isSel=selectedAction===a.id;
+    const mopts=MODS.map(m=>`<option value="${m}"${b.modifier===m?' selected':''}>${MOD_LABEL[m]}</option>`).join('');
     return `<div class="action-row${isSel?' is-sel':''}" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 88px;gap:8px;padding:9px 16px;align-items:center;" data-id="${a.id}" onclick="selectAction('${a.id}')">
       <div style="display:flex;align-items:center;gap:9px;">
-        <div class="detail-icon-ring ${cat.ring}" style="width:28px;height:28px;border-radius:7px;flex-shrink:0;">
-          <i class="fa-solid ${a.icon}" style="font-size:11px;" class="${cat.iconColor}"></i>
-        </div>
-        <span style="font-size:0.78rem;font-weight:500;color:#d4d4d8;">${a.label}</span>
+        <div class="detail-icon-ring ${cat.ring}" style="flex-shrink:0;"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:11px;"></i></div>
+        <span style="font-size:0.78rem;font-weight:500;color:var(--text);">${a.label}</span>
       </div>
       <div><span class="cat-badge ${cat.badge}">${cat.label}</span></div>
       <div style="display:flex;align-items:center;gap:5px;">
-        <span class="kchip${!hasKey?' unbound':isCon?' conflict':''}">${hasKey ? b.key : 'unbound'}</span>
-        ${isCon ? '<span class="cdot"></span>' : ''}
+        <span class="kchip${!hasKey?' unbound':isCon?' conflict':''}">${hasKey?b.key:'unbound'}</span>
+        ${isCon?'<span class="cdot"></span>':''}
       </div>
-      <div>
-        <select class="mod-sel" onchange="setMod('${a.id}',this.value)" onclick="event.stopPropagation()">${mopts}</select>
-      </div>
+      <div><select class="mod-sel" onchange="setMod('${a.id}',this.value)" onclick="event.stopPropagation()">${mopts}</select></div>
       <div style="display:flex;gap:5px;justify-content:flex-end;">
-        <button style="padding:4px 10px;font-size:0.65rem;font-weight:600;background:#18181b;border:1px solid #3f3f46;border-radius:6px;color:#71717a;cursor:pointer;white-space:nowrap;" onmouseover="this.style.background='rgba(37,99,235,0.12)';this.style.borderColor='rgba(59,130,246,0.4)';this.style.color='#93c5fd'" onmouseout="this.style.background='#18181b';this.style.borderColor='#3f3f46';this.style.color='#71717a'" onclick="event.stopPropagation();startListen('${a.id}')">Bind</button>
-        <button style="padding:4px 7px;font-size:0.65rem;background:#18181b;border:1px solid #3f3f46;border-radius:6px;color:#52525b;cursor:pointer;" onmouseover="this.style.background='rgba(220,38,38,0.1)';this.style.color='#fca5a5';this.style.borderColor='rgba(220,38,38,0.3)'" onmouseout="this.style.background='#18181b';this.style.color='#52525b';this.style.borderColor='#3f3f46'" onclick="event.stopPropagation();clearBind('${a.id}')"><i class="fa-solid fa-xmark"></i></button>
+        <button style="padding:4px 10px;font-size:0.65rem;font-weight:600;background:var(--surf-2);border:1px solid var(--border-2);border-radius:6px;color:var(--muted);cursor:pointer;white-space:nowrap;" onmouseover="this.style.background='var(--hydra-s)';this.style.borderColor='rgba(74,222,128,0.3)';this.style.color='var(--hydra)'" onmouseout="this.style.background='var(--surf-2)';this.style.borderColor='var(--border-2)';this.style.color='var(--muted)'" onclick="event.stopPropagation();startListen('${a.id}')">Bind</button>
+        <button style="padding:4px 7px;font-size:0.65rem;background:var(--surf-2);border:1px solid var(--border-2);border-radius:6px;color:var(--muted);cursor:pointer;" onmouseover="this.style.background='rgba(220,38,38,0.1)';this.style.color='#fca5a5';this.style.borderColor='rgba(220,38,38,0.25)'" onmouseout="this.style.background='var(--surf-2)';this.style.color='var(--muted)';this.style.borderColor='var(--border-2)'" onclick="event.stopPropagation();clearBind('${a.id}')"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>`;
   }).join('');
 }
 
-function selectAction(id) {
-  selectedAction = selectedAction === id ? null : id;
-  renderList();
-  renderDetail();
-}
-
-function setMod(id, mod) {
-  bindings[id].modifier = mod;
-  updateAll();
-}
-
-function clearBind(id) {
-  bindings[id] = { key: null, modifier: 'none' };
-  updateAll();
-  toast(`Cleared: ${ACTIONS.find(a=>a.id===id)?.label}`);
-}
+function selectAction(id) { selectedAction=selectedAction===id?null:id; renderList(); renderDetail(); }
+function setMod(id,mod) { bindings[id].modifier=mod; updateAll(); }
+function clearBind(id) { bindings[id]={key:null,modifier:'none'}; updateAll(); toast(`Cleared: ${ACTIONS.find(a=>a.id===id)?.label}`); }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// ACTION DETAIL PANEL
+// DETAIL PANEL
 // ═══════════════════════════════════════════════════════════════════════════
 
 function renderDetail() {
-  const el = document.getElementById('action-detail');
-  if (!selectedAction) {
-    el.innerHTML = `<div style="text-align:center;padding:28px 0;color:#3f3f46;"><i class="fa-solid fa-hand-pointer" style="font-size:1.5rem;display:block;margin-bottom:8px;"></i><div style="font-size:0.78rem;">Select an action to edit</div></div>`;
-    return;
-  }
-  const a   = ACTIONS.find(x => x.id === selectedAction);
-  const b   = bindings[selectedAction];
-  const cat = CATS[a.cat];
-  const mopts = MODS.map(m => `<option value="${m}"${b.modifier===m?' selected':''}>${MOD_LABEL[m]}</option>`).join('');
-
-  el.innerHTML = `
+  const el=document.getElementById('action-detail');
+  if (!selectedAction) { el.innerHTML=`<div style="text-align:center;padding:28px 0;color:var(--border-2);"><i class="fa-solid fa-hand-pointer" style="font-size:1.5rem;display:block;margin-bottom:8px;"></i><div style="font-size:0.78rem;color:var(--muted);">Select an action to edit</div></div>`; return; }
+  const a=ACTIONS.find(x=>x.id===selectedAction), b=bindings[selectedAction], cat=CATS[a.cat];
+  const mopts=MODS.map(m=>`<option value="${m}"${b.modifier===m?' selected':''}>${MOD_LABEL[m]}</option>`).join('');
+  el.innerHTML=`
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-      <div class="detail-icon-ring ${cat.ring}"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:15px;"></i></div>
-      <div>
-        <div style="font-size:0.88rem;font-weight:600;color:#fff;">${a.label}</div>
-        <span class="cat-badge ${cat.badge}">${cat.label}</span>
-      </div>
+      <div class="detail-icon-ring ${cat.ring}" style="width:40px;height:40px;border-radius:11px;"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:15px;"></i></div>
+      <div><div style="font-size:0.9rem;font-weight:600;color:var(--text);">${a.label}</div><span class="cat-badge ${cat.badge}">${cat.label}</span></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px;">
-      <div>
-        <div style="font-size:0.62rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Bound Key</div>
-        <span class="kchip${!b.key?' unbound':''}" style="font-size:0.85rem;">${b.key || 'unbound'}</span>
-        ${b.key && b.modifier !== 'none' ? `<span style="font-size:0.7rem;color:#52525b;margin-left:6px;">+ ${MOD_LABEL[b.modifier]}</span>` : ''}
+      <div><div style="font-size:0.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Bound Key</div>
+        <span class="kchip${!b.key?' unbound':''}" style="font-size:0.85rem;">${b.key||'unbound'}</span>
+        ${b.key&&b.modifier!=='none'?`<span style="font-size:0.7rem;color:var(--muted);margin-left:6px;">+ ${MOD_LABEL[b.modifier]}</span>`:''}
       </div>
-      <div>
-        <div style="font-size:0.62rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Modifier</div>
+      <div><div style="font-size:0.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Modifier</div>
         <select class="mod-sel" style="width:100%;padding:6px 8px;" onchange="setMod('${a.id}',this.value)">${mopts}</select>
       </div>
-      <div>
-        <div style="font-size:0.62rem;font-weight:700;color:#3f3f46;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Default</div>
-        <span class="kchip">${a.def}</span>
-      </div>
+      <div><div style="font-size:0.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Default</div><span class="kchip">${a.def}</span></div>
     </div>
     <div style="display:flex;gap:6px;margin-top:16px;">
-      <button onclick="startListen('${a.id}')" style="flex:1;padding:8px;font-size:0.75rem;font-weight:600;background:#1d4ed8;border:none;border-radius:9px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#1d4ed8'">
+      <button onclick="startListen('${a.id}')" class="btn-hydra" style="flex:1;padding:8px;display:flex;align-items:center;justify-content:center;gap:6px;">
         <i class="fa-solid fa-keyboard" style="font-size:11px;"></i> Press to Bind
       </button>
-      <button onclick="bindings['${a.id}']={key:'${a.def}',modifier:'none'};updateAll();renderDetail();toast('Reset to default')" style="padding:8px 10px;background:#18181b;border:1px solid #27272a;border-radius:9px;color:#71717a;cursor:pointer;font-size:0.75rem;" onmouseover="this.style.color='#d4d4d8'" onmouseout="this.style.color='#71717a'" title="Reset to default"><i class="fa-solid fa-rotate-left"></i></button>
-      <button onclick="clearBind('${a.id}')" style="padding:8px 10px;background:#18181b;border:1px solid #27272a;border-radius:9px;color:#52525b;cursor:pointer;font-size:0.75rem;" onmouseover="this.style.color='#fca5a5';this.style.borderColor='rgba(220,38,38,0.3)'" onmouseout="this.style.color='#52525b';this.style.borderColor='#27272a'" title="Clear binding"><i class="fa-solid fa-xmark"></i></button>
+      <button onclick="bindings['${a.id}']={key:'${a.def}',modifier:'none'};updateAll();renderDetail();toast('Reset to default')" style="padding:8px 10px;background:var(--surf-2);border:1px solid var(--border-2);border-radius:9px;color:var(--muted);cursor:pointer;font-size:0.75rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Reset"><i class="fa-solid fa-rotate-left"></i></button>
+      <button onclick="clearBind('${a.id}')" style="padding:8px 10px;background:var(--surf-2);border:1px solid var(--border-2);border-radius:9px;color:var(--muted);cursor:pointer;font-size:0.75rem;" onmouseover="this.style.color='#fca5a5';this.style.borderColor='rgba(220,38,38,0.25)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border-2)'" title="Clear"><i class="fa-solid fa-xmark"></i></button>
     </div>`;
 }
 
@@ -729,43 +686,24 @@ function renderDetail() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function getConflicts() {
-  const map = {};
-  for (const [id, b] of Object.entries(bindings)) {
+  const map={};
+  for (const [id,b] of Object.entries(bindings)) {
     if (!b.key) continue;
-    const k = `${b.modifier}:${b.key}`;
-    if (!map[k]) map[k] = [];
+    const k=`${b.modifier}:${b.key}`;
+    if (!map[k]) map[k]=[];
     map[k].push(id);
   }
   return map;
 }
 
 function updateConflicts() {
-  const map = getConflicts();
-  const conflicts = Object.entries(map).filter(([,ids]) => ids.length > 1);
-  const badge = document.getElementById('conflict-badge');
-  const btxt  = document.getElementById('conflict-badge-text');
-  const list  = document.getElementById('conflicts-list');
-
-  if (!conflicts.length) {
-    badge?.style && (badge.style.display = 'none');
-    if (list) list.innerHTML = '<div style="color:#3f3f46;">No conflicts detected</div>';
-    return;
-  }
-
-  badge.style.display = 'flex';
-  btxt.textContent = `${conflicts.length} conflict${conflicts.length>1?'s':''}`;
-
-  if (list) list.innerHTML = conflicts.map(([key, ids]) => {
-    const [mod, k] = key.split(':');
-    const names = ids.map(id => ACTIONS.find(a=>a.id===id)?.label || id);
-    return `<div style="padding:6px 0;border-bottom:1px solid #18181b;last-child:border-0;">
-      <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
-        <span class="cdot"></span>
-        <span class="kchip conflict" style="font-size:0.65rem;">${k}</span>
-        ${mod!=='none'?`<span style="font-size:0.65rem;color:#71717a;">+ ${MOD_LABEL[mod]}</span>`:''}
-      </div>
-      <div style="font-size:0.68rem;color:#52525b;padding-left:11px;">${names.join(' · ')}</div>
-    </div>`;
+  const map=getConflicts(), conflicts=Object.entries(map).filter(([,ids])=>ids.length>1);
+  const badge=document.getElementById('conflict-badge'), btxt=document.getElementById('conflict-badge-text'), list=document.getElementById('conflicts-list');
+  if (!conflicts.length) { badge&&(badge.style.display='none'); if(list) list.innerHTML='<div style="color:var(--muted);">No conflicts detected</div>'; return; }
+  badge.style.display='flex'; btxt.textContent=`${conflicts.length} conflict${conflicts.length>1?'s':''}`;
+  if (list) list.innerHTML=conflicts.map(([key,ids])=>{
+    const [mod,k]=key.split(':'), names=ids.map(id=>ACTIONS.find(a=>a.id===id)?.label||id);
+    return `<div style="padding:6px 0;border-bottom:1px solid var(--border);"><div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><span class="cdot"></span><span class="kchip conflict" style="font-size:0.65rem;">${k}</span>${mod!=='none'?`<span style="font-size:0.65rem;color:var(--muted);">+ ${MOD_LABEL[mod]}</span>`:''}</div><div style="font-size:0.68rem;color:var(--muted);padding-left:11px;">${names.join(' · ')}</div></div>`;
   }).join('');
 }
 
@@ -774,167 +712,76 @@ function updateConflicts() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function updateKbMap() {
-  // Build key → action index (base modifier only for map coloring)
-  const keyToId = {};
-  for (const [id, b] of Object.entries(bindings)) {
-    if (b.key && b.modifier === 'none') keyToId[b.key] = id;
-  }
-  const confl = getConflicts();
-
+  const keyToId={};
+  for (const [id,b] of Object.entries(bindings)) { if (b.key&&b.modifier==='none') keyToId[b.key]=id; }
+  const confl=getConflicts();
   document.querySelectorAll('.key[data-key]').forEach(el => {
-    const k = el.dataset.key;
+    const k=el.dataset.key;
     el.classList.remove('kc-movement','kc-combat','kc-skills','kc-ui','kc-conflict');
-    const oldSub = el.querySelector('.k-sub');
-    if (oldSub) oldSub.remove();
-
-    const id = keyToId[k];
-    if (!id) return;
-    const cKey = `none:${k}`;
-    if (confl[cKey] && confl[cKey].length > 1) {
-      el.classList.add('kc-conflict');
-    } else {
-      const a = ACTIONS.find(x => x.id === id);
-      if (a) {
-        el.classList.add(CATS[a.cat].kclass);
-        const sub = document.createElement('span');
-        sub.className = 'k-sub';
-        sub.textContent = a.label.length > 9 ? a.label.slice(0,8)+'…' : a.label;
-        el.appendChild(sub);
-      }
-    }
+    const old=el.querySelector('.k-sub'); if(old) old.remove();
+    const id=keyToId[k]; if (!id) return;
+    const cKey=`none:${k}`;
+    if (confl[cKey]&&confl[cKey].length>1) { el.classList.add('kc-conflict'); }
+    else { const a=ACTIONS.find(x=>x.id===id); if(a){ el.classList.add(CATS[a.cat].kclass); const sub=document.createElement('span'); sub.className='k-sub'; sub.textContent=a.label.length>9?a.label.slice(0,8)+'…':a.label; el.appendChild(sub); } }
   });
-
-  // Mouse buttons
-  const mouseIds = {};
-  for (const [id, b] of Object.entries(bindings)) {
-    if (b.key && ['LMB','RMB','MB3','MB4','MB5'].includes(b.key)) mouseIds[b.key] = id;
-  }
+  const mouseIds={};
+  for (const [id,b] of Object.entries(bindings)) { if(b.key&&['LMB','RMB','MB3','MB4','MB5'].includes(b.key)) mouseIds[b.key]=id; }
   ['LMB','RMB','MB3','MB4','MB5'].forEach(k => {
-    const el  = document.querySelector(`[data-mouse="${k}"]`);
-    const sub = document.getElementById(`msub-${k}`);
+    const el=document.querySelector(`[data-mouse="${k}"]`), sub=document.getElementById(`msub-${k}`);
     if (!el) return;
     el.classList.remove('kc-movement','kc-combat','kc-skills','kc-ui');
-    if (sub) sub.textContent = '';
-    const id = mouseIds[k];
-    if (id) {
-      const a = ACTIONS.find(x => x.id === id);
-      if (a) {
-        el.classList.add(CATS[a.cat].kclass);
-        if (sub) sub.textContent = a.label.length > 9 ? a.label.slice(0,8)+'…' : a.label;
-      }
-    }
+    if (sub) sub.textContent='';
+    const id=mouseIds[k];
+    if (id) { const a=ACTIONS.find(x=>x.id===id); if(a){ el.classList.add(CATS[a.cat].kclass); if(sub) sub.textContent=a.label.length>9?a.label.slice(0,8)+'…':a.label; } }
   });
 }
 
 function kbClickKey(k) {
-  const el = document.getElementById('kb-detail');
-  if (!el) return;
-  const bound = ACTIONS.filter(a => bindings[a.id]?.key === k);
-  if (!bound.length) {
-    el.innerHTML = `<div>
-      <span class="kchip" style="font-size:0.9rem;margin-bottom:8px;display:inline-block;">${k}</span>
-      <div style="font-size:0.72rem;color:#52525b;margin-top:6px;">No binding on this key</div>
-      <button onclick="switchTab('bindings',document.getElementById('tbtn-bindings'));setTimeout(()=>{catFilter='all';renderList()},50)" style="margin-top:12px;font-size:0.72rem;color:#3b82f6;background:none;border:none;cursor:pointer;padding:0;">Assign in Bindings tab →</button>
-    </div>`;
-    return;
-  }
-  el.innerHTML = `<div>
-    <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
-      <span class="kchip" style="font-size:0.9rem;">${k}</span>
-      ${bound.length>1?'<span class="cdot"></span><span style="font-size:0.7rem;color:#fcd34d;">Conflict</span>':''}
-    </div>
-    ${bound.map(a => {
-      const cat = CATS[a.cat];
-      const b   = bindings[a.id];
-      return `<div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:9px;background:#18181b;border:1px solid #27272a;margin-bottom:6px;cursor:pointer;" onclick="switchTab('bindings',document.getElementById('tbtn-bindings'));selectedAction='${a.id}';setTimeout(()=>{renderList();renderDetail()},50)" onmouseover="this.style.borderColor='#52525b'" onmouseout="this.style.borderColor='#27272a'">
-        <div class="detail-icon-ring ${cat.ring}" style="width:28px;height:28px;border-radius:7px;flex-shrink:0;"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:11px;"></i></div>
-        <div>
-          <div style="font-size:0.78rem;font-weight:500;color:#e4e4e7;">${a.label}</div>
-          <div style="font-size:0.65rem;color:#52525b;">${cat.label}${b.modifier!=='none'?' · '+MOD_LABEL[b.modifier]:''}</div>
-        </div>
-        <i class="fa-solid fa-arrow-right" style="font-size:9px;color:#52525b;margin-left:auto;"></i>
-      </div>`;
-    }).join('')}
+  const el=document.getElementById('kb-detail'); if (!el) return;
+  const bound=ACTIONS.filter(a=>bindings[a.id]?.key===k);
+  if (!bound.length) { el.innerHTML=`<div><span class="kchip" style="font-size:0.9rem;margin-bottom:8px;display:inline-block;">${k}</span><div style="font-size:0.72rem;color:var(--muted);margin-top:6px;">No binding</div><button onclick="switchTab('bindings',document.getElementById('tbtn-bindings'))" style="margin-top:12px;font-size:0.72rem;color:var(--hydra);background:none;border:none;cursor:pointer;padding:0;">Assign in Bindings tab →</button></div>`; return; }
+  el.innerHTML=`<div><div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;"><span class="kchip" style="font-size:0.9rem;">${k}</span>${bound.length>1?'<span class="cdot"></span><span style="font-size:0.7rem;color:#fde68a;">Conflict</span>':''}</div>
+    ${bound.map(a=>{const cat=CATS[a.cat],b=bindings[a.id];return`<div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:9px;background:var(--surf-2);border:1px solid var(--border-2);margin-bottom:6px;cursor:pointer;" onclick="switchTab('bindings',document.getElementById('tbtn-bindings'));selectedAction='${a.id}';setTimeout(()=>{renderList();renderDetail()},50)" onmouseover="this.style.borderColor='var(--hydra)'" onmouseout="this.style.borderColor='var(--border-2)'"><div class="detail-icon-ring ${cat.ring}" style="width:28px;height:28px;border-radius:7px;flex-shrink:0;"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:11px;"></i></div><div><div style="font-size:0.78rem;font-weight:500;color:var(--text);">${a.label}</div><div style="font-size:0.65rem;color:var(--muted);">${cat.label}${b.modifier!=='none'?' · '+MOD_LABEL[b.modifier]:''}</div></div><i class="fa-solid fa-arrow-right" style="font-size:9px;color:var(--muted);margin-left:auto;"></i></div>`;}).join('')}
   </div>`;
 }
 
 function updateStats() {
-  const el = document.getElementById('kb-stats');
-  if (!el) return;
-  const total = ACTIONS.length;
-  const bound = ACTIONS.filter(a => bindings[a.id]?.key).length;
-  const confl = Object.values(getConflicts()).filter(ids => ids.length > 1).length;
-  el.innerHTML = `
-    <div style="display:flex;justify-content:space-between;"><span style="color:#71717a;">Total actions</span><span style="font-family:monospace;color:#a1a1aa;">${total}</span></div>
-    <div style="display:flex;justify-content:space-between;"><span style="color:#71717a;">Bound</span><span style="font-family:monospace;color:#6ee7b7;">${bound}</span></div>
-    <div style="display:flex;justify-content:space-between;"><span style="color:#71717a;">Unbound</span><span style="font-family:monospace;color:#52525b;">${total-bound}</span></div>
-    ${confl>0?`<div style="display:flex;justify-content:space-between;"><span style="color:#fcd34d;">Conflicts</span><span style="font-family:monospace;color:#fcd34d;">${confl}</span></div>`:''}`;
+  const el=document.getElementById('kb-stats'); if (!el) return;
+  const total=ACTIONS.length, bound=ACTIONS.filter(a=>bindings[a.id]?.key).length, confl=Object.values(getConflicts()).filter(ids=>ids.length>1).length;
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Total actions</span><span style="font-family:monospace;color:var(--subtle);">${total}</span></div>
+    <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Bound</span><span style="font-family:monospace;color:var(--hydra);">${bound}</span></div>
+    <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Unbound</span><span style="font-family:monospace;color:var(--muted);">${total-bound}</span></div>
+    ${confl>0?`<div style="display:flex;justify-content:space-between;"><span style="color:#fde68a;">Conflicts</span><span style="font-family:monospace;color:#fde68a;">${confl}</span></div>`:''}`;
 }
 
-// Key click handlers (Keyboard tab)
-document.addEventListener('click', e => {
-  const key = e.target.closest('.key[data-key]');
-  if (key && activeTab === 'keyboard') kbClickKey(key.dataset.key);
-});
+document.addEventListener('click', e => { const key=e.target.closest('.key[data-key]'); if(key&&activeTab==='keyboard') kbClickKey(key.dataset.key); });
 
 // ═══════════════════════════════════════════════════════════════════════════
 // LISTEN MODE
 // ═══════════════════════════════════════════════════════════════════════════
 
-function startListen(actionId) {
-  listeningFor = actionId;
-  const a = ACTIONS.find(x => x.id === actionId);
-  document.getElementById('listen-label').textContent = `Binding: ${a?.label}`;
+function startListen(id) {
+  listeningFor=id;
+  document.getElementById('listen-label').textContent=`Binding: ${ACTIONS.find(x=>x.id===id)?.label}`;
   document.getElementById('listen-overlay').classList.add('active');
 }
+function stopListen() { listeningFor=null; document.getElementById('listen-overlay').classList.remove('active'); }
 
-function stopListen() {
-  listeningFor = null;
-  document.getElementById('listen-overlay').classList.remove('active');
-}
-
-const KEY_MAP = {
-  ' ':'SPACE', 'Enter':'ENTER', 'Tab':'TAB', 'CapsLock':'CAPS',
-  'Backspace':'BKSP', 'Delete':'DEL', 'Insert':'INS',
-  'Home':'HOME', 'End':'END', 'PageUp':'PGUP', 'PageDown':'PGDN',
-  'ArrowUp':'UP', 'ArrowDown':'DOWN', 'ArrowLeft':'LEFT', 'ArrowRight':'RIGHT',
-  'ContextMenu':'MENU', 'PrintScreen':'PRTSC', 'ScrollLock':'SCRLK', 'Pause':'PAUSE',
-  ';':'SEMI', "'":"QUOTE", '\\':'BSLASH',
-  'F1':'F1','F2':'F2','F3':'F3','F4':'F4','F5':'F5','F6':'F6',
-  'F7':'F7','F8':'F8','F9':'F9','F10':'F10','F11':'F11','F12':'F12',
-};
-const MODIFIER_KEYS = ['LSHIFT','RSHIFT','LCTRL','RCTRL','LALT','RALT','LWIN','RWIN'];
+const KEY_MAP={' ':'SPACE','Enter':'ENTER','Tab':'TAB','CapsLock':'CAPS','Backspace':'BKSP','Delete':'DEL','Insert':'INS','Home':'HOME','End':'END','PageUp':'PGUP','PageDown':'PGDN','ArrowUp':'UP','ArrowDown':'DOWN','ArrowLeft':'LEFT','ArrowRight':'RIGHT','ContextMenu':'MENU','PrintScreen':'PRTSC','ScrollLock':'SCRLK','Pause':'PAUSE',';':'SEMI',"'":"QUOTE",'\\':'BSLASH','F1':'F1','F2':'F2','F3':'F3','F4':'F4','F5':'F5','F6':'F6','F7':'F7','F8':'F8','F9':'F9','F10':'F10','F11':'F11','F12':'F12'};
+const MODIFIER_KEYS=['LSHIFT','RSHIFT','LCTRL','RCTRL','LALT','RALT','LWIN','RWIN'];
 
 function onKeydown(e) {
   if (!listeningFor) return;
   e.preventDefault(); e.stopPropagation();
-
-  if (e.key === 'Escape') { stopListen(); return; }
-  if (e.key === 'Backspace') { clearBind(listeningFor); stopListen(); return; }
-
-  let key = KEY_MAP[e.key];
-  if (!key) {
-    if (e.key === 'Shift')   key = e.location === 2 ? 'RSHIFT' : 'LSHIFT';
-    else if (e.key === 'Control') key = e.location === 2 ? 'RCTRL' : 'LCTRL';
-    else if (e.key === 'Alt')     key = e.location === 2 ? 'RALT'  : 'LALT';
-    else if (e.key === 'Meta')    key = e.location === 2 ? 'RWIN'  : 'LWIN';
-    else key = e.key.length === 1 ? e.key.toUpperCase() : e.key.toUpperCase();
-  }
-
-  if (MODIFIER_KEYS.includes(key)) return; // pure modifier press, keep waiting
-
-  const mod = e.ctrlKey && e.shiftKey ? 'ctrl+shift'
-            : e.ctrlKey  ? 'ctrl'
-            : e.shiftKey ? 'shift'
-            : e.altKey   ? 'alt'
-            : 'none';
-
-  bindings[listeningFor] = { key, modifier: mod };
-  const a = ACTIONS.find(x => x.id === listeningFor);
-  toast(`Bound "${a?.label}" → ${mod !== 'none' ? MOD_LABEL[mod]+' + ' : ''}${key}`);
-  stopListen();
-  updateAll();
-  renderDetail();
+  if (e.key==='Escape') { stopListen(); return; }
+  if (e.key==='Backspace') { clearBind(listeningFor); stopListen(); return; }
+  let key=KEY_MAP[e.key];
+  if (!key) { if(e.key==='Shift') key=e.location===2?'RSHIFT':'LSHIFT'; else if(e.key==='Control') key=e.location===2?'RCTRL':'LCTRL'; else if(e.key==='Alt') key=e.location===2?'RALT':'LALT'; else if(e.key==='Meta') key=e.location===2?'RWIN':'LWIN'; else key=e.key.length===1?e.key.toUpperCase():e.key.toUpperCase(); }
+  if (MODIFIER_KEYS.includes(key)) return;
+  const mod=e.ctrlKey&&e.shiftKey?'ctrl+shift':e.ctrlKey?'ctrl':e.shiftKey?'shift':e.altKey?'alt':'none';
+  bindings[listeningFor]={key,modifier:mod};
+  toast(`Bound "${ACTIONS.find(x=>x.id===listeningFor)?.label}" → ${mod!=='none'?MOD_LABEL[mod]+' + ':''}${key}`);
+  stopListen(); updateAll(); renderDetail();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -942,72 +789,54 @@ function onKeydown(e) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function renderHotbar() {
-  const c = document.getElementById('hotbar-slots');
-  if (!c) return;
-  c.innerHTML = '';
-  for (let i = 1; i <= 10; i++) {
-    const id  = hotbar[i] || null;
-    const a   = id ? ACTIONS.find(x => x.id === id) : null;
-    const cat = a ? CATS[a.cat] : null;
-    const b   = a ? bindings[a.id] : null;
-    const sel = selectedHSlot === i;
-
-    const slot = document.createElement('div');
-    slot.className = `hslot${sel?' hs-sel':''}${a?' hs-filled':''}`;
-    slot.innerHTML = `<div style="font-size:0.6rem;color:${sel?'#3b82f6':'#3f3f46'};font-family:monospace;font-weight:700;">${i===10?0:i}</div>
-      ${a ? `<div class="detail-icon-ring ${cat.ring}" style="width:32px;height:32px;border-radius:9px;"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:13px;"></i></div>
-        <div style="font-size:0.58rem;color:#a1a1aa;text-align:center;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px;">${a.label}</div>
-        <div style="font-family:monospace;font-size:0.58rem;color:#52525b;">${b?.key||'—'}</div>`
-      : `<div style="font-size:0.6rem;color:#27272a;">Empty</div>`}`;
-    slot.addEventListener('click', () => {
-      selectedHSlot = selectedHSlot === i ? null : i;
-      renderHotbar();
-    });
+  const c=document.getElementById('hotbar-slots'); if (!c) return;
+  c.innerHTML='';
+  for (let i=1;i<=10;i++) {
+    const id=hotbar[i]||null, a=id?ACTIONS.find(x=>x.id===id):null, cat=a?CATS[a.cat]:null, b=a?bindings[a.id]:null, sel=selectedHSlot===i;
+    const slot=document.createElement('div');
+    slot.className=`hslot${sel?' hs-sel':''}${a?' hs-filled':''}`;
+    slot.innerHTML=`<div style="font-size:0.6rem;color:${sel?'var(--hydra)':'var(--border-2)'};font-family:monospace;font-weight:700;">${i===10?0:i}</div>
+      ${a?`<div class="detail-icon-ring ${cat.ring}" style="width:32px;height:32px;border-radius:9px;"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:13px;"></i></div>
+        <div style="font-size:0.58rem;color:var(--text);text-align:center;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px;">${a.label}</div>
+        <div style="font-family:monospace;font-size:0.58rem;color:var(--muted);">${b?.key||'—'}</div>`
+      :`<div style="font-size:0.6rem;color:var(--border-2);">Empty</div>`}`;
+    slot.addEventListener('click', () => { selectedHSlot=selectedHSlot===i?null:i; renderHotbar(); });
     c.appendChild(slot);
   }
 }
 
 function setPalFilter(cat) {
-  palFilter = cat;
-  ['all','movement','combat','skills','ui'].forEach(c => {
-    const el = document.getElementById('ppill-'+c);
-    if (el) el.classList.toggle('active', c === cat);
-  });
+  palFilter=cat;
+  ['all','movement','combat','skills','ui'].forEach(c=>{ const el=document.getElementById('ppill-'+c); if(el) el.classList.toggle('active',c===cat); });
   renderPalette();
 }
 
 function renderPalette() {
-  const c = document.getElementById('action-palette');
-  if (!c) return;
-  const items = palFilter === 'all' ? ACTIONS : ACTIONS.filter(a => a.cat === palFilter);
-  const onBar = new Set(Object.values(hotbar).filter(Boolean));
-
-  c.innerHTML = items.map(a => {
-    const cat = CATS[a.cat];
-    const b   = bindings[a.id];
+  const c=document.getElementById('action-palette'); if (!c) return;
+  const items=palFilter==='all'?ACTIONS:ACTIONS.filter(a=>a.cat===palFilter);
+  const onBar=new Set(Object.values(hotbar).filter(Boolean));
+  c.innerHTML=items.map(a=>{
+    const cat=CATS[a.cat], b=bindings[a.id];
     return `<div class="pal-item${onBar.has(a.id)?' on-bar':''}" onclick="assignHotbar('${a.id}')">
       <div class="detail-icon-ring ${cat.ring}" style="width:36px;height:36px;border-radius:10px;"><i class="fa-solid ${a.icon} ${cat.iconColor}" style="font-size:14px;"></i></div>
-      <div style="font-size:0.65rem;font-weight:500;color:#d4d4d8;text-align:center;line-height:1.25;">${a.label}</div>
-      <div style="font-family:monospace;font-size:0.6rem;color:#52525b;">${b?.key||'—'}</div>
-      ${onBar.has(a.id)?'<div style="font-size:0.55rem;color:#6ee7b7;">On bar</div>':''}
+      <div style="font-size:0.65rem;font-weight:500;color:var(--text);text-align:center;line-height:1.25;">${a.label}</div>
+      <div style="font-family:monospace;font-size:0.6rem;color:var(--muted);">${b?.key||'—'}</div>
+      ${onBar.has(a.id)?'<div style="font-size:0.55rem;color:var(--hydra);">On bar</div>':''}
     </div>`;
   }).join('');
 }
 
 function assignHotbar(actionId) {
   if (!selectedHSlot) { toast('Select a hotbar slot first'); return; }
-  // Remove from existing slot
-  for (const [s, id] of Object.entries(hotbar)) { if (id === actionId) delete hotbar[s]; }
-  hotbar[selectedHSlot] = actionId;
-  const a = ACTIONS.find(x => x.id === actionId);
-  toast(`Slot ${selectedHSlot} → ${a?.label}`);
+  for (const [s,id] of Object.entries(hotbar)) { if(id===actionId) delete hotbar[s]; }
+  hotbar[selectedHSlot]=actionId;
+  toast(`Slot ${selectedHSlot} → ${ACTIONS.find(x=>x.id===actionId)?.label}`);
   renderHotbar(); renderPalette();
 }
 
 function clearHotbar() {
   if (!confirm('Clear all hotbar slots?')) return;
-  Object.keys(hotbar).forEach(k => delete hotbar[k]);
-  selectedHSlot = null;
+  Object.keys(hotbar).forEach(k=>delete hotbar[k]); selectedHSlot=null;
   renderHotbar(); renderPalette();
 }
 
@@ -1017,53 +846,35 @@ function clearHotbar() {
 
 function restoreDefaults() {
   if (!confirm('Restore all bindings to default?')) return;
-  ACTIONS.forEach(a => { bindings[a.id] = { key: a.def, modifier: 'none' }; });
-  updateAll(); renderDetail(); toast('Defaults restored');
+  ACTIONS.forEach(a=>{bindings[a.id]={key:a.def,modifier:'none'};}); updateAll(); renderDetail(); toast('Defaults restored');
 }
 
 function exportConfig() {
-  const data = { version:'1.0', exported: new Date().toISOString(), bindings, hotbar };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
-  const url  = URL.createObjectURL(blob);
-  Object.assign(document.createElement('a'), { href:url, download:'input-config.json' }).click();
+  const data={version:'1.0',tool:'HYDRA Input Configurator',studio:'Grudge Studio',exported:new Date().toISOString(),bindings,hotbar};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  Object.assign(document.createElement('a'),{href:url,download:'hydra-input-config.json'}).click();
   URL.revokeObjectURL(url);
-  toast('Exported input-config.json');
+  toast('Exported hydra-input-config.json');
 }
 
 function handleImport(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = e => {
-    try {
-      const d = JSON.parse(e.target.result);
-      if (d.bindings) Object.assign(bindings, d.bindings);
-      if (d.hotbar)   Object.assign(hotbar, d.hotbar);
-      updateAll(); renderDetail(); toast('Config imported');
-    } catch { toast('Invalid config file'); }
-  };
-  r.readAsText(file);
-  input.value = '';
+  const file=input.files[0]; if (!file) return;
+  const r=new FileReader();
+  r.onload=e=>{ try { const d=JSON.parse(e.target.result); if(d.bindings) Object.assign(bindings,d.bindings); if(d.hotbar) Object.assign(hotbar,d.hotbar); updateAll(); renderDetail(); toast('Config imported'); } catch { toast('Invalid config file'); } };
+  r.readAsText(file); input.value='';
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════════════════════════════
 
-function updateAll() {
-  renderList();
-  updateConflicts();
-  if (activeTab === 'keyboard') { updateKbMap(); updateStats(); }
-  if (activeTab === 'hotbar')   { renderHotbar(); renderPalette(); }
-}
+function updateAll() { renderList(); updateConflicts(); if(activeTab==='keyboard'){updateKbMap();updateStats();} if(activeTab==='hotbar'){renderHotbar();renderPalette();} }
 
 let _tt;
 function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(_tt);
-  _tt = setTimeout(() => el.classList.remove('show'), 2800);
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('show'),2800);
 }
 </script>
 </body>
