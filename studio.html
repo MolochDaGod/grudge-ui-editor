@@ -237,6 +237,39 @@ input,select,textarea{font-family:inherit;}
 #aikey{flex:1;background:var(--s3);border:1px solid var(--bd2);color:var(--text);font-size:.59rem;padding:3px 6px;border-radius:5px;outline:none;}
 #aikey:focus{border-color:var(--teal);}
 
+/* UNIT FRAMES */
+.ufwrap{display:flex;align-items:center;gap:6px;padding:4px 6px;height:100%;}.ufface{width:40px;height:40px;border-radius:4px;background:var(--slot,rgba(255,255,255,.06));border:2px solid var(--ca,#4ade80);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--ca,#4ade80);flex-shrink:0;}.ufinfo{flex:1;display:flex;flex-direction:column;gap:2px;}.ufname{font-size:.6rem;font-weight:700;color:var(--text,#e0e2f0);}.uflvl{font-size:.52rem;color:var(--ca,#4ade80);font-weight:400;}.ufbar{height:7px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}.ufhp{height:100%;background:linear-gradient(90deg,#e11d48,#f87171);border-radius:4px;transition:width .3s;}.ufbarlbl{font-size:.46rem;color:var(--muted,#52546e);}.ufmpbar{margin-top:1px;}.ufmp{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:4px;}
+.tfwrap .ufinfo{flex-direction:column;}
+.afwrap{display:flex;align-items:center;gap:4px;padding:3px 5px;height:100%;}.afface{width:26px;height:26px;border-radius:3px;background:rgba(255,255,255,.06);border:1px solid rgba(74,222,128,.3);display:flex;align-items:center;justify-content:center;font-size:.66rem;color:#4ade80;flex-shrink:0;}.afinfo{flex:1;display:flex;flex-direction:column;gap:2px;}.afname{font-size:.54rem;font-weight:600;color:var(--text,#e0e2f0);}.afbar{height:5px;background:rgba(0,0,0,.5);border-radius:3px;overflow:hidden;}.afhp{height:100%;background:#22c55e;border-radius:3px;}
+/* ORBS */
+.orbwrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}.orbval{position:absolute;font-size:.62rem;font-weight:700;color:var(--text,#fff);}.orblbl{position:absolute;bottom:8%;font-size:.47rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+/* HOTBAR 2ROW */
+.hb2wrap{display:flex;flex-direction:column;gap:3px;padding:4px;height:100%;justify-content:center;}
+/* MENU DOCK */
+.mdwrap{display:flex;align-items:center;gap:3px;padding:3px;height:100%;justify-content:center;}.mdbtn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 8px;border-radius:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:.46rem;color:rgba(255,255,255,.5);transition:all .1s;flex:1;}.mdbtn i{font-size:.72rem;color:var(--ca,#4ade80);}
+/* COMBAT LOG */
+.clwrap{display:flex;flex-direction:column;height:100%;}.clmsgs{flex:1;padding:3px 5px;display:flex;flex-direction:column;gap:2px;overflow:hidden;justify-content:flex-end;}.clm{font-size:.52rem;line-height:1.4;padding:1px 0;}.clm.dmg{color:#f87171;}.clm.heal{color:#4ade80;}.clm.sys{color:#9496b0;font-style:italic;}.clt{font-weight:700;}.cldmg{font-weight:700;color:#fca5a5;}.clheal{font-weight:700;}
+/* OBJECTIVES */
+.objwrap{height:100%;display:flex;flex-direction:column;}.objlist{padding:3px 6px;display:flex;flex-direction:column;gap:3px;flex:1;}.objitem{font-size:.6rem;color:var(--sub,#9496b0);display:flex;align-items:center;gap:5px;}.objitem.done{color:var(--muted,#52546e);text-decoration:line-through;}.objitem i{font-size:.5rem;color:var(--ca,#4ade80);flex-shrink:0;}.objprog{color:var(--ca,#4ade80);font-weight:600;}
+/* DIALOGUE */
+.dlgwrap{display:flex;flex-direction:column;height:100%;padding:8px 12px;gap:5px;}.dlgspk{font-size:.65rem;font-weight:700;color:var(--ca,#4ade80);letter-spacing:.05em;text-transform:uppercase;}.dlgtxt{flex:1;font-size:.68rem;line-height:1.6;color:var(--text,#e0e2f0);}.dlgbtns{display:flex;gap:5px;}.dlgbtn{padding:4px 12px;border-radius:5px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:.6rem;font-weight:600;color:var(--text,#e0e2f0);cursor:pointer;}.dlgbtnx{color:var(--muted,#52546e);}
+/* QUEST TRACKER */
+.qtwrap{height:100%;display:flex;flex-direction:column;}.qtitle{padding:3px 6px;font-size:.65rem;font-weight:700;color:var(--ca,#4ade80);}.qtobj{padding:0 6px;font-size:.6rem;color:var(--sub,#9496b0);line-height:1.5;}
+/* ALERT BANNER */
+.albwrap{display:flex;align-items:center;justify-content:center;gap:8px;height:100%;padding:0 14px;border:1px solid;border-radius:inherit;}.albtxt{font-size:.75rem;font-weight:700;letter-spacing:.08em;}
+/* INTERACTION PROMPT */
+.ipwrap{display:flex;align-items:center;gap:8px;height:100%;padding:0 12px;}.ipkey{width:28px;height:28px;border-radius:5px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;}.ipact{font-size:.7rem;font-weight:600;color:var(--text,#e0e2f0);}
+/* ATTR PANEL */
+.attrlist{padding:2px 4px;display:flex;flex-direction:column;gap:1px;height:100%;justify-content:space-around;overflow:hidden;}.attrow{display:flex;align-items:center;gap:5px;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,.02);}.attic{font-size:.66rem;width:16px;text-align:center;}.attn{flex:1;font-size:.58rem;font-weight:600;color:var(--sub,#9496b0);letter-spacing:.06em;}.attv{font-size:.62rem;font-weight:700;color:var(--ca,#4ade80);}
+/* WEAPON SELECTOR */
+.wswrap{display:flex;align-items:center;gap:3px;padding:3px 5px;height:100%;}.wsbtn{padding:3px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:.54rem;color:var(--sub,#9496b0);cursor:pointer;white-space:nowrap;}.wsbtn.on{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:var(--ca,#4ade80);}
+
+/* MODE BAR */
+#modebar{height:30px;background:var(--s2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:center;gap:3px;padding:0 10px;flex-shrink:0;}
+.modbtn{padding:4px 14px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .15s;}
+.modbtn:hover{background:var(--s4);color:var(--text);}
+.modbtn.on{background:var(--hs);border-color:var(--hb);color:var(--hydra);}
+
 /* STATUSBAR */
 #sb{height:22px;background:var(--s1);border-top:1px solid var(--bd);display:flex;align-items:center;padding:0 10px;gap:10px;flex-shrink:0;}
 .si{font-size:.59rem;color:var(--muted);display:flex;align-items:center;gap:3px;}
@@ -303,6 +336,18 @@ input,select,textarea{font-family:inherit;}
   </div>
 </div>
 
+<div id="modebar">
+  <button class="modbtn on" id="mode-main" onclick="setMode('main')"><i class="fa fa-table-columns"></i> Main Panel</button>
+  <button class="modbtn" id="mode-canvas" onclick="setMode('canvas')"><i class="fa fa-layer-group"></i> Canvas UI</button>
+  <button class="modbtn" id="mode-hud" onclick="setMode('hud')"><i class="fa fa-gamepad"></i> HUD</button>
+  <div style="position:absolute;right:10px;display:flex;gap:3px;">
+    <button class="modbtn" style="font-size:.57rem;padding:3px 9px;" onclick="tpl('rpg')">RPG Example</button>
+    <button class="modbtn" style="font-size:.57rem;padding:3px 9px;" onclick="tpl('fps')">FPS Example</button>
+    <button class="modbtn" style="font-size:.57rem;padding:3px 9px;" onclick="tpl('hud')">HUD Example</button>
+    <button class="modbtn" style="font-size:.57rem;padding:3px 9px;" onclick="tpl('panel')">Panel Example</button>
+    <button class="modbtn" style="font-size:.57rem;padding:3px 9px;" onclick="tpl('canvas')">Canvas Example</button>
+  </div>
+</div>
 <div id="ws">
   <div id="lp">
     <div class="ltabs">
@@ -397,6 +442,7 @@ const G={
   scene:{name:'Untitled Layout',resolution:{w:1920,h:1080},theme:'d',comps:[]},
   sel:new Set(),
   tool:'sel',
+  mode:'main',
   placing:null,
   vp:{x:0,y:0,z:0.45},
   grid:true,snap:true,snapSz:16,
@@ -422,8 +468,24 @@ const D={
   'shop-panel':{l:'Shop',i:'fa-store',cat:'Economy',col:'#f59e0b',d:'Buy/sell UI',w:280,h:340,p:{label:'Shop'}},
   'crosshair':{l:'Crosshair',i:'fa-crosshairs',cat:'FPS',col:'#fff',d:'Aim reticle',w:40,h:40,p:{}},
   'text-label':{l:'Text Label',i:'fa-font',cat:'UI',col:'#8b8b9a',d:'Static text',w:200,h:28,p:{text:'Label',size:14,align:'left'}},
+  'player-frame':{l:'Player Frame',i:'fa-user-shield',cat:'HUD',col:'#4ade80',d:'Portrait+HP/MP unit frame',w:220,h:56,p:{name:'Warrior',level:24,hp:19800,hpMax:19800,mp:468,mpMax:600}},
+  'target-frame':{l:'Target Frame',i:'fa-crosshairs',cat:'HUD',col:'#f43f5e',d:'Selected target unit',w:200,h:48,p:{name:'Mage Priest',level:11,hp:6600,hpMax:9400,hostile:true}},
+  'ally-frame':{l:'Ally Frame',i:'fa-users',cat:'HUD',col:'#16b195',d:'Compact party member',w:160,h:36,p:{name:'Ranger',level:28,hp:80,hpMax:100}},
+  'health-orb':{l:'Health Orb',i:'fa-heart-circle-check',cat:'HUD',col:'#f43f5e',d:'Circular HP orb',w:80,h:80,p:{value:75,max:100,color:'#e11d48',label:'HP'}},
+  'mana-orb':{l:'Mana Orb',i:'fa-circle-dot',cat:'HUD',col:'#3b82f6',d:'Circular MP orb',w:80,h:80,p:{value:60,max:100,color:'#3b82f6',label:'MP'}},
+  'action-orb':{l:'Action Orb',i:'fa-bolt-lightning',cat:'HUD',col:'#f59e0b',d:'Circular AP/stamina orb',w:80,h:80,p:{value:90,max:100,color:'#f59e0b',label:'AP'}},
+  'hotbar-2row':{l:'Hotbar 2-Row',i:'fa-table-cells',cat:'Action',col:'#f59e0b',d:'10-slot dual-row hotbar',w:320,h:130,p:{slots:10,slotSize:52}},
+  'menu-dock':{l:'Menu Dock',i:'fa-grip',cat:'Action',col:'#4ade80',d:'Icon buttons: Spells/Char/Inv',w:200,h:48,p:{buttons:'Spellbook,Character,Inventory,Panel'}},
+  'combat-log':{l:'Combat Log',i:'fa-scroll',cat:'Social',col:'#8b8b9a',d:'Scrolling combat feed',w:280,h:140,p:{label:'Combat Log'}},
+  'objectives':{l:'Objectives',i:'fa-list-check',cat:'UI',col:'#4ade80',d:'Quest objective list',w:220,h:100,p:{label:'Objectives'}},
+  'dialogue-box':{l:'Dialogue Box',i:'fa-comment-dots',cat:'Canvas',col:'#a855f7',d:'NPC dialogue overlay',w:640,h:180,p:{speaker:'Village Elder',text:'Greetings, traveller. The land grows dark with shadow...'}},
+  'quest-tracker':{l:'Quest Tracker',i:'fa-map-pin',cat:'Canvas',col:'#f59e0b',d:'Active quest summary',w:240,h:120,p:{title:'The Dark Harvest',objective:'Collect 5 Shadow Seeds (2/5)',label:'Quest'}},
+  'alert-banner':{l:'Alert Banner',i:'fa-triangle-exclamation',cat:'Canvas',col:'#f43f5e',d:'Full-width alert overlay',w:600,h:52,p:{text:'ENEMY DETECTED IN SECTOR 4',type:'danger'}},
+  'interaction-prompt':{l:'Interaction Prompt',i:'fa-hand-pointer',cat:'Canvas',col:'#16b195',d:'[E] interact contextual',w:200,h:48,p:{key:'E',action:'Open Chest','label':''}},
+  'attr-panel':{l:'Attributes',i:'fa-dumbbell',cat:'RPG',col:'#a855f7',d:'STR/INT/VIT/DEX stats',w:200,h:220,p:{label:'Attributes'}},
+  'weapon-selector':{l:'Weapon Select',i:'fa-sword',cat:'Action',col:'#f59e0b',d:'Weapon type row buttons',w:280,h:40,p:{label:''}},
 };
-const CATS=['Storage','Action','HUD','Navigation','Social','Progress','Economy','FPS','UI'];
+const CATS=['Storage','Action','HUD','Navigation','Social','Progress','Economy','RPG','Canvas','FPS','UI'];
 const THEMENM={d:'Hydra Dark',f:'Fantasy',c:'Cyberpunk',q:'FPS'};
 
 /* ─── UTILS ─── */
@@ -532,6 +594,60 @@ function compInner(c){
       return `<div class="xhwrap"><div class="xhdot"></div></div>`;
     case 'text-label':
       return `<div class="txwrap"><span class="txin" style="font-size:${p.size||14}px;text-align:${p.align||'left'}">${p.text||'Label'}</span></div>`;
+    case 'player-frame':{
+      const hpPct=clamp(((p.hp||100)/(p.hpMax||100))*100,0,100);
+      const mpPct=clamp(((p.mp||60)/(p.mpMax||100))*100,0,100);
+      return `<div class="ufwrap"><div class="ufface"><i class="fa fa-user"></i></div><div class="ufinfo"><div class="ufname">${p.name||'Player'} <span class="uflvl">Lv${p.level||1}</span></div><div class="ufbar"><div class="ufhp" style="width:${hpPct}%"></div></div><div class="ufbarlbl">${p.hp||100}/${p.hpMax||100}</div><div class="ufbar ufmpbar"><div class="ufmp" style="width:${mpPct}%"></div></div></div></div>`;
+    }
+    case 'target-frame':{
+      const hpPct=clamp(((p.hp||66)/(p.hpMax||100))*100,0,100);
+      const col=p.hostile?'#f43f5e':'#4ade80';
+      return `<div class="ufwrap tfwrap"><div class="ufinfo" style="flex-direction:column-reverse"><div class="ufbar"><div class="ufhp" style="width:${hpPct}%;background:${col}"></div></div><div class="ufbarlbl">${p.hp||6600}/${p.hpMax||9400}</div><div class="ufname">${p.name||'Target'} <span class="uflvl" style="color:${col}">Lv${p.level||1}</span></div></div><div class="ufface" style="order:-1;border-color:${col}"><i class="fa fa-user" style="color:${col}"></i></div></div>`;
+    }
+    case 'ally-frame':{
+      const hpPct=clamp(((p.hp||80)/(p.hpMax||100))*100,0,100);
+      return `<div class="afwrap"><div class="afface"><i class="fa fa-user"></i></div><div class="afinfo"><div class="afname">${p.name||'Ally'} <span style="color:var(--ca,#4ade80);font-size:.46rem">Lv${p.level||1}</span></div><div class="afbar"><div class="afhp" style="width:${hpPct}%"></div></div></div></div>`;
+    }
+    case 'health-orb':case 'mana-orb':case 'action-orb':{
+      const pct=clamp(((p.value||75)/(p.max||100))*100,0,100);
+      const col=p.color||(c.type==='health-orb'?'#e11d48':c.type==='mana-orb'?'#3b82f6':'#f59e0b');
+      const glow=`0 0 12px ${col}44`;
+      return `<div class="orbwrap"><svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="34" fill="rgba(0,0,0,.6)" stroke="${col}44" stroke-width="2"/><circle cx="40" cy="40" r="34" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="${2.13*pct*Math.PI/100*34} 999" stroke-linecap="round" transform="rotate(-90 40 40)"/></svg><div class="orbval" style="color:${col}">${Math.round(pct)}%</div><div class="orblbl">${p.label||'HP'}</div></div>`;
+    }
+    case 'hotbar-2row':{
+      const n=p.slots||10, ss=Math.min(p.slotSize||52,Math.floor((c.w-10)/5)-4);
+      const row1=Array.from({length:Math.ceil(n/2)},(_,i)=>`<div class="hbsl" style="width:${ss}px;height:${ss}px"><span class="hbnum">${i+1}</span></div>`).join('');
+      const row2=Array.from({length:Math.floor(n/2)},(_,i)=>`<div class="hbsl" style="width:${ss}px;height:${ss}px"><span class="hbnum">${Math.ceil(n/2)+i+1}</span></div>`).join('');
+      return `<div class="hb2wrap"><div class="hbrow">${row1}</div><div class="hbrow">${row2}</div></div>`;
+    }
+    case 'menu-dock':{
+      const btns=(p.buttons||'Spellbook,Character,Inventory,Panel').split(',');
+      const icons={'Spellbook':'fa-book-sparkles','Character':'fa-person','Inventory':'fa-backpack','Panel':'fa-table-columns','Map':'fa-map','Settings':'fa-gear','Quest':'fa-scroll'};
+      return `<div class="mdwrap">${btns.map(b=>`<div class="mdbtn"><i class="fa ${icons[b.trim()]||'fa-star'}"></i><span>${b.trim()}</span></div>`).join('')}</div>`;
+    }
+    case 'combat-log':
+      return `${p.label?`<div class="gtitle">${p.label}</div>`:''}<div class="clwrap"><div class="clmsgs"><div class="clm dmg"><span class="clt">You</span> hit <span class="clt">Wolf</span> for <span class="cldmg">342</span></div><div class="clm heal"><span class="clt">Priest</span> heals <span class="clheal">+580 HP</span></div><div class="clm dmg"><span class="clt">Wolf</span> hit you for <span class="cldmg">91</span></div><div class="clm sys">Entered combat zone</div></div></div>`;
+    case 'objectives':
+      return `<div class="objwrap">${p.label?`<div class="gtitle">${p.label}</div>`:''}<div class="objlist"><div class="objitem done"><i class="fa fa-check"></i>Talk to the Elder</div><div class="objitem"><i class="fa fa-circle"></i>Collect 5 Shadow Seeds <span class="objprog">(2/5)</span></div><div class="objitem"><i class="fa fa-circle"></i>Return to base</div></div></div>`;
+    case 'dialogue-box':
+      return `<div class="dlgwrap"><div class="dlgspk">${p.speaker||'NPC'}</div><div class="dlgtxt">${p.text||'...'}</div><div class="dlgbtns"><div class="dlgbtn">Continue</div><div class="dlgbtn dlgbtnx">Leave</div></div></div>`;
+    case 'quest-tracker':
+      return `<div class="qtwrap">${p.label?`<div class="gtitle">${p.label}</div>`:''}<div class="qtitle">${p.title||'Quest'}</div><div class="qtobj">${p.objective||'Complete the quest'}</div></div>`;
+    case 'alert-banner':{
+      const cols={danger:'#f43f5e',warning:'#f59e0b',info:'#3b82f6',success:'#4ade80'};
+      const col=cols[p.type||'danger']||cols.danger;
+      return `<div class="albwrap" style="border-color:${col}44;background:${col}18"><i class="fa fa-triangle-exclamation" style="color:${col}"></i><span class="albtxt" style="color:${col}">${p.text||'ALERT'}</span></div>`;
+    }
+    case 'interaction-prompt':
+      return `<div class="ipwrap"><div class="ipkey">${p.key||'E'}</div><span class="ipact">${p.action||'Interact'}</span></div>`;
+    case 'attr-panel':{
+      const attrs=[['STR','⚔️'],['INT','🧠'],['VIT','❤️'],['DEX','🎯'],['END','🛡️'],['WIS','✨'],['AGI','💨'],['TAC','🎪']];
+      return `${p.label?`<div class="gtitle">${p.label}</div>`:''}<div class="attrlist">${attrs.map(([n,e])=>`<div class="attrow"><span class="attic">${e}</span><span class="attn">${n}</span><span class="attv">${Math.floor(10+Math.random()*20)}</span></div>`).join('')}</div>`;
+    }
+    case 'weapon-selector':{
+      const types=['⚔️ Sword','🗡️ Dagger','🏹 Bow','🔮 Staff','🛡️ Shield'];
+      return `<div class="wswrap">${types.map((t,i)=>`<div class="wsbtn ${i===0?'on':''}">${t}</div>`).join('')}</div>`;
+    }
     default:
       return `<div style="padding:5px;font-size:.57rem;color:var(--muted)">${c.type}</div>`;
   }
@@ -696,13 +812,14 @@ function vpWheel(e){
   e.preventDefault();
   const r=VP().getBoundingClientRect();
   const mx=e.clientX-r.left,my=e.clientY-r.top;
-  if(e.ctrlKey||e.metaKey){
-    const oz=G.vp.z, dz=e.deltaY<0?0.05:-0.05;
-    G.vp.z=clamp(oz+dz,0.06,3);
+  if(!e.ctrlKey&&!e.metaKey&&Math.abs(e.deltaX)>Math.abs(e.deltaY)*0.5&&Math.abs(e.deltaX)>3){
+    G.vp.x-=e.deltaX; G.vp.y-=e.deltaY;
+  } else {
+    const oz=G.vp.z;
+    const factor=e.deltaY<0?1.1:0.9;
+    G.vp.z=clamp(G.vp.z*factor,0.06,3);
     G.vp.x=mx-(mx-G.vp.x)*(G.vp.z/oz);
     G.vp.y=my-(my-G.vp.y)*(G.vp.z/oz);
-  } else {
-    G.vp.x-=e.deltaX; G.vp.y-=e.deltaY;
   }
   applyVp();
 }
@@ -913,11 +1030,51 @@ function tpl(n){
     mk('inventory-grid',220,16,370,400,{cols:6,rows:6,slotSize:52,gap:3,label:'Inventory'}),
     mk('currency-display',220,424,150,30,{amount:12500,label:'Gold'}),
     mk('shop-panel',606,16,270,340,{label:'Shop'}),
+  ];}else if(n==='hud'){setMode('hud');setTheme('d');cs=[
+    mk('player-frame',16,H-90,230,58,{name:'Warrior',level:24,hp:19800,hpMax:19800,mp:468,mpMax:600}),
+    mk('ally-frame',16,H-162,168,34,{name:'Mage Priest',level:11,hp:70,hpMax:100}),
+    mk('ally-frame',16,H-200,168,34,{name:'Ranger',level:28,hp:90,hpMax:100}),
+    mk('ally-frame',16,H-238,168,34,{name:'Worge',level:26,hp:55,hpMax:100}),
+    mk('ally-frame',16,H-276,168,34,{name:'Berserker',level:22,hp:40,hpMax:100}),
+    mk('target-frame',Math.floor(W/2)+120,16,210,52,{name:'Mage Priest',level:11,hp:6600,hpMax:9400,hostile:true}),
+    mk('hotbar-2row',Math.floor(W/2)-168,H-148,336,128,{slots:10,slotSize:50}),
+    mk('xp-bar',Math.floor(W/2)-200,H-155,400,10,{value:65,max:100,label:'XP',color:'#f59e0b'}),
+    mk('weapon-selector',Math.floor(W/2)-168,H-172,336,20,{}),
+    mk('menu-dock',Math.floor(W/2)+172,H-116,200,48,{buttons:'Spellbook,Character,Inventory,Panel'}),
+    mk('combat-log',W-298,H-270,280,140,{label:'Combat Log'}),
+    mk('objectives',W-298,H-138,280,96,{label:'Objectives'}),
+    mk('minimap',W-172,16,156,156,{shape:'circle'}),
+    mk('currency-display',W-298,176,130,28,{amount:22578,label:'Gold'}),
+  ];}else if(n==='panel'){setMode('main');setTheme('d');cs=[
+    mk('attr-panel',16,16,200,224,{label:'Attributes'}),
+    mk('healthbar',16,252,200,26,{value:80,max:100,label:'HP',color:'#e11d48'}),
+    mk('manabar',16,284,180,22,{value:55,max:100,label:'MP',color:'#3b82f6'}),
+    mk('currency-display',16,316,150,28,{amount:22578,label:'Gold'}),
+    mk('equipment-slots',230,16,380,300,{label:'Equipment'}),
+    mk('inventory-grid',230,330,380,300,{cols:5,rows:4,slotSize:52,gap:3,label:'Inventory'}),
+    mk('skill-tree',626,16,280,280,{label:'Skills'}),
+    mk('shop-panel',626,310,280,220,{label:'Shop'}),
+    mk('hotbar',Math.floor(W/2)-240,H-74,480,64,{slots:7,slotSize:54}),
+  ];}else if(n==='canvas'){setMode('canvas');setTheme('d');cs=[
+    mk('dialogue-box',Math.floor(W/2)-320,H-220,640,180,{speaker:'Village Elder',text:'Greetings, traveller. The dark harvest grows near. We need your help to stop the shadow plague before it consumes us all.'}),
+    mk('quest-tracker',W-260,16,240,110,{title:'The Dark Harvest',objective:'Collect 5 Shadow Seeds (2/5)',label:'Active Quest'}),
+    mk('interaction-prompt',Math.floor(W/2)-100,Math.floor(H/2)+80,200,48,{key:'E',action:'Open Chest'}),
+    mk('alert-banner',Math.floor(W/2)-300,16,600,52,{text:'ENEMY DETECTED — PREPARE FOR COMBAT',type:'danger'}),
+    mk('objectives',W-260,140,240,110,{label:'Objectives'}),
+    mk('minimap',W-172,H-172,156,156,{shape:'circle'}),
   ];}
   G.scene.comps=cs; G.sel.clear(); renderAll();
 }
 
-/* ─── SAVE / LOAD / EXPORT ─── */
+/* ─── MODE ─── */
+function setMode(m){
+  G.mode=m;
+  ['main','canvas','hud'].forEach(x=>{
+    document.getElementById('mode-'+x)?.classList.toggle('on',x===m);
+  });
+}
+
+
 function doSave(){
   G.scene.name=document.getElementById('scene-name').value;
   const a=document.createElement('a');
