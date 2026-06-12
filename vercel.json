@@ -4,7 +4,8 @@
   "framework": null,
   "rewrites": [
     { "source": "/hotkeys",      "destination": "/hotkeys.html" },
-    { "source": "/((?!hotkeys|assets|favicon).*)", "destination": "/index.html" }
+    { "source": "/studio",       "destination": "/studio.html" },
+    { "source": "/((?!hotkeys|studio|assets|favicon).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

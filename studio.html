@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Game UI Studio — HYDRA · Grudge Studio</title>
+<meta name="description" content="AI-powered game UI layout editor. Design HUDs, inventories, skill trees and more — then export working HTML/CSS for any game engine."/>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=Cinzel:wght@500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --bg:      #07080c;
+  --surf-1:  #0c0e14;
+  --surf-2:  #12141d;
+  --surf-3:  #181b26;
+  --surf-4:  #1e2130;
+  --border:  #1f2235;
+  --border2: #272a40;
+  --text:    #e2e4ef;
+  --muted:   #555870;
+  --subtle:  #8a8da8;
+  --hydra:   #4ade80;
+  --hydra-d: #16a34a;
+  --hydra-s: rgba(74,222,128,0.10);
+  --teal:    #16b195;
+  --blue:    #3e62c0;
+  --grad:    linear-gradient(135deg,#16b195,#3e62c0);
+  --red:     #f43f5e;
+  --amber:   #f59e0b;
+  --purple:  #a855f7;
+  --topbar-h: 48px;
+  --pal-w:   220px;
+  --prop-w:  280px;
+}
+
+body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+.font-display { font-family:'Space Grotesk',system-ui,sans-serif; }
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+
+/* ── TOPBAR ── */
+#topbar {
+  height:var(--topbar-h);
+  background:var(--surf-1);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;padding:0 12px;
+  flex-shrink:0;z-index:100;
+}
+.tb-brand {
+  display:flex;align-items:center;gap:8px;
+  font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:.75rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;white-space:nowrap;margin-right:4px;
+}
+.tb-sep { width:1px;height:20px;background:var(--border2);flex-shrink:0; }
+#scene-name-input {
+  background:transparent;border:none;color:var(--text);font-family:'Inter',sans-serif;
+  font-size:.8rem;font-weight:500;outline:none;width:160px;
+}
+#scene-name-input:focus { background:var(--surf-3);border-radius:4px;padding:2px 6px; }
+.tb-gap { flex:1; }
+.tb-group { display:flex;align-items:center;gap:4px; }
+.tb-btn {
+  display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;
+  border:1px solid var(--border2);background:var(--surf-2);color:var(--subtle);
+  font-size:.7rem;font-weight:600;letter-spacing:.03em;cursor:pointer;
+  transition:all .12s;white-space:nowrap;
+}
+.tb-btn:hover{background:var(--surf-3);color:var(--text);border-color:var(--border2)}
+.tb-btn.primary{background:var(--hydra-s);border-color:rgba(74,222,128,.3);color:var(--hydra)}
+.tb-btn.primary:hover{background:rgba(74,222,128,.18)}
+.tb-btn i{font-size:.65rem}
+.tb-select {
+  background:var(--surf-2);border:1px solid var(--border2);color:var(--text);
+  font-size:.7rem;padding:4px 8px;border-radius:6px;outline:none;cursor:pointer;
+}
+.tb-select:focus{border-color:var(--hydra)}
+
+/* ── WORKSPACE ── */
+#workspace {
+  display:flex;flex:1;overflow:hidden;
+}
+
+/* ── PALETTE ── */
+#palette {
+  width:var(--pal-w);min-width:var(--pal-w);
+  background:var(--surf-1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.pal-search {
+  padding:8px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.pal-search input {
+  width:100%;background:var(--surf-3);border:1px solid var(--border2);
+  color:var(--text);font-size:.72rem;padding:5px 8px 5px 26px;border-radius:6px;outline:none;
+}
+.pal-search input:focus{border-color:var(--teal)}
+.pal-search-wrap{position:relative}
+.pal-search-wrap i{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.65rem}
+.pal-cats { overflow-y:auto;flex:1;padding:8px 6px; }
+.pal-cat-label {
+  font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);padding:8px 6px 4px;
+}
+.pal-item {
+  display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;
+  cursor:pointer;transition:all .1s;margin-bottom:2px;
+  border:1px solid transparent;user-select:none;
+}
+.pal-item:hover{background:var(--surf-3);border-color:var(--border2)}
+.pal-item.active{background:var(--hydra-s);border-color:rgba(74,222,128,.3)}
+.pal-item-icon {
+  width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;flex-shrink:0;
+}
+.pal-item-text { display:flex;flex-direction:column;gap:2px; }
+.pal-item-name { font-size:.72rem;font-weight:600;color:var(--text); }
+.pal-item-desc { font-size:.6rem;color:var(--muted); }
+
+/* ── CANVAS AREA ── */
+#canvas-area {
+  flex:1;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--bg);position:relative;
+}
+#canvas-toolbar {
+  height:34px;background:var(--surf-1);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:6px;padding:0 10px;flex-shrink:0;
+}
+.ct-btn {
+  display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;
+  border:1px solid transparent;background:transparent;color:var(--muted);
+  font-size:.65rem;font-weight:600;cursor:pointer;transition:all .1s;
+}
+.ct-btn:hover{background:var(--surf-3);color:var(--text)}
+.ct-btn.active{background:var(--surf-3);color:var(--hydra);border-color:rgba(74,222,128,.2)}
+.ct-sep{width:1px;height:16px;background:var(--border2)}
+.ct-zoom-label{font-size:.65rem;color:var(--muted);min-width:40px;text-align:center}
+#canvas-viewport {
+  flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;
+  cursor:default;position:relative;
+}
+#canvas-viewport.placing{cursor:crosshair}
+#scene-canvas {
+  position:relative;
+  background:radial-gradient(ellipse at 50% 40%,rgba(30,33,50,.8) 0%,#0a0a12 100%);
+  box-shadow:0 0 80px rgba(0,0,0,.8);
+  transform-origin:top left;
+  overflow:hidden;
+}
+#scene-canvas.grid-on::after {
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:32px 32px;opacity:.35;
+}
+.placing-hint {
+  position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);
+  color:var(--hydra);font-size:.7rem;font-weight:600;padding:6px 14px;border-radius:20px;
+  pointer-events:none;z-index:200;
+}
+
+/* ── GAME COMPONENTS ON CANVAS ── */
+.gc {
+  position:absolute;user-select:none;
+}
+.gc:hover .gc-chrome{opacity:1}
+.gc.selected .gc-chrome{opacity:1;border-color:var(--hydra)!important;box-shadow:0 0 0 1px var(--hydra)}
+.gc-chrome {
+  position:absolute;inset:0;border:1px solid rgba(255,255,255,.15);border-radius:4px;
+  opacity:0;transition:opacity .1s;pointer-events:none;
+}
+.gc.selected .gc-handle {display:block}
+.gc-handle {
+  display:none;position:absolute;width:8px;height:8px;background:var(--hydra);
+  border:1px solid #000;border-radius:2px;z-index:10;cursor:nwse-resize;
+}
+.gc-handle.br{bottom:-4px;right:-4px;cursor:nwse-resize}
+.gc-handle.bl{bottom:-4px;left:-4px;cursor:nesw-resize}
+.gc-handle.tr{top:-4px;right:-4px;cursor:nesw-resize}
+.gc-handle.tl{top:-4px;left:-4px;cursor:nwse-resize}
+.gc-label {
+  position:absolute;top:-18px;left:0;font-size:.55rem;font-weight:700;
+  color:var(--hydra);letter-spacing:.05em;text-transform:uppercase;
+  background:rgba(0,0,0,.7);padding:1px 5px;border-radius:3px;
+  pointer-events:none;white-space:nowrap;
+}
+
+/* ── Theme-aware comp styles ── */
+.comp-inner {
+  width:100%;height:100%;overflow:hidden;
+  border-radius:3px;
+}
+
+/* Fantasy */
+.theme-fantasy .comp-inner {
+  background:rgba(12,7,3,.88);
+  border:1px solid #7a5c10;
+  box-shadow:inset 0 0 20px rgba(200,140,20,.04);
+  --ci: 'Cinzel',serif;
+  --ca: #d4960a;
+  --ct: #e8d090;
+  --cb: rgba(200,140,20,.12);
+  --slot: rgba(5,3,1,.7);
+  --slot-b: rgba(140,100,20,.4);
+}
+/* Cyberpunk */
+.theme-cyberpunk .comp-inner {
+  background:rgba(4,8,18,.92);
+  border:1px solid rgba(0,255,255,.35);
+  box-shadow:inset 0 0 20px rgba(0,255,255,.03),0 0 8px rgba(0,255,255,.06);
+  --ci: 'Rajdhani',sans-serif;
+  --ca: #0ff;
+  --ct: #c0f0ff;
+  --cb: rgba(0,255,255,.08);
+  --slot: rgba(0,3,8,.8);
+  --slot-b: rgba(0,255,255,.2);
+}
+/* FPS */
+.theme-fps .comp-inner {
+  background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.2);
+  --ci: 'Inter',sans-serif;
+  --ca: #fff;
+  --ct: #fff;
+  --cb: rgba(255,255,255,.06);
+  --slot: rgba(255,255,255,.06);
+  --slot-b: rgba(255,255,255,.15);
+}
+/* Dark (default) */
+.theme-dark .comp-inner {
+  background:rgba(10,12,20,.9);
+  border:1px solid rgba(74,222,128,.2);
+  --ci: 'Inter',sans-serif;
+  --ca: #4ade80;
+  --ct: #e2e4ef;
+  --cb: rgba(74,222,128,.06);
+  --slot: rgba(255,255,255,.05);
+  --slot-b: rgba(74,222,128,.15);
+}
+
+/* Component rendering styles */
+.gk-comp-title {
+  font-family:var(--ci,'Inter',sans-serif);font-size:.6rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ca,#4ade80);
+  padding:5px 8px 3px;border-bottom:1px solid var(--slot-b,rgba(255,255,255,.1));
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+/* Slot grid */
+.slot-grid {
+  display:grid;gap:3px;padding:6px;
+}
+.gk-slot {
+  background:var(--slot,rgba(255,255,255,.05));
+  border:1px solid var(--slot-b,rgba(255,255,255,.1));
+  border-radius:3px;display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;color:var(--ca,rgba(255,255,255,.3));transition:background .1s;
+}
+/* Hotbar */
+.hotbar-row{display:flex;gap:3px;padding:6px;align-items:center;justify-content:center;height:100%}
+.hb-slot {
+  background:var(--slot,rgba(255,255,255,.05));
+  border:1px solid var(--slot-b,rgba(255,255,255,.1));
+  border-radius:3px;display:flex;align-items:flex-end;justify-content:flex-end;
+  padding:2px;flex-shrink:0;position:relative;
+}
+.hb-num{font-size:.5rem;color:var(--ca,rgba(255,255,255,.4));line-height:1}
+/* Bars */
+.bar-wrap{padding:6px 8px;display:flex;flex-direction:column;gap:3px;height:100%;justify-content:center}
+.bar-label-row{display:flex;justify-content:space-between;align-items:center}
+.bar-name{font-size:.6rem;font-weight:700;color:var(--ca,#fff);letter-spacing:.05em}
+.bar-val{font-size:.58rem;color:var(--ct,rgba(255,255,255,.7))}
+.bar-track{
+  background:rgba(0,0,0,.5);border:1px solid var(--slot-b,rgba(255,255,255,.1));
+  border-radius:20px;overflow:hidden;height:10px;
+}
+.bar-fill{height:100%;border-radius:20px;transition:width .2s}
+/* Minimap */
+.minimap-inner{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.minimap-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(circle,rgba(30,60,40,.6) 0%,rgba(5,15,10,.9) 100%);
+}
+.minimap-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(74,222,128,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,128,.08) 1px,transparent 1px);
+  background-size:20px 20px;
+}
+.minimap-player{
+  width:6px;height:6px;border-radius:50%;background:#4ade80;
+  position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);
+  box-shadow:0 0 4px #4ade80;z-index:2;
+}
+.minimap-border{
+  position:absolute;inset:0;border-radius:inherit;
+  border:1px solid var(--slot-b,rgba(255,255,255,.2));
+}
+/* Portrait */
+.portrait-inner{display:flex;flex-direction:column;align-items:center;padding:6px;gap:4px;height:100%;justify-content:center}
+.portrait-face{
+  flex:1;width:100%;background:var(--slot,rgba(255,255,255,.05));
+  border:1px solid var(--slot-b,rgba(255,255,255,.1));border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;color:var(--ca,rgba(255,255,255,.3));min-height:0;
+}
+.portrait-name{font-size:.6rem;font-weight:700;color:var(--ct,#fff);letter-spacing:.05em;white-space:nowrap}
+.portrait-level{font-size:.55rem;color:var(--ca,rgba(255,255,255,.5))}
+/* Chat */
+.chat-inner{display:flex;flex-direction:column;height:100%}
+.chat-msgs{flex:1;padding:4px 6px;display:flex;flex-direction:column;gap:3px;overflow:hidden;justify-content:flex-end}
+.chat-msg{font-size:.55rem;line-height:1.4}
+.chat-msg .chat-user{color:var(--ca,#4ade80);font-weight:600}
+.chat-msg .chat-text{color:var(--ct,rgba(255,255,255,.7))}
+.chat-input-row{
+  display:flex;gap:4px;padding:4px 6px;
+  border-top:1px solid var(--slot-b,rgba(255,255,255,.1));
+}
+.chat-input-fake{
+  flex:1;height:18px;background:var(--slot,rgba(255,255,255,.05));
+  border:1px solid var(--slot-b,rgba(255,255,255,.1));border-radius:3px;
+}
+/* Equipment slots */
+.equip-inner{
+  display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(4,1fr);
+  gap:4px;padding:8px;height:100%;
+}
+.equip-slot{
+  background:var(--slot,rgba(255,255,255,.05));border:1px solid var(--slot-b,rgba(255,255,255,.1));
+  border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+}
+.equip-slot i{font-size:.65rem;color:var(--ca,rgba(255,255,255,.3))}
+.equip-slot-name{font-size:.42rem;color:var(--muted);letter-spacing:.04em}
+/* Currency */
+.currency-inner{display:flex;align-items:center;gap:6px;padding:4px 8px;height:100%}
+.currency-icon{font-size:.9rem}
+.currency-amt{font-size:.8rem;font-weight:700;color:var(--ca,#fff)}
+.currency-lbl{font-size:.55rem;color:var(--muted)}
+/* Skill tree */
+.skilltree-inner{position:relative;width:100%;height:100%;overflow:hidden}
+.st-node{
+  position:absolute;width:32px;height:32px;border-radius:50%;
+  background:var(--slot,rgba(255,255,255,.05));border:2px solid var(--slot-b,rgba(255,255,255,.2));
+  display:flex;align-items:center;justify-content:center;
+}
+.st-node.active{background:var(--cb,rgba(74,222,128,.15));border-color:var(--ca,#4ade80)}
+.st-node i{font-size:.6rem;color:var(--ca,rgba(255,255,255,.5))}
+.st-line{position:absolute;background:var(--slot-b,rgba(255,255,255,.1));transform-origin:left center}
+/* Shop */
+.shop-inner{display:flex;flex-direction:column;height:100%}
+.shop-items{flex:1;padding:4px 6px;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.shop-item{
+  display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:3px;
+  background:var(--slot,rgba(255,255,255,.05));border:1px solid var(--slot-b,rgba(255,255,255,.1));
+}
+.shop-item-icon{width:20px;height:20px;border-radius:3px;background:var(--cb,rgba(74,222,128,.08));display:flex;align-items:center;justify-content:center;font-size:.6rem}
+.shop-item-name{flex:1;font-size:.58rem;color:var(--ct,#fff)}
+.shop-item-price{font-size:.58rem;font-weight:700;color:var(--ca,#fff)}
+.shop-buy-btn{
+  margin:4px 6px 6px;padding:4px;border-radius:4px;text-align:center;
+  background:var(--cb,rgba(74,222,128,.1));border:1px solid var(--slot-b,rgba(255,255,255,.1));
+  font-size:.58rem;font-weight:700;color:var(--ca,#4ade80);
+}
+/* Text label */
+.textlabel-inner{display:flex;align-items:center;height:100%;padding:0 6px}
+.textlabel-text{color:var(--ct,#fff);font-weight:600}
+/* XP bar */
+.xpbar-fill{background:linear-gradient(90deg,#f59e0b,#fcd34d)}
+
+/* Crosshair */
+.crosshair-inner{
+  display:flex;align-items:center;justify-content:center;height:100%;
+  color:var(--ca,rgba(255,255,255,.8));position:relative;
+}
+.crosshair-inner::before,.crosshair-inner::after{
+  content:'';position:absolute;background:currentColor;border-radius:1px;
+}
+.crosshair-inner::before{width:14px;height:2px}
+.crosshair-inner::after{width:2px;height:14px}
+.crosshair-gap{
+  width:4px;height:4px;border-radius:50%;background:transparent;
+  border:1px solid currentColor;position:absolute;
+}
+
+/* ── PROPERTIES + AI PANEL ── */
+#side-panel {
+  width:var(--prop-w);min-width:var(--prop-w);
+  background:var(--surf-1);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.panel-tab-bar {
+  display:flex;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.panel-tab {
+  flex:1;padding:8px 0;font-size:.65rem;font-weight:700;letter-spacing:.06em;
+  text-align:center;text-transform:uppercase;color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .1s;
+}
+.panel-tab.active{color:var(--hydra);border-bottom-color:var(--hydra)}
+#props-panel{flex:1;overflow-y:auto;display:none;padding:10px}
+#props-panel.active{display:block}
+#ai-panel{flex:1;overflow:hidden;display:none;flex-direction:column}
+#ai-panel.active{display:flex}
+
+/* Props */
+.prop-group{margin-bottom:12px}
+.prop-group-label{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.prop-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.prop-label{font-size:.65rem;color:var(--subtle);min-width:60px;flex-shrink:0}
+.prop-input,.prop-select{
+  flex:1;background:var(--surf-3);border:1px solid var(--border2);color:var(--text);
+  font-size:.68rem;padding:4px 6px;border-radius:5px;outline:none;
+}
+.prop-input:focus,.prop-select:focus{border-color:var(--teal)}
+.prop-color{width:28px;height:24px;padding:0;border:1px solid var(--border2);border-radius:4px;cursor:pointer;flex-shrink:0}
+.prop-number{width:70px;flex:none}
+.prop-empty{padding:20px;text-align:center;color:var(--muted);font-size:.7rem}
+.prop-empty i{font-size:1.2rem;display:block;margin-bottom:6px;opacity:.4}
+.prop-del-btn{
+  width:100%;padding:7px;border-radius:6px;border:1px solid rgba(244,63,94,.3);
+  background:rgba(244,63,94,.08);color:var(--red);font-size:.68rem;font-weight:700;
+  cursor:pointer;margin-top:8px;transition:all .1s;
+}
+.prop-del-btn:hover{background:rgba(244,63,94,.15)}
+
+/* AI */
+#ai-messages{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+.ai-msg{display:flex;flex-direction:column;gap:3px}
+.ai-msg-role{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.ai-msg.user .ai-msg-role{color:var(--subtle)}
+.ai-msg.assistant .ai-msg-role{color:var(--hydra)}
+.ai-msg-text{
+  font-size:.68rem;line-height:1.5;color:var(--text);
+  background:var(--surf-2);border:1px solid var(--border);
+  border-radius:6px;padding:7px 9px;
+}
+.ai-msg.user .ai-msg-text{background:var(--surf-3);border-color:var(--border2)}
+.ai-thinking{
+  font-size:.68rem;color:var(--muted);padding:7px 9px;
+  background:var(--surf-2);border:1px solid var(--border);border-radius:6px;
+  display:flex;align-items:center;gap:6px;
+}
+.ai-dot{width:5px;height:5px;border-radius:50%;background:var(--hydra);animation:aidot 1s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.15s}
+.ai-dot:nth-child(3){animation-delay:.3s}
+@keyframes aidot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.ai-action-bar{
+  border-top:1px solid var(--border);padding:8px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;
+}
+.ai-quick-row{display:flex;gap:4px;flex-wrap:wrap}
+.ai-quick-btn{
+  font-size:.58rem;font-weight:600;padding:3px 8px;border-radius:12px;
+  border:1px solid var(--border2);background:var(--surf-2);color:var(--subtle);
+  cursor:pointer;transition:all .1s;
+}
+.ai-quick-btn:hover{background:var(--surf-3);color:var(--text)}
+.ai-input-row{display:flex;gap:6px}
+#ai-input{
+  flex:1;background:var(--surf-3);border:1px solid var(--border2);color:var(--text);
+  font-size:.72rem;padding:7px 10px;border-radius:8px;outline:none;resize:none;
+  height:62px;font-family:'Inter',sans-serif;
+}
+#ai-input:focus{border-color:var(--teal)}
+#ai-send-btn{
+  width:36px;height:62px;border-radius:8px;border:none;
+  background:var(--hydra-s);color:var(--hydra);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;
+  transition:all .1s;flex-shrink:0;
+  border:1px solid rgba(74,222,128,.3);
+}
+#ai-send-btn:hover{background:rgba(74,222,128,.2)}
+#ai-send-btn:disabled{opacity:.4;cursor:not-allowed}
+.ai-endpoint-row{display:flex;align-items:center;gap:6px}
+#ai-key-input{
+  flex:1;background:var(--surf-3);border:1px solid var(--border2);color:var(--text);
+  font-size:.62rem;padding:4px 7px;border-radius:5px;outline:none;
+}
+#ai-key-input:focus{border-color:var(--teal)}
+.ai-key-label{font-size:.6rem;color:var(--muted);flex-shrink:0}
+
+/* Status bar */
+#statusbar{
+  height:22px;background:var(--surf-1);border-top:1px solid var(--border);
+  display:flex;align-items:center;padding:0 10px;gap:12px;flex-shrink:0;
+}
+.status-item{font-size:.6rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.status-item i{font-size:.55rem}
+.status-sep{width:1px;height:10px;background:var(--border2)}
+#status-mode{color:var(--hydra)}
+
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal{
+  background:var(--surf-2);border:1px solid var(--border2);border-radius:10px;
+  padding:20px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;
+}
+.modal h3{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:12px;color:var(--text)}
+.modal-btns{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.modal-btn{
+  padding:7px 16px;border-radius:6px;border:1px solid var(--border2);
+  font-size:.72rem;font-weight:600;cursor:pointer;transition:all .1s;
+}
+.modal-btn.primary{background:var(--hydra-s);border-color:rgba(74,222,128,.4);color:var(--hydra)}
+.modal-btn.secondary{background:var(--surf-3);color:var(--subtle)}
+.modal-textarea{
+  width:100%;min-height:120px;background:var(--surf-3);border:1px solid var(--border2);
+  color:var(--text);font-size:.68rem;padding:8px;border-radius:6px;resize:vertical;
+  font-family:'Inter',monospace;outline:none;margin-top:8px;
+}
+.modal-textarea:focus{border-color:var(--teal)}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="tb-brand font-display">
+    <svg width="18" height="14" viewBox="0 0 40 32" fill="none">
+      <ellipse cx="9" cy="9" rx="6" ry="7" fill="#16b195" opacity=".7"/>
+      <ellipse cx="20" cy="5" rx="6" ry="7" fill="#16b195"/>
+      <ellipse cx="31" cy="9" rx="6" ry="7" fill="#16b195" opacity=".7"/>
+      <path d="M9 16 Q14 24 20 26 Q26 24 31 16" stroke="#16b195" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    UI STUDIO
+  </div>
+  <div class="tb-sep"></div>
+  <input id="scene-name-input" value="Untitled Layout" maxlength="40"/>
+  <div class="tb-sep"></div>
+  <select class="tb-select" id="res-select" onchange="setResolution(this.value)">
+    <option value="1920x1080">1920 × 1080</option>
+    <option value="1280x720">1280 × 720</option>
+    <option value="2560x1440">2560 × 1440</option>
+    <option value="1366x768">1366 × 768</option>
+    <option value="800x600">800 × 600</option>
+  </select>
+  <select class="tb-select" id="theme-select" onchange="setTheme(this.value)">
+    <option value="dark">Hydra Dark</option>
+    <option value="fantasy">Fantasy</option>
+    <option value="cyberpunk">Cyberpunk</option>
+    <option value="fps">FPS / Tactical</option>
+  </select>
+  <div class="tb-gap"></div>
+  <div class="tb-group">
+    <button class="tb-btn" onclick="clearScene()"><i class="fa fa-trash"></i> Clear</button>
+    <button class="tb-btn" onclick="showLoadJSON()"><i class="fa fa-folder-open"></i> Load</button>
+    <button class="tb-btn" onclick="saveJSON()"><i class="fa fa-floppy-disk"></i> Save</button>
+    <div class="tb-sep"></div>
+    <button class="tb-btn primary" onclick="exportHTML()"><i class="fa fa-download"></i> Export HTML</button>
+  </div>
+</div>
+
+<!-- WORKSPACE -->
+<div id="workspace">
+
+  <!-- PALETTE -->
+  <div id="palette">
+    <div class="pal-search">
+      <div class="pal-search-wrap">
+        <i class="fa fa-search"></i>
+        <input type="text" placeholder="Search components…" id="pal-search-input" oninput="filterPalette(this.value)"/>
+      </div>
+    </div>
+    <div class="pal-cats" id="palette-list"></div>
+  </div>
+
+  <!-- CANVAS -->
+  <div id="canvas-area">
+    <div id="canvas-toolbar">
+      <button class="ct-btn" onclick="setZoom(state.zoom - 0.1)"><i class="fa fa-minus"></i></button>
+      <span class="ct-zoom-label" id="zoom-label">50%</span>
+      <button class="ct-btn" onclick="setZoom(state.zoom + 0.1)"><i class="fa fa-plus"></i></button>
+      <button class="ct-btn" onclick="fitZoom()"><i class="fa fa-expand"></i> Fit</button>
+      <div class="ct-sep"></div>
+      <button class="ct-btn active" id="btn-grid" onclick="toggleGrid()"><i class="fa fa-grid-3x3"></i> Grid</button>
+      <button class="ct-btn" id="btn-snap" onclick="toggleSnap()"><i class="fa fa-magnet"></i> Snap</button>
+      <div class="ct-sep"></div>
+      <button class="ct-btn" onclick="loadTemplate('rpg')"><i class="fa fa-dragon"></i> RPG</button>
+      <button class="ct-btn" onclick="loadTemplate('fps')"><i class="fa fa-crosshairs"></i> FPS</button>
+      <button class="ct-btn" onclick="loadTemplate('moba')"><i class="fa fa-map"></i> MOBA</button>
+      <button class="ct-btn" onclick="loadTemplate('inventory')"><i class="fa fa-box"></i> Inventory</button>
+    </div>
+    <div id="canvas-viewport"
+      onmousedown="onCanvasMousedown(event)"
+      onmousemove="onCanvasMousemove(event)"
+      onmouseup="onCanvasMouseup(event)"
+      onclick="onCanvasClick(event)">
+      <div id="placing-hint" class="placing-hint" style="display:none">Click to place — Esc to cancel</div>
+      <div id="scene-canvas" class="grid-on"></div>
+    </div>
+  </div>
+
+  <!-- SIDE PANEL -->
+  <div id="side-panel">
+    <div class="panel-tab-bar">
+      <div class="panel-tab active" id="tab-props" onclick="switchTab('props')">Properties</div>
+      <div class="panel-tab" id="tab-ai" onclick="switchTab('ai')">AI</div>
+    </div>
+    <div id="props-panel" class="active"></div>
+    <div id="ai-panel">
+      <div id="ai-messages"></div>
+      <div class="ai-action-bar">
+        <div class="ai-quick-row" id="ai-quick-row"></div>
+        <div class="ai-input-row">
+          <textarea id="ai-input" placeholder="Describe what to build or change…&#10;e.g. 'Add a 5×4 inventory in the bottom right'" onkeydown="aiInputKeydown(event)"></textarea>
+          <button id="ai-send-btn" onclick="sendAI()"><i class="fa fa-arrow-up"></i></button>
+        </div>
+        <div class="ai-endpoint-row">
+          <span class="ai-key-label">API Key</span>
+          <input type="password" id="ai-key-input" placeholder="sk-ant-… (optional if ALE is live)" oninput="state.ai.apiKey=this.value;localStorage.setItem('gs_ai_key',this.value)"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STATUS BAR -->
+<div id="statusbar">
+  <div class="status-item" id="status-mode"><i class="fa fa-arrow-pointer"></i> Select</div>
+  <div class="status-sep"></div>
+  <div class="status-item" id="status-xy"><i class="fa fa-location-crosshairs"></i> 0, 0</div>
+  <div class="status-sep"></div>
+  <div class="status-item" id="status-count"><i class="fa fa-layer-group"></i> <span id="comp-count">0</span> components</div>
+  <div class="status-sep"></div>
+  <div class="status-item" id="status-res">1920 × 1080</div>
+  <div class="tb-gap"></div>
+  <div class="status-item"><a href="/" style="color:var(--muted);text-decoration:none">← UI Kit</a></div>
+  <div class="status-sep"></div>
+  <div class="status-item"><a href="/hotkeys" style="color:var(--muted);text-decoration:none">Input Config</a></div>
+</div>
+
+<!-- Load JSON modal -->
+<div id="modal-load" class="modal-overlay" style="display:none">
+  <div class="modal">
+    <h3><i class="fa fa-folder-open" style="color:var(--teal)"></i> Load Scene</h3>
+    <p style="font-size:.72rem;color:var(--subtle)">Paste a scene JSON exported from this tool.</p>
+    <textarea class="modal-textarea" id="load-json-input" placeholder='{"name":"...","components":[...]}'></textarea>
+    <div class="modal-btns">
+      <button class="modal-btn secondary" onclick="hideModal('modal-load')">Cancel</button>
+      <button class="modal-btn primary" onclick="doLoadJSON()">Load</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+const state = {
+  scene: {
+    name: 'Untitled Layout',
+    resolution: { w: 1920, h: 1080 },
+    theme: 'dark',
+    components: []
+  },
+  selected: null,
+  placing: null,
+  drag: null,      // { id, startX, startY, origX, origY }
+  resize: null,    // { id, handle, startX, startY, origX, origY, origW, origH }
+  zoom: 0.45,
+  showGrid: true,
+  snapGrid: true,
+  gridSize: 16,
+  ai: {
+    messages: [],
+    thinking: false,
+    apiKey: localStorage.getItem('gs_ai_key') || '',
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   COMPONENT DEFINITIONS
+═══════════════════════════════════════════════ */
+const COMP_DEFS = {
+  'inventory-grid': {
+    label:'Inventory Grid', icon:'fa-grip', cat:'Storage',
+    color:'#4ade80', desc:'NxM item slots',
+    defs:{ w:320, h:256, props:{ cols:5, rows:4, slotSize:56, gap:4, label:'Inventory' } }
+  },
+  'equipment-slots': {
+    label:'Equipment Panel', icon:'fa-shirt', cat:'Storage',
+    color:'#4ade80', desc:'Gear slots (head/body/legs…)',
+    defs:{ w:200, h:280, props:{ label:'Equipment' } }
+  },
+  'hotbar': {
+    label:'Hotbar', icon:'fa-bars', cat:'Action',
+    color:'#f59e0b', desc:'Quick-use action slots',
+    defs:{ w:504, h:68, props:{ slots:8, slotSize:58, label:'' } }
+  },
+  'healthbar': {
+    label:'Health Bar', icon:'fa-heart', cat:'HUD',
+    color:'#f43f5e', desc:'HP progress bar',
+    defs:{ w:260, h:30, props:{ value:80, max:100, label:'HP', color:'#e11d48' } }
+  },
+  'manabar': {
+    label:'Mana Bar', icon:'fa-droplet', cat:'HUD',
+    color:'#3b82f6', desc:'MP / energy bar',
+    defs:{ w:220, h:22, props:{ value:60, max:100, label:'MP', color:'#3b82f6' } }
+  },
+  'xp-bar': {
+    label:'XP Bar', icon:'fa-star', cat:'HUD',
+    color:'#f59e0b', desc:'Experience progress',
+    defs:{ w:300, h:14, props:{ value:45, max:100, label:'XP', color:'#f59e0b' } }
+  },
+  'minimap': {
+    label:'Minimap', icon:'fa-map', cat:'Navigation',
+    color:'#16b195', desc:'World / level map',
+    defs:{ w:160, h:160, props:{ shape:'circle', label:'' } }
+  },
+  'portrait': {
+    label:'Character Portrait', icon:'fa-user', cat:'HUD',
+    color:'#a855f7', desc:'Face + name + level',
+    defs:{ w:90, h:100, props:{ name:'Player', level:1 } }
+  },
+  'currency-display': {
+    label:'Currency', icon:'fa-coins', cat:'HUD',
+    color:'#f59e0b', desc:'Gold / coins / GBUX',
+    defs:{ w:130, h:34, props:{ amount:1250, label:'Gold' } }
+  },
+  'chat-window': {
+    label:'Chat Window', icon:'fa-comments', cat:'Social',
+    color:'#8b8b9a', desc:'Scrollable message list',
+    defs:{ w:320, h:200, props:{ label:'Chat' } }
+  },
+  'skill-tree': {
+    label:'Skill Tree', icon:'fa-sitemap', cat:'Progression',
+    color:'#a855f7', desc:'Connected ability nodes',
+    defs:{ w:360, h:280, props:{ label:'Skills' } }
+  },
+  'shop-panel': {
+    label:'Shop', icon:'fa-store', cat:'Economy',
+    color:'#f59e0b', desc:'Buy / sell interface',
+    defs:{ w:300, h:360, props:{ label:'Shop' } }
+  },
+  'crosshair': {
+    label:'Crosshair', icon:'fa-crosshairs', cat:'FPS',
+    color:'#fff', desc:'Center aim reticle',
+    defs:{ w:40, h:40, props:{} }
+  },
+  'text-label': {
+    label:'Text Label', icon:'fa-font', cat:'UI',
+    color:'#8b8b9a', desc:'Static text overlay',
+    defs:{ w:200, h:28, props:{ text:'Label Text', size:14, align:'left' } }
+  },
+};
+
+const CAT_ORDER = ['Storage','Action','HUD','Navigation','Social','Progression','Economy','FPS','UI'];
+
+/* ═══════════════════════════════════════════════
+   RENDER ENGINE
+═══════════════════════════════════════════════ */
+function uid() { return 'c' + Math.random().toString(36).slice(2,8); }
+
+function snap(v) {
+  if (!state.snapGrid) return Math.round(v);
+  return Math.round(v / state.gridSize) * state.gridSize;
+}
+
+function renderComp(c) {
+  const def = COMP_DEFS[c.type] || {};
+  const p = c.props || {};
+  let inner = '';
+
+  if (c.type === 'inventory-grid') {
+    const cols = p.cols || 5, rows = p.rows || 4, ss = Math.min(p.slotSize || 56, Math.floor((c.w - 20) / cols) - 4);
+    const slots = Array.from({length: cols * rows}, (_,i) => `<div class="gk-slot" style="width:${ss}px;height:${ss}px"></div>`).join('');
+    inner = `${p.label ? `<div class="gk-comp-title">${p.label}</div>` : ''}
+      <div class="slot-grid" style="grid-template-columns:repeat(${cols},${ss}px);gap:${p.gap||4}px">${slots}</div>`;
+  } else if (c.type === 'equipment-slots') {
+    const slots = [
+      {icon:'fa-hat-wizard',name:'Head'}, {icon:'fa-shield',name:'Off Hand'}, {icon:'fa-ring',name:'Neck'},
+      {icon:'fa-vest',name:'Chest'}, {icon:'fa-hand-fist',name:'Main Hand'}, {icon:'fa-gem',name:'Ring'},
+      {icon:'fa-person',name:'Legs'}, {icon:'fa-shoe-prints',name:'Feet'}, {icon:'fa-tag',name:'Trinket'},
+    ];
+    inner = `${p.label ? `<div class="gk-comp-title">${p.label}</div>` : ''}
+      <div class="equip-inner">${slots.map(s => `<div class="equip-slot"><i class="fa ${s.icon}"></i><span class="equip-slot-name">${s.name}</span></div>`).join('')}</div>`;
+  } else if (c.type === 'hotbar') {
+    const n = p.slots || 8, ss = Math.min(p.slotSize || 58, Math.floor((c.w - 16) / n) - 4);
+    const slots = Array.from({length:n}, (_,i) => `<div class="hb-slot" style="width:${ss}px;height:${ss}px"><span class="hb-num">${i+1}</span></div>`).join('');
+    inner = `<div class="hotbar-row">${slots}</div>`;
+  } else if (c.type === 'healthbar' || c.type === 'manabar' || c.type === 'xp-bar') {
+    const pct = Math.max(0, Math.min(100, ((p.value||75)/(p.max||100))*100));
+    const color = p.color || (c.type==='healthbar'?'#e11d48':c.type==='manabar'?'#3b82f6':'#f59e0b');
+    const cls = c.type === 'xp-bar' ? 'bar-fill xpbar-fill' : 'bar-fill';
+    inner = `<div class="bar-wrap">
+      <div class="bar-label-row"><span class="bar-name">${p.label||'HP'}</span><span class="bar-val">${p.value||75}/${p.max||100}</span></div>
+      <div class="bar-track"><div class="${cls}" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  } else if (c.type === 'minimap') {
+    const isCircle = p.shape !== 'square';
+    inner = `<div class="minimap-inner" style="${isCircle ? 'border-radius:50%' : ''}">
+      <div class="minimap-bg" style="${isCircle ? 'border-radius:50%' : ''}"></div>
+      <div class="minimap-grid"></div>
+      <div class="minimap-player"></div>
+      <div class="minimap-border" style="${isCircle ? 'border-radius:50%' : ''}"></div>
+    </div>`;
+  } else if (c.type === 'portrait') {
+    inner = `<div class="portrait-inner">
+      <div class="portrait-face"><i class="fa fa-user"></i></div>
+      <div class="portrait-name">${p.name||'Player'}</div>
+      <div class="portrait-level">Lv ${p.level||1}</div>
+    </div>`;
+  } else if (c.type === 'currency-display') {
+    inner = `<div class="currency-inner">
+      <span class="currency-icon">💰</span>
+      <span class="currency-amt">${(p.amount||0).toLocaleString()}</span>
+      <span class="currency-lbl">${p.label||'Gold'}</span>
+    </div>`;
+  } else if (c.type === 'chat-window') {
+    const msgs = [
+      {u:'HYDRA',t:'Welcome to Grudge Studio!'},
+      {u:'Grudge',t:'All systems online'},
+      {u:'Player1',t:'GG'},
+    ];
+    inner = `${p.label ? `<div class="gk-comp-title">${p.label}</div>` : ''}
+      <div class="chat-inner">
+        <div class="chat-msgs">${msgs.map(m=>`<div class="chat-msg"><span class="chat-user">${m.u}: </span><span class="chat-text">${m.t}</span></div>`).join('')}</div>
+        <div class="chat-input-row"><div class="chat-input-fake"></div></div>
+      </div>`;
+  } else if (c.type === 'skill-tree') {
+    // Simple node layout
+    const nodes = [
+      {x:50,y:10,icon:'fa-bolt',active:true},{x:20,y:40,icon:'fa-fire'},{x:80,y:40,icon:'fa-shield'},
+      {x:5,y:70,icon:'fa-wand-sparkles'},{x:50,y:70,icon:'fa-star',active:true},{x:90,y:70,icon:'fa-sword'},
+    ];
+    const pct = (v,dim) => `${v}%`;
+    const lines = [
+      {x1:50,y1:26,x2:20,y2:40},{x1:50,y1:26,x2:80,y2:40},
+      {x1:20,y1:56,x2:5,y2:70},{x1:50,y1:26,x2:50,y2:70},{x1:80,y1:56,x2:90,y2:70}
+    ];
+    const ns = nodes.map(n=>`<div class="st-node ${n.active?'active':''}" style="left:calc(${n.x}% - 16px);top:calc(${n.y}% - 16px)"><i class="fa ${n.icon}"></i></div>`).join('');
+    const ls = lines.map(l=>{
+      const dx=l.x2-l.x1,dy=l.y2-l.y1;
+      const len=Math.sqrt(dx*dx+dy*dy);
+      const ang=Math.atan2(dy,dx)*180/Math.PI;
+      return `<div class="st-line" style="left:${l.x1}%;top:${l.y1}%;width:${len}%;height:1px;transform:rotate(${ang}deg)"></div>`;
+    }).join('');
+    inner = `${p.label ? `<div class="gk-comp-title">${p.label}</div>` : ''}
+      <div class="skilltree-inner">${ls}${ns}</div>`;
+  } else if (c.type === 'shop-panel') {
+    const items = [{icon:'⚔️',name:'Iron Sword',price:150},{icon:'🛡️',name:'Leather Shield',price:80},{icon:'🧪',name:'Health Potion',price:25}];
+    inner = `${p.label ? `<div class="gk-comp-title">${p.label}</div>` : ''}
+      <div class="shop-inner">
+        <div class="shop-items">${items.map(i=>`<div class="shop-item"><div class="shop-item-icon">${i.icon}</div><span class="shop-item-name">${i.name}</span><span class="shop-item-price">${i.price}g</span></div>`).join('')}</div>
+        <div class="shop-buy-btn">BUY</div>
+      </div>`;
+  } else if (c.type === 'crosshair') {
+    inner = `<div class="crosshair-inner"><div class="crosshair-gap"></div></div>`;
+  } else if (c.type === 'text-label') {
+    inner = `<div class="textlabel-inner"><span class="textlabel-text" style="font-size:${p.size||14}px;text-align:${p.align||'left'}">${p.text||'Label'}</span></div>`;
+  } else {
+    inner = `<div style="padding:8px;font-size:.6rem;color:var(--muted)">${c.type}</div>`;
+  }
+
+  const isSelected = state.selected === c.id;
+  return `<div class="gc theme-${state.scene.theme} ${isSelected ? 'selected' : ''}"
+    id="gc-${c.id}"
+    style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px"
+    data-id="${c.id}"
+    onmousedown="selectComp('${c.id}', event)">
+    ${isSelected ? `<div class="gc-label">${COMP_DEFS[c.type]?.label || c.type}</div>` : ''}
+    <div class="comp-inner">${inner}</div>
+    <div class="gc-chrome"></div>
+    ${isSelected ? `<div class="gc-handle tl" data-handle="tl" data-id="${c.id}"></div>
+      <div class="gc-handle tr" data-handle="tr" data-id="${c.id}"></div>
+      <div class="gc-handle bl" data-handle="bl" data-id="${c.id}"></div>
+      <div class="gc-handle br" data-handle="br" data-id="${c.id}"></div>` : ''}
+  </div>`;
+}
+
+function renderCanvas() {
+  const sc = document.getElementById('scene-canvas');
+  const { w, h } = state.scene.resolution;
+  sc.style.width = w + 'px';
+  sc.style.height = h + 'px';
+  sc.style.transform = `scale(${state.zoom})`;
+  sc.style.transformOrigin = 'top left';
+  sc.className = state.showGrid ? 'grid-on' : '';
+  sc.innerHTML = state.scene.components.map(renderComp).join('');
+  document.getElementById('comp-count').textContent = state.scene.components.length;
+  document.getElementById('status-res').textContent = `${w} × ${h}`;
+  document.getElementById('zoom-label').textContent = Math.round(state.zoom * 100) + '%';
+  renderProps();
+}
+
+/* ═══════════════════════════════════════════════
+   PALETTE
+═══════════════════════════════════════════════ */
+function buildPalette(filter = '') {
+  const list = document.getElementById('palette-list');
+  const cats = {};
+  Object.entries(COMP_DEFS).forEach(([type, def]) => {
+    if (filter && !def.label.toLowerCase().includes(filter.toLowerCase()) && !def.cat.toLowerCase().includes(filter.toLowerCase())) return;
+    if (!cats[def.cat]) cats[def.cat] = [];
+    cats[def.cat].push({ type, ...def });
+  });
+  list.innerHTML = CAT_ORDER.filter(c => cats[c]).map(cat =>
+    `<div class="pal-cat-label">${cat}</div>` +
+    cats[cat].map(d => `
+      <div class="pal-item ${state.placing === d.type ? 'active' : ''}" onclick="startPlacing('${d.type}')" data-type="${d.type}">
+        <div class="pal-item-icon" style="background:rgba(${hexToRgb(d.color)},.12);color:${d.color}"><i class="fa ${d.icon}"></i></div>
+        <div class="pal-item-text">
+          <span class="pal-item-name">${d.label}</span>
+          <span class="pal-item-desc">${d.desc}</span>
+        </div>
+      </div>`).join('')
+  ).join('');
+}
+
+function filterPalette(v) { buildPalette(v); }
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+/* ═══════════════════════════════════════════════
+   PLACING + CANVAS INTERACTION
+═══════════════════════════════════════════════ */
+function startPlacing(type) {
+  state.placing = type;
+  state.selected = null;
+  document.getElementById('canvas-viewport').className = 'placing';
+  document.getElementById('placing-hint').style.display = 'block';
+  document.getElementById('status-mode').innerHTML = `<i class="fa fa-plus"></i> Placing ${COMP_DEFS[type]?.label}`;
+  buildPalette();
+  renderProps();
+}
+
+function cancelPlacing() {
+  state.placing = null;
+  document.getElementById('canvas-viewport').className = '';
+  document.getElementById('placing-hint').style.display = 'none';
+  document.getElementById('status-mode').innerHTML = `<i class="fa fa-arrow-pointer"></i> Select`;
+  buildPalette();
+}
+
+function canvasCoords(e) {
+  const vp = document.getElementById('canvas-viewport');
+  const sc = document.getElementById('scene-canvas');
+  const vpRect = vp.getBoundingClientRect();
+  const scRect = sc.getBoundingClientRect();
+  return {
+    x: snap((e.clientX - scRect.left) / state.zoom),
+    y: snap((e.clientY - scRect.top) / state.zoom),
+  };
+}
+
+function placeComponent(x, y, type) {
+  const def = COMP_DEFS[type];
+  if (!def) return;
+  const c = {
+    id: uid(),
+    type,
+    x: Math.max(0, x - def.defs.w / 2),
+    y: Math.max(0, y - def.defs.h / 2),
+    w: def.defs.w,
+    h: def.defs.h,
+    props: { ...def.defs.props },
+  };
+  state.scene.components.push(c);
+  state.selected = c.id;
+  cancelPlacing();
+  renderCanvas();
+}
+
+function selectComp(id, e) {
+  if (e) e.stopPropagation();
+  // Check if clicking a resize handle
+  if (e && e.target.classList.contains('gc-handle')) {
+    const handle = e.target.dataset.handle;
+    const c = state.scene.components.find(c => c.id === id);
+    if (c) {
+      state.resize = { id, handle, startX: e.clientX, startY: e.clientY, origX: c.x, origY: c.y, origW: c.w, origH: c.h };
+      e.preventDefault();
+    }
+    return;
+  }
+  if (state.selected === id && !e) return;
+  const prevSel = state.selected;
+  state.selected = id;
+  if (e && !state.resize) {
+    const c = state.scene.components.find(c => c.id === id);
+    if (c) {
+      state.drag = { id, startX: e.clientX, startY: e.clientY, origX: c.x, origY: c.y };
+    }
+  }
+  if (prevSel !== id) renderCanvas();
+  else renderProps();
+}
+
+function onCanvasMousedown(e) {
+  if (e.target.classList.contains('gc-handle')) {
+    const id = e.target.dataset.id;
+    const handle = e.target.dataset.handle;
+    const c = state.scene.components.find(c => c.id === id);
+    if (c) state.resize = { id, handle, startX: e.clientX, startY: e.clientY, origX: c.x, origY: c.y, origW: c.w, origH: c.h };
+    e.preventDefault();
+  }
+}
+
+function onCanvasMousemove(e) {
+  const coord = canvasCoords(e);
+  document.getElementById('status-xy').innerHTML = `<i class="fa fa-location-crosshairs"></i> ${Math.round(coord.x)}, ${Math.round(coord.y)}`;
+
+  if (state.drag) {
+    const dx = (e.clientX - state.drag.startX) / state.zoom;
+    const dy = (e.clientY - state.drag.startY) / state.zoom;
+    const c = state.scene.components.find(c => c.id === state.drag.id);
+    if (c) {
+      c.x = snap(Math.max(0, state.drag.origX + dx));
+      c.y = snap(Math.max(0, state.drag.origY + dy));
+      const el = document.getElementById('gc-' + c.id);
+      if (el) { el.style.left = c.x + 'px'; el.style.top = c.y + 'px'; }
+    }
+  }
+  if (state.resize) {
+    const dx = (e.clientX - state.resize.startX) / state.zoom;
+    const dy = (e.clientY - state.resize.startY) / state.zoom;
+    const c = state.scene.components.find(c => c.id === state.resize.id);
+    if (c) {
+      const h = state.resize.handle;
+      if (h.includes('r')) c.w = snap(Math.max(40, state.resize.origW + dx));
+      if (h.includes('l')) { c.w = snap(Math.max(40, state.resize.origW - dx)); c.x = snap(state.resize.origX + (state.resize.origW - c.w)); }
+      if (h.includes('b')) c.h = snap(Math.max(20, state.resize.origH + dy));
+      if (h.includes('t')) { c.h = snap(Math.max(20, state.resize.origH - dy)); c.y = snap(state.resize.origY + (state.resize.origH - c.h)); }
+      const el = document.getElementById('gc-' + c.id);
+      if (el) { el.style.left=c.x+'px';el.style.top=c.y+'px';el.style.width=c.w+'px';el.style.height=c.h+'px'; }
+    }
+  }
+}
+
+function onCanvasMouseup(e) {
+  if (state.drag || state.resize) { state.drag = null; state.resize = null; renderCanvas(); }
+}
+
+function onCanvasClick(e) {
+  const sc = document.getElementById('scene-canvas');
+  if (state.placing) {
+    const coord = canvasCoords(e);
+    placeComponent(coord.x, coord.y, state.placing);
+    return;
+  }
+  // Click on canvas background → deselect
+  if (e.target === sc || e.target === document.getElementById('canvas-viewport')) {
+    if (state.selected) { state.selected = null; renderCanvas(); }
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   PROPERTIES PANEL
+═══════════════════════════════════════════════ */
+function renderProps() {
+  const panel = document.getElementById('props-panel');
+  const c = state.scene.components.find(c => c.id === state.selected);
+  if (!c) {
+    panel.innerHTML = `<div class="prop-empty"><i class="fa fa-arrow-pointer"></i>Select a component<br>or pick one from the palette to place.</div>`;
+    return;
+  }
+  const def = COMP_DEFS[c.type] || {};
+  const p = c.props;
+
+  let propRows = '';
+
+  // Position & size
+  propRows += `<div class="prop-group"><div class="prop-group-label">Position & Size</div>
+    <div class="prop-row"><span class="prop-label">X</span><input class="prop-input prop-number" type="number" value="${c.x}" onchange="updateComp('${c.id}','x',+this.value)"/></div>
+    <div class="prop-row"><span class="prop-label">Y</span><input class="prop-input prop-number" type="number" value="${c.y}" onchange="updateComp('${c.id}','y',+this.value)"/></div>
+    <div class="prop-row"><span class="prop-label">W</span><input class="prop-input prop-number" type="number" value="${c.w}" onchange="updateComp('${c.id}','w',+this.value)"/></div>
+    <div class="prop-row"><span class="prop-label">H</span><input class="prop-input prop-number" type="number" value="${c.h}" onchange="updateComp('${c.id}','h',+this.value)"/></div>
+  </div>`;
+
+  // Component-specific props
+  propRows += `<div class="prop-group"><div class="prop-group-label">Component</div>`;
+
+  if (p.label !== undefined)
+    propRows += propRow('label','Label',`<input class="prop-input" value="${p.label}" onchange="updateProp('${c.id}','label',this.value)"/>`);
+  if (p.cols !== undefined)
+    propRows += propRow('cols','Columns',`<input class="prop-input prop-number" type="number" min="1" max="20" value="${p.cols}" onchange="updateProp('${c.id}','cols',+this.value)"/>`);
+  if (p.rows !== undefined)
+    propRows += propRow('rows','Rows',`<input class="prop-input prop-number" type="number" min="1" max="20" value="${p.rows}" onchange="updateProp('${c.id}','rows',+this.value)"/>`);
+  if (p.slots !== undefined)
+    propRows += propRow('slots','Slots',`<input class="prop-input prop-number" type="number" min="1" max="20" value="${p.slots}" onchange="updateProp('${c.id}','slots',+this.value)"/>`);
+  if (p.value !== undefined)
+    propRows += propRow('value','Value',`<input class="prop-input prop-number" type="number" min="0" max="${p.max||100}" value="${p.value}" onchange="updateProp('${c.id}','value',+this.value)"/>`);
+  if (p.max !== undefined)
+    propRows += propRow('max','Max',`<input class="prop-input prop-number" type="number" value="${p.max}" onchange="updateProp('${c.id}','max',+this.value)"/>`);
+  if (p.color !== undefined)
+    propRows += propRow('color','Color',`<input class="prop-color" type="color" value="${p.color}" onchange="updateProp('${c.id}','color',this.value)"/>`);
+  if (p.shape !== undefined)
+    propRows += propRow('shape','Shape',`<select class="prop-select" onchange="updateProp('${c.id}','shape',this.value)"><option value="circle" ${p.shape==='circle'?'selected':''}>Circle</option><option value="square" ${p.shape==='square'?'selected':''}>Square</option></select>`);
+  if (p.name !== undefined)
+    propRows += propRow('name','Name',`<input class="prop-input" value="${p.name}" onchange="updateProp('${c.id}','name',this.value)"/>`);
+  if (p.level !== undefined)
+    propRows += propRow('level','Level',`<input class="prop-input prop-number" type="number" min="1" value="${p.level}" onchange="updateProp('${c.id}','level',+this.value)"/>`);
+  if (p.amount !== undefined)
+    propRows += propRow('amount','Amount',`<input class="prop-input prop-number" type="number" value="${p.amount}" onchange="updateProp('${c.id}','amount',+this.value)"/>`);
+  if (p.text !== undefined)
+    propRows += propRow('text','Text',`<input class="prop-input" value="${p.text}" onchange="updateProp('${c.id}','text',this.value)"/>`);
+  if (p.size !== undefined)
+    propRows += propRow('size','Size',`<input class="prop-input prop-number" type="number" min="8" max="72" value="${p.size}" onchange="updateProp('${c.id}','size',+this.value)"/>`);
+
+  propRows += `</div>`;
+  propRows += `<button class="prop-del-btn" onclick="deleteComp('${c.id}')"><i class="fa fa-trash"></i> Delete Component</button>`;
+
+  panel.innerHTML = propRows;
+}
+
+function propRow(key, label, inputHtml) {
+  return `<div class="prop-row"><span class="prop-label">${label}</span>${inputHtml}</div>`;
+}
+
+function updateComp(id, key, val) {
+  const c = state.scene.components.find(c => c.id === id);
+  if (c) { c[key] = val; renderCanvas(); }
+}
+
+function updateProp(id, key, val) {
+  const c = state.scene.components.find(c => c.id === id);
+  if (c) { c.props[key] = val; renderCanvas(); }
+}
+
+function deleteComp(id) {
+  state.scene.components = state.scene.components.filter(c => c.id !== id);
+  state.selected = null;
+  renderCanvas();
+}
+
+/* ═══════════════════════════════════════════════
+   CONTROLS
+═══════════════════════════════════════════════ */
+function setResolution(val) {
+  const [w, h] = val.split('x').map(Number);
+  state.scene.resolution = { w, h };
+  renderCanvas(); fitZoom();
+}
+
+function setTheme(val) {
+  state.scene.theme = val;
+  document.getElementById('theme-select').value = val;
+  renderCanvas();
+}
+
+function setZoom(z) {
+  state.zoom = Math.max(0.1, Math.min(2, z));
+  renderCanvas();
+}
+
+function fitZoom() {
+  const vp = document.getElementById('canvas-viewport');
+  const { w, h } = state.scene.resolution;
+  const z = Math.min((vp.clientWidth - 60) / w, (vp.clientHeight - 60) / h);
+  setZoom(Math.floor(z * 10) / 10);
+}
+
+function toggleGrid() {
+  state.showGrid = !state.showGrid;
+  document.getElementById('btn-grid').className = 'ct-btn' + (state.showGrid ? ' active' : '');
+  renderCanvas();
+}
+
+function toggleSnap() {
+  state.snapGrid = !state.snapGrid;
+  document.getElementById('btn-snap').className = 'ct-btn' + (state.snapGrid ? ' active' : '');
+}
+
+function clearScene() {
+  if (state.scene.components.length && !confirm('Clear all components?')) return;
+  state.scene.components = [];
+  state.selected = null;
+  renderCanvas();
+}
+
+/* ═══════════════════════════════════════════════
+   TEMPLATES
+═══════════════════════════════════════════════ */
+function loadTemplate(name) {
+  if (state.scene.components.length && !confirm('Replace current layout with template?')) return;
+  const W = state.scene.resolution.w, H = state.scene.resolution.h;
+  let comps = [];
+
+  if (name === 'rpg') {
+    setTheme('fantasy');
+    comps = [
+      {id:uid(),type:'portrait',x:20,y:H-120,w:80,h:100,props:{name:'Grudge',level:12}},
+      {id:uid(),type:'healthbar',x:108,y:H-110,w:260,h:30,props:{value:80,max:100,label:'HP',color:'#e11d48'}},
+      {id:uid(),type:'manabar',x:108,y:H-74,w:220,h:22,props:{value:55,max:100,label:'MP',color:'#3b82f6'}},
+      {id:uid(),type:'xp-bar',x:108,y:H-46,w:260,h:14,props:{value:65,max:100,label:'XP',color:'#f59e0b'}},
+      {id:uid(),type:'hotbar',x:Math.floor(W/2)-252,y:H-78,w:504,h:68,props:{slots:8,slotSize:58}},
+      {id:uid(),type:'inventory-grid',x:W-340,y:H-280,w:320,h:256,props:{cols:5,rows:4,slotSize:56,gap:4,label:'Inventory'}},
+      {id:uid(),type:'minimap',x:W-180,y:20,w:160,h:160,props:{shape:'circle'}},
+      {id:uid(),type:'currency-display',x:W-340,y:H-310,w:130,h:28,props:{amount:4250,label:'Gold'}},
+      {id:uid(),type:'chat-window',x:20,y:H-310,w:280,h:160,props:{label:'Chat'}},
+    ];
+  } else if (name === 'fps') {
+    setTheme('fps');
+    comps = [
+      {id:uid(),type:'crosshair',x:Math.floor(W/2)-20,y:Math.floor(H/2)-20,w:40,h:40,props:{}},
+      {id:uid(),type:'minimap',x:W-180,y:20,w:160,h:160,props:{shape:'square'}},
+      {id:uid(),type:'healthbar',x:20,y:H-50,w:200,h:26,props:{value:85,max:100,label:'HP',color:'#22c55e'}},
+      {id:uid(),type:'text-label',x:W-140,y:H-50,w:120,h:26,props:{text:'30 / 90',size:16,align:'right'}},
+      {id:uid(),type:'text-label',x:20,y:H-86,w:180,h:24,props:{text:'GRUDGE WARLORDS',size:11,align:'left'}},
+    ];
+  } else if (name === 'moba') {
+    setTheme('dark');
+    comps = [
+      {id:uid(),type:'minimap',x:W-180,y:H-180,w:160,h:160,props:{shape:'square'}},
+      {id:uid(),type:'hotbar',x:Math.floor(W/2)-200,y:H-80,w:400,h:68,props:{slots:6,slotSize:62}},
+      {id:uid(),type:'healthbar',x:Math.floor(W/2)-180,y:H-105,w:180,h:22,props:{value:75,max:100,label:'HP',color:'#22c55e'}},
+      {id:uid(),type:'manabar',x:Math.floor(W/2)+4,y:H-105,w:180,h:22,props:{value:50,max:100,label:'MP',color:'#3b82f6'}},
+      {id:uid(),type:'portrait',x:Math.floor(W/2)-240,y:H-110,w:56,h:60,props:{name:'Grudge',level:8}},
+      {id:uid(),type:'chat-window',x:20,y:H-220,w:300,h:180,props:{label:'Chat'}},
+      {id:uid(),type:'text-label',x:Math.floor(W/2)-80,y:16,w:160,h:24,props:{text:'GrudgeWarlords',size:14,align:'center'}},
+    ];
+  } else if (name === 'inventory') {
+    setTheme('fantasy');
+    comps = [
+      {id:uid(),type:'portrait',x:20,y:20,w:100,h:120,props:{name:'Grudge',level:12}},
+      {id:uid(),type:'healthbar',x:130,y:30,w:240,h:28,props:{value:80,max:100,label:'HP',color:'#e11d48'}},
+      {id:uid(),type:'manabar',x:130,y:66,w:200,h:20,props:{value:55,max:100,label:'MP',color:'#3b82f6'}},
+      {id:uid(),type:'equipment-slots',x:20,y:160,w:200,h:280,props:{label:'Equipment'}},
+      {id:uid(),type:'inventory-grid',x:240,y:20,w:380,h:420,props:{cols:6,rows:6,slotSize:56,gap:4,label:'Inventory'}},
+      {id:uid(),type:'currency-display',x:240,y:450,w:160,h:34,props:{amount:12500,label:'Gold'}},
+      {id:uid(),type:'shop-panel',x:640,y:20,w:300,h:380,props:{label:'Shop'}},
+    ];
+  }
+
+  state.scene.components = comps;
+  state.selected = null;
+  renderCanvas();
+}
+
+/* ═══════════════════════════════════════════════
+   SAVE / LOAD / EXPORT
+═══════════════════════════════════════════════ */
+function saveJSON() {
+  state.scene.name = document.getElementById('scene-name-input').value;
+  const json = JSON.stringify(state.scene, null, 2);
+  const a = document.createElement('a');
+  a.href = 'data:application/json,' + encodeURIComponent(json);
+  a.download = (state.scene.name || 'ui-layout') + '.json';
+  a.click();
+}
+
+function showLoadJSON() { document.getElementById('modal-load').style.display = 'flex'; }
+function hideModal(id) { document.getElementById(id).style.display = 'none'; }
+
+function doLoadJSON() {
+  try {
+    const data = JSON.parse(document.getElementById('load-json-input').value);
+    state.scene = data;
+    if (state.scene.resolution) {
+      document.getElementById('res-select').value = `${state.scene.resolution.w}x${state.scene.resolution.h}`;
+    }
+    if (state.scene.theme) setTheme(state.scene.theme);
+    state.selected = null;
+    renderCanvas(); fitZoom();
+    hideModal('modal-load');
+  } catch(e) { alert('Invalid JSON: ' + e.message); }
+}
+
+function exportHTML() {
+  const { w, h } = state.scene.resolution;
+  const theme = state.scene.theme;
+  const compsHtml = state.scene.components.map(c => {
+    const html = renderComp(c).replace(/onclick="[^"]*"/g,'').replace(/onmousedown="[^"]*"/g,'').replace(/data-id="[^"]*"/g,'').replace(/data-handle="[^"]*"/g,'');
+    return html;
+  }).join('\n');
+
+  const themeVars = {
+    dark:     '--ca:#4ade80;--ct:#e2e4ef;--cb:rgba(74,222,128,.06);--slot:rgba(255,255,255,.05);--slot-b:rgba(74,222,128,.15);--ci:Inter,sans-serif;',
+    fantasy:  '--ca:#d4960a;--ct:#e8d090;--cb:rgba(200,140,20,.12);--slot:rgba(5,3,1,.7);--slot-b:rgba(140,100,20,.4);--ci:serif;',
+    cyberpunk:'--ca:#0ff;--ct:#c0f0ff;--cb:rgba(0,255,255,.08);--slot:rgba(0,3,8,.8);--slot-b:rgba(0,255,255,.2);--ci:sans-serif;',
+    fps:      '--ca:#fff;--ct:#fff;--cb:rgba(255,255,255,.06);--slot:rgba(255,255,255,.06);--slot-b:rgba(255,255,255,.15);--ci:sans-serif;',
+  };
+
+  const out = `<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<title>${state.scene.name || 'Game UI'}</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;overflow:hidden;width:${w}px;height:${h}px;position:relative}
+:root{${themeVars[theme]||themeVars.dark}}
+/* GCS Export — Grudge Character Studio Game UI */
+/* Generated by HYDRA Game UI Studio — ui.grudge-studio.com/studio */
+.gc{position:absolute}.comp-inner{width:100%;height:100%;overflow:hidden;border-radius:3px}
+.theme-${theme} .comp-inner{background:${theme==='dark'?'rgba(10,12,20,.9)':theme==='fantasy'?'rgba(12,7,3,.88)':theme==='cyberpunk'?'rgba(4,8,18,.92)':'rgba(0,0,0,.72)'};border:1px solid ${theme==='cyberpunk'?'rgba(0,255,255,.35)':theme==='fantasy'?'#7a5c10':theme==='fps'?'rgba(255,255,255,.2)':'rgba(74,222,128,.2)'}}
+.gc-chrome,.gc-handle,.gc-label{display:none}
+.gk-comp-title{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca);padding:5px 8px 3px;border-bottom:1px solid var(--slot-b)}
+.slot-grid{display:grid;gap:3px;padding:6px}.gk-slot{background:var(--slot);border:1px solid var(--slot-b);border-radius:3px;display:flex;align-items:center;justify-content:center}
+.hotbar-row{display:flex;gap:3px;padding:6px;align-items:center;justify-content:center;height:100%}.hb-slot{background:var(--slot);border:1px solid var(--slot-b);border-radius:3px;display:flex;align-items:flex-end;justify-content:flex-end;padding:2px;flex-shrink:0}.hb-num{font-size:.5rem;color:var(--ca);line-height:1}
+.bar-wrap{padding:6px 8px;display:flex;flex-direction:column;gap:3px;height:100%;justify-content:center}.bar-label-row{display:flex;justify-content:space-between}.bar-name{font-size:.6rem;font-weight:700;color:var(--ca);letter-spacing:.05em}.bar-val{font-size:.58rem;color:var(--ct)}.bar-track{background:rgba(0,0,0,.5);border:1px solid var(--slot-b);border-radius:20px;overflow:hidden;height:10px}.bar-fill{height:100%;border-radius:20px}
+.minimap-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.minimap-bg{position:absolute;inset:0;background:radial-gradient(circle,rgba(30,60,40,.6) 0%,rgba(5,15,10,.9) 100%)}.minimap-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,222,128,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,128,.08) 1px,transparent 1px);background-size:20px 20px}.minimap-player{width:6px;height:6px;border-radius:50%;background:#4ade80;position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 4px #4ade80;z-index:2}.minimap-border{position:absolute;inset:0;border-radius:inherit;border:1px solid var(--slot-b)}
+.portrait-inner{display:flex;flex-direction:column;align-items:center;padding:6px;gap:4px;height:100%;justify-content:center}.portrait-face{flex:1;width:100%;background:var(--slot);border:1px solid var(--slot-b);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--ca);min-height:0}.portrait-name{font-size:.6rem;font-weight:700;color:var(--ct);letter-spacing:.05em}.portrait-level{font-size:.55rem;color:var(--ca)}
+.currency-inner{display:flex;align-items:center;gap:6px;padding:4px 8px;height:100%}.currency-amt{font-size:.8rem;font-weight:700;color:var(--ca)}.currency-lbl{font-size:.55rem;color:var(--ct)}
+.chat-inner{display:flex;flex-direction:column;height:100%}.chat-msgs{flex:1;padding:4px 6px;display:flex;flex-direction:column;gap:3px;overflow:hidden;justify-content:flex-end}.chat-msg{font-size:.55rem;line-height:1.4}.chat-user{color:var(--ca);font-weight:600}.chat-text{color:var(--ct)}.chat-input-row{display:flex;gap:4px;padding:4px 6px;border-top:1px solid var(--slot-b)}.chat-input-fake{flex:1;height:18px;background:var(--slot);border:1px solid var(--slot-b);border-radius:3px}
+.equip-inner{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(4,1fr);gap:4px;padding:8px;height:100%}.equip-slot{background:var(--slot);border:1px solid var(--slot-b);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.equip-slot i{font-size:.65rem;color:var(--ca)}.equip-slot-name{font-size:.42rem;color:rgba(255,255,255,.4);letter-spacing:.04em}
+.skilltree-inner{position:relative;width:100%;height:100%;overflow:hidden}.st-node{position:absolute;width:32px;height:32px;border-radius:50%;background:var(--slot);border:2px solid var(--slot-b);display:flex;align-items:center;justify-content:center}.st-node.active{background:var(--cb);border-color:var(--ca)}.st-node i{font-size:.6rem;color:var(--ca)}.st-line{position:absolute;background:var(--slot-b);transform-origin:left center}
+.shop-inner{display:flex;flex-direction:column;height:100%}.shop-items{flex:1;padding:4px 6px;display:flex;flex-direction:column;gap:3px;overflow:hidden}.shop-item{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:3px;background:var(--slot);border:1px solid var(--slot-b)}.shop-item-icon{width:20px;height:20px;border-radius:3px;background:var(--cb);display:flex;align-items:center;justify-content:center;font-size:.6rem}.shop-item-name{flex:1;font-size:.58rem;color:var(--ct)}.shop-item-price{font-size:.58rem;font-weight:700;color:var(--ca)}.shop-buy-btn{margin:4px 6px 6px;padding:4px;border-radius:4px;text-align:center;background:var(--cb);border:1px solid var(--slot-b);font-size:.58rem;font-weight:700;color:var(--ca)}
+.crosshair-inner{display:flex;align-items:center;justify-content:center;height:100%;color:var(--ca,rgba(255,255,255,.8));position:relative}.crosshair-inner::before,.crosshair-inner::after{content:'';position:absolute;background:currentColor;border-radius:1px}.crosshair-inner::before{width:14px;height:2px}.crosshair-inner::after{width:2px;height:14px}.crosshair-gap{width:4px;height:4px;border-radius:50%;background:transparent;border:1px solid currentColor;position:absolute}
+.textlabel-inner{display:flex;align-items:center;height:100%;padding:0 6px}.textlabel-text{color:var(--ct,#fff);font-weight:600}
+</style>
+</head><body>
+<div id="game-ui" style="position:relative;width:${w}px;height:${h}px">
+${compsHtml}
+</div>
+<!-- GCS Game UI Export | Generated: ${new Date().toISOString()} -->
+<!-- Integrate: overlay this div on your game canvas using CSS position:absolute;inset:0 -->
+<!-- Scales: use CSS transform:scale() on #game-ui to fit any viewport -->
+</body></html>`;
+
+  const a = document.createElement('a');
+  a.href = 'data:text/html,' + encodeURIComponent(out);
+  a.download = (state.scene.name || 'game-ui') + '.html';
+  a.click();
+}
+
+/* ═══════════════════════════════════════════════
+   AI
+═══════════════════════════════════════════════ */
+const AI_SYSTEM = `You are the Grudge Studio Game UI AI — an expert game interface designer embedded in the HYDRA Game UI Studio.
+
+You help designers build complete, production-ready game HUDs, inventories, and UI layouts for Grudge Studio games (GrudgeWarlords, GCS, etc.).
+
+## Component Vocabulary
+You understand these component types and their exact JSON schema:
+
+- **inventory-grid**: Item storage grid. props: cols(int), rows(int), slotSize(px), gap(px), label(str)
+- **equipment-slots**: Gear slot panel (head/chest/legs/hands/feet/weapon/ring/etc). props: label(str)
+- **hotbar**: Quick-use action bar. props: slots(int 1-12), slotSize(px), label(str)
+- **healthbar**: HP bar. props: value(0-100), max(int), label(str), color(hex)
+- **manabar**: MP/energy bar. props: value(0-100), max(int), label(str), color(hex)
+- **xp-bar**: Experience bar. props: value(0-100), max(int), label(str), color(hex)
+- **minimap**: World map. props: shape("circle"|"square"), label(str)
+- **portrait**: Character face + name + level. props: name(str), level(int)
+- **currency-display**: Money display. props: amount(int), label(str)
+- **chat-window**: Scrollable chat. props: label(str)
+- **skill-tree**: Ability node graph. props: label(str)
+- **shop-panel**: Buy/sell interface. props: label(str)
+- **crosshair**: FPS aim reticle. props: {} (no props)
+- **text-label**: Static text. props: text(str), size(px int), align("left"|"center"|"right")
+
+## Canvas & Positioning
+- Canvas is the scene resolution (default 1920×1080). Origin (0,0) = top-left.
+- x/y = top-left corner of component. w/h = width/height in pixels.
+- Think in terms of screen zones: top-left, top-right, bottom-left, bottom-right, center, center-bottom.
+
+## Game UI Layout Patterns
+- **RPG**: portrait+HP/MP bottom-left, hotbar center-bottom, inventory bottom-right, minimap top-right, chat bottom-left
+- **FPS**: crosshair center, health bottom-left, ammo text bottom-right, minimap top-right
+- **MOBA**: hotbar center-bottom, HP/MP above hotbar, portrait left of HP, minimap bottom-right, chat top-left
+- **RTS**: minimap bottom-left, resource bar top, unit portrait center-bottom
+- **Inventory screen**: equipment left, inventory grid center, shop right, portrait+stats top-left
+- **MMO**: portrait+HP/MP+XP bottom-left, hotbar center-bottom, 10-slot bag grid, minimap top-right, chat window
+
+## Response Format
+ALWAYS respond with ONLY valid JSON — no markdown, no explanation outside the message field:
+{
+  "action": "add" | "update" | "remove" | "replace_scene" | "clear",
+  "components": [...],
+  "ids": [...],
+  "updates": {},
+  "scene_props": {},
+  "message": "What I did and why"
+}
+
+For "add": components array = full component objects with unique ids.
+For "update": updates = { "component-id": { x, y, w, h, props: {...patches} } }
+For "remove": ids = array of component ids to delete.
+For "replace_scene": components = full new component array, replaces everything.
+For "clear": no extra fields needed.
+For scene_props: { theme, resolution: {w,h} } — use to change theme or resolution.
+
+IDs: generate short random ids like "inv1", "hp1", "hb1", etc.`;
+
+const AI_QUICK = [
+  'Build an RPG HUD',
+  'Add inventory grid bottom-right',
+  'Add minimap top-right',
+  'FPS layout',
+  'Make it cyberpunk theme',
+  'Add health and mana bars',
+  'Clear layout',
+  'MMO layout',
+];
+
+function buildAIQuickBtns() {
+  document.getElementById('ai-quick-row').innerHTML = AI_QUICK.map(q =>
+    `<div class="ai-quick-btn" onclick="sendAIMsg(${JSON.stringify(q)})">${q}</div>`
+  ).join('');
+}
+
+function switchTab(tab) {
+  document.getElementById('tab-props').className = 'panel-tab' + (tab === 'props' ? ' active' : '');
+  document.getElementById('tab-ai').className = 'panel-tab' + (tab === 'ai' ? ' active' : '');
+  document.getElementById('props-panel').className = 'props-panel' + (tab === 'props' ? ' active' : '');
+  document.getElementById('props-panel').style.display = tab === 'props' ? 'block' : 'none';
+  document.getElementById('ai-panel').style.display = tab === 'ai' ? 'flex' : 'none';
+}
+
+function appendAIMsg(role, text) {
+  const el = document.createElement('div');
+  el.className = `ai-msg ${role}`;
+  el.innerHTML = `<div class="ai-msg-role">${role === 'user' ? 'You' : 'HYDRA AI'}</div><div class="ai-msg-text">${text.replace(/</g,'&lt;')}</div>`;
+  document.getElementById('ai-messages').appendChild(el);
+  document.getElementById('ai-messages').scrollTop = 99999;
+}
+
+function showAIThinking() {
+  const el = document.createElement('div');
+  el.id = 'ai-thinking';
+  el.className = 'ai-thinking';
+  el.innerHTML = `<div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div> Designing your layout…`;
+  document.getElementById('ai-messages').appendChild(el);
+  document.getElementById('ai-messages').scrollTop = 99999;
+}
+
+function hideAIThinking() {
+  const el = document.getElementById('ai-thinking');
+  if (el) el.remove();
+}
+
+function aiInputKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAI(); }
+}
+
+function sendAI() {
+  const input = document.getElementById('ai-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  sendAIMsg(msg);
+}
+
+async function sendAIMsg(msg) {
+  if (state.ai.thinking) return;
+  state.ai.thinking = true;
+  document.getElementById('ai-send-btn').disabled = true;
+  switchTab('ai');
+  appendAIMsg('user', msg);
+  showAIThinking();
+
+  const sceneContext = JSON.stringify({ resolution: state.scene.resolution, theme: state.scene.theme, components: state.scene.components });
+
+  const messages = [
+    ...state.ai.messages,
+    { role: 'user', content: `Current scene:\n${sceneContext}\n\nRequest: ${msg}` }
+  ];
+
+  try {
+    let responseText = '';
+    const apiKey = document.getElementById('ai-key-input').value.trim() || state.ai.apiKey;
+
+    // Try Anthropic direct if key provided
+    if (apiKey.startsWith('sk-ant')) {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 2048,
+          system: AI_SYSTEM,
+          messages,
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      responseText = data.content?.[0]?.text || '';
+    } else {
+      // Try ALE worker
+      const res = await fetch('https://ai.grudge-studio.com/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: AI_SYSTEM, messages })
+      });
+      if (!res.ok) throw new Error(`ALE returned ${res.status}. Add an Anthropic API key below to use AI directly.`);
+      const data = await res.json();
+      responseText = data.content || data.text || data.response || JSON.stringify(data);
+    }
+
+    // Parse and apply JSON action
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('No JSON in response');
+    const action = JSON.parse(jsonMatch[0]);
+
+    applyAIAction(action);
+    state.ai.messages.push({ role: 'user', content: `Scene: ${sceneContext}\nRequest: ${msg}` });
+    state.ai.messages.push({ role: 'assistant', content: responseText });
+    if (state.ai.messages.length > 20) state.ai.messages = state.ai.messages.slice(-20);
+
+    hideAIThinking();
+    appendAIMsg('assistant', action.message || 'Done!');
+    renderCanvas();
+  } catch(err) {
+    hideAIThinking();
+    appendAIMsg('assistant', '⚠️ ' + err.message);
+  }
+
+  state.ai.thinking = false;
+  document.getElementById('ai-send-btn').disabled = false;
+}
+
+function applyAIAction(action) {
+  if (action.scene_props) {
+    if (action.scene_props.theme) setTheme(action.scene_props.theme);
+    if (action.scene_props.resolution) {
+      state.scene.resolution = action.scene_props.resolution;
+      document.getElementById('res-select').value = `${action.scene_props.resolution.w}x${action.scene_props.resolution.h}`;
+    }
+  }
+  if (action.action === 'clear') {
+    state.scene.components = [];
+  } else if (action.action === 'replace_scene') {
+    state.scene.components = (action.components || []).map(ensureId);
+  } else if (action.action === 'add') {
+    (action.components || []).forEach(c => state.scene.components.push(ensureId(c)));
+  } else if (action.action === 'remove') {
+    const ids = new Set(action.ids || []);
+    state.scene.components = state.scene.components.filter(c => !ids.has(c.id));
+  } else if (action.action === 'update') {
+    Object.entries(action.updates || {}).forEach(([id, patch]) => {
+      const c = state.scene.components.find(c => c.id === id);
+      if (c) {
+        if (patch.x !== undefined) c.x = patch.x;
+        if (patch.y !== undefined) c.y = patch.y;
+        if (patch.w !== undefined) c.w = patch.w;
+        if (patch.h !== undefined) c.h = patch.h;
+        if (patch.props) Object.assign(c.props, patch.props);
+      }
+    });
+  }
+  state.selected = null;
+}
+
+function ensureId(c) {
+  if (!c.id) c.id = uid();
+  if (!c.props) c.props = {};
+  return c;
+}
+
+/* ═══════════════════════════════════════════════
+   KEYBOARD
+═══════════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'Escape') { cancelPlacing(); state.selected = null; renderCanvas(); }
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    if (state.selected) { deleteComp(state.selected); }
+  }
+  if (e.key === 'ArrowLeft' && state.selected) {
+    const c = state.scene.components.find(c => c.id === state.selected);
+    if (c) { c.x -= e.shiftKey ? 10 : 1; renderCanvas(); }
+  }
+  if (e.key === 'ArrowRight' && state.selected) {
+    const c = state.scene.components.find(c => c.id === state.selected);
+    if (c) { c.x += e.shiftKey ? 10 : 1; renderCanvas(); }
+  }
+  if (e.key === 'ArrowUp' && state.selected) {
+    const c = state.scene.components.find(c => c.id === state.selected);
+    if (c) { c.y -= e.shiftKey ? 10 : 1; renderCanvas(); }
+  }
+  if (e.key === 'ArrowDown' && state.selected) {
+    const c = state.scene.components.find(c => c.id === state.selected);
+    if (c) { c.y += e.shiftKey ? 10 : 1; renderCanvas(); }
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveJSON(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'e') { e.preventDefault(); exportHTML(); }
+});
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+document.getElementById('scene-name-input').addEventListener('change', e => { state.scene.name = e.target.value; });
+document.getElementById('ai-key-input').value = state.ai.apiKey;
+buildPalette();
+buildAIQuickBtns();
+renderCanvas();
+fitZoom();
+// Default greeting
+setTimeout(() => {
+  appendAIMsg('assistant', 'Ready. Tell me what to build — or click a quick-start button. I understand game UI layout patterns (RPG, FPS, MOBA, etc.) and can place, position, and configure all components for you. Try: "Build a complete RPG HUD for a 1920×1080 fantasy game"');
+}, 300);
+
+// Ctrl+wheel zoom
+document.getElementById('canvas-viewport').addEventListener('wheel', e => {
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault();
+    setZoom(state.zoom + (e.deltaY < 0 ? 0.05 : -0.05));
+  }
+}, { passive: false });
+</script>
+</body>
+</html>
