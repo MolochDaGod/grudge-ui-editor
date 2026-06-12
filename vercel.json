@@ -3,7 +3,8 @@
   "outputDirectory": ".",
   "framework": null,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/hotkeys",      "destination": "/hotkeys.html" },
+    { "source": "/((?!hotkeys|assets|favicon).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
