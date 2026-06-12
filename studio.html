@@ -181,13 +181,40 @@ input,select,textarea{font-family:inherit;}
 
 /* RIGHT PANEL */
 #rp{width:var(--rw);min-width:var(--rw);background:var(--s1);border-left:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;}
-.rtabs{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0;}
-.rtab{flex:1;padding:7px 0;font-size:.59rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .1s;}
+.rtabs{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0;overflow-x:auto;}
+.rtabs::-webkit-scrollbar{height:0;}
+.rtab{flex:1;padding:6px 0;font-size:.54rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .1s;white-space:nowrap;min-width:44px;}
 .rtab.on{color:var(--hydra);border-bottom-color:var(--hydra);}
-#rpd,#rpc,#rpa{flex:1;overflow:hidden;display:none;flex-direction:column;}
-#rpd.show,#rpc.show,#rpa.show{display:flex;}
+#rpd,#rpc,#rpa,#rps,#rpx{flex:1;overflow:hidden;display:none;flex-direction:column;}
+#rpd.show,#rpc.show,#rpa.show,#rps.show,#rpx.show{display:flex;}
 #rpd{overflow-y:auto;}
 #rpc{overflow-y:auto;}
+#rps{overflow-y:auto;}
+#rpx{overflow-y:auto;}
+/* deploy tab */
+.dpsec{padding:9px 10px;border-bottom:1px solid var(--bd);}
+.dpsec:last-child{border-bottom:none;}
+.dpttl{font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.dptarget{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;border:1px solid var(--bd2);background:var(--s2);margin-bottom:4px;cursor:pointer;transition:all .1s;}
+.dptarget:hover{background:var(--s3);border-color:var(--bd2);}
+.dpticon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.72rem;flex-shrink:0;}
+.dptinfo{flex:1;}.dptname{font-size:.65rem;font-weight:700;color:var(--text);}.dptdesc{font-size:.55rem;color:var(--muted);margin-top:1px;}
+.dptbtn{font-size:.55rem;font-weight:700;padding:3px 7px;border-radius:5px;border:1px solid var(--hb);background:var(--hs);color:var(--hydra);cursor:pointer;white-space:nowrap;transition:all .1s;}
+.dptbtn:hover{background:rgba(74,222,128,.18);}
+.dpnotice{font-size:.6rem;color:var(--sub);line-height:1.6;padding:8px 10px;background:var(--s2);border-radius:6px;border:1px solid var(--bd);margin:4px 0;}
+.dpnotice code{background:var(--s4);padding:1px 4px;border-radius:3px;font-family:monospace;font-size:.58rem;color:var(--hydra);}
+/* scene tab */
+.scsec{padding:9px 10px;border-bottom:1px solid var(--bd);}
+.scsec:last-child{border-bottom:none;}
+.scttl{font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.scrow{display:flex;align-items:center;gap:5px;margin-bottom:5px;}
+.sclbl{font-size:.62rem;color:var(--sub);min-width:60px;flex-shrink:0;}
+.scval{flex:1;background:var(--s3);border:1px solid var(--bd2);color:var(--text);font-size:.67rem;padding:3px 6px;border-radius:5px;outline:none;}
+.scval:focus{border-color:var(--teal);}
+.scthemes{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.sctbtn{padding:5px 6px;border-radius:5px;border:1px solid var(--bd2);background:var(--s2);color:var(--sub);font-size:.6rem;font-weight:600;cursor:pointer;transition:all .1s;text-align:center;}
+.sctbtn:hover{background:var(--s3);color:var(--text);}
+.sctbtn.on{background:var(--hs);border-color:var(--hb);color:var(--hydra);}
 /* design props */
 .psec{padding:9px 10px 4px;border-bottom:1px solid var(--bd);}
 .psec:last-child{border-bottom:none;}
@@ -388,11 +415,114 @@ input,select,textarea{font-family:inherit;}
   <div id="rp">
     <div class="rtabs">
       <div class="rtab on" id="rt-d" onclick="setRT('d')">Design</div>
-      <div class="rtab"    id="rt-c" onclick="setRT('c')">Component</div>
+      <div class="rtab"    id="rt-c" onclick="setRT('c')">Props</div>
+      <div class="rtab"    id="rt-s" onclick="setRT('s')">Scene</div>
+      <div class="rtab"    id="rt-x" onclick="setRT('x')">Deploy</div>
       <div class="rtab"    id="rt-a" onclick="setRT('a')">AI</div>
     </div>
     <div id="rpd" class="show"></div>
     <div id="rpc"></div>
+    <div id="rps">
+      <div class="scsec">
+        <div class="scttl">Resolution</div>
+        <select class="scval" onchange="setRes(this.value)" id="res-sel2">
+          <option value="1920x1080">1920×1080 (FHD)</option>
+          <option value="1280x720">1280×720 (HD)</option>
+          <option value="2560x1440">2560×1440 (QHD)</option>
+          <option value="1366x768">1366×768</option>
+          <option value="800x600">800×600</option>
+        </select>
+      </div>
+      <div class="scsec">
+        <div class="scttl">Theme</div>
+        <div class="scthemes">
+          <div class="sctbtn on" id="sct-d" onclick="setTheme('d')"><i class="fa fa-moon"></i> Hydra Dark</div>
+          <div class="sctbtn" id="sct-f" onclick="setTheme('f')"><i class="fa fa-scroll"></i> Fantasy</div>
+          <div class="sctbtn" id="sct-c" onclick="setTheme('c')"><i class="fa fa-bolt"></i> Cyberpunk</div>
+          <div class="sctbtn" id="sct-q" onclick="setTheme('q')"><i class="fa fa-crosshairs"></i> FPS</div>
+        </div>
+      </div>
+      <div class="scsec">
+        <div class="scttl">Mode</div>
+        <div class="scthemes">
+          <div class="sctbtn on" id="smod-main" onclick="setMode('main')"><i class="fa fa-table-columns"></i> Main Panel</div>
+          <div class="sctbtn" id="smod-canvas" onclick="setMode('canvas')"><i class="fa fa-layer-group"></i> Canvas UI</div>
+          <div class="sctbtn" id="smod-hud" onclick="setMode('hud')"><i class="fa fa-gamepad"></i> HUD</div>
+        </div>
+      </div>
+      <div class="scsec">
+        <div class="scttl">Grid &amp; Snap</div>
+        <div class="scrow"><span class="sclbl">Grid</span><div class="ptog on" id="sg-grid" onclick="toggleGrid()"></div></div>
+        <div class="scrow"><span class="sclbl">Snap to Grid</span><div class="ptog on" id="sg-snap" onclick="toggleSnap()"></div></div>
+        <div class="scrow"><span class="sclbl">Snap Size</span><input class="scval" type="number" min="4" max="64" value="16" onchange="G.snapSz=+this.value" style="width:60px;flex:none"/><span style="font-size:.58rem;color:var(--muted)">px</span></div>
+      </div>
+      <div class="scsec">
+        <div class="scttl">Examples</div>
+        <button class="dptbtn" style="width:100%;margin-bottom:3px" onclick="tpl('hud')"><i class="fa fa-gamepad"></i> HUD Layout</button>
+        <button class="dptbtn" style="width:100%;margin-bottom:3px" onclick="tpl('panel')"><i class="fa fa-table-columns"></i> Main Panel Layout</button>
+        <button class="dptbtn" style="width:100%;margin-bottom:3px" onclick="tpl('canvas')"><i class="fa fa-layer-group"></i> Canvas UI Layout</button>
+        <button class="dptbtn" style="width:100%;margin-bottom:3px" onclick="tpl('rpg')"><i class="fa fa-shield"></i> RPG HUD</button>
+        <button class="dptbtn" style="width:100%" onclick="tpl('fps')"><i class="fa fa-crosshairs"></i> FPS HUD</button>
+      </div>
+      <div class="scsec">
+        <div class="scttl">Danger Zone</div>
+        <button class="pdel" onclick="clearAll()"><i class="fa fa-trash"></i> Clear All Components</button>
+      </div>
+    </div>
+    <div id="rpx">
+      <div class="dpsec">
+        <div class="dpttl">Export Targets</div>
+        <div class="dptarget" onclick="doExport('html')">
+          <div class="dpticon" style="background:rgba(74,222,128,.1);color:#4ade80"><i class="fa fa-file-code"></i></div>
+          <div class="dptinfo"><div class="dptname">Standalone HTML</div><div class="dptdesc">Single file, works anywhere</div></div>
+          <button class="dptbtn" onclick="event.stopPropagation();doExport('html')">Export</button>
+        </div>
+        <div class="dptarget" onclick="doExport('ue5')">
+          <div class="dpticon" style="background:rgba(22,177,149,.1);color:#16b195"><i class="fa fa-cube"></i></div>
+          <div class="dptinfo"><div class="dptname">Unreal Engine 5</div><div class="dptdesc">CEF WebUI overlay</div></div>
+          <button class="dptbtn" onclick="event.stopPropagation();doExport('ue5')">Export</button>
+        </div>
+        <div class="dptarget" onclick="doExport('unity')">
+          <div class="dpticon" style="background:rgba(62,98,192,.1);color:#3e62c0"><i class="fa fa-unity" style="font-family:inherit">U</i></div>
+          <div class="dptinfo"><div class="dptname">Unity WebGL</div><div class="dptdesc">WebGL overlay + bridge</div></div>
+          <button class="dptbtn" onclick="event.stopPropagation();doExport('unity')">Export</button>
+        </div>
+        <div class="dptarget" onclick="doExport('gd')">
+          <div class="dpticon" style="background:rgba(168,85,247,.1);color:#a855f7"><i class="fa fa-gamepad"></i></div>
+          <div class="dptinfo"><div class="dptname">GDevelop</div><div class="dptdesc">HTML layer for GDevelop</div></div>
+          <button class="dptbtn" onclick="event.stopPropagation();doExport('gd')">Export</button>
+        </div>
+      </div>
+      <div class="dpsec">
+        <div class="dpttl">Scene Data</div>
+        <div class="dptarget" onclick="doSave()">
+          <div class="dpticon" style="background:rgba(245,158,11,.1);color:#f59e0b"><i class="fa fa-floppy-disk"></i></div>
+          <div class="dptinfo"><div class="dptname">Save Scene JSON</div><div class="dptdesc">Re-import into Studio</div></div>
+          <button class="dptbtn" onclick="event.stopPropagation();doSave()">Save</button>
+        </div>
+        <div class="dptarget" onclick="showLoad()">
+          <div class="dpticon" style="background:rgba(74,222,128,.1);color:#4ade80"><i class="fa fa-folder-open"></i></div>
+          <div class="dptinfo"><div class="dptname">Load Scene JSON</div><div class="dptdesc">Restore a saved layout</div></div>
+          <button class="dptbtn" onclick="event.stopPropagation();showLoad()">Load</button>
+        </div>
+      </div>
+      <div class="dpsec">
+        <div class="dpttl">Integration Notes</div>
+        <div class="dpnotice">
+          <b>UE5 WebUI:</b> Add widget to viewport, set URL to <code>file:///…/ui.html</code>. Enable <code>CEF</code> in Project Settings.<br><br>
+          <b>Unity WebGL:</b> Place HTML in <code>Assets/WebGLTemplates/</code>. Use <code>jslib</code> bridge for game→UI events.<br><br>
+          <b>GDevelop:</b> Use the <i>External HTML layer</i> extension, point to exported file.<br><br>
+          <b>Web/Vercel:</b> Drop the HTML file into your project root and link from your game's HUD layer.
+        </div>
+      </div>
+      <div class="dpsec">
+        <div class="dpttl">AI Handoff</div>
+        <div class="dpnotice">
+          Exports include a machine-readable <code>&lt;!-- HYDRA AI HANDOFF --&gt;</code> block with full component schema, layout intent, and re-import JSON so any LLM can understand and modify the UI without the editor.
+        </div>
+        <button class="dptbtn" style="width:100%;margin-top:4px" onclick="copyHandoff()"><i class="fa fa-copy"></i> Copy Handoff Prompt</button>
+      </div>
+    </div>
     <div id="rpa">
       <div id="amsgs"></div>
       <div id="aftr">
@@ -902,9 +1032,9 @@ function dup(){
 
 /* ─── RIGHT PANEL TABS ─── */
 function setRT(t){
-  ['d','c','a'].forEach(x=>{
-    document.getElementById('rt-'+x).classList.toggle('on',x===t);
-    document.getElementById('rp'+x).classList.toggle('show',x===t);
+  ['d','c','s','x','a'].forEach(x=>{
+    document.getElementById('rt-'+x)?.classList.toggle('on',x===t);
+    document.getElementById('rp'+x)?.classList.toggle('show',x===t);
   });
 }
 function setLT(t){
@@ -986,10 +1116,11 @@ function upP(id,k,v){const c=gc(id);if(c){c.props[k]=v;renderAll();}}
 function delC(id){G.scene.comps=G.scene.comps.filter(c=>c.id!==id);G.sel.delete(id);renderAll();}
 
 /* ─── SCENE SETTINGS ─── */
-function setRes(v){const[w,h]=v.split('x').map(Number);G.scene.resolution={w,h};renderAll();setTimeout(fitView,50);}
+function setRes(v){const[w,h]=v.split('x').map(Number);G.scene.resolution={w,h};document.getElementById('res-sel').value=v;document.getElementById('res-sel2')&&(document.getElementById('res-sel2').value=v);renderAll();setTimeout(fitView,50);}
 function setTheme(v){
   G.scene.theme=v;
   document.getElementById('theme-sel').value=v;
+  ['d','f','c','q'].forEach(x=>{document.getElementById('sct-'+x)?.classList.toggle('on',x===v);});
   renderAll();
 }
 
@@ -1071,6 +1202,7 @@ function setMode(m){
   G.mode=m;
   ['main','canvas','hud'].forEach(x=>{
     document.getElementById('mode-'+x)?.classList.toggle('on',x===m);
+    document.getElementById('smod-'+x)?.classList.toggle('on',x===m);
   });
 }
 
@@ -1093,7 +1225,101 @@ function doLoad(){
   }catch(e){alert('Invalid JSON: '+e.message);}
 }
 
-function doExport(){
+function buildHandoffJSON(){
+  const{w,h}=G.scene.resolution;
+  const themeNames={d:'Hydra Dark',f:'Fantasy',c:'Cyberpunk',q:'FPS'};
+  return {
+    tool:'HYDRA Game UI Studio',
+    version:'2.0',
+    exported:new Date().toISOString(),
+    scene:{
+      name:G.scene.name,
+      resolution:{w,h},
+      theme:G.scene.theme,
+      themeName:themeNames[G.scene.theme]||G.scene.theme,
+      mode:G.mode,
+      componentCount:G.scene.comps.length
+    },
+    components:G.scene.comps.map(c=>({
+      id:c.id,type:c.type,label:D[c.type]?.l||c.type,
+      x:Math.round(c.x),y:Math.round(c.y),w:c.w,h:c.h,
+      rot:c.rot||0,opacity:c.op!==undefined?c.op:1,
+      borderRadius:c.br||0,shadow:c.shd||false,
+      props:c.props
+    })),
+    ai_instructions:'This is a game UI layout exported from HYDRA Game UI Studio. To modify it with AI: import the scene_json below into the studio via Load, then use the AI tab to describe changes. Component types and positions are listed above. All coordinates use a top-left origin at 0,0.',
+    schema_reference:{
+      'inventory-grid':'props{cols,rows,slotSize,gap,label}',
+      'equipment-slots':'props{label}',
+      'hotbar':'props{slots,slotSize,label}',
+      'hotbar-2row':'props{slots,slotSize}',
+      'healthbar/manabar/xp-bar':'props{value,max,label,color}',
+      'minimap':'props{shape:"circle"|"square"}',
+      'portrait':'props{name,level}',
+      'player-frame':'props{name,level,hp,hpMax,mp,mpMax}',
+      'target-frame':'props{name,level,hp,hpMax,hostile:bool}',
+      'ally-frame':'props{name,level,hp,hpMax}',
+      'health-orb/mana-orb/action-orb':'props{value,max,color,label}',
+      'menu-dock':'props{buttons:"comma,separated,names"}',
+      'combat-log':'props{label}',
+      'objectives':'props{label}',
+      'dialogue-box':'props{speaker,text}',
+      'quest-tracker':'props{title,objective,label}',
+      'alert-banner':'props{text,type:"danger"|"warning"|"info"|"success"}',
+      'interaction-prompt':'props{key,action}',
+      'attr-panel':'props{label}',
+      'weapon-selector':'props{label}',
+      'currency-display':'props{amount,label}',
+      'chat-window':'props{label}',
+      'skill-tree':'props{label}',
+      'shop-panel':'props{label}',
+      'crosshair':'props{}',
+      'text-label':'props{text,size,align:"left"|"center"|"right"}'
+    },
+    scene_json:G.scene
+  };
+}
+
+function copyHandoff(){
+  const h=buildHandoffJSON();
+  const prompt=`You are a game UI designer. Here is a UI layout from HYDRA Game UI Studio:\n\n\`\`\`json\n${JSON.stringify(h,null,2)}\n\`\`\`\n\nYou can modify this layout by editing the scene_json.components array and returning valid JSON in the same format. Components have: id, type, x, y, w, h, rot, opacity, borderRadius, shadow, props. All coordinates are in pixels from top-left on a ${h.scene.resolution.w}×${h.scene.resolution.h} canvas.`;
+  navigator.clipboard.writeText(prompt).then(()=>{
+    const btn=event.currentTarget;const orig=btn.innerHTML;
+    btn.innerHTML='<i class="fa fa-check"></i> Copied!';
+    setTimeout(()=>btn.innerHTML=orig,2000);
+  }).catch(()=>alert('Copy failed — open browser console and run: copy(JSON.stringify(buildHandoffJSON(),null,2))'));
+}
+
+function buildExportCSS(){
+  return `.gtitle{font-size:.57rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca);padding:4px 6px 3px;border-bottom:1px solid var(--sb);}
+.sgrid{display:grid;gap:3px;padding:5px;}.gslot{background:var(--slot);border:1px solid var(--sb);border-radius:3px;}
+.hbrow{display:flex;gap:3px;padding:5px;align-items:center;justify-content:center;height:100%;}.hbsl{background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;align-items:flex-end;justify-content:flex-end;padding:2px;flex-shrink:0;}.hbnum{font-size:.46rem;color:var(--ca);}
+.hb2wrap{display:flex;flex-direction:column;gap:3px;padding:4px;height:100%;justify-content:center;}
+.bwrap{padding:5px 7px;display:flex;flex-direction:column;gap:3px;height:100%;justify-content:center;}.brow{display:flex;justify-content:space-between;}.blbl{font-size:.57rem;font-weight:700;color:var(--ca);}.bval{font-size:.55rem;color:var(--ct);}.btrack{background:rgba(0,0,0,.5);border:1px solid var(--sb);border-radius:20px;overflow:hidden;height:8px;}.bfill{height:100%;border-radius:20px;}.xpfill{background:linear-gradient(90deg,#f59e0b,#fcd34d)!important;}
+.mmwrap{width:100%;height:100%;position:relative;overflow:hidden;}.mmbg{position:absolute;inset:0;background:radial-gradient(circle,rgba(30,60,40,.6),rgba(5,15,10,.9));}.mmgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,222,128,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,128,.07) 1px,transparent 1px);background-size:18px 18px;}.mmdot{width:5px;height:5px;border-radius:50%;background:#4ade80;position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 4px #4ade80;z-index:2;}.mmbd{position:absolute;inset:0;border-radius:inherit;border:1px solid var(--sb);}
+.pwrap{display:flex;flex-direction:column;align-items:center;padding:5px;gap:3px;height:100%;justify-content:center;}.pface{flex:1;width:100%;background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--ca);min-height:0;}.pname{font-size:.57rem;font-weight:700;color:var(--ct);}.plvl{font-size:.53rem;color:var(--ca);}
+.cwrap{display:flex;align-items:center;gap:5px;padding:3px 7px;height:100%;}.camt{font-size:.76rem;font-weight:700;color:var(--ca);}.clbl{font-size:.53rem;color:var(--ct);}
+.chatwrap{display:flex;flex-direction:column;height:100%;}.chatmsgs{flex:1;padding:3px 5px;display:flex;flex-direction:column;gap:2px;overflow:hidden;justify-content:flex-end;}.chatmsg{font-size:.51rem;line-height:1.4;}.chatu{color:var(--ca);font-weight:600;}.chatt{color:var(--ct);}.chatinp{display:flex;gap:3px;padding:3px 5px;border-top:1px solid var(--sb);}.chatfake{flex:1;height:15px;background:var(--slot);border:1px solid var(--sb);border-radius:3px;}
+.eqgrid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(4,1fr);gap:3px;padding:5px;height:100%;}.eqsl{background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}.eqsl i{font-size:.58rem;color:var(--ca);}.eqn{font-size:.38rem;color:rgba(255,255,255,.4);}
+.stwrap{position:relative;width:100%;height:100%;overflow:hidden;}.stnode{position:absolute;width:28px;height:28px;border-radius:50%;background:var(--slot);border:2px solid var(--sb);display:flex;align-items:center;justify-content:center;}.stnode.on{background:var(--cb);border-color:var(--ca);}.stnode i{font-size:.55rem;color:var(--ca);}.stedge{position:absolute;background:var(--sb);transform-origin:left center;}
+.shwrap{display:flex;flex-direction:column;height:100%;}.shitems{flex:1;padding:3px 5px;display:flex;flex-direction:column;gap:2px;overflow:hidden;}.shitem{display:flex;align-items:center;gap:4px;padding:3px 4px;border-radius:3px;background:var(--slot);border:1px solid var(--sb);}.shico{width:17px;height:17px;border-radius:3px;background:var(--cb);display:flex;align-items:center;justify-content:center;font-size:.56rem;}.shnm{flex:1;font-size:.54rem;color:var(--ct);}.shpr{font-size:.54rem;font-weight:700;color:var(--ca);}.shbuy{margin:3px 5px 4px;padding:3px;border-radius:4px;text-align:center;background:var(--cb);border:1px solid var(--sb);font-size:.54rem;font-weight:700;color:var(--ca);}
+.xhwrap{display:flex;align-items:center;justify-content:center;height:100%;color:var(--ca,rgba(255,255,255,.9));position:relative;}.xhwrap::before,.xhwrap::after{content:'';position:absolute;background:currentColor;border-radius:1px;}.xhwrap::before{width:11px;height:1.5px;}.xhwrap::after{width:1.5px;height:11px;}.xhdot{width:3px;height:3px;border-radius:50%;border:1px solid currentColor;position:absolute;}
+.txwrap{display:flex;align-items:center;height:100%;padding:0 5px;}.txin{color:var(--ct,#fff);font-weight:600;}
+.ufwrap{display:flex;align-items:center;gap:6px;padding:4px 6px;height:100%;}.ufface{width:40px;height:40px;border-radius:4px;background:var(--slot);border:2px solid var(--ca);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--ca);flex-shrink:0;}.ufinfo{flex:1;display:flex;flex-direction:column;gap:2px;}.ufname{font-size:.6rem;font-weight:700;color:#e0e2f0;}.uflvl{font-size:.52rem;color:var(--ca);font-weight:400;}.ufbar{height:7px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden;}.ufhp{height:100%;background:linear-gradient(90deg,#e11d48,#f87171);border-radius:4px;}.ufbarlbl{font-size:.46rem;color:#52546e;}.ufmpbar{margin-top:1px;}.ufmp{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:4px;}
+.afwrap{display:flex;align-items:center;gap:4px;padding:3px 5px;height:100%;}.afface{width:26px;height:26px;border-radius:3px;background:rgba(255,255,255,.06);border:1px solid rgba(74,222,128,.3);display:flex;align-items:center;justify-content:center;font-size:.66rem;color:#4ade80;flex-shrink:0;}.afinfo{flex:1;display:flex;flex-direction:column;gap:2px;}.afname{font-size:.54rem;font-weight:600;}.afbar{height:5px;background:rgba(0,0,0,.5);border-radius:3px;overflow:hidden;}.afhp{height:100%;background:#22c55e;border-radius:3px;}
+.orbwrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}.orbval{position:absolute;font-size:.62rem;font-weight:700;}.orblbl{position:absolute;bottom:8%;font-size:.47rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.mdwrap{display:flex;align-items:center;gap:3px;padding:3px;height:100%;justify-content:center;}.mdbtn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 8px;border-radius:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:.46rem;color:rgba(255,255,255,.5);flex:1;}.mdbtn i{font-size:.72rem;color:var(--ca);}
+.clwrap{display:flex;flex-direction:column;height:100%;}.clmsgs{flex:1;padding:3px 5px;display:flex;flex-direction:column;gap:2px;overflow:hidden;justify-content:flex-end;}.clm{font-size:.52rem;line-height:1.4;}.clm.dmg{color:#f87171;}.clm.heal{color:#4ade80;}.clm.sys{color:#9496b0;font-style:italic;}.clt{font-weight:700;}.cldmg{font-weight:700;color:#fca5a5;}.clheal{font-weight:700;}
+.objwrap{height:100%;display:flex;flex-direction:column;}.objlist{padding:3px 6px;display:flex;flex-direction:column;gap:3px;flex:1;}.objitem{font-size:.6rem;color:#9496b0;display:flex;align-items:center;gap:5px;}.objitem.done{color:#52546e;text-decoration:line-through;}.objitem i{font-size:.5rem;color:var(--ca);flex-shrink:0;}.objprog{color:var(--ca);font-weight:600;}
+.dlgwrap{display:flex;flex-direction:column;height:100%;padding:8px 12px;gap:5px;}.dlgspk{font-size:.65rem;font-weight:700;color:var(--ca);letter-spacing:.05em;text-transform:uppercase;}.dlgtxt{flex:1;font-size:.68rem;line-height:1.6;}.dlgbtns{display:flex;gap:5px;}.dlgbtn{padding:4px 12px;border-radius:5px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:.6rem;font-weight:600;}
+.qtwrap{height:100%;display:flex;flex-direction:column;}.qtitle{padding:3px 6px;font-size:.65rem;font-weight:700;color:var(--ca);}.qtobj{padding:0 6px;font-size:.6rem;color:#9496b0;line-height:1.5;}
+.albwrap{display:flex;align-items:center;justify-content:center;gap:8px;height:100%;padding:0 14px;border:1px solid;border-radius:inherit;}.albtxt{font-size:.75rem;font-weight:700;letter-spacing:.08em;}
+.ipwrap{display:flex;align-items:center;gap:8px;height:100%;padding:0 12px;}.ipkey{width:28px;height:28px;border-radius:5px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;}.ipact{font-size:.7rem;font-weight:600;}
+.attrlist{padding:2px 4px;display:flex;flex-direction:column;gap:1px;height:100%;justify-content:space-around;overflow:hidden;}.attrow{display:flex;align-items:center;gap:5px;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,.02);}.attic{font-size:.66rem;width:16px;text-align:center;}.attn{flex:1;font-size:.58rem;font-weight:600;color:#9496b0;letter-spacing:.06em;}.attv{font-size:.62rem;font-weight:700;color:var(--ca);}
+.wswrap{display:flex;align-items:center;gap:3px;padding:3px 5px;height:100%;}.wsbtn{padding:3px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:.54rem;color:#9496b0;white-space:nowrap;}.wsbtn.on{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:var(--ca);}`;
+}
+
+function doExport(target='html'){
   const{w,h}=G.scene.resolution,th=G.scene.theme;
   const tvars={d:'--ca:#4ade80;--ct:#e2e4ef;--cb:rgba(74,222,128,.06);--slot:rgba(255,255,255,.05);--sb:rgba(74,222,128,.15)',f:'--ca:#d4960a;--ct:#e8d090;--cb:rgba(200,140,20,.12);--slot:rgba(5,3,1,.7);--sb:rgba(140,100,20,.4)',c:'--ca:#0ff;--ct:#c0f0ff;--cb:rgba(0,255,255,.08);--slot:rgba(0,3,8,.8);--sb:rgba(0,255,255,.2)',q:'--ca:#fff;--ct:#fff;--cb:rgba(255,255,255,.06);--slot:rgba(255,255,255,.06);--sb:rgba(255,255,255,.15)'};
   const tbg={d:'rgba(10,12,20,.92)',f:'rgba(12,7,3,.9)',c:'rgba(4,8,18,.93)',q:'rgba(0,0,0,.75)'};
@@ -1114,44 +1340,67 @@ function doExport(){
 .stwrap{position:relative;width:100%;height:100%;overflow:hidden;}.stnode{position:absolute;width:28px;height:28px;border-radius:50%;background:var(--slot);border:2px solid var(--sb);display:flex;align-items:center;justify-content:center;}.stnode.on{background:var(--cb);border-color:var(--ca);}.stnode i{font-size:.55rem;color:var(--ca);}.stedge{position:absolute;background:var(--sb);transform-origin:left center;}
 .shwrap{display:flex;flex-direction:column;height:100%;}.shitems{flex:1;padding:3px 5px;display:flex;flex-direction:column;gap:2px;overflow:hidden;}.shitem{display:flex;align-items:center;gap:4px;padding:3px 4px;border-radius:3px;background:var(--slot);border:1px solid var(--sb);}.shico{width:17px;height:17px;border-radius:3px;background:var(--cb);display:flex;align-items:center;justify-content:center;font-size:.56rem;}.shnm{flex:1;font-size:.54rem;color:var(--ct);}.shpr{font-size:.54rem;font-weight:700;color:var(--ca);}.shbuy{margin:3px 5px 4px;padding:3px;border-radius:4px;text-align:center;background:var(--cb);border:1px solid var(--sb);font-size:.54rem;font-weight:700;color:var(--ca);}
 .xhwrap{display:flex;align-items:center;justify-content:center;height:100%;color:var(--ca,rgba(255,255,255,.9));position:relative;}.xhwrap::before,.xhwrap::after{content:'';position:absolute;background:currentColor;border-radius:1px;}.xhwrap::before{width:11px;height:1.5px;}.xhwrap::after{width:1.5px;height:11px;}.xhdot{width:3px;height:3px;border-radius:50%;border:1px solid currentColor;position:absolute;}
-.txwrap{display:flex;align-items:center;height:100%;padding:0 5px;}.txin{color:var(--ct,#fff);font-weight:600;}`;
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>${G.scene.name||'Game UI'}</title>
+  const css=buildExportCSS();
+  const handoff=buildHandoffJSON();
+  const handoffComment=`\n<!--\n  ╔══════════════════════════════════════════════════╗\n  ║  HYDRA AI HANDOFF — Machine-readable layout data ║\n  ╚══════════════════════════════════════════════════╝\n  To modify with AI: paste this block into Claude/GPT.\n  Re-import via HYDRA Studio → Deploy → Load Scene JSON.\n${JSON.stringify(handoff,null,2).split('\n').map(l=>'  '+l).join('\n')}\n-->`;
+
+  const targetExtras={
+    ue5:`\n<!-- UE5 CEF SETUP:\n  1. Widget Blueprint → WebBrowser widget → URL: file:///C:/YourProject/UI/${G.scene.name||'game-ui'}.html\n  2. Project Settings → Plugins → WebBrowserPlugin → Enable\n  3. Add widget to HUD blueprint viewport\n  4. Set z-order above game viewport\n-->`,
+    unity:`\n<!-- UNITY WEBGL SETUP:\n  1. Place this file in Assets/WebGLTemplates/HYDRA/index.html\n  2. Build Settings → WebGL → Player Settings → Resolution: ${w}x${h}\n  3. JS Bridge: window.addEventListener('message', e => GameInstance.SendMessage('UIBridge', 'OnEvent', e.data))\n  4. C#: Application.ExternalCall("postMessage", JsonUtility.ToJson(data), "*")\n-->`,
+    gd:`\n<!-- GDEVELOP SETUP:\n  1. Add ExternalHTML layer extension\n  2. Action: Load External HTML → Path: ${G.scene.name||'game-ui'}.html\n  3. Use JavaScript events to communicate: runtimeScene.getVariables()\n-->`,
+    html:''
+  };
+
+  const baseHtml=`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>${G.scene.name||'Game UI'} — HYDRA</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>*{box-sizing:border-box;margin:0;padding:0}body{background:#000;overflow:hidden;width:${w}px;height:${h}px}:root{${tvars[th]||tvars.d}}${css}</style></head>
-<body><div id="ui" style="position:relative;width:${w}px;height:${h}px">${ch}</div>
-<!-- HYDRA Game UI Studio export — ${new Date().toISOString()} -->
-<!-- Overlay: position:absolute;inset:0;pointer-events:none on #ui -->
-</body></html>`;
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;overflow:hidden;width:${w}px;height:${h}px;font-family:'Inter',sans-serif;}
+:root{${tvars[th]||tvars.d}}
+${css}
+</style>
+</head>
+<body>
+<div id="ui" style="position:relative;width:${w}px;height:${h}px">
+${ch}
+</div>
+${targetExtras[target]||''}
+${handoffComment}
+</body>
+</html>`;
+
   const a=document.createElement('a');
-  a.href='data:text/html,'+encodeURIComponent(html);
-  a.download=(G.scene.name||'game-ui')+'.html'; a.click();
+  a.href='data:text/html,'+encodeURIComponent(baseHtml);
+  const suffix=target!=='html'?`-${target}`:'';
+  a.download=`${G.scene.name||'game-ui'}${suffix}.html`; a.click();
 }
 
 /* ─── AI ─── */
 const AISYS=`You are the Grudge Studio Game UI AI in HYDRA Game UI Studio.
 
-COMPONENT TYPES:
-inventory-grid: props{cols,rows,slotSize,gap,label}
-equipment-slots: props{label}
-hotbar: props{slots,slotSize,label}
-healthbar/manabar/xp-bar: props{value,max,label,color}
-minimap: props{shape:"circle"|"square",label}
-portrait: props{name,level}
-currency-display: props{amount,label}
-chat-window: props{label}
-skill-tree: props{label}
-shop-panel: props{label}
-crosshair: props{}
-text-label: props{text,size,align:"left"|"center"|"right"}
+COMPONENT TYPES (all available):
+HUD: player-frame{name,level,hp,hpMax,mp,mpMax}, target-frame{name,level,hp,hpMax,hostile}, ally-frame{name,level,hp,hpMax}, health-orb/mana-orb/action-orb{value,max,color,label}, healthbar/manabar/xp-bar{value,max,label,color}, portrait{name,level}, minimap{shape:"circle"|"square"}
+Action: hotbar{slots,slotSize,label}, hotbar-2row{slots,slotSize}, menu-dock{buttons:"comma,list"}, weapon-selector{label}
+Storage: inventory-grid{cols,rows,slotSize,gap,label}, equipment-slots{label}
+RPG: attr-panel{label}, skill-tree{label}, shop-panel{label}, currency-display{amount,label}, chat-window{label}, combat-log{label}, objectives{label}
+Canvas/Overlay: dialogue-box{speaker,text}, quest-tracker{title,objective,label}, alert-banner{text,type:"danger"|"warning"|"info"|"success"}, interaction-prompt{key,action}
+FPS: crosshair{}
+UI: text-label{text,size,align:"left"|"center"|"right"}
 
 CANVAS: origin top-left, default 1920×1080.
 THEME CODES: "d"=Hydra Dark "f"=Fantasy "c"=Cyberpunk "q"=FPS
+MODES: "main"=RPG main panel, "canvas"=overlay UI, "hud"=heads-up display
 
 LAYOUT PATTERNS:
-RPG: portrait+HP/MP/XP bottom-left, hotbar center-bottom, inventory+minimap right
+HUD: player-frame bottom-left, ally-frames stacked left, target-frame top-center, hotbar-2row center-bottom, menu-dock right-of-hotbar, minimap top-right, combat-log+objectives right
+Main Panel: attr-panel left, equipment+inventory center, skills+shop right, hotbar bottom
+Canvas/Overlay: dialogue-box bottom-center, quest-tracker top-right, alert-banner top-center, interaction-prompt near interaction point
+RPG HUD: portrait+HP/MP/XP bottom-left, hotbar center-bottom, inventory+minimap right
 FPS: crosshair center, health bottom-left, ammo text bottom-right, minimap top-right
-MOBA: hotbar center-bottom, HP/MP flanking portrait, minimap bottom-right
-Inventory screen: equipment left, grid center, shop right
 
 RESPOND ONLY VALID JSON:
 {"action":"add"|"replace"|"update"|"remove"|"clear","components":[...],"ids":[],"updates":{},"scene_props":{},"message":"..."}
