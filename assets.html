@@ -22,13 +22,26 @@
       --bg:#06070b; --s1:#0c0d12; --s2:#12131a; --s3:#181a24; --bd:#1e2030; --bd2:#2a2d42;
       --text:#e2e4ef; --muted:#6b7088; --hydra:#4ade80; --gold:#c8a84b;
       --sidebar:300px; --inspector:290px;
+      --nav-h:46px;
     }
     * { box-sizing:border-box; }
-    body { margin:0; font-family:Inter,system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    html, body.gs-has-nav {
+      height:100%;
+      overflow:hidden;
+    }
+    body {
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
     main {
       display:grid;
       grid-template-columns:var(--sidebar) 1fr var(--inspector);
-      min-height:calc(100vh - 46px);
+      grid-template-rows:1fr;
+      height:calc(100vh - var(--nav-h));
+      max-height:calc(100vh - var(--nav-h));
+      overflow:hidden;
     }
 
     aside {
@@ -45,11 +58,21 @@
     }
     .search-wrap { position:relative; }
     .search-wrap input {
-      width:100%; padding:8px 10px 8px 30px; border-radius:8px;
+      width:100%; padding:8px 28px 8px 30px; border-radius:8px;
       border:1px solid var(--bd); background:var(--s2); color:var(--text); font-size:12px; outline:none;
     }
     .search-wrap input:focus { border-color:rgba(74,222,128,.35); }
+    .search-wrap input::placeholder { color:var(--muted); }
     .search-wrap svg { position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+    .search-clear {
+      position:absolute; right:6px; top:50%; transform:translateY(-50%);
+      width:22px; height:22px; border:none; border-radius:5px;
+      background:transparent; color:var(--muted); font-size:14px; line-height:1;
+      cursor:pointer; display:none;
+    }
+    .search-clear:hover { color:var(--text); background:var(--s3); }
+    .search-clear.show { display:block; }
+    #search-meta { font-size:10px; color:var(--muted); margin-top:6px; min-height:14px; }
 
     .pack-tabs { display:flex; gap:4px; padding:8px 10px; border-bottom:1px solid var(--bd); flex-shrink:0; overflow-x:auto; }
     .pack-tab {
@@ -61,7 +84,11 @@
     .pack-tab.active { color:var(--hydra); background:rgba(74,222,128,.08); border-color:rgba(74,222,128,.28); }
     .pack-tab .cnt { opacity:.65; margin-left:3px; }
 
-    #asset-scroll { flex:1; overflow-y:auto; padding:8px 10px 16px; }
+    #asset-scroll { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:8px 10px 16px; overscroll-behavior:contain; }
+    #asset-scroll::-webkit-scrollbar, .insp-body::-webkit-scrollbar, .pack-tabs::-webkit-scrollbar { width:5px; height:5px; }
+    #asset-scroll::-webkit-scrollbar-thumb, .insp-body::-webkit-scrollbar-thumb, .pack-tabs::-webkit-scrollbar-thumb {
+      background:var(--bd2); border-radius:3px;
+    }
     .pack { margin-bottom:12px; }
     .pack h2 { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; display:flex; align-items:center; gap:6px; }
     .pack h2 span { font-size:9px; color:var(--hydra); background:rgba(74,222,128,.08); padding:1px 5px; border-radius:4px; }
@@ -76,8 +103,18 @@
     .asset-btn .fmt { float:right; font-size:9px; color:var(--muted); text-transform:uppercase; }
     .empty-msg { font-size:11px; color:var(--muted); padding:12px 4px; text-align:center; }
 
-    #viewer { position:relative; background:radial-gradient(ellipse at 50% 35%, rgba(74,222,128,.05), transparent 65%), #090a12; min-width:0; }
-    #canvas-host { width:100%; height:calc(100vh - 46px); }
+    #viewer {
+      position:relative;
+      background:radial-gradient(ellipse at 50% 35%, rgba(74,222,128,.05), transparent 65%), #090a12;
+      min-width:0; min-height:0; height:100%; overflow:hidden;
+    }
+    #canvas-host {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      overflow:hidden;
+      touch-action:none;
+    }
+    #canvas-host canvas { display:block; width:100% !important; height:100% !important; touch-action:none; }
     #hud {
       position:absolute; top:12px; left:12px; right:12px;
       display:flex; justify-content:space-between; align-items:flex-start; gap:10px; pointer-events:none; z-index:2;
@@ -110,9 +147,14 @@
     @keyframes spin { to { transform:rotate(360deg); } }
 
     /* inspector */
+    aside, #inspector {
+      min-height:0;
+      height:100%;
+      overflow:hidden;
+    }
     #inspector {
       background:var(--s1); border-left:1px solid var(--bd);
-      display:flex; flex-direction:column; overflow:hidden;
+      display:flex; flex-direction:column;
     }
     .insp-head { padding:12px 14px 8px; border-bottom:1px solid var(--bd); flex-shrink:0; }
     .insp-head h2 { font-family:'Space Grotesk',sans-serif; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:0 0 8px; }
@@ -122,7 +164,7 @@
       color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;
     }
     .insp-tab.active { color:var(--hydra); border-color:rgba(74,222,128,.3); background:rgba(74,222,128,.08); }
-    .insp-body { flex:1; overflow-y:auto; padding:12px 14px 20px; }
+    .insp-body { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:12px 14px 20px; overscroll-behavior:contain; }
     .insp-panel { display:none; }
     .insp-panel.active { display:block; }
     .field { margin-bottom:10px; }
@@ -167,12 +209,27 @@
     }
 
     @media (max-width:1100px) {
-      main { grid-template-columns:var(--sidebar) 1fr; grid-template-rows:auto 1fr auto; }
-      #inspector { grid-column:1/-1; max-height:42vh; border-left:none; border-top:1px solid var(--bd); }
+      main {
+        grid-template-columns:var(--sidebar) 1fr;
+        grid-template-rows:1fr minmax(0, 220px);
+      }
+      #viewer { grid-column:2; grid-row:1; }
+      #inspector {
+        grid-column:1 / -1;
+        grid-row:2;
+        border-left:none;
+        border-top:1px solid var(--bd);
+      }
     }
     @media (max-width:700px) {
-      main { grid-template-columns:1fr; }
-      aside { max-height:38vh; border-right:none; border-bottom:1px solid var(--bd); }
+      :root { --sidebar:min(100%, 280px); }
+      main {
+        grid-template-columns:1fr;
+        grid-template-rows:minmax(0, 32vh) 1fr minmax(0, 26vh);
+      }
+      aside { grid-row:1; border-right:none; border-bottom:1px solid var(--bd); }
+      #viewer { grid-row:2; }
+      #inspector { grid-row:3; }
       .card { max-width:100%; }
     }
   </style>
@@ -186,8 +243,10 @@
         <div class="stats" id="stats-bar"><span class="stat">Loading…</span></div>
         <div class="search-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="search" id="search" placeholder="Filter assets…" autocomplete="off"/>
+          <input type="search" id="search" placeholder="Search name, pack, format…" autocomplete="off" spellcheck="false" enterkeyhint="search"/>
+          <button type="button" class="search-clear" id="search-clear" title="Clear search" aria-label="Clear search">×</button>
         </div>
+        <div id="search-meta"></div>
       </div>
       <div class="pack-tabs" id="pack-tabs"></div>
       <div id="asset-scroll"><div id="pack-list"></div></div>
@@ -374,12 +433,16 @@
 
     function resize() {
       const w = host.clientWidth, h = host.clientHeight;
-      renderer.setSize(w, h);
+      if (w < 1 || h < 1) return;
+      renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       drawChart();
     }
     addEventListener('resize', resize);
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(() => resize()).observe(host);
+    }
     resize();
 
     function animate() {
@@ -621,11 +684,29 @@
       }
     }
 
+    function searchHaystack(item) {
+      return [
+        item.name,
+        item.name?.replace(/_/g, ' '),
+        item.path,
+        item.packId,
+        item.packLabel,
+        item.format,
+      ].filter(Boolean).join(' ').toLowerCase();
+    }
+
+    function matchesSearch(haystack, query) {
+      if (!query) return true;
+      const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+      return tokens.every((t) => haystack.includes(t));
+    }
+
     function addBtn(container, item) {
       const btn = document.createElement('button');
       btn.className = 'asset-btn';
-      btn.dataset.name = item.name.toLowerCase();
+      btn.dataset.assetId = item.name;
       btn.dataset.pack = item.packId;
+      btn.dataset.search = searchHaystack(item);
       btn.innerHTML = `${item.name}<span class="fmt">${item.format || 'fbx'}</span>`;
       btn.onclick = () => {
         document.querySelectorAll('.asset-btn').forEach((b) => b.classList.remove('active'));
@@ -638,19 +719,27 @@
     }
 
     function renderFilter() {
-      const q = document.getElementById('search').value.toLowerCase().trim();
+      const input = document.getElementById('search');
+      const q = input.value.trim();
+      const qLower = q.toLowerCase();
+      const searchAllPacks = qLower.length > 0;
       let visible = 0;
+
+      document.getElementById('search-clear').classList.toggle('show', q.length > 0);
+
       document.querySelectorAll('.asset-btn').forEach((btn) => {
-        const matchPack = activeFilter === 'all' || btn.dataset.pack === activeFilter;
-        const matchSearch = !q || btn.dataset.name.includes(q);
+        const matchPack = searchAllPacks || activeFilter === 'all' || btn.dataset.pack === activeFilter;
+        const matchSearch = matchesSearch(btn.dataset.search || '', qLower);
         const show = matchPack && matchSearch;
         btn.classList.toggle('hidden', !show);
         if (show) visible++;
       });
+
       document.querySelectorAll('.pack').forEach((p) => {
         const any = [...p.querySelectorAll('.asset-btn')].some((b) => !b.classList.contains('hidden'));
         p.style.display = any ? '' : 'none';
       });
+
       let msg = document.getElementById('no-results');
       if (!msg) {
         msg = document.createElement('p');
@@ -658,8 +747,18 @@
         msg.className = 'empty-msg';
         document.getElementById('pack-list').appendChild(msg);
       }
-      msg.textContent = visible ? '' : 'No assets match your filter';
+      msg.textContent = visible ? '' : (q ? `No assets match "${q}"` : 'No assets in this pack');
       msg.style.display = visible ? 'none' : 'block';
+
+      const meta = document.getElementById('search-meta');
+      if (q) {
+        meta.textContent = `${visible} of ${allAssets.length} shown · searching all packs`;
+      } else if (activeFilter !== 'all') {
+        const packLabel = PACK_DEFS.find((p) => p.id === activeFilter)?.label || activeFilter;
+        meta.textContent = `${visible} in ${packLabel}`;
+      } else {
+        meta.textContent = `${allAssets.length} assets`;
+      }
     }
 
     const tabsEl = document.getElementById('pack-tabs');
@@ -720,7 +819,7 @@
         tabsEl.querySelectorAll('.pack-tab').forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
         renderFilter();
-        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        wrap.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       };
       tabsEl.appendChild(tab);
     }
@@ -731,7 +830,20 @@
       <span class="stat">Grid anchor</span>
     `;
 
-    document.getElementById('search').addEventListener('input', renderFilter);
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', renderFilter);
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        searchInput.value = '';
+        renderFilter();
+        searchInput.blur();
+      }
+    });
+    document.getElementById('search-clear').onclick = () => {
+      searchInput.value = '';
+      renderFilter();
+      searchInput.focus();
+    };
 
     document.querySelectorAll('.insp-tab').forEach((tab) => {
       tab.onclick = () => {
@@ -834,10 +946,15 @@
     let target = allAssets.find((a) => a.packId === params.get('pack') && a.name === params.get('asset'));
     if (!target) target = allAssets.find((a) => a.name === 'vehicle_boat') || allAssets[0];
     if (target) {
-      const btn = [...document.querySelectorAll('.asset-btn')].find((b) => b.textContent.startsWith(target.name));
-      if (btn) { btn.classList.add('active'); btn.scrollIntoView({ block: 'nearest' }); }
+      const btn = [...document.querySelectorAll('.asset-btn')].find((b) => b.dataset.assetId === target.name);
+      if (btn) {
+        btn.classList.add('active');
+        const scrollEl = document.getElementById('asset-scroll');
+        scrollEl.scrollTo({ top: btn.offsetTop - scrollEl.offsetTop - 40, behavior: 'auto' });
+      }
       loadAsset(target);
     }
+    renderFilter();
   </script>
 </body>
 </html>
