@@ -13,7 +13,8 @@
     "imports": {
       "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
-      "asset-grid": "./asset-grid.js"
+      "asset-grid": "./asset-grid.js",
+      "asset-scene": "./asset-scene.js"
     }
   }
   </script>
@@ -269,6 +270,8 @@
         <button class="tool-btn on" id="btn-gizmo">Gizmo</button>
         <button class="tool-btn" id="btn-reset">Reset view</button>
         <button class="tool-btn" id="btn-renorm">Re-normalize</button>
+        <button class="tool-btn" id="btn-add-scene" title="Keep current assets and add another">+ Scene</button>
+        <button class="tool-btn" id="btn-clear-scene">Clear scene</button>
         <button class="tool-btn" id="btn-copy">Copy URL</button>
         <button class="tool-btn" id="btn-export">Export JSON</button>
       </div>
@@ -322,6 +325,18 @@
           </div>
           <button class="insp-btn primary" id="btn-apply-grid">Apply grid normalize</button>
           <button class="insp-btn" id="btn-zero">Reset to origin</button>
+          <div class="field" style="margin-top:14px">
+            <label>Scene light <span id="light-val" style="opacity:.7">1.15</span></label>
+            <input type="range" id="light-exposure" min="0.4" max="2.2" step="0.05" value="1.15" style="width:100%"/>
+          </div>
+          <div class="metric" style="margin-top:8px">
+            <span class="k">Textures</span>
+            <span class="v" id="m-tex" style="font-size:9px">—</span>
+          </div>
+          <div class="metric" style="margin-top:6px">
+            <span class="k">In scene</span>
+            <span class="v" id="m-scene-cnt">0</span>
+          </div>
         </div>
         <div class="insp-panel" id="panel-graph">
           <canvas id="dim-chart"></canvas>
@@ -349,6 +364,14 @@
     import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     import { normalizeToGrid, inferGridCells, CELL_SIZE } from 'asset-grid';
+    import {
+      configureRenderer,
+      createStudioRig,
+      createTextureResolver,
+      createAssetLoadingManager,
+      prepareModelMaterials,
+      createStage,
+    } from 'asset-scene';
 
     const { cdn, packs: PACK_DEFS } = window.GRUDGE_PRIM_PACKS;
     const host = document.getElementById('canvas-host');
@@ -356,13 +379,12 @@
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    configureRenderer(renderer);
     host.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x090a12);
-    scene.fog = new THREE.Fog(0x090a12, 40, 100);
+    scene.fog = new THREE.FogExp2(0x090a12, 0.018);
 
     const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 2000);
     const defaultCam = new THREE.Vector3(5, 4, 7);
@@ -372,14 +394,7 @@
     controls.enableDamping = true;
     controls.target.set(0, 1, 0);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-    const sun = new THREE.DirectionalLight(0xffe8c8, 1.1);
-    sun.position.set(8, 12, 6);
-    sun.castShadow = true;
-    scene.add(sun);
-    const fill = new THREE.DirectionalLight(0x88aaff, 0.35);
-    fill.position.set(-5, 3, -4);
-    scene.add(fill);
+    const studio = createStudioRig(scene, renderer);
 
     const GRID_SIZE = 24;
     const grid = new THREE.GridHelper(GRID_SIZE, GRID_SIZE, 0x3a4a5a, 0x1e2430);
@@ -396,11 +411,16 @@
     originMarker.position.y = 0.002;
     scene.add(originMarker);
 
+    const stage = createStage();
+    scene.add(stage);
+
     let pivot = new THREE.Group();
     pivot.name = 'assetPivot';
-    scene.add(pivot);
+    stage.add(pivot);
 
     let root = null;
+    let stagedCount = 0;
+    let addToSceneMode = false;
     let bboxHelper = null;
     let footprintMesh = null;
     let mixer = null;
@@ -417,8 +437,11 @@
     let packDefMap = Object.fromEntries(PACK_DEFS.map((p) => [p.id, p]));
     let metrics = null;
 
-    const fbxLoader = new FBXLoader();
-    const gltfLoader = new GLTFLoader();
+    let activeResolver = createTextureResolver({ cdn, packId: 'prim-vehicles', assetPath: '' });
+    const loadingManager = createAssetLoadingManager(activeResolver);
+    const fbxLoader = new FBXLoader(loadingManager);
+    const gltfLoader = new GLTFLoader(loadingManager);
+    const textureLoader = new THREE.TextureLoader(loadingManager);
 
     const transform = new TransformControls(camera, renderer.domElement);
     transform.setSpace('world');
@@ -596,7 +619,11 @@
       }
     }
 
-    function clearScene() {
+    function updateSceneCount() {
+      document.getElementById('m-scene-cnt').textContent = String(stagedCount);
+    }
+
+    function clearScene(full = false) {
       if (root) pivot.remove(root);
       root = null;
       if (bboxHelper) { scene.remove(bboxHelper); bboxHelper = null; }
@@ -607,6 +634,27 @@
       document.getElementById('btn-play').disabled = true;
       document.getElementById('btn-play').textContent = '▶ Play';
       document.getElementById('btn-play').classList.remove('on');
+      if (full) {
+        while (stage.children.length) stage.remove(stage.children[0]);
+        pivot = new THREE.Group();
+        pivot.name = 'assetPivot';
+        stage.add(pivot);
+        stagedCount = 0;
+        updateSceneCount();
+        document.getElementById('m-tex').textContent = '—';
+      }
+    }
+
+    function spawnPivot(offsetIndex = 0) {
+      const g = new THREE.Group();
+      g.name = `assetPivot_${offsetIndex}`;
+      if (offsetIndex > 0) {
+        const ring = Math.floor(offsetIndex / 4);
+        const slot = offsetIndex % 4;
+        g.position.set((slot - 1.5) * 2.5, 0, ring * 2.5);
+      }
+      stage.add(g);
+      return g;
     }
 
     function runNormalize() {
@@ -627,7 +675,7 @@
       if (gizmoEnabled) transform.attach(pivot);
     }
 
-    async function loadAsset(item) {
+    async function loadAsset(item, { append = false } = {}) {
       currentItem = item;
       const url = cdn + item.path;
       const packDef = packDefMap[item.packId];
@@ -642,7 +690,25 @@
         (item.size ? ` · ${(item.size / 1024).toFixed(0)} KB` : '');
       document.getElementById('status').textContent = 'Loading…';
       loaderEl.classList.add('show');
-      clearScene();
+
+      activeResolver = createTextureResolver({
+        cdn,
+        packId: item.packId,
+        assetPath: item.path,
+        manifestTextures: item.textures || {},
+      });
+      loadingManager.setURLModifier((u) => activeResolver.urlModifier(u));
+
+      const assetDir = item.path.replace(/[^/]+$/, '');
+      fbxLoader.setResourcePath(cdn + assetDir);
+      gltfLoader.setResourcePath(cdn + assetDir);
+
+      if (append) {
+        pivot = spawnPivot(stagedCount);
+      } else {
+        clearScene(true);
+        pivot = spawnPivot(0);
+      }
 
       try {
         let obj;
@@ -654,12 +720,23 @@
           obj = await fbxLoader.loadAsync(url);
         }
 
+        const texStats = await prepareModelMaterials(obj, activeResolver, textureLoader);
+        const texLabel = texStats.resolved
+          ? `${texStats.resolved} loaded`
+          : texStats.mapped
+            ? `${texStats.mapped} mapped · CDN pending`
+            : 'PBR fallback colors';
+        document.getElementById('m-tex').textContent = texLabel;
+
         root = obj;
         pivot.rotation.set(0, 0, 0);
-        pivot.position.set(0, 0, 0);
+        if (!append) pivot.position.set(0, 0, 0);
         pivot.add(root);
         applyWireframe(root, wireframe);
         runNormalize();
+
+        stagedCount = append ? stagedCount + 1 : 1;
+        updateSceneCount();
 
         if (obj.animations?.length) {
           mixer = new THREE.AnimationMixer(root);
@@ -670,9 +747,9 @@
           btn.disabled = false;
           btn.textContent = '⏸ Pause';
           btn.classList.add('on');
-          document.getElementById('status').textContent = `Playing · ${obj.animations.length} clip(s)`;
+          document.getElementById('status').textContent = `Playing · ${obj.animations.length} clip(s) · ${texLabel}`;
         } else {
-          document.getElementById('status').textContent = 'Normalized on grid';
+          document.getElementById('status').textContent = `On grid · ${texLabel}`;
         }
       } catch (e) {
         document.getElementById('status').textContent = 'Failed to load — check CDN';
@@ -681,6 +758,8 @@
         drawChart();
       } finally {
         loaderEl.classList.remove('show');
+        addToSceneMode = false;
+        document.getElementById('btn-add-scene').classList.remove('on');
       }
     }
 
@@ -711,7 +790,7 @@
       btn.onclick = () => {
         document.querySelectorAll('.asset-btn').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        loadAsset(item);
+        loadAsset(item, { append: addToSceneMode && stagedCount > 0 });
         history.replaceState(null, '', `?pack=${item.packId}&asset=${encodeURIComponent(item.name)}`);
       };
       container.appendChild(btn);
@@ -912,6 +991,20 @@
       camera.position.copy(defaultCam);
       controls.target.set(0, 1, 0);
       controls.update();
+    };
+
+    document.getElementById('btn-add-scene').onclick = () => {
+      addToSceneMode = true;
+      document.getElementById('btn-add-scene').classList.add('on');
+      document.getElementById('status').textContent = 'Pick an asset to add to scene';
+    };
+
+    document.getElementById('btn-clear-scene').onclick = () => clearScene(true);
+
+    document.getElementById('light-exposure').oninput = (e) => {
+      const v = Number(e.target.value);
+      renderer.toneMappingExposure = v;
+      document.getElementById('light-val').textContent = v.toFixed(2);
     };
 
     document.getElementById('btn-copy').onclick = async () => {
