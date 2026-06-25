@@ -4,6 +4,7 @@
     { href: '/', label: 'UI Kit', match: (p) => p === '/' || p === '/index.html' },
     { href: '/studio', label: 'Studio', match: (p) => p === '/studio' },
     { href: '/hotkeys', label: 'Input', match: (p) => p === '/hotkeys' },
+    { href: '/main-panel', label: 'Main Panel', match: (p) => p === '/main-panel' },
     { href: '/assets', label: '3D Assets', match: (p) => p === '/assets' },
   ];
 

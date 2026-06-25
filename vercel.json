@@ -7,6 +7,8 @@
     { "source": "/hotkeys",      "destination": "/hotkeys.html" },
     { "source": "/studio",       "destination": "/studio.html" },
     { "source": "/assets",       "destination": "/assets.html" },
+    { "source": "/main-panel",   "destination": "/main-panel.html" },
+    { "source": "/equipment",    "destination": "/index.html" },
     { "source": "/((?!hotkeys|studio|assets|favicon|grudge-shell).*)", "destination": "/index.html" }
   ],
   "headers": [
