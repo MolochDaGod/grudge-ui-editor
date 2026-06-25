@@ -6,7 +6,8 @@
     { "source": "/favicon.ico",  "destination": "/favicon.svg" },
     { "source": "/hotkeys",      "destination": "/hotkeys.html" },
     { "source": "/studio",       "destination": "/studio.html" },
-    { "source": "/((?!hotkeys|studio|assets|favicon).*)", "destination": "/index.html" }
+    { "source": "/assets",       "destination": "/assets.html" },
+    { "source": "/((?!hotkeys|studio|assets|favicon|grudge-shell).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

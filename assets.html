@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>3D Asset Browser — Grudge Studio</title>
+  <meta name="description" content="Browse Prim vehicles, islands, structures and animations from the Grudge Studio R2 CDN."/>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
+  <link rel="stylesheet" href="./grudge-shell.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
+  </script>
+  <style>
+    :root { --bg:#06070b; --s1:#0c0d12; --s2:#12131a; --bd:#1e2030; --text:#e2e4ef; --muted:#6b7088; --hydra:#4ade80; --gold:#c8a84b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Inter,system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    main { display:grid; grid-template-columns:300px 1fr; min-height:calc(100vh - 46px); }
+    aside { background:var(--s1); border-right:1px solid var(--bd); padding:16px; overflow-y:auto; }
+    h1 { font-family:'Space Grotesk',sans-serif; font-size:1rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0 0 4px; }
+    .sub { font-size:12px; color:var(--muted); margin-bottom:16px; line-height:1.5; }
+    .pack { margin-bottom:14px; }
+    .pack h2 { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 8px; }
+    .asset-btn { display:block; width:100%; text-align:left; padding:8px 10px; margin-bottom:4px; border-radius:8px; border:1px solid var(--bd); background:var(--s2); color:var(--text); font-size:12px; cursor:pointer; transition:background .1s,border-color .1s; }
+    .asset-btn:hover, .asset-btn.active { border-color:rgba(74,222,128,.35); background:rgba(74,222,128,.08); color:var(--hydra); }
+    #viewer { position:relative; background:radial-gradient(ellipse at 50% 35%, rgba(74,222,128,.05), transparent 65%), #090a12; }
+    #canvas-host { width:100%; height:calc(100vh - 46px); }
+    #hud { position:absolute; top:12px; left:12px; right:12px; display:flex; justify-content:space-between; gap:12px; pointer-events:none; }
+    .card { pointer-events:auto; background:rgba(12,13,18,.88); border:1px solid var(--bd); border-radius:10px; padding:10px 14px; backdrop-filter:blur(8px); font-size:12px; }
+    .card strong { color:var(--gold); display:block; margin-bottom:4px; }
+    #status { color:var(--muted); }
+    @media (max-width:900px) { main { grid-template-columns:1fr; } aside { max-height:40vh; } }
+  </style>
+</head>
+<body>
+  <main>
+    <aside>
+      <h1>Prim → R2</h1>
+      <p class="sub">Canonical 3D packs on <code>assets.grudge-studio.com</code>. Used by Metaverse, Warlords, and island builders.</p>
+      <div id="pack-list"></div>
+    </aside>
+    <section id="viewer">
+      <div id="hud">
+        <div class="card"><strong id="asset-name">Select an asset</strong><span id="status">Ready</span></div>
+        <div class="card"><span id="asset-url" style="word-break:break-all;color:var(--muted)"></span></div>
+      </div>
+      <div id="canvas-host"></div>
+    </section>
+  </main>
+  <script src="./grudge-shell.js"></script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+
+    const CDN = 'https://assets.grudge-studio.com';
+    const PACKS = [
+      { id: 'prim-vehicles', label: 'Vehicles', items: [
+        { name: 'Boat', path: '/asset-packs/prim-vehicles/v1/vehicle_boat.fbx' },
+        { name: 'Sail Ship', path: '/asset-packs/prim-vehicles/v1/vehicle_sail.fbx' },
+        { name: 'Car', path: '/asset-packs/prim-vehicles/v1/vehicle_car.fbx' },
+        { name: 'Spaceship', path: '/asset-packs/prim-vehicles/v1/vehicle_spaceship.fbx' },
+        { name: 'Cloud', path: '/asset-packs/prim-vehicles/v1/cloud.fbx' },
+      ]},
+      { id: 'prim-islands', label: 'Islands & Environment', manifest: '/asset-packs/prim-islands/manifest.json' },
+      { id: 'prim-structures', label: 'Structures & Bases', manifest: '/asset-packs/prim-structures/manifest.json' },
+      { id: 'prim-animations', label: 'Animations', manifest: '/asset-packs/prim-animations/manifest.json' },
+    ];
+
+    const host = document.getElementById('canvas-host');
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    host.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x090a12);
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 2000);
+    camera.position.set(4, 3, 6);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const sun = new THREE.DirectionalLight(0xffe8c8, 1.2);
+    sun.position.set(6, 10, 4);
+    sun.castShadow = true;
+    scene.add(sun);
+    scene.add(new THREE.GridHelper(20, 20, 0x2a2d3a, 0x1a1c28));
+
+    let mesh = null;
+    const loader = new FBXLoader();
+
+    function resize() {
+      const w = host.clientWidth, h = host.clientHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    addEventListener('resize', resize);
+    resize();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    async function loadAsset(item) {
+      const url = CDN + item.path;
+      document.getElementById('asset-name').textContent = item.name;
+      document.getElementById('asset-url').textContent = url;
+      document.getElementById('status').textContent = 'Loading…';
+      try {
+        const obj = await loader.loadAsync(url);
+        if (mesh) scene.remove(mesh);
+        mesh = obj;
+        const box = new THREE.Box3().setFromObject(mesh);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        mesh.position.sub(center);
+        const scale = 2 / Math.max(size.x, size.y, size.z, 0.01);
+        mesh.scale.setScalar(scale);
+        scene.add(mesh);
+        document.getElementById('status').textContent = 'Loaded';
+      } catch (e) {
+        document.getElementById('status').textContent = 'Not on CDN yet — run Prim upload';
+        console.warn(e);
+      }
+    }
+
+    function addBtn(container, item) {
+      const btn = document.createElement('button');
+      btn.className = 'asset-btn';
+      btn.textContent = item.name;
+      btn.onclick = () => {
+        container.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadAsset(item);
+      };
+      container.appendChild(btn);
+    }
+
+    const list = document.getElementById('pack-list');
+    for (const pack of PACKS) {
+      const wrap = document.createElement('div');
+      wrap.className = 'pack';
+      wrap.innerHTML = `<h2>${pack.label}</h2>`;
+      const body = document.createElement('div');
+      wrap.appendChild(body);
+      list.appendChild(wrap);
+
+      if (pack.items) {
+        pack.items.forEach(i => addBtn(body, i));
+      } else if (pack.manifest) {
+        try {
+          const res = await fetch(CDN + pack.manifest);
+          if (res.ok) {
+            const m = await res.json();
+            (m.files || m.assets || []).slice(0, 24).forEach(f => {
+              addBtn(body, { name: f.name || f.path?.split('/').pop(), path: f.cdnPath || f.path });
+            });
+          } else {
+            body.innerHTML = '<p style="font-size:11px;color:var(--muted)">Manifest pending upload</p>';
+          }
+        } catch {
+          body.innerHTML = '<p style="font-size:11px;color:var(--muted)">Manifest pending upload</p>';
+        }
+      }
+    }
+  </script>
+</body>
+</html>

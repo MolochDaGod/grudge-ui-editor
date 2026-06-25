@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Game UI Studio — HYDRA</title>
 <link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
+<link rel="stylesheet" href="./grudge-shell.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -18,6 +19,7 @@
   --topbar:44px;--lw:218px;--rw:270px;
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;font-size:13px;}
+body.gs-has-nav{height:calc(100vh - var(--gs-nav-h));overflow:hidden;}
 button{font-family:inherit;cursor:pointer;}
 input,select,textarea{font-family:inherit;}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
@@ -1530,5 +1532,6 @@ renderAll();
 setTimeout(fitView,80);
 setTimeout(()=>aiAppend('ai','Ready. Try a quick-start or describe your layout. Example: "RPG HUD 1920×1080 fantasy theme with inventory and minimap"'),400);
 </script>
+<script src="./grudge-shell.js"></script>
 </body>
 </html>

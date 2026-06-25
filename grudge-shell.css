@@ -1,0 +1,104 @@
+/* Grudge Studio — shared fleet shell for ui.grudge-studio.com */
+:root {
+  --gs-bg: #06070b;
+  --gs-surf: #0c0d12;
+  --gs-border: #1e2030;
+  --gs-text: #e2e4ef;
+  --gs-muted: #6b7088;
+  --gs-gold: #c8a84b;
+  --gs-hydra: #4ade80;
+  --gs-hydra-dim: rgba(74, 222, 128, 0.12);
+  --gs-nav-h: 46px;
+}
+
+#gs-fleet-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--gs-nav-h);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  background: rgba(6, 7, 11, 0.92);
+  border-bottom: 1px solid var(--gs-border);
+  backdrop-filter: blur(10px);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+}
+
+#gs-fleet-nav a {
+  color: var(--gs-muted);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  transition: color 0.12s, background 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+
+#gs-fleet-nav a:hover {
+  color: var(--gs-text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+#gs-fleet-nav a.is-active {
+  color: var(--gs-hydra);
+  background: var(--gs-hydra-dim);
+  border-color: rgba(74, 222, 128, 0.22);
+  font-weight: 600;
+}
+
+#gs-fleet-nav .gs-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 4px;
+  padding-right: 10px;
+  border-right: 1px solid var(--gs-border);
+}
+
+#gs-fleet-nav .gs-brand strong {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  color: var(--gs-gold);
+  text-transform: uppercase;
+}
+
+#gs-fleet-nav .gs-brand span {
+  font-size: 10px;
+  color: var(--gs-muted);
+  letter-spacing: 0.06em;
+}
+
+#gs-fleet-nav .gs-spacer { flex: 1; }
+
+#gs-fleet-nav .gs-pill {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gs-hydra);
+  background: var(--gs-hydra-dim);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 5px;
+  padding: 2px 7px;
+}
+
+body.gs-has-nav {
+  padding-top: var(--gs-nav-h) !important;
+}
+
+body.gs-has-nav #topbar,
+body.gs-has-nav .brand-bar {
+  top: var(--gs-nav-h);
+}
+
+@media (max-width: 900px) {
+  #gs-fleet-nav { overflow-x: auto; gap: 6px; }
+  #gs-fleet-nav .gs-brand span { display: none; }
+}
