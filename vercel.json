@@ -9,7 +9,7 @@
     { "source": "/assets",       "destination": "/assets.html" },
     { "source": "/main-panel",   "destination": "/main-panel.html" },
     { "source": "/equipment",    "destination": "/index.html" },
-    { "source": "/((?!hotkeys|studio|assets|favicon|grudge-shell).*)", "destination": "/index.html" }
+    { "source": "/((?!hotkeys|studio|assets|main-panel|equipment|favicon|grudge-shell|prim-packs).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

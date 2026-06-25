@@ -125,10 +125,58 @@
       a[href="/hotkeys"]:hover {
         background: rgba(74,222,128,0.14);
       }
+
+      /* ── Prim 3D assets promo strip ── */
+      #prim-banner {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(12, 13, 18, 0.94);
+        border: 1px solid rgba(74, 222, 128, 0.22);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 12px;
+        color: #e2e4ef;
+        text-decoration: none;
+        transition: border-color 0.15s, transform 0.15s;
+        max-width: 280px;
+      }
+      #prim-banner:hover {
+        border-color: rgba(74, 222, 128, 0.45);
+        transform: translateY(-2px);
+      }
+      #prim-banner strong {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #c8a84b;
+        margin-bottom: 2px;
+      }
+      #prim-banner span { color: #6b7088; font-size: 11px; line-height: 1.4; }
+      #prim-banner .arrow { color: #4ade80; font-weight: 700; flex-shrink: 0; }
+      @media (max-width: 600px) {
+        #prim-banner { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+      }
     </style>
   </head>
   <body>
     <div id="root"></div>
+    <a id="prim-banner" href="/assets">
+      <div>
+        <strong>Prim 3D Assets</strong>
+        <span>276 vehicles, islands, structures &amp; animations on CDN</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
     <script src="./grudge-shell.js"></script>
     <script src="./grudge-enhancements.js" defer></script>
   </body>

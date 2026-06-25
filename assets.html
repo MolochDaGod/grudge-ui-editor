@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3D Asset Browser — Grudge Studio</title>
-  <meta name="description" content="Browse Prim vehicles, islands, structures and animations from the Grudge Studio R2 CDN."/>
+  <meta name="description" content="Browse 276 Prim vehicles, islands, structures and animations from assets.grudge-studio.com."/>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
   <link rel="stylesheet" href="./grudge-shell.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
@@ -12,62 +12,162 @@
   { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
   </script>
   <style>
-    :root { --bg:#06070b; --s1:#0c0d12; --s2:#12131a; --bd:#1e2030; --text:#e2e4ef; --muted:#6b7088; --hydra:#4ade80; --gold:#c8a84b; }
-    * { box-sizing: border-box; }
+    :root {
+      --bg:#06070b; --s1:#0c0d12; --s2:#12131a; --s3:#181a24; --bd:#1e2030; --bd2:#2a2d42;
+      --text:#e2e4ef; --muted:#6b7088; --hydra:#4ade80; --gold:#c8a84b;
+      --sidebar:320px;
+    }
+    * { box-sizing:border-box; }
     body { margin:0; font-family:Inter,system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-    main { display:grid; grid-template-columns:300px 1fr; min-height:calc(100vh - 46px); }
-    aside { background:var(--s1); border-right:1px solid var(--bd); padding:16px; overflow-y:auto; }
-    h1 { font-family:'Space Grotesk',sans-serif; font-size:1rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0 0 4px; }
-    .sub { font-size:12px; color:var(--muted); margin-bottom:16px; line-height:1.5; }
-    .pack { margin-bottom:14px; }
-    .pack h2 { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 8px; }
-    .asset-btn { display:block; width:100%; text-align:left; padding:8px 10px; margin-bottom:4px; border-radius:8px; border:1px solid var(--bd); background:var(--s2); color:var(--text); font-size:12px; cursor:pointer; transition:background .1s,border-color .1s; }
-    .asset-btn:hover, .asset-btn.active { border-color:rgba(74,222,128,.35); background:rgba(74,222,128,.08); color:var(--hydra); }
+    main { display:grid; grid-template-columns:var(--sidebar) 1fr; min-height:calc(100vh - 46px); }
+
+    /* sidebar */
+    aside {
+      background:var(--s1); border-right:1px solid var(--bd);
+      display:flex; flex-direction:column; overflow:hidden;
+    }
+    .aside-head { padding:14px 14px 10px; border-bottom:1px solid var(--bd); flex-shrink:0; }
+    h1 { font-family:'Space Grotesk',sans-serif; font-size:.95rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin:0 0 4px; }
+    .sub { font-size:11px; color:var(--muted); line-height:1.5; margin:0 0 10px; }
+    .stats { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+    .stat {
+      font-size:10px; font-weight:600; letter-spacing:.04em;
+      padding:3px 8px; border-radius:6px;
+      background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.18); color:var(--hydra);
+    }
+    .search-wrap { position:relative; }
+    .search-wrap input {
+      width:100%; padding:8px 10px 8px 30px; border-radius:8px;
+      border:1px solid var(--bd); background:var(--s2); color:var(--text); font-size:12px; outline:none;
+    }
+    .search-wrap input:focus { border-color:rgba(74,222,128,.35); }
+    .search-wrap svg { position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+
+    .pack-tabs { display:flex; gap:4px; padding:8px 10px; border-bottom:1px solid var(--bd); flex-shrink:0; overflow-x:auto; }
+    .pack-tab {
+      flex-shrink:0; padding:5px 9px; border-radius:7px; border:1px solid var(--bd);
+      background:var(--s2); color:var(--muted); font-size:10px; font-weight:600;
+      cursor:pointer; transition:all .1s; white-space:nowrap;
+    }
+    .pack-tab:hover { color:var(--text); border-color:var(--bd2); }
+    .pack-tab.active { color:var(--hydra); background:rgba(74,222,128,.08); border-color:rgba(74,222,128,.28); }
+    .pack-tab .cnt { opacity:.65; margin-left:3px; }
+
+    #asset-scroll { flex:1; overflow-y:auto; padding:8px 10px 16px; }
+    .pack { margin-bottom:12px; }
+    .pack h2 {
+      font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+      margin:0 0 6px; display:flex; align-items:center; gap:6px;
+    }
+    .pack h2 span { font-size:9px; color:var(--hydra); background:rgba(74,222,128,.08); padding:1px 5px; border-radius:4px; }
+    .asset-btn {
+      display:block; width:100%; text-align:left; padding:7px 10px; margin-bottom:3px;
+      border-radius:7px; border:1px solid transparent; background:transparent;
+      color:var(--text); font-size:11px; cursor:pointer; transition:background .1s,border-color .1s;
+    }
+    .asset-btn:hover { background:var(--s2); border-color:var(--bd); }
+    .asset-btn.active { border-color:rgba(74,222,128,.35); background:rgba(74,222,128,.08); color:var(--hydra); }
+    .asset-btn.hidden { display:none; }
+    .asset-btn .fmt { float:right; font-size:9px; color:var(--muted); text-transform:uppercase; }
+    .empty-msg { font-size:11px; color:var(--muted); padding:12px 4px; text-align:center; }
+
+    /* viewer */
     #viewer { position:relative; background:radial-gradient(ellipse at 50% 35%, rgba(74,222,128,.05), transparent 65%), #090a12; }
     #canvas-host { width:100%; height:calc(100vh - 46px); }
-    #hud { position:absolute; top:12px; left:12px; right:12px; display:flex; justify-content:space-between; gap:12px; pointer-events:none; }
-    .card { pointer-events:auto; background:rgba(12,13,18,.88); border:1px solid var(--bd); border-radius:10px; padding:10px 14px; backdrop-filter:blur(8px); font-size:12px; }
-    .card strong { color:var(--gold); display:block; margin-bottom:4px; }
+    #hud {
+      position:absolute; top:12px; left:12px; right:12px;
+      display:flex; justify-content:space-between; align-items:flex-start; gap:10px; pointer-events:none;
+    }
+    .card {
+      pointer-events:auto; background:rgba(12,13,18,.9); border:1px solid var(--bd);
+      border-radius:10px; padding:10px 14px; backdrop-filter:blur(8px); font-size:12px; max-width:50%;
+    }
+    .card strong { color:var(--gold); display:block; margin-bottom:4px; font-size:13px; }
     #status { color:var(--muted); }
-    @media (max-width:900px) { main { grid-template-columns:1fr; } aside { max-height:40vh; } }
+    #asset-meta { font-size:10px; color:var(--muted); margin-top:4px; }
+    #asset-url { word-break:break-all; color:var(--muted); font-size:10px; max-width:280px; }
+    .toolbar {
+      position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+      display:flex; gap:6px; pointer-events:auto;
+    }
+    .tool-btn {
+      padding:7px 14px; border-radius:8px; border:1px solid var(--bd);
+      background:rgba(12,13,18,.92); color:var(--text); font-size:11px; font-weight:600;
+      cursor:pointer; backdrop-filter:blur(8px); transition:all .1s;
+    }
+    .tool-btn:hover { border-color:rgba(74,222,128,.3); color:var(--hydra); }
+    .tool-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .tool-btn.on { background:rgba(74,222,128,.12); border-color:rgba(74,222,128,.35); color:var(--hydra); }
+    #loader {
+      position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(6,7,11,.6); pointer-events:none;
+    }
+    #loader.show { display:flex; }
+    .spinner {
+      width:32px; height:32px; border:2px solid var(--bd); border-top-color:var(--hydra);
+      border-radius:50%; animation:spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    @media (max-width:900px) {
+      main { grid-template-columns:1fr; grid-template-rows:auto 1fr; }
+      aside { max-height:42vh; }
+      .card { max-width:100%; }
+    }
   </style>
 </head>
 <body>
   <main>
     <aside>
-      <h1>Prim → R2</h1>
-      <p class="sub">Canonical 3D packs on <code>assets.grudge-studio.com</code>. Used by Metaverse, Warlords, and island builders.</p>
-      <div id="pack-list"></div>
+      <div class="aside-head">
+        <h1>Prim → R2</h1>
+        <p class="sub">Canonical 3D from <code>assets.grudge-studio.com</code>. Powers Metaverse islands, Warlords vehicles, and world builders.</p>
+        <div class="stats" id="stats-bar">
+          <span class="stat">Loading…</span>
+        </div>
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" id="search" placeholder="Filter assets…" autocomplete="off"/>
+        </div>
+      </div>
+      <div class="pack-tabs" id="pack-tabs"></div>
+      <div id="asset-scroll">
+        <div id="pack-list"></div>
+      </div>
     </aside>
     <section id="viewer">
       <div id="hud">
-        <div class="card"><strong id="asset-name">Select an asset</strong><span id="status">Ready</span></div>
-        <div class="card"><span id="asset-url" style="word-break:break-all;color:var(--muted)"></span></div>
+        <div class="card">
+          <strong id="asset-name">Select an asset</strong>
+          <span id="status">Ready</span>
+          <div id="asset-meta"></div>
+        </div>
+        <div class="card">
+          <span id="asset-url"></span>
+        </div>
       </div>
+      <div class="toolbar">
+        <button class="tool-btn" id="btn-play" disabled title="Play animation">▶ Play</button>
+        <button class="tool-btn" id="btn-wire" title="Toggle wireframe">Wireframe</button>
+        <button class="tool-btn" id="btn-reset" title="Reset camera">Reset view</button>
+        <button class="tool-btn" id="btn-copy" title="Copy CDN URL">Copy URL</button>
+      </div>
+      <div id="loader"><div class="spinner"></div></div>
       <div id="canvas-host"></div>
     </section>
   </main>
+  <script src="./prim-packs.js"></script>
   <script src="./grudge-shell.js"></script>
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
-    const CDN = 'https://assets.grudge-studio.com';
-    const PACKS = [
-      { id: 'prim-vehicles', label: 'Vehicles', items: [
-        { name: 'Boat', path: '/asset-packs/prim-vehicles/v1/vehicle_boat.fbx' },
-        { name: 'Sail Ship', path: '/asset-packs/prim-vehicles/v1/vehicle_sail.fbx' },
-        { name: 'Car', path: '/asset-packs/prim-vehicles/v1/vehicle_car.fbx' },
-        { name: 'Spaceship', path: '/asset-packs/prim-vehicles/v1/vehicle_spaceship.fbx' },
-        { name: 'Cloud', path: '/asset-packs/prim-vehicles/v1/cloud.fbx' },
-      ]},
-      { id: 'prim-islands', label: 'Islands & Environment', manifest: '/asset-packs/prim-islands/manifest.json' },
-      { id: 'prim-structures', label: 'Structures & Bases', manifest: '/asset-packs/prim-structures/manifest.json' },
-      { id: 'prim-animations', label: 'Animations', manifest: '/asset-packs/prim-animations/manifest.json' },
-    ];
-
+    const { cdn, packs: PACK_DEFS } = window.GRUDGE_PRIM_PACKS;
     const host = document.getElementById('canvas-host');
+    const loader = document.getElementById('loader');
+    const loaderEl = new FBXLoader();
+
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
@@ -75,20 +175,35 @@
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x090a12);
+    scene.fog = new THREE.Fog(0x090a12, 30, 80);
+
     const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 2000);
-    camera.position.set(4, 3, 6);
+    const defaultCam = new THREE.Vector3(4, 3, 6);
+    camera.position.copy(defaultCam);
+
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
+    controls.target.set(0, 0.5, 0);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-    const sun = new THREE.DirectionalLight(0xffe8c8, 1.2);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    const sun = new THREE.DirectionalLight(0xffe8c8, 1.1);
     sun.position.set(6, 10, 4);
     sun.castShadow = true;
     scene.add(sun);
+    const fill = new THREE.DirectionalLight(0x88aaff, 0.35);
+    fill.position.set(-4, 2, -3);
+    scene.add(fill);
     scene.add(new THREE.GridHelper(20, 20, 0x2a2d3a, 0x1a1c28));
 
-    let mesh = null;
-    const loader = new FBXLoader();
+    let root = null;
+    let mixer = null;
+    let currentAction = null;
+    let clock = new THREE.Clock();
+    let playing = false;
+    let wireframe = false;
+    let allAssets = [];
+    let activeFilter = 'all';
+    let currentItem = null;
 
     function resize() {
       const w = host.clientWidth, h = host.clientHeight;
@@ -101,72 +216,237 @@
 
     function animate() {
       requestAnimationFrame(animate);
+      const dt = clock.getDelta();
+      if (mixer && playing) mixer.update(dt);
       controls.update();
       renderer.render(scene, camera);
     }
     animate();
 
+    function clearScene() {
+      if (root) { scene.remove(root); root = null; }
+      if (mixer) { mixer.stopAllAction(); mixer = null; }
+      currentAction = null;
+      playing = false;
+      document.getElementById('btn-play').disabled = true;
+      document.getElementById('btn-play').textContent = '▶ Play';
+      document.getElementById('btn-play').classList.remove('on');
+    }
+
+    function applyWireframe(obj, on) {
+      obj.traverse((c) => {
+        if (c.isMesh && c.material) {
+          const mats = Array.isArray(c.material) ? c.material : [c.material];
+          mats.forEach((m) => { m.wireframe = on; });
+        }
+      });
+    }
+
     async function loadAsset(item) {
-      const url = CDN + item.path;
+      currentItem = item;
+      const url = cdn + item.path;
       document.getElementById('asset-name').textContent = item.name;
       document.getElementById('asset-url').textContent = url;
+      document.getElementById('asset-meta').textContent = `${item.packLabel} · ${item.format || 'fbx'}${item.size ? ` · ${(item.size / 1024).toFixed(0)} KB` : ''}`;
       document.getElementById('status').textContent = 'Loading…';
+      loader.classList.add('show');
+      clearScene();
+
       try {
-        const obj = await loader.loadAsync(url);
-        if (mesh) scene.remove(mesh);
-        mesh = obj;
-        const box = new THREE.Box3().setFromObject(mesh);
+        const obj = await loaderEl.loadAsync(url);
+        root = obj;
+        const box = new THREE.Box3().setFromObject(root);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
-        mesh.position.sub(center);
-        const scale = 2 / Math.max(size.x, size.y, size.z, 0.01);
-        mesh.scale.setScalar(scale);
-        scene.add(mesh);
-        document.getElementById('status').textContent = 'Loaded';
+        root.position.sub(center);
+        const maxDim = Math.max(size.x, size.y, size.z, 0.01);
+        const scale = 2.5 / maxDim;
+        root.scale.setScalar(scale);
+        applyWireframe(root, wireframe);
+        scene.add(root);
+
+        if (obj.animations && obj.animations.length) {
+          mixer = new THREE.AnimationMixer(root);
+          currentAction = mixer.clipAction(obj.animations[0]);
+          currentAction.play();
+          playing = true;
+          const btn = document.getElementById('btn-play');
+          btn.disabled = false;
+          btn.textContent = '⏸ Pause';
+          btn.classList.add('on');
+          document.getElementById('status').textContent = `Playing · ${obj.animations.length} clip(s)`;
+        } else {
+          document.getElementById('status').textContent = 'Loaded';
+        }
       } catch (e) {
-        document.getElementById('status').textContent = 'Not on CDN yet — run Prim upload';
+        document.getElementById('status').textContent = 'Failed to load — check CDN';
         console.warn(e);
+      } finally {
+        loader.classList.remove('show');
       }
     }
 
     function addBtn(container, item) {
       const btn = document.createElement('button');
       btn.className = 'asset-btn';
-      btn.textContent = item.name;
+      btn.dataset.name = item.name.toLowerCase();
+      btn.dataset.pack = item.packId;
+      btn.innerHTML = `${item.name}<span class="fmt">${item.format || 'fbx'}</span>`;
       btn.onclick = () => {
-        container.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         loadAsset(item);
+        history.replaceState(null, '', `?pack=${item.packId}&asset=${encodeURIComponent(item.name)}`);
       };
       container.appendChild(btn);
+      return btn;
     }
 
+    function renderFilter() {
+      const q = document.getElementById('search').value.toLowerCase().trim();
+      let visible = 0;
+      document.querySelectorAll('.asset-btn').forEach((btn) => {
+        const matchPack = activeFilter === 'all' || btn.dataset.pack === activeFilter;
+        const matchSearch = !q || btn.dataset.name.includes(q);
+        const show = matchPack && matchSearch;
+        btn.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+      document.querySelectorAll('.pack').forEach((p) => {
+        const any = [...p.querySelectorAll('.asset-btn')].some(b => !b.classList.contains('hidden'));
+        p.style.display = any ? '' : 'none';
+      });
+      let msg = document.getElementById('no-results');
+      if (!msg) {
+        msg = document.createElement('p');
+        msg.id = 'no-results';
+        msg.className = 'empty-msg';
+        document.getElementById('pack-list').appendChild(msg);
+      }
+      msg.textContent = visible ? '' : 'No assets match your filter';
+      msg.style.display = visible ? 'none' : 'block';
+    }
+
+    // Build pack tabs
+    const tabsEl = document.getElementById('pack-tabs');
+    const allTab = document.createElement('button');
+    allTab.className = 'pack-tab active';
+    allTab.textContent = 'All';
+    allTab.onclick = () => {
+      activeFilter = 'all';
+      tabsEl.querySelectorAll('.pack-tab').forEach(t => t.classList.remove('active'));
+      allTab.classList.add('active');
+      renderFilter();
+    };
+    tabsEl.appendChild(allTab);
+
     const list = document.getElementById('pack-list');
-    for (const pack of PACKS) {
+    let totalCount = 0;
+    const packCounts = {};
+
+    for (const def of PACK_DEFS) {
       const wrap = document.createElement('div');
       wrap.className = 'pack';
-      wrap.innerHTML = `<h2>${pack.label}</h2>`;
+      wrap.dataset.pack = def.id;
       const body = document.createElement('div');
+      wrap.innerHTML = `<h2>${def.icon} ${def.label} <span class="pack-cnt">…</span></h2>`;
       wrap.appendChild(body);
       list.appendChild(wrap);
 
-      if (pack.items) {
-        pack.items.forEach(i => addBtn(body, i));
-      } else if (pack.manifest) {
-        try {
-          const res = await fetch(CDN + pack.manifest);
-          if (res.ok) {
-            const m = await res.json();
-            (m.files || m.assets || []).slice(0, 24).forEach(f => {
-              addBtn(body, { name: f.name || f.path?.split('/').pop(), path: f.cdnPath || f.path });
-            });
-          } else {
-            body.innerHTML = '<p style="font-size:11px;color:var(--muted)">Manifest pending upload</p>';
-          }
-        } catch {
-          body.innerHTML = '<p style="font-size:11px;color:var(--muted)">Manifest pending upload</p>';
+      let files = [];
+      try {
+        const res = await fetch(cdn + def.manifest);
+        if (res.ok) {
+          const m = await res.json();
+          files = m.files || m.assets || [];
         }
+      } catch { /* pending */ }
+
+      packCounts[def.id] = files.length;
+      totalCount += files.length;
+      wrap.querySelector('.pack-cnt').textContent = files.length;
+
+      files.forEach((f) => {
+        const item = {
+          name: f.name || f.path?.split('/').pop()?.replace(/\.[^.]+$/, ''),
+          path: f.path || f.cdnPath,
+          format: f.format || 'fbx',
+          size: f.size,
+          packId: def.id,
+          packLabel: def.label,
+        };
+        allAssets.push(item);
+        addBtn(body, item);
+      });
+
+      const tab = document.createElement('button');
+      tab.className = 'pack-tab';
+      tab.innerHTML = `${def.icon} ${def.label.split(' ')[0]}<span class="cnt">${files.length}</span>`;
+      tab.onclick = () => {
+        activeFilter = def.id;
+        tabsEl.querySelectorAll('.pack-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderFilter();
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+      tabsEl.appendChild(tab);
+    }
+
+    document.getElementById('stats-bar').innerHTML = `
+      <span class="stat">${totalCount} assets</span>
+      <span class="stat">4 packs</span>
+      <span class="stat">CDN live</span>
+    `;
+
+    document.getElementById('search').addEventListener('input', renderFilter);
+
+    document.getElementById('btn-play').onclick = () => {
+      if (!mixer || !currentAction) return;
+      playing = !playing;
+      const btn = document.getElementById('btn-play');
+      if (playing) {
+        currentAction.play();
+        btn.textContent = '⏸ Pause';
+        btn.classList.add('on');
+      } else {
+        currentAction.stop();
+        btn.textContent = '▶ Play';
+        btn.classList.remove('on');
       }
+    };
+
+    document.getElementById('btn-wire').onclick = () => {
+      wireframe = !wireframe;
+      if (root) applyWireframe(root, wireframe);
+      document.getElementById('btn-wire').classList.toggle('on', wireframe);
+    };
+
+    document.getElementById('btn-reset').onclick = () => {
+      camera.position.copy(defaultCam);
+      controls.target.set(0, 0.5, 0);
+      controls.update();
+    };
+
+    document.getElementById('btn-copy').onclick = async () => {
+      if (!currentItem) return;
+      const url = cdn + currentItem.path;
+      await navigator.clipboard.writeText(url);
+      document.getElementById('status').textContent = 'URL copied';
+      setTimeout(() => {
+        if (currentItem) document.getElementById('status').textContent = mixer ? 'Playing' : 'Loaded';
+      }, 1500);
+    };
+
+    // Deep link or default to boat
+    const params = new URLSearchParams(location.search);
+    const packQ = params.get('pack');
+    const assetQ = params.get('asset');
+    let target = allAssets.find(a => a.packId === packQ && a.name === assetQ);
+    if (!target) target = allAssets.find(a => a.name === 'vehicle_boat') || allAssets.find(a => a.packId === 'prim-vehicles') || allAssets[0];
+    if (target) {
+      const btn = [...document.querySelectorAll('.asset-btn')].find(b => b.textContent.startsWith(target.name));
+      if (btn) { btn.classList.add('active'); btn.scrollIntoView({ block: 'nearest' }); }
+      loadAsset(target);
     }
   </script>
 </body>

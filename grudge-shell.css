@@ -51,6 +51,22 @@
   font-weight: 600;
 }
 
+#gs-fleet-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#gs-fleet-nav .gs-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(200, 168, 75, 0.15);
+  color: var(--gs-gold);
+  letter-spacing: 0.04em;
+}
+
 #gs-fleet-nav .gs-brand {
   display: flex;
   align-items: center;

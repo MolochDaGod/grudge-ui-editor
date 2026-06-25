@@ -5,7 +5,7 @@
     { href: '/studio', label: 'Studio', match: (p) => p === '/studio' },
     { href: '/hotkeys', label: 'Input', match: (p) => p === '/hotkeys' },
     { href: '/main-panel', label: 'Main Panel', match: (p) => p === '/main-panel' },
-    { href: '/assets', label: '3D Assets', match: (p) => p === '/assets' },
+    { href: '/assets', label: '3D Assets', badge: '276', match: (p) => p === '/assets' },
   ];
 
   const nav = document.createElement('nav');
@@ -21,6 +21,12 @@
     const a = document.createElement('a');
     a.href = l.href;
     a.textContent = l.label;
+    if (l.badge) {
+      const b = document.createElement('span');
+      b.className = 'gs-badge';
+      b.textContent = l.badge;
+      a.appendChild(b);
+    }
     if (l.match(path)) a.classList.add('is-active');
     nav.appendChild(a);
   });
