@@ -14,7 +14,8 @@
       "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
       "asset-grid": "./asset-grid.js",
-      "asset-scene": "./asset-scene.js"
+      "asset-scene": "./asset-scene.js",
+      "asset-sources": "./asset-sources.js"
     }
   }
   </script>
@@ -103,6 +104,14 @@
     .asset-btn.hidden { display:none; }
     .asset-btn .fmt { float:right; font-size:9px; color:var(--muted); text-transform:uppercase; }
     .empty-msg { font-size:11px; color:var(--muted); padding:12px 4px; text-align:center; }
+    .load-more {
+      width:100%; padding:7px 10px; margin:6px 0 10px; border-radius:7px;
+      border:1px dashed var(--bd2); background:transparent; color:var(--muted);
+      font-size:10px; font-weight:600; cursor:pointer;
+    }
+    .load-more:hover { border-color:rgba(74,222,128,.35); color:var(--hydra); }
+    .load-more:disabled { opacity:.45; cursor:wait; }
+    .pack-source { font-size:8px; color:var(--muted); opacity:.75; margin-left:4px; text-transform:uppercase; }
 
     #viewer {
       position:relative;
@@ -239,8 +248,8 @@
   <main>
     <aside>
       <div class="aside-head">
-        <h1>Prim → R2</h1>
-        <p class="sub">Grid-normalized viewer — every asset sits bottom-center on the origin cell. Scale matches declared footprint.</p>
+        <h1>Grudge Assets</h1>
+        <p class="sub">Prim packs, D1 registry, R2 CDN, and icon library — 3D models on grid or 2D images in scene.</p>
         <div class="stats" id="stats-bar"><span class="stat">Loading…</span></div>
         <div class="search-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -371,7 +380,22 @@
       createAssetLoadingManager,
       prepareModelMaterials,
       createStage,
+      createImageAsset,
     } from 'asset-scene';
+    import {
+      D1_CATEGORIES,
+      fetchD1Category,
+      fetchD1CategoryMore,
+      fetchD1Total,
+      fetchIconRegistry,
+      primFileToItem,
+      d1AssetToItem,
+      iconEntryToItem,
+      assetUrl,
+      isImageAsset,
+      searchHaystack,
+      packIdD1,
+    } from 'asset-sources';
 
     const { cdn, packs: PACK_DEFS } = window.GRUDGE_PRIM_PACKS;
     const host = document.getElementById('canvas-host');
@@ -434,7 +458,16 @@
     let allAssets = [];
     let activeFilter = 'all';
     let currentItem = null;
-    let packDefMap = Object.fromEntries(PACK_DEFS.map((p) => [p.id, p]));
+    let packDefMap = Object.fromEntries([
+      ...PACK_DEFS.map((p) => [p.id, p]),
+      ...D1_CATEGORIES.map((c) => [packIdD1(c.id), { ...c, id: packIdD1(c.id), defaultGrid: c.defaultGrid }]),
+    ]);
+    const d1LoadedIds = new Map();
+    const d1ScanOffsets = new Map();
+    const ICON_RENDER_CAP = 80;
+    const SEARCH_RENDER_CAP = 250;
+    const packDom = new Map();
+    let sourceLabels = {};
     let metrics = null;
 
     let activeResolver = createTextureResolver({ cdn, packId: 'prim-vehicles', assetPath: '' });
@@ -677,31 +710,30 @@
 
     async function loadAsset(item, { append = false } = {}) {
       currentItem = item;
-      const url = cdn + item.path;
+      const url = assetUrl(item, cdn);
       const packDef = packDefMap[item.packId];
       const [gCols, gRows] = inferGridCells(item, packDef);
+      const imageMode = isImageAsset(item);
       document.getElementById('grid-cols').value = gCols;
       document.getElementById('grid-rows').value = gRows;
 
       document.getElementById('asset-name').textContent = item.name;
       document.getElementById('asset-url').textContent = url;
+      const srcTag = item.source === 'd1' ? 'D1/R2' : item.source === 'icon' ? 'Icon' : item.source || 'prim';
       document.getElementById('asset-meta').textContent =
-        `${item.packLabel} · ${item.format || 'fbx'} · grid ${gCols}×${gRows}` +
+        `${item.packLabel} · ${srcTag} · ${item.format || 'fbx'}` +
+        (imageMode ? ' · 2D plane' : ` · grid ${gCols}×${gRows}`) +
+        (item.grudgeUuid ? ` · ${item.grudgeUuid}` : '') +
         (item.size ? ` · ${(item.size / 1024).toFixed(0)} KB` : '');
       document.getElementById('status').textContent = 'Loading…';
       loaderEl.classList.add('show');
 
-      activeResolver = createTextureResolver({
-        cdn,
-        packId: item.packId,
-        assetPath: item.path,
-        manifestTextures: item.textures || {},
-      });
-      loadingManager.setURLModifier((u) => activeResolver.urlModifier(u));
-
-      const assetDir = item.path.replace(/[^/]+$/, '');
-      fbxLoader.setResourcePath(cdn + assetDir);
-      gltfLoader.setResourcePath(cdn + assetDir);
+      const fmtLower = (item.format || '').toLowerCase();
+      if (['mp3', 'wav', 'ogg', 'woff', 'woff2', 'ttf', 'otf'].includes(fmtLower)) {
+        document.getElementById('status').textContent = `${fmtLower.toUpperCase()} — copy URL to download`;
+        loaderEl.classList.remove('show');
+        return;
+      }
 
       if (append) {
         pivot = spawnPivot(stagedCount);
@@ -712,33 +744,57 @@
 
       try {
         let obj;
-        if ((item.format || '').toLowerCase() === 'glb' || item.path.endsWith('.glb')) {
-          const gltf = await gltfLoader.loadAsync(url);
-          obj = gltf.scene;
-          if (gltf.animations?.length) obj.animations = gltf.animations;
-        } else {
-          obj = await fbxLoader.loadAsync(url);
-        }
+        let texLabel = '—';
 
-        const texStats = await prepareModelMaterials(obj, activeResolver, textureLoader);
-        const texLabel = texStats.resolved
-          ? `${texStats.resolved} loaded`
-          : texStats.mapped
-            ? `${texStats.mapped} mapped · CDN pending`
-            : 'PBR fallback colors';
-        document.getElementById('m-tex').textContent = texLabel;
+        if (imageMode) {
+          const maxSize = item.source === 'icon' ? 1 : item.category === 'texture' ? 2 : 1.5;
+          obj = await createImageAsset(url, textureLoader, { maxSize, upright: true });
+          texLabel = '2D image';
+          document.getElementById('m-tex').textContent = texLabel;
+          document.getElementById('btn-play').disabled = true;
+        } else {
+          activeResolver = createTextureResolver({
+            cdn,
+            packId: item.packId,
+            assetPath: item.path || `/${item.r2Key || ''}`,
+            manifestTextures: item.textures || {},
+          });
+          loadingManager.setURLModifier((u) => activeResolver.urlModifier(u));
+
+          const assetDir = (item.path || `/${item.r2Key || ''}`).replace(/[^/]+$/, '');
+          fbxLoader.setResourcePath(cdn + assetDir);
+          gltfLoader.setResourcePath(cdn + assetDir);
+
+          const fmt = (item.format || '').toLowerCase();
+          const isGlb = fmt === 'glb' || fmt === 'gltf' || url.endsWith('.glb') || url.endsWith('.gltf');
+          if (isGlb) {
+            const gltf = await gltfLoader.loadAsync(url);
+            obj = gltf.scene;
+            if (gltf.animations?.length) obj.animations = gltf.animations;
+          } else {
+            obj = await fbxLoader.loadAsync(url);
+          }
+
+          const texStats = await prepareModelMaterials(obj, activeResolver, textureLoader);
+          texLabel = texStats.resolved
+            ? `${texStats.resolved} loaded`
+            : texStats.mapped
+              ? `${texStats.mapped} mapped · CDN pending`
+              : 'PBR fallback colors';
+          document.getElementById('m-tex').textContent = texLabel;
+        }
 
         root = obj;
         pivot.rotation.set(0, 0, 0);
         if (!append) pivot.position.set(0, 0, 0);
         pivot.add(root);
-        applyWireframe(root, wireframe);
+        if (!imageMode) applyWireframe(root, wireframe);
         runNormalize();
 
         stagedCount = append ? stagedCount + 1 : 1;
         updateSceneCount();
 
-        if (obj.animations?.length) {
+        if (!imageMode && obj.animations?.length) {
           mixer = new THREE.AnimationMixer(root);
           currentAction = mixer.clipAction(obj.animations[0]);
           currentAction.play();
@@ -749,7 +805,7 @@
           btn.classList.add('on');
           document.getElementById('status').textContent = `Playing · ${obj.animations.length} clip(s) · ${texLabel}`;
         } else {
-          document.getElementById('status').textContent = `On grid · ${texLabel}`;
+          document.getElementById('status').textContent = imageMode ? `2D in scene · ${texLabel}` : `On grid · ${texLabel}`;
         }
       } catch (e) {
         document.getElementById('status').textContent = 'Failed to load — check CDN';
@@ -763,38 +819,121 @@
       }
     }
 
-    function searchHaystack(item) {
-      return [
-        item.name,
-        item.name?.replace(/_/g, ' '),
-        item.path,
-        item.packId,
-        item.packLabel,
-        item.format,
-      ].filter(Boolean).join(' ').toLowerCase();
-    }
-
     function matchesSearch(haystack, query) {
       if (!query) return true;
       const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
       return tokens.every((t) => haystack.includes(t));
     }
 
-    function addBtn(container, item) {
+    const itemIndex = new Map();
+
+    function registerItem(item) {
+      allAssets.push(item);
+      itemIndex.set(item.uid || `${item.packId}::${item.name}`, item);
+      return item;
+    }
+
+    function addBtn(container, item, before = null) {
       const btn = document.createElement('button');
       btn.className = 'asset-btn';
-      btn.dataset.assetId = item.name;
+      btn.dataset.assetId = item.uid || `${item.packId}::${item.name}`;
       btn.dataset.pack = item.packId;
       btn.dataset.search = searchHaystack(item);
-      btn.innerHTML = `${item.name}<span class="fmt">${item.format || 'fbx'}</span>`;
+      const src = item.source === 'd1' ? 'd1' : item.source === 'icon' ? 'img' : item.format || 'fbx';
+      btn.innerHTML = `${item.name}<span class="fmt">${src}</span>`;
       btn.onclick = () => {
         document.querySelectorAll('.asset-btn').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         loadAsset(item, { append: addToSceneMode && stagedCount > 0 });
         history.replaceState(null, '', `?pack=${item.packId}&asset=${encodeURIComponent(item.name)}`);
       };
-      container.appendChild(btn);
+      if (before) container.insertBefore(btn, before);
+      else container.appendChild(btn);
       return btn;
+    }
+
+    function ensureSearchSection() {
+      let el = document.getElementById('search-results');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'search-results';
+        el.className = 'pack';
+        el.innerHTML = '<h2>🔎 Search results <span class="pack-cnt">0</span></h2><div class="search-body"></div>';
+        document.getElementById('pack-list').prepend(el);
+      }
+      return el;
+    }
+
+    function createPackSection(packId, titleHtml, bodyParent) {
+      let wrap = packDom.get(packId);
+      if (wrap) return wrap.body;
+      wrap = { el: document.createElement('div'), body: document.createElement('div') };
+      wrap.el.className = 'pack';
+      wrap.el.dataset.pack = packId;
+      wrap.el.innerHTML = titleHtml;
+      wrap.el.appendChild(wrap.body);
+      bodyParent.appendChild(wrap.el);
+      packDom.set(packId, wrap);
+      return wrap.body;
+    }
+
+    function addPackTab(tabsEl, packId, labelHtml, scrollTarget) {
+      const tab = document.createElement('button');
+      tab.className = 'pack-tab';
+      tab.dataset.pack = packId;
+      tab.innerHTML = labelHtml;
+      tab.onclick = () => {
+        activeFilter = packId;
+        tabsEl.querySelectorAll('.pack-tab').forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderFilter();
+        scrollTarget?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      };
+      tabsEl.appendChild(tab);
+      return tab;
+    }
+
+    async function loadD1Page(catDef, body, moreBtn, { more = false } = {}) {
+      const packId = packIdD1(catDef.id);
+      if (!d1LoadedIds.has(packId)) d1LoadedIds.set(packId, new Set());
+      const known = d1LoadedIds.get(packId);
+
+      moreBtn.disabled = true;
+      moreBtn.textContent = 'Loading…';
+      try {
+        let assets;
+        let hasMore;
+        if (!more) {
+          ({ assets, hasMore } = await fetchD1Category(catDef.id, { limit: 500 }));
+        } else {
+          const scanOffset = d1ScanOffsets.get(packId) || 500;
+          const page = await fetchD1CategoryMore(catDef.id, known, { scanOffset, limit: 200 });
+          assets = page.assets;
+          hasMore = page.hasMore;
+          d1ScanOffsets.set(packId, page.nextScanOffset);
+        }
+
+        assets.forEach((a) => {
+          if (known.has(a.id)) return;
+          known.add(a.id);
+          addBtn(body, registerItem(d1AssetToItem(a, catDef)), moreBtn);
+        });
+
+        const cnt = known.size;
+        packDom.get(packId)?.el?.querySelector('.pack-cnt')?.textContent = cnt;
+        const tabCnt = tabsEl.querySelector(`[data-pack="${packId}"] .cnt`);
+        if (tabCnt) tabCnt.textContent = cnt;
+        moreBtn.style.display = hasMore ? '' : 'none';
+        moreBtn.textContent = more
+          ? (hasMore ? `Load more (${catDef.label})` : '')
+          : (hasMore ? `Load more (${catDef.label})` : '');
+        renderFilter();
+      } catch (e) {
+        moreBtn.textContent = 'Failed — retry';
+        console.warn(e);
+      } finally {
+        moreBtn.disabled = false;
+      }
     }
 
     function renderFilter() {
@@ -806,18 +945,40 @@
 
       document.getElementById('search-clear').classList.toggle('show', q.length > 0);
 
-      document.querySelectorAll('.asset-btn').forEach((btn) => {
-        const matchPack = searchAllPacks || activeFilter === 'all' || btn.dataset.pack === activeFilter;
-        const matchSearch = matchesSearch(btn.dataset.search || '', qLower);
-        const show = matchPack && matchSearch;
-        btn.classList.toggle('hidden', !show);
-        if (show) visible++;
-      });
+      const searchSection = document.getElementById('search-results');
+      if (searchSection) searchSection.style.display = 'none';
 
-      document.querySelectorAll('.pack').forEach((p) => {
-        const any = [...p.querySelectorAll('.asset-btn')].some((b) => !b.classList.contains('hidden'));
-        p.style.display = any ? '' : 'none';
-      });
+      if (searchAllPacks) {
+        const matches = allAssets.filter((item) => matchesSearch(searchHaystack(item), qLower));
+        const section = ensureSearchSection();
+        section.style.display = '';
+        const body = section.querySelector('.search-body');
+        body.innerHTML = '';
+        matches.slice(0, SEARCH_RENDER_CAP).forEach((item) => {
+          addBtn(body, item);
+          visible++;
+        });
+        section.querySelector('.pack-cnt').textContent = String(matches.length);
+        if (matches.length > SEARCH_RENDER_CAP) {
+          const hint = document.createElement('p');
+          hint.className = 'empty-msg';
+          hint.textContent = `Showing ${SEARCH_RENDER_CAP} of ${matches.length} — refine search`;
+          body.appendChild(hint);
+        }
+        document.querySelectorAll('.pack:not(#search-results)').forEach((p) => { p.style.display = 'none'; });
+      } else {
+        document.querySelectorAll('.asset-btn').forEach((btn) => {
+          const matchPack = activeFilter === 'all' || btn.dataset.pack === activeFilter;
+          btn.classList.toggle('hidden', !matchPack);
+          if (matchPack) visible++;
+        });
+
+        document.querySelectorAll('.pack').forEach((p) => {
+          if (p.id === 'search-results') return;
+          const any = [...p.querySelectorAll('.asset-btn')].some((b) => !b.classList.contains('hidden'));
+          p.style.display = any ? '' : 'none';
+        });
+      }
 
       let msg = document.getElementById('no-results');
       if (!msg) {
@@ -831,12 +992,16 @@
 
       const meta = document.getElementById('search-meta');
       if (q) {
-        meta.textContent = `${visible} of ${allAssets.length} shown · searching all packs`;
+        const totalMatches = allAssets.filter((item) => matchesSearch(searchHaystack(item), qLower)).length;
+        meta.textContent = `${Math.min(SEARCH_RENDER_CAP, totalMatches)} shown · ${totalMatches} matches · ${allAssets.length} indexed`;
       } else if (activeFilter !== 'all') {
-        const packLabel = PACK_DEFS.find((p) => p.id === activeFilter)?.label || activeFilter;
+        const packLabel = sourceLabels[activeFilter]
+          || PACK_DEFS.find((p) => p.id === activeFilter)?.label
+          || D1_CATEGORIES.find((c) => packIdD1(c.id) === activeFilter)?.label
+          || activeFilter;
         meta.textContent = `${visible} in ${packLabel}`;
       } else {
-        meta.textContent = `${allAssets.length} assets`;
+        meta.textContent = `${allAssets.length} indexed`;
       }
     }
 
@@ -855,14 +1020,14 @@
     const list = document.getElementById('pack-list');
     let totalCount = 0;
 
+    // ── Prim packs (manifest on R2) ──
     for (const def of PACK_DEFS) {
-      const wrap = document.createElement('div');
-      wrap.className = 'pack';
-      wrap.dataset.pack = def.id;
-      const body = document.createElement('div');
-      wrap.innerHTML = `<h2>${def.icon} ${def.label} <span class="pack-cnt">…</span></h2>`;
-      wrap.appendChild(body);
-      list.appendChild(wrap);
+      sourceLabels[def.id] = def.label;
+      const body = createPackSection(
+        def.id,
+        `<h2>${def.icon} ${def.label}<span class="pack-source">prim</span> <span class="pack-cnt">…</span></h2>`,
+        list,
+      );
 
       let files = [];
       try {
@@ -874,39 +1039,105 @@
       } catch { /* pending */ }
 
       totalCount += files.length;
-      wrap.querySelector('.pack-cnt').textContent = files.length;
+      packDom.get(def.id).el.querySelector('.pack-cnt').textContent = files.length;
+      files.forEach((f) => addBtn(body, registerItem(primFileToItem(f, def))));
 
-      files.forEach((f) => {
-        const item = {
-          name: f.name || f.path?.split('/').pop()?.replace(/\.[^.]+$/, ''),
-          path: f.path || f.cdnPath,
-          format: f.format || 'fbx',
-          size: f.size,
-          gridSize: f.gridSize,
-          packId: def.id,
-          packLabel: def.label,
-        };
-        allAssets.push(item);
-        addBtn(body, item);
-      });
-
-      const tab = document.createElement('button');
-      tab.className = 'pack-tab';
-      tab.innerHTML = `${def.icon} ${def.label.split(' ')[0]}<span class="cnt">${files.length}</span>`;
-      tab.onclick = () => {
-        activeFilter = def.id;
-        tabsEl.querySelectorAll('.pack-tab').forEach((t) => t.classList.remove('active'));
-        tab.classList.add('active');
-        renderFilter();
-        wrap.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      };
-      tabsEl.appendChild(tab);
+      addPackTab(
+        tabsEl,
+        def.id,
+        `${def.icon} ${def.label.split(' ')[0]}<span class="cnt">${files.length}</span>`,
+        packDom.get(def.id).el,
+      );
     }
 
+    // ── D1 registry + R2 CDN (asset-api) ──
+    const d1Header = document.createElement('div');
+    d1Header.className = 'pack';
+    d1Header.dataset.pack = 'd1-all';
+    d1Header.innerHTML = '<h2>🗄️ D1 Registry <span class="pack-source">d1 · r2</span> <span class="pack-cnt">…</span></h2>';
+    list.appendChild(d1Header);
+
+    let d1Total = 0;
+    try { d1Total = await fetchD1Total(); } catch { /* offline */ }
+
+    for (const catDef of D1_CATEGORIES) {
+      const packId = packIdD1(catDef.id);
+      sourceLabels[packId] = `D1 · ${catDef.label}`;
+      const body = createPackSection(
+        packId,
+        `<h2>${catDef.icon} ${catDef.label}<span class="pack-source">d1</span> <span class="pack-cnt">0</span></h2>`,
+        list,
+      );
+      const moreBtn = document.createElement('button');
+      moreBtn.className = 'load-more';
+      moreBtn.textContent = `Load ${catDef.label} from D1`;
+      moreBtn.onclick = () => loadD1Page(catDef, body, moreBtn, { more: (d1LoadedIds.get(packId)?.size || 0) > 0 });
+      body.appendChild(moreBtn);
+
+      addPackTab(
+        tabsEl,
+        packId,
+        `${catDef.icon}<span class="cnt">0</span>`,
+        packDom.get(packId).el,
+      );
+    }
+
+    // ── Icon registry (2D images on CDN) ──
+    const iconHeader = document.createElement('div');
+    iconHeader.className = 'pack';
+    iconHeader.dataset.pack = 'icons-all';
+    iconHeader.innerHTML = '<h2>🎨 Icon Library <span class="pack-source">icons · r2</span> <span class="pack-cnt">…</span></h2>';
+    list.appendChild(iconHeader);
+
+    (async () => {
+      try {
+        const { packs, total } = await fetchIconRegistry();
+        iconHeader.querySelector('.pack-cnt').textContent = total;
+        totalCount += total;
+
+        for (const pack of packs) {
+          sourceLabels[pack.packId] = `Icons · ${pack.label}`;
+          const body = createPackSection(
+            pack.packId,
+            `<h2>🎨 ${pack.label}<span class="pack-source">icon</span> <span class="pack-cnt">${pack.count}</span></h2>`,
+            list,
+          );
+          const packItems = pack.entries.map(({ relativePath, meta }) =>
+            registerItem(iconEntryToItem(relativePath, meta, pack.folder)),
+          );
+          packItems.slice(0, ICON_RENDER_CAP).forEach((item) => addBtn(body, item));
+          if (pack.count > ICON_RENDER_CAP) {
+            const hint = document.createElement('p');
+            hint.className = 'empty-msg';
+            hint.textContent = `+${pack.count - ICON_RENDER_CAP} more — search by name`;
+            body.appendChild(hint);
+          }
+
+          if (packs.indexOf(pack) < 12) {
+            addPackTab(
+              tabsEl,
+              pack.packId,
+              `🎨<span class="cnt">${pack.count}</span>`,
+              packDom.get(pack.packId).el,
+            );
+          }
+        }
+        renderFilter();
+        document.getElementById('stats-bar').innerHTML = `
+          <span class="stat">${allAssets.length} indexed</span>
+          <span class="stat">${d1Total || '—'} D1</span>
+          <span class="stat">${total} icons</span>
+        `;
+      } catch (e) {
+        iconHeader.querySelector('.pack-cnt').textContent = 'err';
+        console.warn('Icon registry', e);
+      }
+    })();
+
     document.getElementById('stats-bar').innerHTML = `
-      <span class="stat">${totalCount} assets</span>
-      <span class="stat">${PACK_DEFS.length} packs</span>
-      <span class="stat">Grid anchor</span>
+      <span class="stat">${totalCount} prim</span>
+      <span class="stat">${d1Total || '…'} D1/R2</span>
+      <span class="stat">icons loading</span>
     `;
 
     const searchInput = document.getElementById('search');
@@ -1039,7 +1270,9 @@
     let target = allAssets.find((a) => a.packId === params.get('pack') && a.name === params.get('asset'));
     if (!target) target = allAssets.find((a) => a.name === 'vehicle_boat') || allAssets[0];
     if (target) {
-      const btn = [...document.querySelectorAll('.asset-btn')].find((b) => b.dataset.assetId === target.name);
+      const btn = [...document.querySelectorAll('.asset-btn')].find(
+        (b) => b.dataset.assetId === (target.uid || `${target.packId}::${target.name}`) || b.dataset.assetId === target.name,
+      );
       if (btn) {
         btn.classList.add('active');
         const scrollEl = document.getElementById('asset-scroll');

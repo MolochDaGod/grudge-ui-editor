@@ -253,3 +253,58 @@ export function createStage() {
   group.name = 'assetStage';
   return group;
 }
+
+/**
+ * Display a 2D image (icon, texture, sprite) as an upright plane in the scene.
+ */
+export async function createImageAsset(url, textureLoader, { maxSize = 1.5, upright = true } = {}) {
+  const tex = await textureLoader.loadAsync(url);
+  fixTexture(tex);
+
+  const img = tex.image;
+  const iw = img?.width || 1;
+  const ih = img?.height || 1;
+  const aspect = iw / ih;
+  let w;
+  let h;
+  if (aspect >= 1) {
+    w = maxSize;
+    h = maxSize / aspect;
+  } else {
+    h = maxSize;
+    w = maxSize * aspect;
+  }
+
+  const group = new THREE.Group();
+  group.name = 'imageAsset';
+
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthWrite: true,
+    toneMapped: false,
+  });
+
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+  plane.name = 'imagePlane';
+
+  if (upright) {
+    plane.position.y = h * 0.5;
+  } else {
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.y = 0.02;
+  }
+
+  group.add(plane);
+
+  const frame = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.PlaneGeometry(w + 0.06, h + 0.06)),
+    new THREE.LineBasicMaterial({ color: 0xc8a84b, transparent: true, opacity: 0.4 }),
+  );
+  frame.position.copy(plane.position);
+  if (!upright) frame.rotation.x = -Math.PI / 2;
+  group.add(frame);
+
+  return group;
+}
