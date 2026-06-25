@@ -4,35 +4,43 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3D Asset Browser — Grudge Studio</title>
-  <meta name="description" content="Browse 276 Prim vehicles, islands, structures and animations from assets.grudge-studio.com."/>
+  <meta name="description" content="Browse Prim vehicles, islands, structures and animations — grid-normalized placement editor."/>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
   <link rel="stylesheet" href="./grudge-shell.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script type="importmap">
-  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+      "asset-grid": "./asset-grid.js"
+    }
+  }
   </script>
   <style>
     :root {
       --bg:#06070b; --s1:#0c0d12; --s2:#12131a; --s3:#181a24; --bd:#1e2030; --bd2:#2a2d42;
       --text:#e2e4ef; --muted:#6b7088; --hydra:#4ade80; --gold:#c8a84b;
-      --sidebar:320px;
+      --sidebar:300px; --inspector:290px;
     }
     * { box-sizing:border-box; }
     body { margin:0; font-family:Inter,system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-    main { display:grid; grid-template-columns:var(--sidebar) 1fr; min-height:calc(100vh - 46px); }
+    main {
+      display:grid;
+      grid-template-columns:var(--sidebar) 1fr var(--inspector);
+      min-height:calc(100vh - 46px);
+    }
 
-    /* sidebar */
     aside {
       background:var(--s1); border-right:1px solid var(--bd);
       display:flex; flex-direction:column; overflow:hidden;
     }
     .aside-head { padding:14px 14px 10px; border-bottom:1px solid var(--bd); flex-shrink:0; }
-    h1 { font-family:'Space Grotesk',sans-serif; font-size:.95rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin:0 0 4px; }
+    h1 { font-family:'Space Grotesk',sans-serif; font-size:.92rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin:0 0 4px; }
     .sub { font-size:11px; color:var(--muted); line-height:1.5; margin:0 0 10px; }
     .stats { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
     .stat {
-      font-size:10px; font-weight:600; letter-spacing:.04em;
-      padding:3px 8px; border-radius:6px;
+      font-size:10px; font-weight:600; padding:3px 8px; border-radius:6px;
       background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.18); color:var(--hydra);
     }
     .search-wrap { position:relative; }
@@ -55,10 +63,7 @@
 
     #asset-scroll { flex:1; overflow-y:auto; padding:8px 10px 16px; }
     .pack { margin-bottom:12px; }
-    .pack h2 {
-      font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
-      margin:0 0 6px; display:flex; align-items:center; gap:6px;
-    }
+    .pack h2 { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; display:flex; align-items:center; gap:6px; }
     .pack h2 span { font-size:9px; color:var(--hydra); background:rgba(74,222,128,.08); padding:1px 5px; border-radius:4px; }
     .asset-btn {
       display:block; width:100%; text-align:left; padding:7px 10px; margin-bottom:3px;
@@ -71,47 +76,103 @@
     .asset-btn .fmt { float:right; font-size:9px; color:var(--muted); text-transform:uppercase; }
     .empty-msg { font-size:11px; color:var(--muted); padding:12px 4px; text-align:center; }
 
-    /* viewer */
-    #viewer { position:relative; background:radial-gradient(ellipse at 50% 35%, rgba(74,222,128,.05), transparent 65%), #090a12; }
+    #viewer { position:relative; background:radial-gradient(ellipse at 50% 35%, rgba(74,222,128,.05), transparent 65%), #090a12; min-width:0; }
     #canvas-host { width:100%; height:calc(100vh - 46px); }
     #hud {
       position:absolute; top:12px; left:12px; right:12px;
-      display:flex; justify-content:space-between; align-items:flex-start; gap:10px; pointer-events:none;
+      display:flex; justify-content:space-between; align-items:flex-start; gap:10px; pointer-events:none; z-index:2;
     }
     .card {
       pointer-events:auto; background:rgba(12,13,18,.9); border:1px solid var(--bd);
-      border-radius:10px; padding:10px 14px; backdrop-filter:blur(8px); font-size:12px; max-width:50%;
+      border-radius:10px; padding:10px 14px; backdrop-filter:blur(8px); font-size:12px; max-width:48%;
     }
     .card strong { color:var(--gold); display:block; margin-bottom:4px; font-size:13px; }
     #status { color:var(--muted); }
     #asset-meta { font-size:10px; color:var(--muted); margin-top:4px; }
-    #asset-url { word-break:break-all; color:var(--muted); font-size:10px; max-width:280px; }
+    #asset-url { word-break:break-all; color:var(--muted); font-size:10px; max-width:260px; }
+
     .toolbar {
       position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
-      display:flex; gap:6px; pointer-events:auto;
+      display:flex; gap:6px; flex-wrap:wrap; justify-content:center; pointer-events:auto; z-index:2;
     }
     .tool-btn {
-      padding:7px 14px; border-radius:8px; border:1px solid var(--bd);
+      padding:7px 12px; border-radius:8px; border:1px solid var(--bd);
       background:rgba(12,13,18,.92); color:var(--text); font-size:11px; font-weight:600;
       cursor:pointer; backdrop-filter:blur(8px); transition:all .1s;
     }
     .tool-btn:hover { border-color:rgba(74,222,128,.3); color:var(--hydra); }
     .tool-btn:disabled { opacity:.4; cursor:not-allowed; }
     .tool-btn.on { background:rgba(74,222,128,.12); border-color:rgba(74,222,128,.35); color:var(--hydra); }
-    #loader {
-      position:absolute; inset:0; display:none; align-items:center; justify-content:center;
-      background:rgba(6,7,11,.6); pointer-events:none;
-    }
+
+    #loader { position:absolute; inset:0; display:none; align-items:center; justify-content:center; background:rgba(6,7,11,.6); z-index:3; }
     #loader.show { display:flex; }
-    .spinner {
-      width:32px; height:32px; border:2px solid var(--bd); border-top-color:var(--hydra);
-      border-radius:50%; animation:spin .7s linear infinite;
-    }
+    .spinner { width:32px; height:32px; border:2px solid var(--bd); border-top-color:var(--hydra); border-radius:50%; animation:spin .7s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
 
-    @media (max-width:900px) {
-      main { grid-template-columns:1fr; grid-template-rows:auto 1fr; }
-      aside { max-height:42vh; }
+    /* inspector */
+    #inspector {
+      background:var(--s1); border-left:1px solid var(--bd);
+      display:flex; flex-direction:column; overflow:hidden;
+    }
+    .insp-head { padding:12px 14px 8px; border-bottom:1px solid var(--bd); flex-shrink:0; }
+    .insp-head h2 { font-family:'Space Grotesk',sans-serif; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:0 0 8px; }
+    .insp-tabs { display:flex; gap:4px; }
+    .insp-tab {
+      flex:1; padding:6px 0; border-radius:6px; border:1px solid var(--bd); background:var(--s2);
+      color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;
+    }
+    .insp-tab.active { color:var(--hydra); border-color:rgba(74,222,128,.3); background:rgba(74,222,128,.08); }
+    .insp-body { flex:1; overflow-y:auto; padding:12px 14px 20px; }
+    .insp-panel { display:none; }
+    .insp-panel.active { display:block; }
+    .field { margin-bottom:10px; }
+    .field label { display:block; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+    .field input, .field select {
+      width:100%; padding:6px 8px; border-radius:6px; border:1px solid var(--bd);
+      background:var(--s2); color:var(--text); font-size:11px; font-family:'JetBrains Mono',monospace; outline:none;
+    }
+    .field input:focus, .field select:focus { border-color:rgba(74,222,128,.35); }
+    .insp-btn {
+      width:100%; padding:8px; border-radius:8px; border:1px solid var(--bd); background:var(--s2);
+      color:var(--text); font-size:11px; font-weight:600; cursor:pointer; margin-top:6px;
+    }
+    .insp-btn:hover { border-color:rgba(74,222,128,.3); color:var(--hydra); }
+    .insp-btn.primary { background:rgba(74,222,128,.1); border-color:rgba(74,222,128,.28); color:var(--hydra); }
+    .mode-row { display:flex; gap:4px; margin-bottom:12px; }
+    .mode-btn { flex:1; padding:7px 4px; border-radius:6px; border:1px solid var(--bd); background:var(--s2); color:var(--muted); font-size:10px; font-weight:600; cursor:pointer; }
+    .mode-btn.active { color:var(--hydra); border-color:rgba(74,222,128,.35); background:rgba(74,222,128,.08); }
+
+    #dim-chart { width:100%; height:140px; border-radius:8px; background:var(--s2); border:1px solid var(--bd); margin-bottom:10px; }
+    .metric-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+    .metric {
+      padding:8px; border-radius:8px; background:var(--s2); border:1px solid var(--bd);
+      font-family:'JetBrains Mono',monospace; font-size:10px;
+    }
+    .metric .k { color:var(--muted); display:block; font-size:9px; text-transform:uppercase; margin-bottom:2px; }
+    .metric .v { color:var(--hydra); font-weight:600; }
+
+    .footprint-grid {
+      display:grid; gap:2px; margin:8px 0; padding:8px; background:var(--s2); border-radius:8px; border:1px solid var(--bd);
+    }
+    .footprint-cell {
+      aspect-ratio:1; border-radius:2px; background:rgba(74,222,128,.12); border:1px solid rgba(74,222,128,.25);
+    }
+    .footprint-cell.origin { background:rgba(200,168,75,.25); border-color:var(--gold); }
+
+    .anchor-tag {
+      position:absolute; bottom:14px; right:14px; font-size:10px; color:var(--muted);
+      background:rgba(12,13,18,.85); border:1px solid var(--bd); border-radius:8px; padding:6px 10px; z-index:2;
+      font-family:'JetBrains Mono',monospace;
+    }
+
+    @media (max-width:1100px) {
+      main { grid-template-columns:var(--sidebar) 1fr; grid-template-rows:auto 1fr auto; }
+      #inspector { grid-column:1/-1; max-height:42vh; border-left:none; border-top:1px solid var(--bd); }
+    }
+    @media (max-width:700px) {
+      main { grid-template-columns:1fr; }
+      aside { max-height:38vh; border-right:none; border-bottom:1px solid var(--bd); }
       .card { max-width:100%; }
     }
   </style>
@@ -121,20 +182,17 @@
     <aside>
       <div class="aside-head">
         <h1>Prim → R2</h1>
-        <p class="sub">Canonical 3D from <code>assets.grudge-studio.com</code>. Powers Metaverse islands, Warlords vehicles, and world builders.</p>
-        <div class="stats" id="stats-bar">
-          <span class="stat">Loading…</span>
-        </div>
+        <p class="sub">Grid-normalized viewer — every asset sits bottom-center on the origin cell. Scale matches declared footprint.</p>
+        <div class="stats" id="stats-bar"><span class="stat">Loading…</span></div>
         <div class="search-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           <input type="search" id="search" placeholder="Filter assets…" autocomplete="off"/>
         </div>
       </div>
       <div class="pack-tabs" id="pack-tabs"></div>
-      <div id="asset-scroll">
-        <div id="pack-list"></div>
-      </div>
+      <div id="asset-scroll"><div id="pack-list"></div></div>
     </aside>
+
     <section id="viewer">
       <div id="hud">
         <div class="card">
@@ -142,74 +200,184 @@
           <span id="status">Ready</span>
           <div id="asset-meta"></div>
         </div>
-        <div class="card">
-          <span id="asset-url"></span>
-        </div>
+        <div class="card"><span id="asset-url"></span></div>
       </div>
       <div class="toolbar">
-        <button class="tool-btn" id="btn-play" disabled title="Play animation">▶ Play</button>
-        <button class="tool-btn" id="btn-wire" title="Toggle wireframe">Wireframe</button>
-        <button class="tool-btn" id="btn-reset" title="Reset camera">Reset view</button>
-        <button class="tool-btn" id="btn-copy" title="Copy CDN URL">Copy URL</button>
+        <button class="tool-btn" id="btn-play" disabled>▶ Play</button>
+        <button class="tool-btn" id="btn-wire">Wireframe</button>
+        <button class="tool-btn on" id="btn-bbox">BBox</button>
+        <button class="tool-btn on" id="btn-snap">Snap</button>
+        <button class="tool-btn on" id="btn-gizmo">Gizmo</button>
+        <button class="tool-btn" id="btn-reset">Reset view</button>
+        <button class="tool-btn" id="btn-renorm">Re-normalize</button>
+        <button class="tool-btn" id="btn-copy">Copy URL</button>
+        <button class="tool-btn" id="btn-export">Export JSON</button>
       </div>
+      <div class="anchor-tag" id="anchor-tag">anchor: (0, 0, 0) bottom-center</div>
       <div id="loader"><div class="spinner"></div></div>
       <div id="canvas-host"></div>
     </section>
+
+    <section id="inspector">
+      <div class="insp-head">
+        <h2>Placement Editor</h2>
+        <div class="insp-tabs">
+          <button class="insp-tab active" data-panel="editor">Editor</button>
+          <button class="insp-tab" data-panel="graph">Graph</button>
+        </div>
+      </div>
+      <div class="insp-body">
+        <div class="insp-panel active" id="panel-editor">
+          <div class="mode-row">
+            <button class="mode-btn active" data-mode="translate">Move</button>
+            <button class="mode-btn" data-mode="rotate">Rotate</button>
+            <button class="mode-btn" data-mode="scale">Scale</button>
+          </div>
+          <div class="field">
+            <label>Grid footprint (cells)</label>
+            <div class="field-row">
+              <input type="number" id="grid-cols" min="1" max="12" value="1" title="Columns"/>
+              <input type="number" id="grid-rows" min="1" max="12" value="1" title="Rows"/>
+              <select id="cell-size"><option value="1">1m cell</option><option value="0.5">0.5m</option><option value="2">2m</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Position (world)</label>
+            <div class="field-row">
+              <input type="number" id="pos-x" step="0.01" value="0"/>
+              <input type="number" id="pos-y" step="0.01" value="0"/>
+              <input type="number" id="pos-z" step="0.01" value="0"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Rotation (deg)</label>
+            <div class="field-row">
+              <input type="number" id="rot-x" step="1" value="0"/>
+              <input type="number" id="rot-y" step="1" value="0"/>
+              <input type="number" id="rot-z" step="1" value="0"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Scale (uniform)</label>
+            <input type="number" id="scale-u" step="0.01" min="0.01" value="1"/>
+          </div>
+          <button class="insp-btn primary" id="btn-apply-grid">Apply grid normalize</button>
+          <button class="insp-btn" id="btn-zero">Reset to origin</button>
+        </div>
+        <div class="insp-panel" id="panel-graph">
+          <canvas id="dim-chart"></canvas>
+          <div class="metric-grid">
+            <div class="metric"><span class="k">Scale factor</span><span class="v" id="m-scale">—</span></div>
+            <div class="metric"><span class="k">Footprint</span><span class="v" id="m-foot">—</span></div>
+            <div class="metric"><span class="k">Width (X)</span><span class="v" id="m-w">—</span></div>
+            <div class="metric"><span class="k">Height (Y)</span><span class="v" id="m-h">—</span></div>
+            <div class="metric"><span class="k">Depth (Z)</span><span class="v" id="m-d">—</span></div>
+            <div class="metric"><span class="k">On grid</span><span class="v" id="m-cells">—</span></div>
+          </div>
+          <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Footprint preview</label>
+          <div class="footprint-grid" id="footprint-preview"></div>
+        </div>
+      </div>
+    </section>
   </main>
+
   <script src="./prim-packs.js"></script>
   <script src="./grudge-shell.js"></script>
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { TransformControls } from 'three/addons/controls/TransformControls.js';
     import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { normalizeToGrid, inferGridCells, CELL_SIZE } from 'asset-grid';
 
     const { cdn, packs: PACK_DEFS } = window.GRUDGE_PRIM_PACKS;
     const host = document.getElementById('canvas-host');
-    const loader = document.getElementById('loader');
-    const loaderEl = new FBXLoader();
+    const loaderEl = document.getElementById('loader');
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     host.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x090a12);
-    scene.fog = new THREE.Fog(0x090a12, 30, 80);
+    scene.fog = new THREE.Fog(0x090a12, 40, 100);
 
     const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 2000);
-    const defaultCam = new THREE.Vector3(4, 3, 6);
+    const defaultCam = new THREE.Vector3(5, 4, 7);
     camera.position.copy(defaultCam);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.target.set(0, 0.5, 0);
+    controls.target.set(0, 1, 0);
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const sun = new THREE.DirectionalLight(0xffe8c8, 1.1);
-    sun.position.set(6, 10, 4);
+    sun.position.set(8, 12, 6);
     sun.castShadow = true;
     scene.add(sun);
     const fill = new THREE.DirectionalLight(0x88aaff, 0.35);
-    fill.position.set(-4, 2, -3);
+    fill.position.set(-5, 3, -4);
     scene.add(fill);
-    scene.add(new THREE.GridHelper(20, 20, 0x2a2d3a, 0x1a1c28));
+
+    const GRID_SIZE = 24;
+    const grid = new THREE.GridHelper(GRID_SIZE, GRID_SIZE, 0x3a4a5a, 0x1e2430);
+    scene.add(grid);
+
+    const axes = new THREE.AxesHelper(2);
+    scene.add(axes);
+
+    const originMarker = new THREE.Mesh(
+      new THREE.RingGeometry(0.08, 0.14, 32),
+      new THREE.MeshBasicMaterial({ color: 0xc8a84b, side: THREE.DoubleSide })
+    );
+    originMarker.rotation.x = -Math.PI / 2;
+    originMarker.position.y = 0.002;
+    scene.add(originMarker);
+
+    let pivot = new THREE.Group();
+    pivot.name = 'assetPivot';
+    scene.add(pivot);
 
     let root = null;
+    let bboxHelper = null;
+    let footprintMesh = null;
     let mixer = null;
     let currentAction = null;
     let clock = new THREE.Clock();
     let playing = false;
     let wireframe = false;
+    let showBbox = true;
+    let snapEnabled = true;
+    let gizmoEnabled = true;
     let allAssets = [];
     let activeFilter = 'all';
     let currentItem = null;
+    let packDefMap = Object.fromEntries(PACK_DEFS.map((p) => [p.id, p]));
+    let metrics = null;
+
+    const fbxLoader = new FBXLoader();
+    const gltfLoader = new GLTFLoader();
+
+    const transform = new TransformControls(camera, renderer.domElement);
+    transform.setSpace('world');
+    transform.addEventListener('dragging-changed', (e) => { controls.enabled = !e.value; });
+    transform.addEventListener('change', () => {
+      if (snapEnabled && transform.mode === 'translate') snapPivot();
+      syncFieldsFromPivot();
+      updateBbox();
+      drawChart();
+    });
+    scene.add(transform);
 
     function resize() {
       const w = host.clientWidth, h = host.clientHeight;
       renderer.setSize(w, h);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      drawChart();
     }
     addEventListener('resize', resize);
     resize();
@@ -223,18 +391,15 @@
     }
     animate();
 
-    function clearScene() {
-      if (root) { scene.remove(root); root = null; }
-      if (mixer) { mixer.stopAllAction(); mixer = null; }
-      currentAction = null;
-      playing = false;
-      document.getElementById('btn-play').disabled = true;
-      document.getElementById('btn-play').textContent = '▶ Play';
-      document.getElementById('btn-play').classList.remove('on');
+    function snapPivot() {
+      const cs = Number(document.getElementById('cell-size').value) || CELL_SIZE;
+      pivot.position.x = Math.round(pivot.position.x / cs) * cs;
+      pivot.position.y = Math.round(pivot.position.y / cs) * cs;
+      pivot.position.z = Math.round(pivot.position.z / cs) * cs;
     }
 
     function applyWireframe(obj, on) {
-      obj.traverse((c) => {
+      obj?.traverse((c) => {
         if (c.isMesh && c.material) {
           const mats = Array.isArray(c.material) ? c.material : [c.material];
           mats.forEach((m) => { m.wireframe = on; });
@@ -242,30 +407,198 @@
       });
     }
 
+    function updateFootprintPlane(cols, rows, cellSize) {
+      if (footprintMesh) scene.remove(footprintMesh);
+      const w = cols * cellSize;
+      const d = rows * cellSize;
+      footprintMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(w, d),
+        new THREE.MeshBasicMaterial({ color: 0x4ade80, transparent: true, opacity: 0.08, side: THREE.DoubleSide, depthWrite: false })
+      );
+      footprintMesh.rotation.x = -Math.PI / 2;
+      footprintMesh.position.y = 0.004;
+      scene.add(footprintMesh);
+
+      const outline = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.PlaneGeometry(w, d)),
+        new THREE.LineBasicMaterial({ color: 0x4ade80, transparent: true, opacity: 0.45 })
+      );
+      outline.rotation.x = -Math.PI / 2;
+      outline.position.y = 0.005;
+      footprintMesh.add(outline);
+    }
+
+    function updateBbox() {
+      if (bboxHelper) scene.remove(bboxHelper);
+      bboxHelper = null;
+      if (!showBbox || !root) return;
+      const box = new THREE.Box3().setFromObject(root);
+      bboxHelper = new THREE.Box3Helper(box, 0xc8a84b);
+      scene.add(bboxHelper);
+    }
+
+    function syncFieldsFromPivot() {
+      document.getElementById('pos-x').value = pivot.position.x.toFixed(3);
+      document.getElementById('pos-y').value = pivot.position.y.toFixed(3);
+      document.getElementById('pos-z').value = pivot.position.z.toFixed(3);
+      document.getElementById('rot-x').value = THREE.MathUtils.radToDeg(pivot.rotation.x).toFixed(1);
+      document.getElementById('rot-y').value = THREE.MathUtils.radToDeg(pivot.rotation.y).toFixed(1);
+      document.getElementById('rot-z').value = THREE.MathUtils.radToDeg(pivot.rotation.z).toFixed(1);
+      const s = root?.scale.x ?? 1;
+      document.getElementById('scale-u').value = s.toFixed(4);
+    }
+
+    function applyFieldsToPivot() {
+      pivot.position.set(
+        Number(document.getElementById('pos-x').value),
+        Number(document.getElementById('pos-y').value),
+        Number(document.getElementById('pos-z').value),
+      );
+      pivot.rotation.set(
+        THREE.MathUtils.degToRad(Number(document.getElementById('rot-x').value)),
+        THREE.MathUtils.degToRad(Number(document.getElementById('rot-y').value)),
+        THREE.MathUtils.degToRad(Number(document.getElementById('rot-z').value)),
+      );
+      const su = Number(document.getElementById('scale-u').value);
+      if (root && su > 0) root.scale.setScalar(su);
+      updateBbox();
+      drawChart();
+    }
+
+    function drawChart() {
+      const canvas = document.getElementById('dim-chart');
+      const ctx = canvas.getContext('2d');
+      const dpr = Math.min(devicePixelRatio, 2);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      if (!metrics) {
+        ctx.fillStyle = '#6b7088';
+        ctx.font = '11px Inter,sans-serif';
+        ctx.fillText('Load an asset to see dimensions', 12, rect.height / 2);
+        return;
+      }
+
+      const vals = [
+        { label: 'Raw X', v: metrics.raw.size.x, color: '#6b7088' },
+        { label: 'Raw Y', v: metrics.raw.size.y, color: '#6b7088' },
+        { label: 'Raw Z', v: metrics.raw.size.z, color: '#6b7088' },
+        { label: 'Norm X', v: metrics.normalized.size.x, color: '#4ade80' },
+        { label: 'Norm Y', v: metrics.normalized.size.y, color: '#4ade80' },
+        { label: 'Norm Z', v: metrics.normalized.size.z, color: '#4ade80' },
+      ];
+      const max = Math.max(...vals.map((x) => x.v), 0.01);
+      const barW = (rect.width - 40) / vals.length;
+      const hMax = rect.height - 36;
+
+      vals.forEach((item, i) => {
+        const bh = (item.v / max) * hMax;
+        const x = 20 + i * barW + 4;
+        const y = rect.height - 16 - bh;
+        ctx.fillStyle = item.color;
+        ctx.fillRect(x, y, barW - 8, bh);
+        ctx.fillStyle = '#e2e4ef';
+        ctx.font = '8px JetBrains Mono,monospace';
+        ctx.fillText(item.label, x, rect.height - 4);
+        ctx.fillText(item.v.toFixed(2), x, y - 4);
+      });
+    }
+
+    function updateMetricsUI(m) {
+      metrics = m;
+      document.getElementById('m-scale').textContent = m.scaleFactor.toFixed(4);
+      document.getElementById('m-foot').textContent = `${m.grid.cols}×${m.grid.rows} @ ${m.grid.cellSize}m`;
+      document.getElementById('m-w').textContent = m.normalized.size.x.toFixed(2) + 'm';
+      document.getElementById('m-h').textContent = m.normalized.size.y.toFixed(2) + 'm';
+      document.getElementById('m-d').textContent = m.normalized.size.z.toFixed(2) + 'm';
+      document.getElementById('m-cells').textContent =
+        `${m.normalized.cellsX.toFixed(1)}×${m.normalized.cellsZ.toFixed(1)} × ${m.normalized.cellsY.toFixed(1)}h`;
+      drawFootprintPreview(m.grid.cols, m.grid.rows);
+      drawChart();
+    }
+
+    function drawFootprintPreview(cols, rows) {
+      const el = document.getElementById('footprint-preview');
+      el.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      el.innerHTML = '';
+      const total = cols * rows;
+      const mid = Math.floor(total / 2);
+      for (let i = 0; i < total; i++) {
+        const c = document.createElement('div');
+        c.className = 'footprint-cell' + (i === mid ? ' origin' : '');
+        el.appendChild(c);
+      }
+    }
+
+    function clearScene() {
+      if (root) pivot.remove(root);
+      root = null;
+      if (bboxHelper) { scene.remove(bboxHelper); bboxHelper = null; }
+      if (mixer) { mixer.stopAllAction(); mixer = null; }
+      currentAction = null;
+      playing = false;
+      transform.detach();
+      document.getElementById('btn-play').disabled = true;
+      document.getElementById('btn-play').textContent = '▶ Play';
+      document.getElementById('btn-play').classList.remove('on');
+    }
+
+    function runNormalize() {
+      if (!root) return;
+      const cols = Number(document.getElementById('grid-cols').value) || 1;
+      const rows = Number(document.getElementById('grid-rows').value) || 1;
+      const cs = Number(document.getElementById('cell-size').value) || CELL_SIZE;
+      pivot.position.set(0, 0, 0);
+      pivot.rotation.set(0, 0, 0);
+      root.position.set(0, 0, 0);
+      root.rotation.set(0, 0, 0);
+      root.scale.set(1, 1, 1);
+      const m = normalizeToGrid(root, cols, rows, cs);
+      updateFootprintPlane(cols, rows, cs);
+      updateMetricsUI(m);
+      updateBbox();
+      syncFieldsFromPivot();
+      if (gizmoEnabled) transform.attach(pivot);
+    }
+
     async function loadAsset(item) {
       currentItem = item;
       const url = cdn + item.path;
+      const packDef = packDefMap[item.packId];
+      const [gCols, gRows] = inferGridCells(item, packDef);
+      document.getElementById('grid-cols').value = gCols;
+      document.getElementById('grid-rows').value = gRows;
+
       document.getElementById('asset-name').textContent = item.name;
       document.getElementById('asset-url').textContent = url;
-      document.getElementById('asset-meta').textContent = `${item.packLabel} · ${item.format || 'fbx'}${item.size ? ` · ${(item.size / 1024).toFixed(0)} KB` : ''}`;
+      document.getElementById('asset-meta').textContent =
+        `${item.packLabel} · ${item.format || 'fbx'} · grid ${gCols}×${gRows}` +
+        (item.size ? ` · ${(item.size / 1024).toFixed(0)} KB` : '');
       document.getElementById('status').textContent = 'Loading…';
-      loader.classList.add('show');
+      loaderEl.classList.add('show');
       clearScene();
 
       try {
-        const obj = await loaderEl.loadAsync(url);
-        root = obj;
-        const box = new THREE.Box3().setFromObject(root);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-        root.position.sub(center);
-        const maxDim = Math.max(size.x, size.y, size.z, 0.01);
-        const scale = 2.5 / maxDim;
-        root.scale.setScalar(scale);
-        applyWireframe(root, wireframe);
-        scene.add(root);
+        let obj;
+        if ((item.format || '').toLowerCase() === 'glb' || item.path.endsWith('.glb')) {
+          const gltf = await gltfLoader.loadAsync(url);
+          obj = gltf.scene;
+          if (gltf.animations?.length) obj.animations = gltf.animations;
+        } else {
+          obj = await fbxLoader.loadAsync(url);
+        }
 
-        if (obj.animations && obj.animations.length) {
+        root = obj;
+        pivot.rotation.set(0, 0, 0);
+        pivot.position.set(0, 0, 0);
+        pivot.add(root);
+        applyWireframe(root, wireframe);
+        runNormalize();
+
+        if (obj.animations?.length) {
           mixer = new THREE.AnimationMixer(root);
           currentAction = mixer.clipAction(obj.animations[0]);
           currentAction.play();
@@ -276,13 +609,15 @@
           btn.classList.add('on');
           document.getElementById('status').textContent = `Playing · ${obj.animations.length} clip(s)`;
         } else {
-          document.getElementById('status').textContent = 'Loaded';
+          document.getElementById('status').textContent = 'Normalized on grid';
         }
       } catch (e) {
         document.getElementById('status').textContent = 'Failed to load — check CDN';
         console.warn(e);
+        metrics = null;
+        drawChart();
       } finally {
-        loader.classList.remove('show');
+        loaderEl.classList.remove('show');
       }
     }
 
@@ -293,7 +628,7 @@
       btn.dataset.pack = item.packId;
       btn.innerHTML = `${item.name}<span class="fmt">${item.format || 'fbx'}</span>`;
       btn.onclick = () => {
-        document.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.asset-btn').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         loadAsset(item);
         history.replaceState(null, '', `?pack=${item.packId}&asset=${encodeURIComponent(item.name)}`);
@@ -313,7 +648,7 @@
         if (show) visible++;
       });
       document.querySelectorAll('.pack').forEach((p) => {
-        const any = [...p.querySelectorAll('.asset-btn')].some(b => !b.classList.contains('hidden'));
+        const any = [...p.querySelectorAll('.asset-btn')].some((b) => !b.classList.contains('hidden'));
         p.style.display = any ? '' : 'none';
       });
       let msg = document.getElementById('no-results');
@@ -327,14 +662,13 @@
       msg.style.display = visible ? 'none' : 'block';
     }
 
-    // Build pack tabs
     const tabsEl = document.getElementById('pack-tabs');
     const allTab = document.createElement('button');
     allTab.className = 'pack-tab active';
     allTab.textContent = 'All';
     allTab.onclick = () => {
       activeFilter = 'all';
-      tabsEl.querySelectorAll('.pack-tab').forEach(t => t.classList.remove('active'));
+      tabsEl.querySelectorAll('.pack-tab').forEach((t) => t.classList.remove('active'));
       allTab.classList.add('active');
       renderFilter();
     };
@@ -342,7 +676,6 @@
 
     const list = document.getElementById('pack-list');
     let totalCount = 0;
-    const packCounts = {};
 
     for (const def of PACK_DEFS) {
       const wrap = document.createElement('div');
@@ -362,7 +695,6 @@
         }
       } catch { /* pending */ }
 
-      packCounts[def.id] = files.length;
       totalCount += files.length;
       wrap.querySelector('.pack-cnt').textContent = files.length;
 
@@ -372,6 +704,7 @@
           path: f.path || f.cdnPath,
           format: f.format || 'fbx',
           size: f.size,
+          gridSize: f.gridSize,
           packId: def.id,
           packLabel: def.label,
         };
@@ -384,7 +717,7 @@
       tab.innerHTML = `${def.icon} ${def.label.split(' ')[0]}<span class="cnt">${files.length}</span>`;
       tab.onclick = () => {
         activeFilter = def.id;
-        tabsEl.querySelectorAll('.pack-tab').forEach(t => t.classList.remove('active'));
+        tabsEl.querySelectorAll('.pack-tab').forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
         renderFilter();
         wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -394,25 +727,49 @@
 
     document.getElementById('stats-bar').innerHTML = `
       <span class="stat">${totalCount} assets</span>
-      <span class="stat">4 packs</span>
-      <span class="stat">CDN live</span>
+      <span class="stat">${PACK_DEFS.length} packs</span>
+      <span class="stat">Grid anchor</span>
     `;
 
     document.getElementById('search').addEventListener('input', renderFilter);
+
+    document.querySelectorAll('.insp-tab').forEach((tab) => {
+      tab.onclick = () => {
+        document.querySelectorAll('.insp-tab').forEach((t) => t.classList.remove('active'));
+        document.querySelectorAll('.insp-panel').forEach((p) => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+        if (tab.dataset.panel === 'graph') drawChart();
+      };
+    });
+
+    document.querySelectorAll('.mode-btn').forEach((btn) => {
+      btn.onclick = () => {
+        document.querySelectorAll('.mode-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        transform.setMode(btn.dataset.mode);
+      };
+    });
+
+    ['pos-x','pos-y','pos-z','rot-x','rot-y','rot-z','scale-u'].forEach((id) => {
+      document.getElementById(id).addEventListener('change', applyFieldsToPivot);
+    });
+
+    document.getElementById('btn-apply-grid').onclick = runNormalize;
+    document.getElementById('btn-zero').onclick = () => {
+      pivot.position.set(0, 0, 0);
+      pivot.rotation.set(0, 0, 0);
+      syncFieldsFromPivot();
+      updateBbox();
+    };
+    document.getElementById('btn-renorm').onclick = runNormalize;
 
     document.getElementById('btn-play').onclick = () => {
       if (!mixer || !currentAction) return;
       playing = !playing;
       const btn = document.getElementById('btn-play');
-      if (playing) {
-        currentAction.play();
-        btn.textContent = '⏸ Pause';
-        btn.classList.add('on');
-      } else {
-        currentAction.stop();
-        btn.textContent = '▶ Play';
-        btn.classList.remove('on');
-      }
+      if (playing) { currentAction.play(); btn.textContent = '⏸ Pause'; btn.classList.add('on'); }
+      else { currentAction.stop(); btn.textContent = '▶ Play'; btn.classList.remove('on'); }
     };
 
     document.getElementById('btn-wire').onclick = () => {
@@ -421,30 +778,63 @@
       document.getElementById('btn-wire').classList.toggle('on', wireframe);
     };
 
+    document.getElementById('btn-bbox').onclick = () => {
+      showBbox = !showBbox;
+      updateBbox();
+      document.getElementById('btn-bbox').classList.toggle('on', showBbox);
+    };
+
+    document.getElementById('btn-snap').onclick = () => {
+      snapEnabled = !snapEnabled;
+      document.getElementById('btn-snap').classList.toggle('on', snapEnabled);
+    };
+
+    document.getElementById('btn-gizmo').onclick = () => {
+      gizmoEnabled = !gizmoEnabled;
+      if (gizmoEnabled && root) transform.attach(pivot);
+      else transform.detach();
+      document.getElementById('btn-gizmo').classList.toggle('on', gizmoEnabled);
+    };
+
     document.getElementById('btn-reset').onclick = () => {
       camera.position.copy(defaultCam);
-      controls.target.set(0, 0.5, 0);
+      controls.target.set(0, 1, 0);
       controls.update();
     };
 
     document.getElementById('btn-copy').onclick = async () => {
       if (!currentItem) return;
-      const url = cdn + currentItem.path;
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(cdn + currentItem.path);
       document.getElementById('status').textContent = 'URL copied';
-      setTimeout(() => {
-        if (currentItem) document.getElementById('status').textContent = mixer ? 'Playing' : 'Loaded';
-      }, 1500);
     };
 
-    // Deep link or default to boat
+    document.getElementById('btn-export').onclick = async () => {
+      if (!currentItem || !metrics) return;
+      const payload = {
+        asset: currentItem.name,
+        url: cdn + currentItem.path,
+        grid: metrics.grid,
+        transform: {
+          position: pivot.position.toArray(),
+          rotation: [pivot.rotation.x, pivot.rotation.y, pivot.rotation.z],
+          scale: root?.scale.x ?? 1,
+        },
+        dimensions: {
+          width: metrics.normalized.size.x,
+          height: metrics.normalized.size.y,
+          depth: metrics.normalized.size.z,
+        },
+        scaleFactor: metrics.scaleFactor,
+      };
+      await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+      document.getElementById('status').textContent = 'Placement JSON copied';
+    };
+
     const params = new URLSearchParams(location.search);
-    const packQ = params.get('pack');
-    const assetQ = params.get('asset');
-    let target = allAssets.find(a => a.packId === packQ && a.name === assetQ);
-    if (!target) target = allAssets.find(a => a.name === 'vehicle_boat') || allAssets.find(a => a.packId === 'prim-vehicles') || allAssets[0];
+    let target = allAssets.find((a) => a.packId === params.get('pack') && a.name === params.get('asset'));
+    if (!target) target = allAssets.find((a) => a.name === 'vehicle_boat') || allAssets[0];
     if (target) {
-      const btn = [...document.querySelectorAll('.asset-btn')].find(b => b.textContent.startsWith(target.name));
+      const btn = [...document.querySelectorAll('.asset-btn')].find((b) => b.textContent.startsWith(target.name));
       if (btn) { btn.classList.add('active'); btn.scrollIntoView({ block: 'nearest' }); }
       loadAsset(target);
     }
