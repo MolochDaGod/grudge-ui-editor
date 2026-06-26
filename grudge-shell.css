@@ -105,6 +105,23 @@
   padding: 2px 7px;
 }
 
+#gs-fleet-nav .gs-pill--ai {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+#gs-fleet-nav .gs-pill--ai.gs-pill--on {
+  color: var(--gs-hydra);
+  background: var(--gs-hydra-dim);
+  border-color: rgba(74, 222, 128, 0.28);
+}
+
+#gs-fleet-nav .gs-pill--ai.gs-pill--off {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
 body.gs-has-nav {
   padding-top: var(--gs-nav-h) !important;
 }

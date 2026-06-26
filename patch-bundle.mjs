@@ -54,5 +54,12 @@ replace(
   'main panel component wk'
 );
 
+// ── AI Director: Grudge AI client instead of broken /api/ai/configure ────────
+const aiDirectorOld =
+  'const T=await fetch("/api/ai/configure",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt:y,current:{theme:i,overrides:r,fontScale:s,activeSystem:o},themes:np.map(A=>({id:A,label:Dt[A].label})),systems:uf.map(A=>({id:A.id,label:A.label})),paletteKeys:bk})});if(!T.ok)throw new Error(`AI request failed (${T.status})`);const _=await T.json();_.patch&&d(_.patch),x(_.message??"Updated the UI.")';
+const aiDirectorNew =
+  'let _;if(window.GrudgeAI?.configureUIKit){if(!GrudgeAI.isReady())throw new Error("Sign in with Grudge ID (nav) or add an Anthropic key");_=await GrudgeAI.configureUIKit({prompt:y,current:{theme:i,overrides:r,fontScale:s,activeSystem:o}})}else{const T=await fetch("/api/ai/configure",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt:y,current:{theme:i,overrides:r,fontScale:s,activeSystem:o},themes:np.map(A=>({id:A,label:Dt[A].label})),systems:uf.map(A=>({id:A.id,label:A.label})),paletteKeys:bk})});if(!T.ok)throw new Error(`AI request failed (${T.status})`);_=await T.json()}_.patch&&d(_.patch),x(_.message??"Updated the UI.")';
+replace(aiDirectorOld, aiDirectorNew, 'AI Director grudge-ai fallback');
+
 fs.writeFileSync(BUNDLE, s);
 console.log('Applied patches:', patches.join(', '));
