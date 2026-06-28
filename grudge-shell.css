@@ -122,6 +122,102 @@
   border-color: rgba(248, 113, 113, 0.28);
 }
 
+#gs-fleet-nav .gs-account-wrap {
+  position: relative;
+  margin-left: 4px;
+}
+
+#gs-fleet-nav .gs-pill-name {
+  max-width: 88px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#gs-fleet-nav .gs-cloud-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+#gs-fleet-nav .gs-cloud-dot--on {
+  background: var(--gs-hydra);
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.55);
+}
+
+#gs-fleet-nav .gs-cloud-dot--off {
+  background: #fbbf24;
+  box-shadow: 0 0 4px rgba(251, 191, 36, 0.4);
+}
+
+#gs-fleet-nav .gs-account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 210px;
+  background: #0f1018;
+  border: 1px solid var(--gs-border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  padding: 8px;
+  z-index: 10001;
+}
+
+#gs-fleet-nav .gs-account-head {
+  padding: 8px 10px 10px;
+  border-bottom: 1px solid var(--gs-border);
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#gs-fleet-nav .gs-account-head strong {
+  color: var(--gs-text);
+  font-size: 12px;
+}
+
+#gs-fleet-nav .gs-account-head span {
+  color: var(--gs-gold);
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+#gs-fleet-nav .gs-account-head em {
+  color: var(--gs-muted);
+  font-size: 10px;
+  font-style: normal;
+  margin-top: 4px;
+}
+
+#gs-fleet-nav .gs-account-item {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--gs-text);
+  font: inherit;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+#gs-fleet-nav .gs-account-item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+#gs-fleet-nav .gs-account-item:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+#gs-fleet-nav .gs-account-item--danger {
+  color: #f87171;
+}
+
 body.gs-has-nav {
   padding-top: var(--gs-nav-h) !important;
 }

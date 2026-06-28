@@ -15,10 +15,28 @@ A visual UI editor and showcase for building game interfaces used across Grudge 
 - **Cyberpunk** — sci-fi HUDs, neon panels, terminal UI
 - **RPG** — stat bars, item tooltips, character sheets
 
+**HYDRA tools** on the same domain:
+- `/studio` — drag-and-drop UI scene editor + Craftpix assets
+- `/hotkeys` — input binding configurator
+- `/assets` — 3D / D1 asset browser
+- `/main-panel` — character panel preview
+
+## Account & cloud saves
+
+Sign in via the nav pill → Grudge ID (`id.grudge-studio.com`). After redirect, the app:
+
+1. Exchanges `?grudge_token=` for a session JWT (proxied API)
+2. Links **Puter** for cloud KV (studio packs, hotkeys)
+3. Shows cloud status in the account menu (green = cloud on)
+
+Full auth/persistence spec: **[AUTH.md](./AUTH.md)**
+
 ## Deployment
 
 ### Vercel (primary)
 Push to `main` → Vercel auto-deploys. Static site — no build step.
+
+Fleet API rewrites live in `vercel.json` (`/api/auth/*`, `/api/registry`).
 
 ### Puter (mirror)
 ```bash
@@ -30,4 +48,8 @@ puter site deploy . grudge-ui-editor
 
 ## Part of Grudge Studio
 
-This is a tool in the [Grudge Studio](https://grudge-studio.com) ecosystem. See [The-ENGINE](https://github.com/MolochDaGod/The-ENGINE) for the main game backend.
+This is a tool in the [Grudge Studio](https://grudge-studio.com) ecosystem.
+
+- Fleet map: `grudge-fleet` skill / [The-ENGINE](https://github.com/MolochDaGod/The-ENGINE)
+- Auth backend: `GrudgeBuilder` Railway (`/api/auth/*`)
+- Puter mirror notes: [DEPLOY-PUTER.md](./DEPLOY-PUTER.md)

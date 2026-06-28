@@ -32,9 +32,11 @@ A ready-to-upload archive is provided next to this folder:
 
 ## Notes
 
-- **Single page app, no routing** — no server rewrite rules are needed.
-- **No API/server** — the optional "AI Director" panel calls a backend that isn't part
-  of a static deploy; it fails silently and the rest of the kit works fully.
+- **Multi-page HYDRA shell** — `studio`, `hotkeys`, `assets`, `main-panel` are separate HTML entry points (same as Vercel).
+- **Grudge ID + Puter** — include `grudge-cloud-save.js` + Puter SDK for sign-in and cloud pack saves. See [AUTH.md](./AUTH.md).
+- **AI Director** — uses `grudge-ai.js` (Puter AI or user Anthropic key); no server `/api/ai/configure` required.
 - **Fonts** load from Google Fonts over the network.
 - To preview locally before uploading, run `./serve-local.sh` (or any static file
   server) from inside this folder and open the printed URL.
+
+On Puter hosting there are **no Vercel API proxies** — auth calls hit Railway / `api.grudge-studio.com` directly (CORS permitting), or users rely on local-only saves until they use the Vercel primary URL.

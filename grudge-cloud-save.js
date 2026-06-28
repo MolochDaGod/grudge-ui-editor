@@ -1,5 +1,6 @@
 /**
  * Grudge Cloud Save — persistent auth + UI pack storage (Puter KV + localStorage).
+ * Fleet model: Grudge ID session JWT + linked Puter cloud for per-user KV saves.
  */
 (function (global) {
   const API = 'https://api.grudge-studio.com';
@@ -12,6 +13,8 @@
   const LS_LAST = 'grudge_ui_pack_last';
   const LS_TOKEN = 'grudge_auth_token';
   const LS_USER = 'grudge_ui_user';
+  const LS_CLOUD = 'grudge_cloud_ready';
+  const AUTH_LS_KEYS = [LS_TOKEN, LS_USER, LS_CLOUD, 'grudge_id', 'grudge_username', LS_LAST];
 
   function sameOriginApi() {
     const host = global.location?.hostname || '';
@@ -79,6 +82,14 @@
     lsSet(LS_PACKS, JSON.stringify(packs));
   }
 
+  async function waitForPuter(timeoutMs = 10000) {
+    const start = Date.now();
+    while (typeof puter === 'undefined' && Date.now() - start < timeoutMs) {
+      await new Promise((r) => setTimeout(r, 120));
+    }
+    return typeof puter !== 'undefined';
+  }
+
   async function puterReady() {
     if (typeof puter === 'undefined') return false;
     try {
@@ -89,7 +100,7 @@
   }
 
   async function ensurePuterSignIn() {
-    if (typeof puter === 'undefined' || !puter.auth) return false;
+    if (!(await waitForPuter())) return false;
     if (await puterReady()) return true;
     try {
       await puter.auth.signIn();
@@ -97,6 +108,23 @@
     } catch {
       return false;
     }
+  }
+
+  /** After Grudge ID login, open Puter so cloud KV/AI work under the same user. */
+  async function linkPuterCloud() {
+    const linked = await ensurePuterSignIn();
+    if (linked) {
+      lsSet(LS_CLOUD, '1');
+      global.dispatchEvent(new CustomEvent('grudge:cloud:ready'));
+    } else {
+      lsDel(LS_CLOUD);
+      global.dispatchEvent(new CustomEvent('grudge:cloud:off'));
+    }
+    return linked;
+  }
+
+  async function isCloudReady() {
+    return await puterReady();
   }
 
   async function exchangeLaunchToken(token) {
@@ -201,6 +229,7 @@
     if (!tokenValid(token)) {
       lsDel(LS_TOKEN);
       lsDel(LS_USER);
+      lsDel(LS_CLOUD);
       return null;
     }
 
@@ -213,6 +242,10 @@
     else if (profile) storeSession(token, profile);
     else profile = storeSession(token, parseJwt(token));
 
+    if (profile) {
+      linkPuterCloud().catch(() => {});
+    }
+
     return profile;
   }
 
@@ -222,7 +255,7 @@
   }
 
   function isLoggedIn() {
-    return !!getToken() || (global.GrudgeAI && global.GrudgeAI.loggedIn && global.GrudgeAI.loggedIn());
+    return !!getToken();
   }
 
   function getUser() {
@@ -237,6 +270,38 @@
     const ret = returnUrl || global.location.href.split('?')[0];
     global.location.href =
       AUTH + '/api/auth/page?app=ui-editor&redirect=' + encodeURIComponent(ret);
+  }
+
+  async function logout() {
+    const logoutUrls = sameOriginApi()
+      ? ['/api/auth/logout', `${RAILWAY}/api/auth/logout`]
+      : [`${RAILWAY}/api/auth/logout`, '/api/auth/logout'];
+
+    for (const url of logoutUrls) {
+      try {
+        await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: '{}',
+        });
+        break;
+      } catch {}
+    }
+
+    if (typeof puter !== 'undefined') {
+      try {
+        await puter.auth.signOut();
+      } catch {}
+    }
+
+    AUTH_LS_KEYS.forEach(lsDel);
+    global.dispatchEvent(new CustomEvent('grudge:auth:logout'));
+  }
+
+  async function switchAccount() {
+    await logout();
+    login();
   }
 
   async function savePack(scene, packId) {
@@ -352,7 +417,11 @@
     getToken,
     getUser,
     isLoggedIn,
+    isCloudReady,
+    linkPuterCloud,
     login,
+    logout,
+    switchAccount,
     ensurePuterSignIn,
     savePack,
     loadPack,
