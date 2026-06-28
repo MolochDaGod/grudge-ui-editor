@@ -36,14 +36,5 @@ window.GRUDGE_PRIM_PACKS = {
       description: 'Humanoid combat, climb, idle, berserker rigs',
       defaultGrid: [1, 1],
     },
-    {
-      id: 'super-dialogue',
-      label: 'Super Dialogue (NPC Voice)',
-      icon: '🎙️',
-      manifest: '/audio/dialogue/super-pack/manifest.json',
-      description: '545 voice barks — greeting, damage, death, combat grunts (5 actors)',
-      defaultGrid: [1, 1],
-      viewer: 'audio',
-    },
   ],
 };
