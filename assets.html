@@ -218,6 +218,51 @@
       font-family:'JetBrains Mono',monospace;
     }
 
+    #audio-panel {
+      position:absolute; inset:0; z-index:3; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:16px; padding:24px;
+      background:radial-gradient(ellipse at 50% 30%, rgba(74,222,128,.08), transparent 55%), var(--bg);
+      pointer-events:none; opacity:0; transition:opacity .2s;
+    }
+    #audio-panel.show { opacity:1; pointer-events:auto; }
+    #audio-panel.hidden { display:none; }
+    .audio-card {
+      width:min(420px, 92%); padding:20px; border-radius:14px;
+      background:var(--s2); border:1px solid var(--bd2);
+      box-shadow:0 12px 40px rgba(0,0,0,.35);
+    }
+    .audio-badges { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+    .audio-badge {
+      font-size:10px; font-weight:600; padding:3px 8px; border-radius:6px;
+      background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.25); color:var(--gold);
+      text-transform:capitalize;
+    }
+    .audio-badge.voice { background:rgba(74,222,128,.1); border-color:rgba(74,222,128,.22); color:var(--hydra); }
+    .audio-wave {
+      display:flex; align-items:flex-end; justify-content:center; gap:3px; height:48px; margin:12px 0 16px;
+    }
+    .audio-wave span {
+      width:4px; border-radius:2px; background:linear-gradient(180deg, var(--hydra), rgba(74,222,128,.35));
+      animation:audioBar 1.1s ease-in-out infinite;
+    }
+    .audio-wave span:nth-child(2) { animation-delay:.1s; height:60%; }
+    .audio-wave span:nth-child(3) { animation-delay:.2s; height:85%; }
+    .audio-wave span:nth-child(4) { animation-delay:.15s; height:45%; }
+    .audio-wave span:nth-child(5) { animation-delay:.25s; height:70%; }
+    .audio-wave span:nth-child(6) { animation-delay:.05s; height:55%; }
+    .audio-wave span:nth-child(7) { animation-delay:.18s; height:90%; }
+    .audio-wave.paused span { animation-play-state:paused; opacity:.35; }
+    @keyframes audioBar {
+      0%, 100% { height:18%; }
+      50% { height:92%; }
+    }
+    #audio-player { width:100%; margin-top:8px; accent-color:var(--hydra); }
+    .audio-hint { font-size:11px; color:var(--muted); line-height:1.5; margin-top:10px; }
+    .audio-code {
+      margin-top:10px; padding:10px; border-radius:8px; font-size:10px; font-family:'JetBrains Mono',monospace;
+      background:var(--s1); border:1px solid var(--bd); color:var(--muted); word-break:break-all;
+    }
+
     @media (max-width:1100px) {
       main {
         grid-template-columns:var(--sidebar) 1fr;
@@ -249,7 +294,7 @@
     <aside>
       <div class="aside-head">
         <h1>Grudge Assets</h1>
-        <p class="sub">Prim packs, D1 registry, R2 CDN, and icon library — 3D models on grid or 2D images in scene.</p>
+        <p class="sub">Prim packs, D1 registry, R2 CDN, dialogue voice barks, and icon library — 3D on grid, audio preview, 2D in scene.</p>
         <div class="stats" id="stats-bar"><span class="stat">Loading…</span></div>
         <div class="search-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -286,6 +331,17 @@
       </div>
       <div class="anchor-tag" id="anchor-tag">anchor: (0, 0, 0) bottom-center</div>
       <div id="loader"><div class="spinner"></div></div>
+      <div id="audio-panel" class="audio-panel hidden" aria-hidden="true">
+        <div class="audio-card">
+          <div class="audio-badges" id="audio-badges"></div>
+          <div class="audio-wave paused" id="audio-wave" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <audio id="audio-player" controls preload="metadata"></audio>
+          <p class="audio-hint" id="audio-hint">NPC dialogue barks — wire via <code>playNPCDialogue()</code> in GrudgeBuilder.</p>
+          <div class="audio-code" id="audio-code"></div>
+        </div>
+      </div>
       <div id="canvas-host"></div>
     </section>
 
@@ -398,6 +454,9 @@
       isImageAsset,
       searchHaystack,
       packIdD1,
+      fetchSuperDialoguePack,
+      isAudioAsset,
+      packIdDialogue,
     } from 'asset-sources';
 
     const { cdn, packs: PACK_DEFS } = window.GRUDGE_PRIM_PACKS;
@@ -457,6 +516,8 @@
     let wireframe = false;
     let showBbox = true;
     let snapEnabled = true;
+    let dialogueAudioEl = null;
+    let audioPreviewMode = false;
     let gizmoEnabled = true;
     let allAssets = [];
     let activeFilter = 'all';
@@ -671,6 +732,7 @@
       document.getElementById('btn-play').textContent = '▶ Play';
       document.getElementById('btn-play').classList.remove('on');
       if (full) {
+        hideAudioPanel();
         while (stage.children.length) stage.remove(stage.children[0]);
         pivot = new THREE.Group();
         pivot.name = 'assetPivot';
@@ -679,6 +741,60 @@
         updateSceneCount();
         document.getElementById('m-tex').textContent = '—';
       }
+    }
+
+    function hideAudioPanel() {
+      audioPreviewMode = false;
+      const panel = document.getElementById('audio-panel');
+      panel.classList.add('hidden');
+      panel.classList.remove('show');
+      panel.setAttribute('aria-hidden', 'true');
+      host.style.visibility = '';
+      if (dialogueAudioEl) {
+        dialogueAudioEl.pause();
+        dialogueAudioEl.removeAttribute('src');
+        dialogueAudioEl = null;
+      }
+      document.getElementById('audio-wave')?.classList.add('paused');
+    }
+
+    function showAudioPanel(item, url) {
+      hideAudioPanel();
+      const panel = document.getElementById('audio-panel');
+      const player = document.getElementById('audio-player');
+      const badges = document.getElementById('audio-badges');
+      const code = document.getElementById('audio-code');
+      const wave = document.getElementById('audio-wave');
+
+      badges.innerHTML = [
+        item.dialogueCategory && `<span class="audio-badge">${item.dialogueCategory}</span>`,
+        item.dialogueGender && `<span class="audio-badge">${item.dialogueGender}</span>`,
+        item.dialogueActor && `<span class="audio-badge voice">${item.dialogueActor.replace(/-/g, ' ')}</span>`,
+        item.dialogueVariant && `<span class="audio-badge">v${item.dialogueVariant}</span>`,
+      ].filter(Boolean).join('');
+
+      player.src = url;
+      dialogueAudioEl = player;
+      panel.classList.remove('hidden');
+      panel.classList.add('show');
+      panel.setAttribute('aria-hidden', 'false');
+      host.style.visibility = 'hidden';
+
+      const cat = item.dialogueCategory || 'greeting';
+      const actor = item.dialogueActor || 'alex-brodie';
+      code.textContent =
+        `playNPCDialogue(npc, '${cat}'); // voice: ${actor}\n` +
+        `assetUrl('${item.path || item.r2Key || ''}')`;
+
+      player.onplay = () => wave?.classList.remove('paused');
+      player.onpause = () => wave?.classList.add('paused');
+      player.onended = () => wave?.classList.add('paused');
+
+      audioPreviewMode = true;
+      const btn = document.getElementById('btn-play');
+      btn.disabled = false;
+      btn.textContent = '▶ Play audio';
+      btn.classList.remove('on');
     }
 
     function spawnPivot(offsetIndex = 0) {
@@ -732,11 +848,22 @@
       loaderEl.classList.add('show');
 
       const fmtLower = (item.format || '').toLowerCase();
-      if (['mp3', 'wav', 'ogg', 'woff', 'woff2', 'ttf', 'otf'].includes(fmtLower)) {
+      if (isAudioAsset(item)) {
+        hideAudioPanel();
+        clearScene(true);
+        showAudioPanel(item, url);
+        document.getElementById('status').textContent = `Audio · ${item.dialogueCategory || fmtLower} · ready`;
+        loaderEl.classList.remove('show');
+        return;
+      }
+      if (['woff', 'woff2', 'ttf', 'otf'].includes(fmtLower)) {
+        hideAudioPanel();
         document.getElementById('status').textContent = `${fmtLower.toUpperCase()} — copy URL to download`;
         loaderEl.classList.remove('show');
         return;
       }
+
+      hideAudioPanel();
 
       if (append) {
         pivot = spawnPivot(stagedCount);
@@ -923,7 +1050,8 @@
         });
 
         const cnt = known.size;
-        packDom.get(packId)?.el?.querySelector('.pack-cnt')?.textContent = cnt;
+        const packCntEl = packDom.get(packId)?.el?.querySelector('.pack-cnt');
+        if (packCntEl) packCntEl.textContent = String(cnt);
         const tabCnt = tabsEl.querySelector(`[data-pack="${packId}"] .cnt`);
         if (tabCnt) tabCnt.textContent = cnt;
         moreBtn.style.display = hasMore ? '' : 'none';
@@ -1051,6 +1179,54 @@
         `${def.icon} ${def.label.split(' ')[0]}<span class="cnt">${files.length}</span>`,
         packDom.get(def.id).el,
       );
+    }
+
+    // ── Super Dialogue Audio Pack (R2 CDN) ──
+    const dialoguePackId = packIdDialogue();
+    sourceLabels[dialoguePackId] = 'Super Dialogue Pack';
+    try {
+      const { items: dialogueItems, byCategory, total: dialogueTotal } = await fetchSuperDialoguePack();
+      totalCount += dialogueTotal;
+
+      const dlgHeader = document.createElement('div');
+      dlgHeader.className = 'pack';
+      dlgHeader.dataset.pack = 'dialogue-all';
+      dlgHeader.innerHTML = `<h2>🎙️ Super Dialogue <span class="pack-source">r2 · npc</span> <span class="pack-cnt">${dialogueTotal}</span></h2>`;
+      list.appendChild(dlgHeader);
+
+      const categoryOrder = [
+        'greeting', 'farewell', 'confirmation', 'completion', 'refusal',
+        'damage', 'death', 'grunting', 'shouting', 'miscellaneous',
+      ];
+      const categoryIcons = {
+        greeting: '👋', farewell: '👋', confirmation: '✓', completion: '★',
+        refusal: '✗', damage: '💥', death: '☠', grunting: '💪',
+        shouting: '📢', miscellaneous: '…',
+      };
+
+      for (const cat of categoryOrder) {
+        const catItems = byCategory.get(cat);
+        if (!catItems?.length) continue;
+        const subPackId = `${dialoguePackId}-${cat}`;
+        sourceLabels[subPackId] = `Dialogue · ${cat}`;
+        const body = createPackSection(
+          subPackId,
+          `<h2>${categoryIcons[cat] || '🔊'} ${cat}<span class="pack-source">voice</span> <span class="pack-cnt">${catItems.length}</span></h2>`,
+          list,
+        );
+        catItems
+          .sort((a, b) => (a.dialogueActor || '').localeCompare(b.dialogueActor || '') || (a.dialogueVariant || 0) - (b.dialogueVariant || 0))
+          .forEach((item) => addBtn(body, registerItem(item)));
+      }
+
+      addPackTab(
+        tabsEl,
+        dialoguePackId,
+        `🎙️<span class="cnt">${dialogueTotal}</span>`,
+        dlgHeader,
+      );
+    } catch (e) {
+      console.warn('Super Dialogue pack:', e);
     }
 
     // ── D1 registry + R2 CDN (asset-api) ──
@@ -1190,9 +1366,21 @@
     document.getElementById('btn-renorm').onclick = runNormalize;
 
     document.getElementById('btn-play').onclick = () => {
+      const btn = document.getElementById('btn-play');
+      if (audioPreviewMode && dialogueAudioEl) {
+        if (dialogueAudioEl.paused) {
+          dialogueAudioEl.play().catch(() => {});
+          btn.textContent = '⏸ Pause audio';
+          btn.classList.add('on');
+        } else {
+          dialogueAudioEl.pause();
+          btn.textContent = '▶ Play audio';
+          btn.classList.remove('on');
+        }
+        return;
+      }
       if (!mixer || !currentAction) return;
       playing = !playing;
-      const btn = document.getElementById('btn-play');
       if (playing) { currentAction.play(); btn.textContent = '⏸ Pause'; btn.classList.add('on'); }
       else { currentAction.stop(); btn.textContent = '▶ Play'; btn.classList.remove('on'); }
     };

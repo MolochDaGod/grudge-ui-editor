@@ -13,6 +13,9 @@ function resolveRegistryBase() {
 
 export const API_BASE = resolveRegistryBase();
 export const ICON_INDEX_URL = 'https://assets.grudge-studio.com/game-assets/api/v1/icon-path-index.json';
+export const SUPER_DIALOGUE_MANIFEST_URL = 'https://assets.grudge-studio.com/audio/dialogue/super-pack/manifest.json';
+
+const AUDIO_EXTS = new Set(['wav', 'mp3', 'ogg', 'm4a', 'flac', 'aac']);
 
 const IMAGE_EXTS = new Set(['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'svg']);
 const MODEL_EXTS = new Set(['fbx', 'glb', 'gltf', 'obj']);
@@ -41,6 +44,10 @@ export function packIdIcon(folder) {
   return `icon-${folder}`;
 }
 
+export function packIdDialogue() {
+  return 'super-dialogue';
+}
+
 export function assetUrl(item, cdn) {
   if (item.url) return item.url;
   if (item.cdnUrl) return item.cdnUrl;
@@ -62,10 +69,71 @@ export function isImageAsset(item) {
 
 export function isModelAsset(item) {
   if (isImageAsset(item)) return false;
+  if (isAudioAsset(item)) return false;
   const fmt = (item.format || '').toLowerCase();
   if (MODEL_EXTS.has(fmt)) return true;
   const path = (item.path || item.r2Key || '').toLowerCase();
   return MODEL_EXTS.has(path.split('.').pop() || '');
+}
+
+export function isAudioAsset(item) {
+  if (item.viewer === 'audio') return true;
+  if (item.source === 'dialogue') return true;
+  const fmt = (item.format || '').toLowerCase();
+  if (AUDIO_EXTS.has(fmt)) return true;
+  if (item.mimeType?.startsWith('audio/')) return true;
+  const path = (item.path || item.r2Key || item.url || '').toLowerCase();
+  return AUDIO_EXTS.has(path.split('.').pop()?.split('?')[0] || '');
+}
+
+export function dialogueFileToItem(entry, fileName) {
+  const { cdnUrl, r2Key, category, gender, actor, bytes } = entry;
+  const variantMatch = fileName.match(/_(\d+)_/);
+  const variant = variantMatch ? Number(variantMatch[1]) : 1;
+  const packId = packIdDialogue();
+  return {
+    uid: `${packId}::${r2Key || fileName}`,
+    name: fileName.replace(/\.wav$/i, ''),
+    path: r2Key ? `/${r2Key}` : undefined,
+    url: cdnUrl,
+    r2Key,
+    format: 'wav',
+    size: bytes,
+    packId,
+    packLabel: 'Super Dialogue Pack',
+    source: 'dialogue',
+    category: 'audio',
+    dialogueCategory: category,
+    dialogueGender: gender,
+    dialogueActor: actor,
+    dialogueVariant: variant,
+    viewer: 'audio',
+    gridSize: [1, 1],
+  };
+}
+
+/** Load Super Dialogue Audio Pack v1 manifest from R2 CDN. */
+export async function fetchSuperDialoguePack() {
+  const res = await fetch(SUPER_DIALOGUE_MANIFEST_URL);
+  if (!res.ok) throw new Error(`Dialogue manifest: ${res.status}`);
+  const data = await res.json();
+  const items = [];
+  const byCategory = new Map();
+
+  for (const [fileName, entry] of Object.entries(data.files || {})) {
+    const item = dialogueFileToItem(entry, fileName);
+    items.push(item);
+    const cat = entry.category || 'miscellaneous';
+    if (!byCategory.has(cat)) byCategory.set(cat, []);
+    byCategory.get(cat).push(item);
+  }
+
+  return {
+    items,
+    byCategory,
+    total: items.length,
+    categories: data.categories || [...byCategory.keys()],
+  };
 }
 
 export function primFileToItem(f, def) {
@@ -208,5 +276,9 @@ export function searchHaystack(item) {
     item.format,
     item.grudgeUuid,
     item.id,
+    item.dialogueCategory,
+    item.dialogueGender,
+    item.dialogueActor,
+    item.dialogueActor?.replace(/-/g, ' '),
   ].filter(Boolean).join(' ').toLowerCase();
 }
