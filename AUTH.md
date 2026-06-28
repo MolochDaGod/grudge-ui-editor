@@ -42,16 +42,24 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 | `grudge_ui_pack_last` | Last opened studio pack id |
 | `grudge_hydra_input_v1` | Hotkeys (local fallback) |
 
-## Puter KV keys (current)
+## Puter KV keys (scoped by Grudge ID)
 
 | Key | Page |
 |-----|------|
-| `grudge:ui-pack:{id}` | `/studio` scene packs |
-| `grudge:ui-packs:index` | Pack id list |
-| `grudge:ui-pack:last` | Last pack id |
-| `grudge:ui-input:default` | `/hotkeys` bindings |
+| `grudge:{grudgeId}:ui-pack:{id}` | `/studio` scene packs |
+| `grudge:{grudgeId}:ui-packs:index` | Pack id list |
+| `grudge:{grudgeId}:ui-pack:last` | Last pack id |
+| `grudge:{grudgeId}:ui-input:default` | `/hotkeys` bindings |
 
-> **Pair 2** scopes these under `grudge:{grudgeId}:…` — see changelog in README.
+Legacy unscoped keys (`grudge:ui-pack:…`) are still read for migration; new writes use the scoped form.
+
+Local studio packs: `grudge_ui_packs_{grudgeId}` (falls back to `grudge_ui_packs_v1`).
+
+## Silent re-auth
+
+If the session JWT expires but Puter is still signed in, `bootstrapAuth()` calls `silentReauthFromPuter()`:
+
+`POST /api/auth/puter` with `{ puterUuid, puterUsername, email }` → fresh JWT in JSON (no redirect).
 
 ## Account menu (nav pill)
 

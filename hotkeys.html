@@ -585,24 +585,20 @@ let activeTab='bindings', selectedAction=null, selectedHSlot=null, catFilter='al
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 
-const INPUT_LS='grudge_hydra_input_v1';
-const INPUT_KV='grudge:ui-input:default';
-
 async function persistInputConfig(){
   const data={version:'1.0',tool:'HYDRA Input Configurator',studio:'Grudge Studio',exported:new Date().toISOString(),bindings,hotbar};
-  try{ localStorage.setItem(INPUT_LS, JSON.stringify(data)); }catch{}
-  if(typeof puter!=='undefined'&&await puter.auth?.isSignedIn?.()){
-    try{ await puter.kv.set(INPUT_KV, data); }catch{}
+  if(window.GrudgeCloud?.saveInputConfig){
+    await GrudgeCloud.saveInputConfig(data);
+    return;
   }
+  try{ localStorage.setItem('grudge_hydra_input_v1', JSON.stringify(data)); }catch{}
 }
 
 async function restoreInputConfig(){
   let data=null;
-  if(typeof puter!=='undefined'&&await puter.auth?.isSignedIn?.()){
-    try{ data=await puter.kv.get(INPUT_KV); }catch{}
-  }
+  if(window.GrudgeCloud?.loadInputConfig) data=await GrudgeCloud.loadInputConfig();
   if(!data){
-    try{ data=JSON.parse(localStorage.getItem(INPUT_LS)||'null'); }catch{}
+    try{ data=JSON.parse(localStorage.getItem('grudge_hydra_input_v1')||'null'); }catch{}
   }
   if(data?.bindings) Object.assign(bindings,data.bindings);
   if(data?.hotbar) Object.assign(hotbar,data.hotbar);

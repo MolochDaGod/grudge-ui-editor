@@ -6,10 +6,13 @@
   const API = 'https://api.grudge-studio.com';
   const AUTH = 'https://id.grudge-studio.com';
   const RAILWAY = 'https://grudge-builder-production.up.railway.app';
-  const KV_PACK = (id) => `grudge:ui-pack:${id}`;
-  const KV_INDEX = 'grudge:ui-packs:index';
-  const KV_LAST = 'grudge:ui-pack:last';
-  const LS_PACKS = 'grudge_ui_packs_v1';
+  const LS_PACKS_LEGACY = 'grudge_ui_packs_v1';
+  const LEGACY_KV = {
+    pack: (id) => `grudge:ui-pack:${id}`,
+    index: 'grudge:ui-packs:index',
+    last: 'grudge:ui-pack:last',
+    input: 'grudge:ui-input:default',
+  };
   const LS_LAST = 'grudge_ui_pack_last';
   const LS_TOKEN = 'grudge_auth_token';
   const LS_USER = 'grudge_ui_user';
@@ -70,16 +73,57 @@
       .slice(0, 48) || 'untitled';
   }
 
-  function localPacks() {
+  function getGrudgeId() {
     try {
-      return JSON.parse(lsGet(LS_PACKS) || '{}');
+      const u = JSON.parse(lsGet(LS_USER) || 'null');
+      if (u?.grudgeId) return u.grudgeId;
+    } catch {}
+    return lsGet('grudge_id') || '';
+  }
+
+  function scopedKv(suffix) {
+    const gid = getGrudgeId();
+    return gid ? `grudge:${gid}:${suffix}` : `grudge:ui:${suffix}`;
+  }
+
+  function kvPackKey(id) {
+    return scopedKv(`ui-pack:${id}`);
+  }
+
+  function kvIndexKey() {
+    return scopedKv('ui-packs:index');
+  }
+
+  function kvLastKey() {
+    return scopedKv('ui-pack:last');
+  }
+
+  function kvInputKey() {
+    return scopedKv('ui-input:default');
+  }
+
+  function localPacksLsKey() {
+    const gid = getGrudgeId();
+    return gid ? `grudge_ui_packs_${gid}` : LS_PACKS_LEGACY;
+  }
+
+  function localPacks() {
+    const key = localPacksLsKey();
+    try {
+      const raw = lsGet(key);
+      if (raw) return JSON.parse(raw);
+      if (key !== LS_PACKS_LEGACY) {
+        const legacy = lsGet(LS_PACKS_LEGACY);
+        if (legacy) return JSON.parse(legacy);
+      }
+      return {};
     } catch {
       return {};
     }
   }
 
   function writeLocalPacks(packs) {
-    lsSet(LS_PACKS, JSON.stringify(packs));
+    lsSet(localPacksLsKey(), JSON.stringify(packs));
   }
 
   async function waitForPuter(timeoutMs = 10000) {
@@ -108,6 +152,51 @@
     } catch {
       return false;
     }
+  }
+
+  /** Re-mint Grudge JWT from an active Puter session (no full redirect). */
+  async function silentReauthFromPuter() {
+    if (!(await waitForPuter()) || !(await puterReady())) return null;
+    let pu;
+    try {
+      pu = await puter.auth.getUser();
+    } catch {
+      return null;
+    }
+    if (!pu?.uuid) return null;
+
+    const puterUrls = sameOriginApi()
+      ? ['/api/auth/puter', `${RAILWAY}/api/auth/puter`]
+      : [`${RAILWAY}/api/auth/puter`, '/api/auth/puter'];
+
+    for (const url of puterUrls) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            puterUuid: pu.uuid,
+            puterId: pu.uuid,
+            puterUsername: pu.username,
+            email: pu.email || undefined,
+          }),
+        });
+        if (!res.ok) continue;
+        const data = await res.json();
+        const token = data.token || data.sessionToken;
+        if (!token) continue;
+        return {
+          token,
+          user: data.user || {
+            username: data.username,
+            grudgeId: data.grudgeId,
+            userId: data.userId || data.id,
+          },
+        };
+      } catch {}
+    }
+    return null;
   }
 
   /** After Grudge ID login, open Puter so cloud KV/AI work under the same user. */
@@ -227,6 +316,13 @@
     }
 
     if (!tokenValid(token)) {
+      const recovered = await silentReauthFromPuter();
+      if (recovered?.token) {
+        token = recovered.token;
+        const profile = storeSession(token, recovered.user);
+        linkPuterCloud().catch(() => {});
+        return profile;
+      }
       lsDel(LS_TOKEN);
       lsDel(LS_USER);
       lsDel(LS_CLOUD);
@@ -322,14 +418,14 @@
     let cloud = false;
     if (await puterReady()) {
       try {
-        await puter.kv.set(KV_PACK(id), payload);
-        const index = (await puter.kv.get(KV_INDEX)) || [];
+        await puter.kv.set(kvPackKey(id), payload);
+        const index = (await puter.kv.get(kvIndexKey())) || [];
         const ids = Array.isArray(index) ? index : [];
         if (!ids.includes(id)) {
           ids.push(id);
-          await puter.kv.set(KV_INDEX, ids);
+          await puter.kv.set(kvIndexKey(), ids);
         }
-        await puter.kv.set(KV_LAST, id);
+        await puter.kv.set(kvLastKey(), id);
         cloud = true;
       } catch (e) {
         console.warn('[GrudgeCloud] puter.kv save failed', e);
@@ -343,7 +439,8 @@
   async function loadPack(id) {
     if (await puterReady()) {
       try {
-        const cloud = await puter.kv.get(KV_PACK(id));
+        let cloud = await puter.kv.get(kvPackKey(id));
+        if (!cloud?.scene) cloud = await puter.kv.get(LEGACY_KV.pack(id));
         if (cloud?.scene) return cloud.scene;
       } catch {}
     }
@@ -362,20 +459,24 @@
 
     if (await puterReady()) {
       try {
-        const index = (await puter.kv.get(KV_INDEX)) || [];
-        for (const id of Array.isArray(index) ? index : []) {
-          const item = await puter.kv.get(KV_PACK(id));
-          if (!item) continue;
-          const existing = map.get(id);
-          if (!existing || (item.savedAt || 0) > (existing.savedAt || 0)) {
-            map.set(id, {
-              id,
-              name: item.scene?.name || id,
-              savedAt: item.savedAt,
-              source: 'cloud',
-            });
+        const mergeCloudIndex = async (indexKey, packKeyFn) => {
+          const index = (await puter.kv.get(indexKey)) || [];
+          for (const pid of Array.isArray(index) ? index : []) {
+            const item = await puter.kv.get(packKeyFn(pid));
+            if (!item) continue;
+            const existing = map.get(pid);
+            if (!existing || (item.savedAt || 0) > (existing.savedAt || 0)) {
+              map.set(pid, {
+                id: pid,
+                name: item.scene?.name || pid,
+                savedAt: item.savedAt,
+                source: 'cloud',
+              });
+            }
           }
-        }
+        };
+        await mergeCloudIndex(kvIndexKey(), kvPackKey);
+        await mergeCloudIndex(LEGACY_KV.index, LEGACY_KV.pack);
       } catch {}
     }
 
@@ -386,7 +487,7 @@
     let last = lsGet(LS_LAST);
     if (await puterReady()) {
       try {
-        const cloudLast = await puter.kv.get(KV_LAST);
+        const cloudLast = (await puter.kv.get(kvLastKey())) || (await puter.kv.get(LEGACY_KV.last));
         if (cloudLast) last = cloudLast;
       } catch {}
     }
@@ -400,11 +501,12 @@
     writeLocalPacks(packs);
     if (await puterReady()) {
       try {
-        await puter.kv.del(KV_PACK(id));
-        const index = (await puter.kv.get(KV_INDEX)) || [];
+        await puter.kv.del(kvPackKey(id));
+        await puter.kv.del(LEGACY_KV.pack(id));
+        const index = (await puter.kv.get(kvIndexKey())) || [];
         if (Array.isArray(index)) {
           await puter.kv.set(
-            KV_INDEX,
+            kvIndexKey(),
             index.filter((x) => x !== id)
           );
         }
@@ -412,17 +514,51 @@
     }
   }
 
+  async function saveInputConfig(data) {
+    try {
+      lsSet('grudge_hydra_input_v1', JSON.stringify(data));
+    } catch {}
+    if (await puterReady()) {
+      try {
+        await puter.kv.set(kvInputKey(), data);
+      } catch (e) {
+        console.warn('[GrudgeCloud] input kv save failed', e);
+      }
+    }
+  }
+
+  async function loadInputConfig() {
+    if (await puterReady()) {
+      try {
+        const scoped = await puter.kv.get(kvInputKey());
+        if (scoped) return scoped;
+        const legacy = await puter.kv.get(LEGACY_KV.input);
+        if (legacy) return legacy;
+      } catch {}
+    }
+    try {
+      return JSON.parse(lsGet('grudge_hydra_input_v1') || 'null');
+    } catch {
+      return null;
+    }
+  }
+
   const GrudgeCloud = {
     bootstrapAuth,
     getToken,
     getUser,
+    getGrudgeId,
+    kvInputKey,
     isLoggedIn,
     isCloudReady,
     linkPuterCloud,
+    silentReauthFromPuter,
     login,
     logout,
     switchAccount,
     ensurePuterSignIn,
+    saveInputConfig,
+    loadInputConfig,
     savePack,
     loadPack,
     listPacks,

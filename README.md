@@ -31,6 +31,11 @@ Sign in via the nav pill → Grudge ID (`id.grudge-studio.com`). After redirect,
 
 Full auth/persistence spec: **[AUTH.md](./AUTH.md)**
 
+Persistence layers:
+- **Grudge ID JWT** — session across pages (silent re-auth via Puter when JWT expires)
+- **Puter KV** — cloud packs/hotkeys scoped to `grudge:{grudgeId}:…`
+- **localStorage** — offline fallback per account
+
 ## Deployment
 
 ### Vercel (primary)
