@@ -4,13 +4,13 @@
  * — Crafting grid class hooks
  */
 (function () {
-  const RACES = {
-    human: 'https://tactical-infinity.replit.app/assets/human_1777036154781-BQPXB4iK.png',
-    barbarian: 'https://tactical-infinity.replit.app/assets/Barbarian_1777036154778-D1yd9ddH.png',
-    dwarf: 'https://tactical-infinity.replit.app/assets/Dwarf_1777036154779-7VQfUCY3.png',
-    elf: 'https://tactical-infinity.replit.app/assets/Elf_1777036154780-DJEQzQzJ.png',
-    orc: 'https://tactical-infinity.replit.app/assets/Orc_1777036154782-DB-Xb4Eg.png',
-    undead: 'https://tactical-infinity.replit.app/assets/Undead_1777036154776-BqtCvSJQ.png',
+  const RACES = window.GRUDGE_RACE_PORTRAITS || {
+    human: 'https://client.grudge-studio.com/images/portraits/human.png',
+    barbarian: 'https://client.grudge-studio.com/images/portraits/barbarian.png',
+    dwarf: 'https://client.grudge-studio.com/images/portraits/dwarf.png',
+    elf: 'https://client.grudge-studio.com/images/portraits/elf.png',
+    orc: 'https://client.grudge-studio.com/images/portraits/orc.png',
+    undead: 'https://client.grudge-studio.com/images/portraits/undead.png',
   };
 
   let activeRace = 'human';

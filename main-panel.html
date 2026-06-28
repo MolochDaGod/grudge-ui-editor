@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./main-panel.css" />
   <script src="https://js.puter.com/v2/" async></script>
   <script src="./grudge-cloud-save.js"></script>
+  <script src="./race-portraits.js"></script>
   <script src="./grudge-engine.js"></script>
   <script src="./grudge-shell.js"></script>
 </head>
@@ -151,8 +152,8 @@
   </div>
   <script>
     const PORTRAITS = {
-      player: 'https://tactical-infinity.replit.app/assets/Barbarian_1777036154778-D1yd9ddH.png',
-      shadowfang: 'https://tactical-infinity.replit.app/assets/Elf_1777036154780-DJEQzQzJ.png',
+      player: window.grudgePortraitForRace?.('barbarian') || 'https://client.grudge-studio.com/images/portraits/barbarian.png',
+      shadowfang: window.grudgePortraitForRace?.('elf') || 'https://client.grudge-studio.com/images/portraits/elf.png',
     };
     const DEFAULT_ENTITIES = {
       player: { name: 'Korgath the Sworn', meta: 'Lv.42 Barbarian Warrior', portrait: PORTRAITS.player },
@@ -240,10 +241,11 @@
     function mergeFleetCharacter(char) {
       if (!char) return;
       const id = 'player';
+      const race = char.raceId || char.race || '';
       state.entities[id] = {
         name: char.name || char.displayName || state.entities[id].name,
-        meta: `Lv.${char.level || 1} ${char.race || ''} ${char.class || char.classId || ''}`.trim(),
-        portrait: state.entities[id].portrait,
+        meta: `Lv.${char.level || 1} ${race} ${char.class || char.classId || ''}`.trim(),
+        portrait: window.grudgePortraitForRace?.(race) || state.entities[id].portrait,
       };
       applyEntity(state.activeEntity);
       scheduleSave();
