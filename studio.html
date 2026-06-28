@@ -55,8 +55,8 @@ input,select,textarea{font-family:inherit;}
 .ltabs{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0;}
 .ltab{flex:1;padding:7px 0;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .1s;}
 .ltab.on{color:var(--hydra);border-bottom-color:var(--hydra);}
-#pal-panel,#lay-panel{flex:1;overflow-y:auto;display:none;}
-#pal-panel.show,#lay-panel.show{display:block;}
+#pal-panel,#assets-panel,#lay-panel{flex:1;overflow-y:auto;display:none;}
+#pal-panel.show,#assets-panel.show,#lay-panel.show{display:block;}
 .psearch{padding:6px 5px 4px;position:sticky;top:0;background:var(--s1);z-index:1;}
 .psw{position:relative;}
 .psw i{position:absolute;left:7px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.6rem;pointer-events:none;}
@@ -71,6 +71,17 @@ input,select,textarea{font-family:inherit;}
 .ptxt{display:flex;flex-direction:column;gap:1px;}
 .pname{font-size:.68rem;font-weight:600;color:var(--text);}
 .pdesc{font-size:.57rem;color:var(--muted);}
+.cpix{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:6px;cursor:pointer;border:1px solid transparent;margin-bottom:1px;transition:all .1s;user-select:none;}
+.cpix:hover{background:var(--s3);border-color:var(--bd2);}
+.cpix.placing{background:var(--hs);border-color:var(--hb);}
+.cpix img{width:34px;height:34px;object-fit:contain;background:rgba(0,0,0,.35);border-radius:4px;border:1px solid var(--bd2);flex-shrink:0;}
+.cpixtxt{display:flex;flex-direction:column;gap:1px;min-width:0;}
+.cpixname{font-size:.64rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cpixpath{font-size:.54rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cpixwrap img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;}
+.packrow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-bottom:1px solid var(--bd);font-size:.67rem;}
+.packrow button{font-size:.6rem;padding:3px 8px;border-radius:5px;border:1px solid var(--bd2);background:var(--s3);color:var(--sub);}
+.packrow button:hover{color:var(--hydra);border-color:var(--hb);}
 /* layers */
 .litem{display:flex;align-items:center;gap:5px;padding:5px 8px;cursor:pointer;border-bottom:1px solid var(--bd);transition:background .08s;}
 .litem:hover{background:var(--s2);}
@@ -361,6 +372,7 @@ input,select,textarea{font-family:inherit;}
     <button class="tbtn" onclick="dup()"><i class="fa fa-copy"></i> Dup</button>
     <button class="tbtn" onclick="showLoad()"><i class="fa fa-folder-open"></i> Load</button>
     <button class="tbtn" onclick="doSave()"><i class="fa fa-floppy-disk"></i> Save</button>
+    <button class="tbtn" onclick="showMyPacks()" title="Your saved UI packs"><i class="fa fa-cloud"></i> Packs</button>
     <button class="tbtn g" onclick="doExport()"><i class="fa fa-download"></i> Export</button>
   </div>
 </div>
@@ -381,11 +393,16 @@ input,select,textarea{font-family:inherit;}
   <div id="lp">
     <div class="ltabs">
       <div class="ltab on" id="lt-pal" onclick="setLT('pal')">Components</div>
+      <div class="ltab" id="lt-assets" onclick="setLT('assets')">Craftpix</div>
       <div class="ltab" id="lt-lay" onclick="setLT('lay')">Layers</div>
     </div>
     <div id="pal-panel" class="show">
       <div class="psearch"><div class="psw"><i class="fa fa-search"></i><input type="text" placeholder="Search…" oninput="filterPal(this.value)"/></div></div>
       <div class="pbody" id="pbody"></div>
+    </div>
+    <div id="assets-panel">
+      <div class="psearch"><div class="psw"><i class="fa fa-search"></i><input type="text" placeholder="Search craftpix…" oninput="filterCraftpix(this.value)"/></div></div>
+      <div class="pbody" id="craftpix-body"><div class="pempty" style="padding:12px;color:var(--muted);font-size:.65rem">Loading Craftpix pack…</div></div>
     </div>
     <div id="lay-panel"><div id="laybody"></div></div>
   </div>
@@ -494,6 +511,11 @@ input,select,textarea{font-family:inherit;}
           <div class="dptinfo"><div class="dptname">GDevelop</div><div class="dptdesc">HTML layer for GDevelop</div></div>
           <button class="dptbtn" onclick="event.stopPropagation();doExport('gd')">Export</button>
         </div>
+        <div class="dptarget" onclick="doExportBundle()">
+          <div class="dpticon" style="background:rgba(245,158,11,.1);color:#f59e0b"><i class="fa fa-box-archive"></i></div>
+          <div class="dptinfo"><div class="dptname">Grudge Bundle</div><div class="dptdesc">HTML + scene JSON + fleet manifest</div></div>
+          <button class="dptbtn" onclick="event.stopPropagation();doExportBundle()">Bundle</button>
+        </div>
       </div>
       <div class="dpsec">
         <div class="dpttl">Scene Data</div>
@@ -535,7 +557,7 @@ input,select,textarea{font-family:inherit;}
         </div>
         <div class="aicfg">
           <span class="aicfgl">Grudge AI</span>
-          <input type="password" id="aikey" placeholder="sk-ant-… or sign in via nav" oninput="G.ai.key=this.value;lsSet('gsk',this.value);GrudgeAI?.setUserKey?.(this.value)"/>
+          <input type="password" id="aikey" placeholder="sk-ant-… or sign in via nav" oninput="G.ai.key=this.value;lsSet('gsk',this.value);window.GrudgeAI?.setUserKey?.(this.value)"/>
         </div>
       </div>
     </div>
@@ -556,6 +578,18 @@ input,select,textarea{font-family:inherit;}
   <div class="si"><a href="/hotkeys" style="color:var(--muted);text-decoration:none">Hotkeys</a></div>
 </div>
 
+<div id="modal-packs" class="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" style="max-width:520px">
+    <h3><i class="fa fa-cloud" style="color:var(--teal)"></i> My UI Packs</h3>
+    <p style="font-size:.67rem;color:var(--sub);margin-bottom:8px">Saved to your browser and Puter cloud when signed in.</p>
+    <div id="packs-list" style="max-height:280px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px;margin-bottom:10px"></div>
+    <div class="mbtns">
+      <button class="mbtn s" onclick="closeModal()">Close</button>
+      <button class="mbtn p" onclick="doSave(true);closeModal()">Save Current</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="modal-load">
   <div class="modal">
     <h3><i class="fa fa-folder-open" style="color:var(--teal)"></i> Load Scene</h3>
@@ -567,6 +601,11 @@ input,select,textarea{font-family:inherit;}
     </div>
   </div>
 </div>
+
+<script src="https://js.puter.com/v2/" async></script>
+<script src="./grudge-ai.js"></script>
+<script src="./grudge-cloud-save.js"></script>
+<script src="./grudge-shell.js"></script>
 
 <script>
 /* ─── STATE ─── */
@@ -616,8 +655,10 @@ const D={
   'interaction-prompt':{l:'Interaction Prompt',i:'fa-hand-pointer',cat:'Canvas',col:'#16b195',d:'[E] interact contextual',w:200,h:48,p:{key:'E',action:'Open Chest','label':''}},
   'attr-panel':{l:'Attributes',i:'fa-dumbbell',cat:'RPG',col:'#a855f7',d:'STR/INT/VIT/DEX stats',w:200,h:220,p:{label:'Attributes'}},
   'weapon-selector':{l:'Weapon Select',i:'fa-sword',cat:'Action',col:'#f59e0b',d:'Weapon type row buttons',w:280,h:40,p:{label:''}},
+  'craftpix-sprite':{l:'Craftpix Sprite',i:'fa-image',cat:'Assets',col:'#16b195',d:'Premade UI texture',w:160,h:80,p:{src:'',label:'Sprite',fit:'contain'}},
 };
-const CATS=['Storage','Action','HUD','Navigation','Social','Progress','Economy','RPG','Canvas','FPS','UI'];
+const CATS=['Storage','Action','HUD','Navigation','Social','Progress','Economy','RPG','Canvas','FPS','UI','Assets'];
+let CRAFTPIX=null, CRAFTPIX_FILTER='';
 const THEMENM={d:'Hydra Dark',f:'Fantasy',c:'Cyberpunk',q:'FPS'};
 
 /* ─── UTILS ─── */
@@ -780,6 +821,8 @@ function compInner(c){
       const types=['⚔️ Sword','🗡️ Dagger','🏹 Bow','🔮 Staff','🛡️ Shield'];
       return `<div class="wswrap">${types.map((t,i)=>`<div class="wsbtn ${i===0?'on':''}">${t}</div>`).join('')}</div>`;
     }
+    case 'craftpix-sprite':
+      return `<div class="cpixwrap"><img src="${p.src||''}" alt="${p.label||'sprite'}" style="object-fit:${p.fit||'contain'}"/></div>`;
     default:
       return `<div style="padding:5px;font-size:.57rem;color:var(--muted)">${c.type}</div>`;
   }
@@ -815,6 +858,55 @@ function buildPal(filter=''){
   ).join('');
 }
 function filterPal(v){buildPal(v);}
+
+async function loadCraftpixManifest(){
+  try{
+    const r=await fetch('./craftpix-manifest.json');
+    CRAFTPIX=await r.json();
+    buildCraftpixPal();
+  }catch(e){
+    document.getElementById('craftpix-body').innerHTML='<div class="pempty">Craftpix manifest missing — run scripts/import-craftpix.mjs</div>';
+  }
+}
+
+function buildCraftpixPal(filter=''){
+  const body=document.getElementById('craftpix-body');
+  if(!CRAFTPIX){body.innerHTML='<div class="pempty">Loading…</div>';return;}
+  CRAFTPIX_FILTER=filter;
+  const q=filter.toLowerCase();
+  body.innerHTML=CRAFTPIX.categories.map(cat=>{
+    const items=cat.items.filter(it=>!q||it.label.toLowerCase().includes(q)||it.path.toLowerCase().includes(q)||cat.name.toLowerCase().includes(q));
+    if(!items.length)return '';
+    return `<div class="pcat">${cat.name} <span style="opacity:.6">${items.length}</span></div>`+
+      items.map(it=>`<div class="cpix ${G.placingCraftpix===it.id?'placing':''}" data-cpix-id="${it.id}" onclick="startPlaceCraftpix(this.dataset.cpixId)">
+        <img src="${it.url}" alt="" loading="lazy"/>
+        <div class="cpixtxt"><span class="cpixname">${it.label}</span><span class="cpixpath">${it.path}</span></div>
+      </div>`).join('');
+  }).join('')||'<div class="pempty">No textures match</div>';
+}
+
+function filterCraftpix(v){buildCraftpixPal(v);}
+
+function craftpixItem(id){
+  if(!CRAFTPIX)return null;
+  for(const cat of CRAFTPIX.categories){
+    const it=cat.items.find(x=>x.id===id);
+    if(it)return it;
+  }
+  return null;
+}
+
+function startPlaceCraftpix(id){
+  const it=craftpixItem(id); if(!it)return;
+  G.placing='craftpix-sprite';
+  G.placingCraftpix=id;
+  G.placingCraftpixMeta=it;
+  VP().className='place';
+  document.getElementById('ph').style.display='block';
+  document.getElementById('ph').textContent='Click canvas to place '+it.label+' — Esc to cancel';
+  document.getElementById('sb-tool').innerHTML='<i class="fa fa-image"></i> Placing '+it.label;
+  buildCraftpixPal(CRAFTPIX_FILTER);
+}
 
 /* ─── VIEWPORT EVENTS ─── */
 function initVP(){
@@ -936,8 +1028,8 @@ function vpUp(e){
   }
   VP().classList.remove('panning');
   const t=G.drag.type; G.drag=null;
-  if(t==='resize'||t==='rotate') renderAll();
-  else renderAll();
+  renderAll();
+  if(t==='move'||t==='resize'||t==='rotate') scheduleAutosave();
 }
 
 function vpWheel(e){
@@ -960,11 +1052,18 @@ function vpClick(e){
   if(!G.placing) return;
   const sp=vpToScene(e.clientX,e.clientY);
   const def=D[G.placing]; if(!def) return;
-  const c={id:uid(),type:G.placing,x:snapV(sp.x-def.w/2),y:snapV(sp.y-def.h/2),w:def.w,h:def.h,rot:0,op:1,br:0,shd:false,props:{...def.p}};
+  const props={...def.p};
+  if(G.placing==='craftpix-sprite'&&G.placingCraftpixMeta){
+    props.src=G.placingCraftpixMeta.url;
+    props.label=G.placingCraftpixMeta.label;
+    props.path=G.placingCraftpixMeta.path;
+  }
+  const c={id:uid(),type:G.placing,x:snapV(sp.x-def.w/2),y:snapV(sp.y-def.h/2),w:def.w,h:def.h,rot:0,op:1,br:0,shd:false,props};
   G.scene.comps.push(c);
   G.sel.clear(); G.sel.add(c.id);
   cancelPlace();
   renderAll();
+  scheduleAutosave();
 }
 
 /* ─── PLACE ─── */
@@ -977,10 +1076,13 @@ function startPlace(t){
 }
 function cancelPlace(){
   G.placing=null;
+  G.placingCraftpix=null;
+  G.placingCraftpixMeta=null;
   VP().className=G.tool==='pan'?'pan':'sel';
   document.getElementById('ph').style.display='none';
   document.getElementById('sb-tool').innerHTML=G.tool==='pan'?'<i class="fa fa-hand"></i> Pan':'<i class="fa fa-arrow-pointer"></i> Select';
   buildPal();
+  if(CRAFTPIX)buildCraftpixPal(CRAFTPIX_FILTER);
 }
 
 /* ─── TOOLS / VIEW ─── */
@@ -1040,11 +1142,12 @@ function setRT(t){
   });
 }
 function setLT(t){
-  ['pal','lay'].forEach(x=>{
-    document.getElementById('lt-'+x).classList.toggle('on',x===t);
-    document.getElementById('pal-panel').classList.toggle('show',t==='pal'&&x==='pal');
-    document.getElementById('lay-panel').classList.toggle('show',t==='lay'&&x==='lay');
+  ['pal','assets','lay'].forEach(x=>{
+    document.getElementById('lt-'+x)?.classList.toggle('on',x===t);
   });
+  document.getElementById('pal-panel').classList.toggle('show',t==='pal');
+  document.getElementById('assets-panel').classList.toggle('show',t==='assets');
+  document.getElementById('lay-panel').classList.toggle('show',t==='lay');
 }
 
 /* ─── DESIGN PROPS ─── */
@@ -1110,6 +1213,9 @@ function renderCompProps(){
   if(p.text!==undefined)  rows+=ri('Text',ii('text','text'));
   if(p.size!==undefined)  rows+=ri('Size',ii('size','number','min="8" max="72"'));
   if(p.align!==undefined) rows+=ri('Align',si('align',[{v:'left',l:'Left'},{v:'center',l:'Center'},{v:'right',l:'Right'}]));
+  if(p.src!==undefined) rows+=ri('Texture',ii('src','text'));
+  if(p.fit!==undefined) rows+=ri('Fit',si('fit',[{v:'contain',l:'Contain'},{v:'cover',l:'Cover'},{v:'fill',l:'Fill'}]));
+  if(p.path!==undefined) rows+=ri('Path',`<span style="font-size:.58rem;color:var(--muted)">${p.path}</span>`);
   panel.innerHTML=rows?`<div class="psec"><div class="pslbl">${D[c.type]?.l||c.type}</div>${rows}</div>`:`<div class="pempty">No props</div>`;
 }
 
@@ -1209,11 +1315,72 @@ function setMode(m){
 }
 
 
-function doSave(){
+let _autosaveTimer=null;
+function scheduleAutosave(){
+  clearTimeout(_autosaveTimer);
+  _autosaveTimer=setTimeout(()=>doSave(true,true),2500);
+}
+
+async function doSave(silent=false,autosave=false){
   G.scene.name=document.getElementById('scene-name').value;
+  if(window.GrudgeCloud?.savePack){
+    try{
+      const res=await GrudgeCloud.savePack(G.scene);
+      if(!silent){
+        const where=res.cloud?'cloud + local':'local';
+        toastSave(`Saved “${G.scene.name}” (${where})`);
+      }
+      if(autosave) return;
+    }catch(e){
+      if(!silent) alert('Cloud save failed: '+e.message);
+    }
+  }
+  if(autosave) return;
   const a=document.createElement('a');
   a.href='data:application/json,'+encodeURIComponent(JSON.stringify(G.scene,null,2));
   a.download=(G.scene.name||'ui-layout')+'.json'; a.click();
+}
+
+function toastSave(msg){
+  let t=document.getElementById('save-toast');
+  if(!t){t=document.createElement('div');t.id='save-toast';t.style.cssText='position:fixed;bottom:36px;right:14px;z-index:600;background:var(--s3);border:1px solid var(--hb);color:var(--hydra);padding:8px 12px;border-radius:8px;font-size:.68rem;opacity:0;transition:opacity .2s';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity='0',2200);
+}
+
+async function showMyPacks(){
+  if(!window.GrudgeCloud){alert('Cloud save module not loaded');return;}
+  const list=document.getElementById('packs-list');
+  list.innerHTML='<div style="padding:12px;color:var(--muted);font-size:.65rem">Loading packs…</div>';
+  document.getElementById('modal-packs').classList.add('show');
+  const packs=await GrudgeCloud.listPacks();
+  if(!packs.length){
+    list.innerHTML='<div style="padding:14px;color:var(--muted);font-size:.67rem">No saved packs yet. Hit Save to store your layout.</div>';
+    return;
+  }
+  list.innerHTML=packs.map(p=>`<div class="packrow">
+    <div><strong>${p.name}</strong><div style="font-size:.58rem;color:var(--muted)">${p.source} · ${new Date(p.savedAt||0).toLocaleString()}</div></div>
+    <div style="display:flex;gap:4px">
+      <button onclick="loadPackId('${p.id}')">Load</button>
+      <button onclick="deletePackId('${p.id}')">Delete</button>
+    </div>
+  </div>`).join('');
+}
+
+async function loadPackId(id){
+  const scene=await GrudgeCloud.loadPack(id);
+  if(!scene){alert('Pack not found');return;}
+  G.scene=scene;
+  document.getElementById('scene-name').value=scene.name||'Untitled Layout';
+  if(scene.resolution)document.getElementById('res-sel').value=`${scene.resolution.w}x${scene.resolution.h}`;
+  if(scene.theme){G.scene.theme=scene.theme;document.getElementById('theme-sel').value=scene.theme;}
+  G.sel.clear(); renderAll(); setTimeout(fitView,50); closeModal();
+}
+
+async function deletePackId(id){
+  if(!confirm('Delete pack “'+id+'”?'))return;
+  await GrudgeCloud.deletePack(id);
+  showMyPacks();
 }
 function showLoad(){document.getElementById('modal-load').classList.add('show');}
 function closeModal(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('show'));}
@@ -1318,7 +1485,27 @@ function buildExportCSS(){
 .albwrap{display:flex;align-items:center;justify-content:center;gap:8px;height:100%;padding:0 14px;border:1px solid;border-radius:inherit;}.albtxt{font-size:.75rem;font-weight:700;letter-spacing:.08em;}
 .ipwrap{display:flex;align-items:center;gap:8px;height:100%;padding:0 12px;}.ipkey{width:28px;height:28px;border-radius:5px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;}.ipact{font-size:.7rem;font-weight:600;}
 .attrlist{padding:2px 4px;display:flex;flex-direction:column;gap:1px;height:100%;justify-content:space-around;overflow:hidden;}.attrow{display:flex;align-items:center;gap:5px;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,.02);}.attic{font-size:.66rem;width:16px;text-align:center;}.attn{flex:1;font-size:.58rem;font-weight:600;color:#9496b0;letter-spacing:.06em;}.attv{font-size:.62rem;font-weight:700;color:var(--ca);}
-.wswrap{display:flex;align-items:center;gap:3px;padding:3px 5px;height:100%;}.wsbtn{padding:3px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:.54rem;color:#9496b0;white-space:nowrap;}.wsbtn.on{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:var(--ca);}`;
+.wswrap{display:flex;align-items:center;gap:3px;padding:3px 5px;height:100%;}.wsbtn{padding:3px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:.54rem;color:#9496b0;white-space:nowrap;}.wsbtn.on{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:var(--ca);}
+.cpixwrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}.cpixwrap img{width:100%;height:100%;object-fit:contain;display:block;}`;
+}
+
+function doExportBundle(){
+  doExport('html');
+  setTimeout(()=>{
+    G.scene.name=document.getElementById('scene-name').value;
+    const manifest={
+      tool:'HYDRA Grudge Bundle',
+      version:1,
+      exported:new Date().toISOString(),
+      scene:buildHandoffJSON(),
+      input:{note:'Export bindings from /hotkeys → Export',url:'https://ui.grudge-studio.com/hotkeys'},
+      assets:{craftpix:'./assets/craftpix/',cdn:'https://assets.grudge-studio.com'},
+      files:{ui_html:(G.scene.name||'game-ui')+'.html',scene_json:(G.scene.name||'ui-layout')+'.json',input_json:'hydra-input-config.json'}
+    };
+    const a=document.createElement('a');
+    a.href='data:application/json,'+encodeURIComponent(JSON.stringify(manifest,null,2));
+    a.download=(G.scene.name||'game-ui')+'-bundle.json'; a.click();
+  },400);
 }
 
 function doExport(target='html'){
@@ -1431,12 +1618,12 @@ async function aiSendMsg(msg){
   const msgs=[...G.ai.msgs,{role:'user',content:`Scene:${ctx}\nRequest:${msg}`}];
 
   try{
-    const key=document.getElementById('aikey').value.trim()||G.ai.key||GrudgeAI?.getUserKey?.()||'';
-    if(key) GrudgeAI?.setUserKey?.(key);
-    if(!GrudgeAI?.isReady?.() && !key.startsWith('sk-ant')){
+    const key=document.getElementById('aikey').value.trim()||G.ai.key||window.GrudgeAI?.getUserKey?.()||'';
+    if(key) window.GrudgeAI?.setUserKey?.(key);
+    if(!window.GrudgeAI?.isReady?.() && !key.startsWith('sk-ant')){
       throw new Error('Sign in with Grudge ID (nav pill) or paste an Anthropic key (sk-ant-…).');
     }
-    const text=await GrudgeAI.chat({system:AISYS,messages:msgs,max_tokens:2048,key});
+    const text=await window.GrudgeAI.chat({system:AISYS,messages:msgs,max_tokens:2048,key});
 
     const jm=text.match(/\{[\s\S]*\}/);
     if(!jm)throw new Error('No JSON in response:\n'+text.slice(0,300));
@@ -1490,17 +1677,28 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ─── INIT ─── */
-document.getElementById('scene-name').addEventListener('change',e=>G.scene.name=e.target.value);
-document.getElementById('aikey').value=G.ai.key||GrudgeAI?.getUserKey?.()||'';
-buildPal();
-buildAIQuick();
-initVP();
-renderAll();
-setTimeout(fitView,80);
-setTimeout(()=>aiAppend('ai','Ready. Sign in via the Grudge pill in the nav, or add an API key. Example: "RPG HUD 1920×1080 fantasy theme with inventory and minimap"'),400);
+async function bootStudio(){
+  if(window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
+  const restored=window.GrudgeCloud?.restoreLastPack ? await GrudgeCloud.restoreLastPack() : null;
+  if(restored){
+    G.scene=restored;
+    document.getElementById('scene-name').value=restored.name||'Untitled Layout';
+    if(restored.resolution)document.getElementById('res-sel').value=`${restored.resolution.w}x${restored.resolution.h}`;
+    if(restored.theme){document.getElementById('theme-sel').value=restored.theme;}
+  }
+  document.getElementById('scene-name').addEventListener('change',e=>{G.scene.name=e.target.value;scheduleAutosave();});
+  document.getElementById('aikey').value=G.ai.key||window.GrudgeAI?.getUserKey?.()||'';
+  buildPal();
+  loadCraftpixManifest();
+  buildAIQuick();
+  initVP();
+  renderAll();
+  setTimeout(fitView,80);
+  const user=window.GrudgeCloud?.getUser?.();
+  const greet=user?.username?`Signed in as ${user.username}. `:'';
+  setTimeout(()=>aiAppend('ai',greet+'Craftpix textures are in the left “Craftpix” tab. Layouts auto-save locally; sign in for cloud packs. Example: "RPG HUD 1920×1080 with inventory and minimap"'),400);
+}
+bootStudio();
 </script>
-<script src="https://js.puter.com/v2/" async></script>
-<script src="./grudge-ai.js"></script>
-<script src="./grudge-shell.js"></script>
 </body>
 </html>

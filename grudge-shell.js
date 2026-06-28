@@ -48,20 +48,35 @@
   aiPill.className = 'gs-pill gs-pill--ai gs-pill--off';
   aiPill.textContent = 'Grudge';
   aiPill.title = 'Grudge AI — sign in for cloud models';
-  aiPill.addEventListener('click', () => {
-    if (window.GrudgeAI?.isReady?.()) return;
-    if (window.GrudgeAI?.login) window.GrudgeAI.login();
+  aiPill.addEventListener('click', async () => {
+    if (window.GrudgeCloud?.isLoggedIn?.()) {
+      const user = window.GrudgeCloud.getUser?.();
+      if (user?.username) {
+        aiPill.title = 'Signed in as ' + user.username + ' — cloud packs enabled';
+        return;
+      }
+    }
+    if (window.GrudgeCloud?.login) window.GrudgeCloud.login();
+    else if (window.GrudgeAI?.login) window.GrudgeAI.login();
     else window.open('https://id.grudge-studio.com/api/auth/page?app=ui-editor&redirect=' + encodeURIComponent(location.href), '_self');
   });
   nav.appendChild(aiPill);
 
   async function refreshAiPill() {
+    const cloudUser = window.GrudgeCloud?.getUser?.();
+    const cloudIn = window.GrudgeCloud?.isLoggedIn?.();
+    if (cloudIn && cloudUser?.username) {
+      aiPill.classList.add('gs-pill--on');
+      aiPill.classList.remove('gs-pill--off');
+      aiPill.title = 'Signed in as ' + cloudUser.username;
+      aiPill.textContent = cloudUser.username.split(' ')[0];
+      return;
+    }
     if (!window.GrudgeAI?.probe) return;
-    const st = await GrudgeAI.probe();
-    const ready = GrudgeAI.isReady();
+    const ready = window.GrudgeAI.isReady();
     aiPill.classList.toggle('gs-pill--on', ready);
     aiPill.classList.toggle('gs-pill--off', !ready);
-    aiPill.title = GrudgeAI.statusLabel();
+    aiPill.title = window.GrudgeAI.statusLabel();
     aiPill.textContent = ready ? 'Grudge' : 'Grudge · sign in';
   }
 

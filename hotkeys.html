@@ -585,7 +585,32 @@ let activeTab='bindings', selectedAction=null, selectedHSlot=null, catFilter='al
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 
-window.addEventListener('load', () => {
+const INPUT_LS='grudge_hydra_input_v1';
+const INPUT_KV='grudge:ui-input:default';
+
+async function persistInputConfig(){
+  const data={version:'1.0',tool:'HYDRA Input Configurator',studio:'Grudge Studio',exported:new Date().toISOString(),bindings,hotbar};
+  try{ localStorage.setItem(INPUT_LS, JSON.stringify(data)); }catch{}
+  if(typeof puter!=='undefined'&&await puter.auth?.isSignedIn?.()){
+    try{ await puter.kv.set(INPUT_KV, data); }catch{}
+  }
+}
+
+async function restoreInputConfig(){
+  let data=null;
+  if(typeof puter!=='undefined'&&await puter.auth?.isSignedIn?.()){
+    try{ data=await puter.kv.get(INPUT_KV); }catch{}
+  }
+  if(!data){
+    try{ data=JSON.parse(localStorage.getItem(INPUT_LS)||'null'); }catch{}
+  }
+  if(data?.bindings) Object.assign(bindings,data.bindings);
+  if(data?.hotbar) Object.assign(hotbar,data.hotbar);
+}
+
+window.addEventListener('load', async () => {
+  if(window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
+  await restoreInputConfig();
   renderList(); renderHotbar(); renderPalette(); updateKbMap(); updateStats(); updateConflicts();
   document.addEventListener('keydown', onKeydown);
 });
@@ -852,6 +877,7 @@ function restoreDefaults() {
 
 function exportConfig() {
   const data={version:'1.0',tool:'HYDRA Input Configurator',studio:'Grudge Studio',exported:new Date().toISOString(),bindings,hotbar};
+  persistInputConfig();
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   Object.assign(document.createElement('a'),{href:url,download:'hydra-input-config.json'}).click();
@@ -870,7 +896,14 @@ function handleImport(input) {
 // HELPERS
 // ═══════════════════════════════════════════════════════════════════════════
 
-function updateAll() { renderList(); updateConflicts(); if(activeTab==='keyboard'){updateKbMap();updateStats();} if(activeTab==='hotbar'){renderHotbar();renderPalette();} }
+let _persistTimer;
+function updateAll() {
+  renderList(); updateConflicts();
+  if(activeTab==='keyboard'){updateKbMap();updateStats();}
+  if(activeTab==='hotbar'){renderHotbar();renderPalette();}
+  clearTimeout(_persistTimer);
+  _persistTimer=setTimeout(()=>persistInputConfig(),1200);
+}
 
 let _tt;
 function toast(msg) {
@@ -880,6 +913,7 @@ function toast(msg) {
 </script>
 <script src="https://js.puter.com/v2/" async></script>
 <script src="./grudge-ai.js"></script>
+<script src="./grudge-cloud-save.js"></script>
 <script src="./grudge-shell.js"></script>
 </body>
 </html>

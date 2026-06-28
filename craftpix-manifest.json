@@ -1,0 +1,2450 @@
+{
+  "pack": "craftpix-ui4",
+  "version": 1,
+  "generated": "2026-06-28T00:39:38.946Z",
+  "baseUrl": "./assets/craftpix/",
+  "total": 323,
+  "categories": [
+    {
+      "name": "Action Bar",
+      "count": 27,
+      "items": [
+        {
+          "id": "Action Bar--ActionBar_Main_Background",
+          "path": "Action Bar/ActionBar_Main_Background.png",
+          "url": "./assets/craftpix/Action Bar/ActionBar_Main_Background.png",
+          "label": "ActionBar Main Background",
+          "name": "ActionBar_Main_Background.png"
+        },
+        {
+          "id": "Action Bar--Arrows--ActionBar_Arrows_ArrowUp",
+          "path": "Action Bar/Arrows/ActionBar_Arrows_ArrowUp.png",
+          "url": "./assets/craftpix/Action Bar/Arrows/ActionBar_Arrows_ArrowUp.png",
+          "label": "ActionBar Arrows ArrowUp",
+          "name": "ActionBar_Arrows_ArrowUp.png"
+        },
+        {
+          "id": "Action Bar--Arrows--ActionBar_Arrows_Background",
+          "path": "Action Bar/Arrows/ActionBar_Arrows_Background.png",
+          "url": "./assets/craftpix/Action Bar/Arrows/ActionBar_Arrows_Background.png",
+          "label": "ActionBar Arrows Background",
+          "name": "ActionBar_Arrows_Background.png"
+        },
+        {
+          "id": "Action Bar--Arrows--ActionBar_Arrows_Hover",
+          "path": "Action Bar/Arrows/ActionBar_Arrows_Hover.png",
+          "url": "./assets/craftpix/Action Bar/Arrows/ActionBar_Arrows_Hover.png",
+          "label": "ActionBar Arrows Hover",
+          "name": "ActionBar_Arrows_Hover.png"
+        },
+        {
+          "id": "Action Bar--Arrows--ActionBar_Arrows_Press",
+          "path": "Action Bar/Arrows/ActionBar_Arrows_Press.png",
+          "url": "./assets/craftpix/Action Bar/Arrows/ActionBar_Arrows_Press.png",
+          "label": "ActionBar Arrows Press",
+          "name": "ActionBar_Arrows_Press.png"
+        },
+        {
+          "id": "Action Bar--Buttons--ActionBar_Buttons_Background",
+          "path": "Action Bar/Buttons/ActionBar_Buttons_Background.png",
+          "url": "./assets/craftpix/Action Bar/Buttons/ActionBar_Buttons_Background.png",
+          "label": "ActionBar Buttons Background",
+          "name": "ActionBar_Buttons_Background.png"
+        },
+        {
+          "id": "Action Bar--Buttons--ActionBar_Buttons_Hover",
+          "path": "Action Bar/Buttons/ActionBar_Buttons_Hover.png",
+          "url": "./assets/craftpix/Action Bar/Buttons/ActionBar_Buttons_Hover.png",
+          "label": "ActionBar Buttons Hover",
+          "name": "ActionBar_Buttons_Hover.png"
+        },
+        {
+          "id": "Action Bar--Buttons--ActionBar_Buttons_Icon_Book",
+          "path": "Action Bar/Buttons/ActionBar_Buttons_Icon_Book.png",
+          "url": "./assets/craftpix/Action Bar/Buttons/ActionBar_Buttons_Icon_Book.png",
+          "label": "ActionBar Buttons Icon Book",
+          "name": "ActionBar_Buttons_Icon_Book.png"
+        },
+        {
+          "id": "Action Bar--Buttons--ActionBar_Buttons_Icon_Flame",
+          "path": "Action Bar/Buttons/ActionBar_Buttons_Icon_Flame.png",
+          "url": "./assets/craftpix/Action Bar/Buttons/ActionBar_Buttons_Icon_Flame.png",
+          "label": "ActionBar Buttons Icon Flame",
+          "name": "ActionBar_Buttons_Icon_Flame.png"
+        },
+        {
+          "id": "Action Bar--Buttons--ActionBar_Buttons_Icon_Profile",
+          "path": "Action Bar/Buttons/ActionBar_Buttons_Icon_Profile.png",
+          "url": "./assets/craftpix/Action Bar/Buttons/ActionBar_Buttons_Icon_Profile.png",
+          "label": "ActionBar Buttons Icon Profile",
+          "name": "ActionBar_Buttons_Icon_Profile.png"
+        },
+        {
+          "id": "Action Bar--Buttons--ActionBar_Buttons_Icon_Settings",
+          "path": "Action Bar/Buttons/ActionBar_Buttons_Icon_Settings.png",
+          "url": "./assets/craftpix/Action Bar/Buttons/ActionBar_Buttons_Icon_Settings.png",
+          "label": "ActionBar Buttons Icon Settings",
+          "name": "ActionBar_Buttons_Icon_Settings.png"
+        },
+        {
+          "id": "Action Bar--Buttons--ActionBar_Buttons_Press",
+          "path": "Action Bar/Buttons/ActionBar_Buttons_Press.png",
+          "url": "./assets/craftpix/Action Bar/Buttons/ActionBar_Buttons_Press.png",
+          "label": "ActionBar Buttons Press",
+          "name": "ActionBar_Buttons_Press.png"
+        },
+        {
+          "id": "Action Bar--Globes--ActionBar_Globe_Background",
+          "path": "Action Bar/Globes/ActionBar_Globe_Background.png",
+          "url": "./assets/craftpix/Action Bar/Globes/ActionBar_Globe_Background.png",
+          "label": "ActionBar Globe Background",
+          "name": "ActionBar_Globe_Background.png"
+        },
+        {
+          "id": "Action Bar--Globes--ActionBar_Globe_Fill_Blue",
+          "path": "Action Bar/Globes/ActionBar_Globe_Fill_Blue.png",
+          "url": "./assets/craftpix/Action Bar/Globes/ActionBar_Globe_Fill_Blue.png",
+          "label": "ActionBar Globe Fill Blue",
+          "name": "ActionBar_Globe_Fill_Blue.png"
+        },
+        {
+          "id": "Action Bar--Globes--ActionBar_Globe_Fill_Empty",
+          "path": "Action Bar/Globes/ActionBar_Globe_Fill_Empty.png",
+          "url": "./assets/craftpix/Action Bar/Globes/ActionBar_Globe_Fill_Empty.png",
+          "label": "ActionBar Globe Fill Empty",
+          "name": "ActionBar_Globe_Fill_Empty.png"
+        },
+        {
+          "id": "Action Bar--Globes--ActionBar_Globe_Fill_Red",
+          "path": "Action Bar/Globes/ActionBar_Globe_Fill_Red.png",
+          "url": "./assets/craftpix/Action Bar/Globes/ActionBar_Globe_Fill_Red.png",
+          "label": "ActionBar Globe Fill Red",
+          "name": "ActionBar_Globe_Fill_Red.png"
+        },
+        {
+          "id": "Action Bar--Slots--ActionBar_Extra_Slot_Background",
+          "path": "Action Bar/Slots/ActionBar_Extra_Slot_Background.png",
+          "url": "./assets/craftpix/Action Bar/Slots/ActionBar_Extra_Slot_Background.png",
+          "label": "ActionBar Extra Slot Background",
+          "name": "ActionBar_Extra_Slot_Background.png"
+        },
+        {
+          "id": "Action Bar--Slots--ActionBar_Slot_Background",
+          "path": "Action Bar/Slots/ActionBar_Slot_Background.png",
+          "url": "./assets/craftpix/Action Bar/Slots/ActionBar_Slot_Background.png",
+          "label": "ActionBar Slot Background",
+          "name": "ActionBar_Slot_Background.png"
+        },
+        {
+          "id": "Action Bar--Slots--ActionBar_Slot_Cooldown",
+          "path": "Action Bar/Slots/ActionBar_Slot_Cooldown.png",
+          "url": "./assets/craftpix/Action Bar/Slots/ActionBar_Slot_Cooldown.png",
+          "label": "ActionBar Slot Cooldown",
+          "name": "ActionBar_Slot_Cooldown.png"
+        },
+        {
+          "id": "Action Bar--Slots--ActionBar_Slot_Cooldown_Finish",
+          "path": "Action Bar/Slots/ActionBar_Slot_Cooldown_Finish.png",
+          "url": "./assets/craftpix/Action Bar/Slots/ActionBar_Slot_Cooldown_Finish.png",
+          "label": "ActionBar Slot Cooldown Finish",
+          "name": "ActionBar_Slot_Cooldown_Finish.png"
+        },
+        {
+          "id": "Action Bar--Slots--ActionBar_Slot_Hover",
+          "path": "Action Bar/Slots/ActionBar_Slot_Hover.png",
+          "url": "./assets/craftpix/Action Bar/Slots/ActionBar_Slot_Hover.png",
+          "label": "ActionBar Slot Hover",
+          "name": "ActionBar_Slot_Hover.png"
+        },
+        {
+          "id": "Action Bar--Slots--ActionBar_Slot_Overlay",
+          "path": "Action Bar/Slots/ActionBar_Slot_Overlay.png",
+          "url": "./assets/craftpix/Action Bar/Slots/ActionBar_Slot_Overlay.png",
+          "label": "ActionBar Slot Overlay",
+          "name": "ActionBar_Slot_Overlay.png"
+        },
+        {
+          "id": "Action Bar--Slots--ActionBar_Slot_Press",
+          "path": "Action Bar/Slots/ActionBar_Slot_Press.png",
+          "url": "./assets/craftpix/Action Bar/Slots/ActionBar_Slot_Press.png",
+          "label": "ActionBar Slot Press",
+          "name": "ActionBar_Slot_Press.png"
+        },
+        {
+          "id": "Action Bar--XP Bar--ActionBar_XP_Background",
+          "path": "Action Bar/XP Bar/ActionBar_XP_Background.png",
+          "url": "./assets/craftpix/Action Bar/XP Bar/ActionBar_XP_Background.png",
+          "label": "ActionBar XP Background",
+          "name": "ActionBar_XP_Background.png"
+        },
+        {
+          "id": "Action Bar--XP Bar--ActionBar_XP_Fill",
+          "path": "Action Bar/XP Bar/ActionBar_XP_Fill.png",
+          "url": "./assets/craftpix/Action Bar/XP Bar/ActionBar_XP_Fill.png",
+          "label": "ActionBar XP Fill",
+          "name": "ActionBar_XP_Fill.png"
+        },
+        {
+          "id": "Action Bar--XP Bar--ActionBar_XP_Tooltip_Left",
+          "path": "Action Bar/XP Bar/ActionBar_XP_Tooltip_Left.png",
+          "url": "./assets/craftpix/Action Bar/XP Bar/ActionBar_XP_Tooltip_Left.png",
+          "label": "ActionBar XP Tooltip Left",
+          "name": "ActionBar_XP_Tooltip_Left.png"
+        },
+        {
+          "id": "Action Bar--XP Bar--ActionBar_XP_Tooltip_Middle",
+          "path": "Action Bar/XP Bar/ActionBar_XP_Tooltip_Middle.png",
+          "url": "./assets/craftpix/Action Bar/XP Bar/ActionBar_XP_Tooltip_Middle.png",
+          "label": "ActionBar XP Tooltip Middle",
+          "name": "ActionBar_XP_Tooltip_Middle.png"
+        }
+      ]
+    },
+    {
+      "name": "Buttons",
+      "count": 20,
+      "items": [
+        {
+          "id": "Buttons--Rectangular--Large--Button_RL_Background",
+          "path": "Buttons/Rectangular/Large/Button_RL_Background.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Large/Button_RL_Background.png",
+          "label": "Button RL Background",
+          "name": "Button_RL_Background.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Large--Button_RL_Background_Green",
+          "path": "Buttons/Rectangular/Large/Button_RL_Background_Green.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Large/Button_RL_Background_Green.png",
+          "label": "Button RL Background Green",
+          "name": "Button_RL_Background_Green.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Large--Button_RL_Background_Yellow",
+          "path": "Buttons/Rectangular/Large/Button_RL_Background_Yellow.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Large/Button_RL_Background_Yellow.png",
+          "label": "Button RL Background Yellow",
+          "name": "Button_RL_Background_Yellow.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Large--Button_RL_Hover_Green",
+          "path": "Buttons/Rectangular/Large/Button_RL_Hover_Green.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Large/Button_RL_Hover_Green.png",
+          "label": "Button RL Hover Green",
+          "name": "Button_RL_Hover_Green.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Large--Button_RL_Hover_Yellow",
+          "path": "Buttons/Rectangular/Large/Button_RL_Hover_Yellow.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Large/Button_RL_Hover_Yellow.png",
+          "label": "Button RL Hover Yellow",
+          "name": "Button_RL_Hover_Yellow.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Large--Button_RL_Press",
+          "path": "Buttons/Rectangular/Large/Button_RL_Press.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Large/Button_RL_Press.png",
+          "label": "Button RL Press",
+          "name": "Button_RL_Press.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Medium--Button_RM_Background",
+          "path": "Buttons/Rectangular/Medium/Button_RM_Background.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Medium/Button_RM_Background.png",
+          "label": "Button RM Background",
+          "name": "Button_RM_Background.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Medium--Button_RM_Foreground_Red",
+          "path": "Buttons/Rectangular/Medium/Button_RM_Foreground_Red.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Medium/Button_RM_Foreground_Red.png",
+          "label": "Button RM Foreground Red",
+          "name": "Button_RM_Foreground_Red.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Medium--Button_RM_Hover_Red",
+          "path": "Buttons/Rectangular/Medium/Button_RM_Hover_Red.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Medium/Button_RM_Hover_Red.png",
+          "label": "Button RM Hover Red",
+          "name": "Button_RM_Hover_Red.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Medium--Button_RM_Press",
+          "path": "Buttons/Rectangular/Medium/Button_RM_Press.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Medium/Button_RM_Press.png",
+          "label": "Button RM Press",
+          "name": "Button_RM_Press.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Small--Buttom_RS_Background",
+          "path": "Buttons/Rectangular/Small/Buttom_RS_Background.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Small/Buttom_RS_Background.png",
+          "label": "Buttom RS Background",
+          "name": "Buttom_RS_Background.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Small--Buttom_RS_Foreground_Green",
+          "path": "Buttons/Rectangular/Small/Buttom_RS_Foreground_Green.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Small/Buttom_RS_Foreground_Green.png",
+          "label": "Buttom RS Foreground Green",
+          "name": "Buttom_RS_Foreground_Green.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Small--Buttom_RS_Foreground_Red",
+          "path": "Buttons/Rectangular/Small/Buttom_RS_Foreground_Red.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Small/Buttom_RS_Foreground_Red.png",
+          "label": "Buttom RS Foreground Red",
+          "name": "Buttom_RS_Foreground_Red.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Small--Buttom_RS_Foreground_Yellow",
+          "path": "Buttons/Rectangular/Small/Buttom_RS_Foreground_Yellow.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Small/Buttom_RS_Foreground_Yellow.png",
+          "label": "Buttom RS Foreground Yellow",
+          "name": "Buttom_RS_Foreground_Yellow.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Small--Buttom_RS_Hover_Green",
+          "path": "Buttons/Rectangular/Small/Buttom_RS_Hover_Green.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Small/Buttom_RS_Hover_Green.png",
+          "label": "Buttom RS Hover Green",
+          "name": "Buttom_RS_Hover_Green.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Small--Buttom_RS_Hover_Red",
+          "path": "Buttons/Rectangular/Small/Buttom_RS_Hover_Red.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Small/Buttom_RS_Hover_Red.png",
+          "label": "Buttom RS Hover Red",
+          "name": "Buttom_RS_Hover_Red.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Small--Buttom_RS_Hover_Yellow",
+          "path": "Buttons/Rectangular/Small/Buttom_RS_Hover_Yellow.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Small/Buttom_RS_Hover_Yellow.png",
+          "label": "Buttom RS Hover Yellow",
+          "name": "Buttom_RS_Hover_Yellow.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Tiny--Button_RT_Background",
+          "path": "Buttons/Rectangular/Tiny/Button_RT_Background.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Tiny/Button_RT_Background.png",
+          "label": "Button RT Background",
+          "name": "Button_RT_Background.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Tiny--Button_RT_Hover",
+          "path": "Buttons/Rectangular/Tiny/Button_RT_Hover.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Tiny/Button_RT_Hover.png",
+          "label": "Button RT Hover",
+          "name": "Button_RT_Hover.png"
+        },
+        {
+          "id": "Buttons--Rectangular--Tiny--Button_RT_Press",
+          "path": "Buttons/Rectangular/Tiny/Button_RT_Press.png",
+          "url": "./assets/craftpix/Buttons/Rectangular/Tiny/Button_RT_Press.png",
+          "label": "Button RT Press",
+          "name": "Button_RT_Press.png"
+        }
+      ]
+    },
+    {
+      "name": "Cast Bars",
+      "count": 6,
+      "items": [
+        {
+          "id": "Cast Bars--CastBar_Background",
+          "path": "Cast Bars/CastBar_Background.png",
+          "url": "./assets/craftpix/Cast Bars/CastBar_Background.png",
+          "label": "CastBar Background",
+          "name": "CastBar_Background.png"
+        },
+        {
+          "id": "Cast Bars--CastBar_Bar_Background",
+          "path": "Cast Bars/CastBar_Bar_Background.png",
+          "url": "./assets/craftpix/Cast Bars/CastBar_Bar_Background.png",
+          "label": "CastBar Bar Background",
+          "name": "CastBar_Bar_Background.png"
+        },
+        {
+          "id": "Cast Bars--CastBar_Bar_Fill",
+          "path": "Cast Bars/CastBar_Bar_Fill.png",
+          "url": "./assets/craftpix/Cast Bars/CastBar_Bar_Fill.png",
+          "label": "CastBar Bar Fill",
+          "name": "CastBar_Bar_Fill.png"
+        },
+        {
+          "id": "Cast Bars--CastBar_Bar_Fill_Grayscale",
+          "path": "Cast Bars/CastBar_Bar_Fill_Grayscale.png",
+          "url": "./assets/craftpix/Cast Bars/CastBar_Bar_Fill_Grayscale.png",
+          "label": "CastBar Bar Fill Grayscale",
+          "name": "CastBar_Bar_Fill_Grayscale.png"
+        },
+        {
+          "id": "Cast Bars--CastBar_Icon_Frame",
+          "path": "Cast Bars/CastBar_Icon_Frame.png",
+          "url": "./assets/craftpix/Cast Bars/CastBar_Icon_Frame.png",
+          "label": "CastBar Icon Frame",
+          "name": "CastBar_Icon_Frame.png"
+        },
+        {
+          "id": "Cast Bars--Test",
+          "path": "Cast Bars/Test.png",
+          "url": "./assets/craftpix/Cast Bars/Test.png",
+          "label": "Test",
+          "name": "Test.png"
+        }
+      ]
+    },
+    {
+      "name": "Character Create",
+      "count": 21,
+      "items": [
+        {
+          "id": "Character Create--CharacterCreate_SectionGlow",
+          "path": "Character Create/CharacterCreate_SectionGlow.png",
+          "url": "./assets/craftpix/Character Create/CharacterCreate_SectionGlow.png",
+          "label": "CharacterCreate SectionGlow",
+          "name": "CharacterCreate_SectionGlow.png"
+        },
+        {
+          "id": "Character Create--CharacterCreate_Separator",
+          "path": "Character Create/CharacterCreate_Separator.png",
+          "url": "./assets/craftpix/Character Create/CharacterCreate_Separator.png",
+          "label": "CharacterCreate Separator",
+          "name": "CharacterCreate_Separator.png"
+        },
+        {
+          "id": "Character Create--CharacterCreate_SwitchSelect_ArrowDown",
+          "path": "Character Create/CharacterCreate_SwitchSelect_ArrowDown.png",
+          "url": "./assets/craftpix/Character Create/CharacterCreate_SwitchSelect_ArrowDown.png",
+          "label": "CharacterCreate SwitchSelect ArrowDown",
+          "name": "CharacterCreate_SwitchSelect_ArrowDown.png"
+        },
+        {
+          "id": "Character Create--Faction--CharacterCreate_Faction_Active",
+          "path": "Character Create/Faction/CharacterCreate_Faction_Active.png",
+          "url": "./assets/craftpix/Character Create/Faction/CharacterCreate_Faction_Active.png",
+          "label": "CharacterCreate Faction Active",
+          "name": "CharacterCreate_Faction_Active.png"
+        },
+        {
+          "id": "Character Create--Faction--CharacterCreate_Faction_Background",
+          "path": "Character Create/Faction/CharacterCreate_Faction_Background.png",
+          "url": "./assets/craftpix/Character Create/Faction/CharacterCreate_Faction_Background.png",
+          "label": "CharacterCreate Faction Background",
+          "name": "CharacterCreate_Faction_Background.png"
+        },
+        {
+          "id": "Character Create--Faction--CharacterCreate_Faction_Hover",
+          "path": "Character Create/Faction/CharacterCreate_Faction_Hover.png",
+          "url": "./assets/craftpix/Character Create/Faction/CharacterCreate_Faction_Hover.png",
+          "label": "CharacterCreate Faction Hover",
+          "name": "CharacterCreate_Faction_Hover.png"
+        },
+        {
+          "id": "Character Create--Faction--CharacterCreate_Faction_Press",
+          "path": "Character Create/Faction/CharacterCreate_Faction_Press.png",
+          "url": "./assets/craftpix/Character Create/Faction/CharacterCreate_Faction_Press.png",
+          "label": "CharacterCreate Faction Press",
+          "name": "CharacterCreate_Faction_Press.png"
+        },
+        {
+          "id": "Character Create--Gender--CharacterCreate_Gender_Active",
+          "path": "Character Create/Gender/CharacterCreate_Gender_Active.png",
+          "url": "./assets/craftpix/Character Create/Gender/CharacterCreate_Gender_Active.png",
+          "label": "CharacterCreate Gender Active",
+          "name": "CharacterCreate_Gender_Active.png"
+        },
+        {
+          "id": "Character Create--Gender--CharacterCreate_Gender_Background",
+          "path": "Character Create/Gender/CharacterCreate_Gender_Background.png",
+          "url": "./assets/craftpix/Character Create/Gender/CharacterCreate_Gender_Background.png",
+          "label": "CharacterCreate Gender Background",
+          "name": "CharacterCreate_Gender_Background.png"
+        },
+        {
+          "id": "Character Create--Gender--CharacterCreate_Gender_Female",
+          "path": "Character Create/Gender/CharacterCreate_Gender_Female.png",
+          "url": "./assets/craftpix/Character Create/Gender/CharacterCreate_Gender_Female.png",
+          "label": "CharacterCreate Gender Female",
+          "name": "CharacterCreate_Gender_Female.png"
+        },
+        {
+          "id": "Character Create--Gender--CharacterCreate_Gender_Hover",
+          "path": "Character Create/Gender/CharacterCreate_Gender_Hover.png",
+          "url": "./assets/craftpix/Character Create/Gender/CharacterCreate_Gender_Hover.png",
+          "label": "CharacterCreate Gender Hover",
+          "name": "CharacterCreate_Gender_Hover.png"
+        },
+        {
+          "id": "Character Create--Gender--CharacterCreate_Gender_Male",
+          "path": "Character Create/Gender/CharacterCreate_Gender_Male.png",
+          "url": "./assets/craftpix/Character Create/Gender/CharacterCreate_Gender_Male.png",
+          "label": "CharacterCreate Gender Male",
+          "name": "CharacterCreate_Gender_Male.png"
+        },
+        {
+          "id": "Character Create--Gender--CharacterCreate_Gender_Press",
+          "path": "Character Create/Gender/CharacterCreate_Gender_Press.png",
+          "url": "./assets/craftpix/Character Create/Gender/CharacterCreate_Gender_Press.png",
+          "label": "CharacterCreate Gender Press",
+          "name": "CharacterCreate_Gender_Press.png"
+        },
+        {
+          "id": "Character Create--Race--CharacterCreate_Race_Active",
+          "path": "Character Create/Race/CharacterCreate_Race_Active.png",
+          "url": "./assets/craftpix/Character Create/Race/CharacterCreate_Race_Active.png",
+          "label": "CharacterCreate Race Active",
+          "name": "CharacterCreate_Race_Active.png"
+        },
+        {
+          "id": "Character Create--Race--CharacterCreate_Race_Background",
+          "path": "Character Create/Race/CharacterCreate_Race_Background.png",
+          "url": "./assets/craftpix/Character Create/Race/CharacterCreate_Race_Background.png",
+          "label": "CharacterCreate Race Background",
+          "name": "CharacterCreate_Race_Background.png"
+        },
+        {
+          "id": "Character Create--Race--CharacterCreate_Race_Hover",
+          "path": "Character Create/Race/CharacterCreate_Race_Hover.png",
+          "url": "./assets/craftpix/Character Create/Race/CharacterCreate_Race_Hover.png",
+          "label": "CharacterCreate Race Hover",
+          "name": "CharacterCreate_Race_Hover.png"
+        },
+        {
+          "id": "Character Create--Race--CharacterCreate_Race_Press",
+          "path": "Character Create/Race/CharacterCreate_Race_Press.png",
+          "url": "./assets/craftpix/Character Create/Race/CharacterCreate_Race_Press.png",
+          "label": "CharacterCreate Race Press",
+          "name": "CharacterCreate_Race_Press.png"
+        },
+        {
+          "id": "Character Create--Skin Color--CharacterCreate_Color_Active",
+          "path": "Character Create/Skin Color/CharacterCreate_Color_Active.png",
+          "url": "./assets/craftpix/Character Create/Skin Color/CharacterCreate_Color_Active.png",
+          "label": "CharacterCreate Color Active",
+          "name": "CharacterCreate_Color_Active.png"
+        },
+        {
+          "id": "Character Create--Skin Color--CharacterCreate_Color_Background",
+          "path": "Character Create/Skin Color/CharacterCreate_Color_Background.png",
+          "url": "./assets/craftpix/Character Create/Skin Color/CharacterCreate_Color_Background.png",
+          "label": "CharacterCreate Color Background",
+          "name": "CharacterCreate_Color_Background.png"
+        },
+        {
+          "id": "Character Create--Skin Color--CharacterCreate_Color_Hover",
+          "path": "Character Create/Skin Color/CharacterCreate_Color_Hover.png",
+          "url": "./assets/craftpix/Character Create/Skin Color/CharacterCreate_Color_Hover.png",
+          "label": "CharacterCreate Color Hover",
+          "name": "CharacterCreate_Color_Hover.png"
+        },
+        {
+          "id": "Character Create--Skin Color--CharacterCreate_Color_Press",
+          "path": "Character Create/Skin Color/CharacterCreate_Color_Press.png",
+          "url": "./assets/craftpix/Character Create/Skin Color/CharacterCreate_Color_Press.png",
+          "label": "CharacterCreate Color Press",
+          "name": "CharacterCreate_Color_Press.png"
+        }
+      ]
+    },
+    {
+      "name": "Character Select",
+      "count": 12,
+      "items": [
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Arrow_Left_Background",
+          "path": "Character Select/Buttons/CharacterSelect_Arrow_Left_Background.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Arrow_Left_Background.png",
+          "label": "CharacterSelect Arrow Left Background",
+          "name": "CharacterSelect_Arrow_Left_Background.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Arrow_Left_Hover",
+          "path": "Character Select/Buttons/CharacterSelect_Arrow_Left_Hover.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Arrow_Left_Hover.png",
+          "label": "CharacterSelect Arrow Left Hover",
+          "name": "CharacterSelect_Arrow_Left_Hover.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Arrow_Left_Press",
+          "path": "Character Select/Buttons/CharacterSelect_Arrow_Left_Press.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Arrow_Left_Press.png",
+          "label": "CharacterSelect Arrow Left Press",
+          "name": "CharacterSelect_Arrow_Left_Press.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Create_Hover",
+          "path": "Character Select/Buttons/CharacterSelect_Create_Hover.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Create_Hover.png",
+          "label": "CharacterSelect Create Hover",
+          "name": "CharacterSelect_Create_Hover.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Create_Press",
+          "path": "Character Select/Buttons/CharacterSelect_Create_Press.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Create_Press.png",
+          "label": "CharacterSelect Create Press",
+          "name": "CharacterSelect_Create_Press.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Delete_Hover",
+          "path": "Character Select/Buttons/CharacterSelect_Delete_Hover.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Delete_Hover.png",
+          "label": "CharacterSelect Delete Hover",
+          "name": "CharacterSelect_Delete_Hover.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Delete_Press",
+          "path": "Character Select/Buttons/CharacterSelect_Delete_Press.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Delete_Press.png",
+          "label": "CharacterSelect Delete Press",
+          "name": "CharacterSelect_Delete_Press.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Icon_Create",
+          "path": "Character Select/Buttons/CharacterSelect_Icon_Create.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Icon_Create.png",
+          "label": "CharacterSelect Icon Create",
+          "name": "CharacterSelect_Icon_Create.png"
+        },
+        {
+          "id": "Character Select--Buttons--CharacterSelect_Icon_Delete",
+          "path": "Character Select/Buttons/CharacterSelect_Icon_Delete.png",
+          "url": "./assets/craftpix/Character Select/Buttons/CharacterSelect_Icon_Delete.png",
+          "label": "CharacterSelect Icon Delete",
+          "name": "CharacterSelect_Icon_Delete.png"
+        },
+        {
+          "id": "Character Select--CharacterSelect_BottomBar_Middle",
+          "path": "Character Select/CharacterSelect_BottomBar_Middle.png",
+          "url": "./assets/craftpix/Character Select/CharacterSelect_BottomBar_Middle.png",
+          "label": "CharacterSelect BottomBar Middle",
+          "name": "CharacterSelect_BottomBar_Middle.png"
+        },
+        {
+          "id": "Character Select--CharacterSelect_BottomBar_Repeat",
+          "path": "Character Select/CharacterSelect_BottomBar_Repeat.png",
+          "url": "./assets/craftpix/Character Select/CharacterSelect_BottomBar_Repeat.png",
+          "label": "CharacterSelect BottomBar Repeat",
+          "name": "CharacterSelect_BottomBar_Repeat.png"
+        },
+        {
+          "id": "Character Select--CharacterSelect_Glow",
+          "path": "Character Select/CharacterSelect_Glow.png",
+          "url": "./assets/craftpix/Character Select/CharacterSelect_Glow.png",
+          "label": "CharacterSelect Glow",
+          "name": "CharacterSelect_Glow.png"
+        }
+      ]
+    },
+    {
+      "name": "Character Window",
+      "count": 25,
+      "items": [
+        {
+          "id": "Character Window--CharacterWindow_Character_Example",
+          "path": "Character Window/CharacterWindow_Character_Example.png",
+          "url": "./assets/craftpix/Character Window/CharacterWindow_Character_Example.png",
+          "label": "CharacterWindow Character Example",
+          "name": "CharacterWindow_Character_Example.png"
+        },
+        {
+          "id": "Character Window--CharacterWindow_Rotate_Sign",
+          "path": "Character Window/CharacterWindow_Rotate_Sign.png",
+          "url": "./assets/craftpix/Character Window/CharacterWindow_Rotate_Sign.png",
+          "label": "CharacterWindow Rotate Sign",
+          "name": "CharacterWindow_Rotate_Sign.png"
+        },
+        {
+          "id": "Character Window--CharacterWindow_Stats_GlowSeparator",
+          "path": "Character Window/CharacterWindow_Stats_GlowSeparator.png",
+          "url": "./assets/craftpix/Character Window/CharacterWindow_Stats_GlowSeparator.png",
+          "label": "CharacterWindow Stats GlowSeparator",
+          "name": "CharacterWindow_Stats_GlowSeparator.png"
+        },
+        {
+          "id": "Character Window--CharacterWindow_Stats_Separator",
+          "path": "Character Window/CharacterWindow_Stats_Separator.png",
+          "url": "./assets/craftpix/Character Window/CharacterWindow_Stats_Separator.png",
+          "label": "CharacterWindow Stats Separator",
+          "name": "CharacterWindow_Stats_Separator.png"
+        },
+        {
+          "id": "Character Window--Reputations--CharacterWindow_Reputations_Bar_Background",
+          "path": "Character Window/Reputations/CharacterWindow_Reputations_Bar_Background.png",
+          "url": "./assets/craftpix/Character Window/Reputations/CharacterWindow_Reputations_Bar_Background.png",
+          "label": "CharacterWindow Reputations Bar Background",
+          "name": "CharacterWindow_Reputations_Bar_Background.png"
+        },
+        {
+          "id": "Character Window--Reputations--CharacterWindow_Reputations_Bar_Fill_Grayscale",
+          "path": "Character Window/Reputations/CharacterWindow_Reputations_Bar_Fill_Grayscale.png",
+          "url": "./assets/craftpix/Character Window/Reputations/CharacterWindow_Reputations_Bar_Fill_Grayscale.png",
+          "label": "CharacterWindow Reputations Bar Fill Grayscale",
+          "name": "CharacterWindow_Reputations_Bar_Fill_Grayscale.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Belt",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Belt.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Belt.png",
+          "label": "CharacterWindow Slot Belt",
+          "name": "CharacterWindow_Slot_Belt.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Boots",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Boots.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Boots.png",
+          "label": "CharacterWindow Slot Boots",
+          "name": "CharacterWindow_Slot_Boots.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Bracers",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Bracers.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Bracers.png",
+          "label": "CharacterWindow Slot Bracers",
+          "name": "CharacterWindow_Slot_Bracers.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Chest",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Chest.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Chest.png",
+          "label": "CharacterWindow Slot Chest",
+          "name": "CharacterWindow_Slot_Chest.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Finger",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Finger.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Finger.png",
+          "label": "CharacterWindow Slot Finger",
+          "name": "CharacterWindow_Slot_Finger.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Gloves",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Gloves.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Gloves.png",
+          "label": "CharacterWindow Slot Gloves",
+          "name": "CharacterWindow_Slot_Gloves.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Head",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Head.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Head.png",
+          "label": "CharacterWindow Slot Head",
+          "name": "CharacterWindow_Slot_Head.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Hover",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Hover.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Hover.png",
+          "label": "CharacterWindow Slot Hover",
+          "name": "CharacterWindow_Slot_Hover.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Necklace",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Necklace.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Necklace.png",
+          "label": "CharacterWindow Slot Necklace",
+          "name": "CharacterWindow_Slot_Necklace.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Pants",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Pants.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Pants.png",
+          "label": "CharacterWindow Slot Pants",
+          "name": "CharacterWindow_Slot_Pants.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Shield",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Shield.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Shield.png",
+          "label": "CharacterWindow Slot Shield",
+          "name": "CharacterWindow_Slot_Shield.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Shirt",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Shirt.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Shirt.png",
+          "label": "CharacterWindow Slot Shirt",
+          "name": "CharacterWindow_Slot_Shirt.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Shoulders",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Shoulders.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Shoulders.png",
+          "label": "CharacterWindow Slot Shoulders",
+          "name": "CharacterWindow_Slot_Shoulders.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Trinket",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Trinket.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Trinket.png",
+          "label": "CharacterWindow Slot Trinket",
+          "name": "CharacterWindow_Slot_Trinket.png"
+        },
+        {
+          "id": "Character Window--Slots--CharacterWindow_Slot_Weapon",
+          "path": "Character Window/Slots/CharacterWindow_Slot_Weapon.png",
+          "url": "./assets/craftpix/Character Window/Slots/CharacterWindow_Slot_Weapon.png",
+          "label": "CharacterWindow Slot Weapon",
+          "name": "CharacterWindow_Slot_Weapon.png"
+        },
+        {
+          "id": "Character Window--Titles--CharacterWindow_Title_Background",
+          "path": "Character Window/Titles/CharacterWindow_Title_Background.png",
+          "url": "./assets/craftpix/Character Window/Titles/CharacterWindow_Title_Background.png",
+          "label": "CharacterWindow Title Background",
+          "name": "CharacterWindow_Title_Background.png"
+        },
+        {
+          "id": "Character Window--Titles--CharacterWindow_Title_Background_Active",
+          "path": "Character Window/Titles/CharacterWindow_Title_Background_Active.png",
+          "url": "./assets/craftpix/Character Window/Titles/CharacterWindow_Title_Background_Active.png",
+          "label": "CharacterWindow Title Background Active",
+          "name": "CharacterWindow_Title_Background_Active.png"
+        },
+        {
+          "id": "Character Window--Titles--CharacterWindow_Title_Checkbox",
+          "path": "Character Window/Titles/CharacterWindow_Title_Checkbox.png",
+          "url": "./assets/craftpix/Character Window/Titles/CharacterWindow_Title_Checkbox.png",
+          "label": "CharacterWindow Title Checkbox",
+          "name": "CharacterWindow_Title_Checkbox.png"
+        },
+        {
+          "id": "Character Window--Titles--CharacterWindow_Title_Checkmark",
+          "path": "Character Window/Titles/CharacterWindow_Title_Checkmark.png",
+          "url": "./assets/craftpix/Character Window/Titles/CharacterWindow_Title_Checkmark.png",
+          "label": "CharacterWindow Title Checkmark",
+          "name": "CharacterWindow_Title_Checkmark.png"
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "count": 25,
+      "items": [
+        {
+          "id": "Chat--Chat_Background",
+          "path": "Chat/Chat_Background.png",
+          "url": "./assets/craftpix/Chat/Chat_Background.png",
+          "label": "Chat Background",
+          "name": "Chat_Background.png"
+        },
+        {
+          "id": "Chat--Chat_Border_Middle",
+          "path": "Chat/Chat_Border_Middle.png",
+          "url": "./assets/craftpix/Chat/Chat_Border_Middle.png",
+          "label": "Chat Border Middle",
+          "name": "Chat_Border_Middle.png"
+        },
+        {
+          "id": "Chat--Chat_Border_Top",
+          "path": "Chat/Chat_Border_Top.png",
+          "url": "./assets/craftpix/Chat/Chat_Border_Top.png",
+          "label": "Chat Border Top",
+          "name": "Chat_Border_Top.png"
+        },
+        {
+          "id": "Chat--Chat_Input_Background",
+          "path": "Chat/Chat_Input_Background.png",
+          "url": "./assets/craftpix/Chat/Chat_Input_Background.png",
+          "label": "Chat Input Background",
+          "name": "Chat_Input_Background.png"
+        },
+        {
+          "id": "Chat--Chat_ScrollBar_Background",
+          "path": "Chat/Chat_ScrollBar_Background.png",
+          "url": "./assets/craftpix/Chat/Chat_ScrollBar_Background.png",
+          "label": "Chat ScrollBar Background",
+          "name": "Chat_ScrollBar_Background.png"
+        },
+        {
+          "id": "Chat--Chat_ScrollBar_Handle",
+          "path": "Chat/Chat_ScrollBar_Handle.png",
+          "url": "./assets/craftpix/Chat/Chat_ScrollBar_Handle.png",
+          "label": "Chat ScrollBar Handle",
+          "name": "Chat_ScrollBar_Handle.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Hover",
+          "path": "Chat/Options/Chat_Options_Hover.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Hover.png",
+          "label": "Chat Options Hover",
+          "name": "Chat_Options_Hover.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Icon_ArrowDown",
+          "path": "Chat/Options/Chat_Options_Icon_ArrowDown.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Icon_ArrowDown.png",
+          "label": "Chat Options Icon ArrowDown",
+          "name": "Chat_Options_Icon_ArrowDown.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Icon_ArrowUp",
+          "path": "Chat/Options/Chat_Options_Icon_ArrowUp.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Icon_ArrowUp.png",
+          "label": "Chat Options Icon ArrowUp",
+          "name": "Chat_Options_Icon_ArrowUp.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Icon_DoubleArrowDown",
+          "path": "Chat/Options/Chat_Options_Icon_DoubleArrowDown.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Icon_DoubleArrowDown.png",
+          "label": "Chat Options Icon DoubleArrowDown",
+          "name": "Chat_Options_Icon_DoubleArrowDown.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Icon_DoubleArrowUp",
+          "path": "Chat/Options/Chat_Options_Icon_DoubleArrowUp.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Icon_DoubleArrowUp.png",
+          "label": "Chat Options Icon DoubleArrowUp",
+          "name": "Chat_Options_Icon_DoubleArrowUp.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Icon_Lock",
+          "path": "Chat/Options/Chat_Options_Icon_Lock.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Icon_Lock.png",
+          "label": "Chat Options Icon Lock",
+          "name": "Chat_Options_Icon_Lock.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Icon_Lock_Active",
+          "path": "Chat/Options/Chat_Options_Icon_Lock_Active.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Icon_Lock_Active.png",
+          "label": "Chat Options Icon Lock Active",
+          "name": "Chat_Options_Icon_Lock_Active.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Icon_Settings",
+          "path": "Chat/Options/Chat_Options_Icon_Settings.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Icon_Settings.png",
+          "label": "Chat Options Icon Settings",
+          "name": "Chat_Options_Icon_Settings.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Press",
+          "path": "Chat/Options/Chat_Options_Press.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Press.png",
+          "label": "Chat Options Press",
+          "name": "Chat_Options_Press.png"
+        },
+        {
+          "id": "Chat--Options--Chat_Options_Separator",
+          "path": "Chat/Options/Chat_Options_Separator.png",
+          "url": "./assets/craftpix/Chat/Options/Chat_Options_Separator.png",
+          "label": "Chat Options Separator",
+          "name": "Chat_Options_Separator.png"
+        },
+        {
+          "id": "Chat--Submit--Chat_Submit_Background",
+          "path": "Chat/Submit/Chat_Submit_Background.png",
+          "url": "./assets/craftpix/Chat/Submit/Chat_Submit_Background.png",
+          "label": "Chat Submit Background",
+          "name": "Chat_Submit_Background.png"
+        },
+        {
+          "id": "Chat--Submit--Chat_Submit_Hover",
+          "path": "Chat/Submit/Chat_Submit_Hover.png",
+          "url": "./assets/craftpix/Chat/Submit/Chat_Submit_Hover.png",
+          "label": "Chat Submit Hover",
+          "name": "Chat_Submit_Hover.png"
+        },
+        {
+          "id": "Chat--Submit--Chat_Submit_Press",
+          "path": "Chat/Submit/Chat_Submit_Press.png",
+          "url": "./assets/craftpix/Chat/Submit/Chat_Submit_Press.png",
+          "label": "Chat Submit Press",
+          "name": "Chat_Submit_Press.png"
+        },
+        {
+          "id": "Chat--Tabs--Chat_Tab_Active",
+          "path": "Chat/Tabs/Chat_Tab_Active.png",
+          "url": "./assets/craftpix/Chat/Tabs/Chat_Tab_Active.png",
+          "label": "Chat Tab Active",
+          "name": "Chat_Tab_Active.png"
+        },
+        {
+          "id": "Chat--Tabs--Chat_Tab_Active_Pointer",
+          "path": "Chat/Tabs/Chat_Tab_Active_Pointer.png",
+          "url": "./assets/craftpix/Chat/Tabs/Chat_Tab_Active_Pointer.png",
+          "label": "Chat Tab Active Pointer",
+          "name": "Chat_Tab_Active_Pointer.png"
+        },
+        {
+          "id": "Chat--Tabs--Chat_Tab_Active_Underline",
+          "path": "Chat/Tabs/Chat_Tab_Active_Underline.png",
+          "url": "./assets/craftpix/Chat/Tabs/Chat_Tab_Active_Underline.png",
+          "label": "Chat Tab Active Underline",
+          "name": "Chat_Tab_Active_Underline.png"
+        },
+        {
+          "id": "Chat--Tabs--Chat_Tab_Hover",
+          "path": "Chat/Tabs/Chat_Tab_Hover.png",
+          "url": "./assets/craftpix/Chat/Tabs/Chat_Tab_Hover.png",
+          "label": "Chat Tab Hover",
+          "name": "Chat_Tab_Hover.png"
+        },
+        {
+          "id": "Chat--Tabs--Chat_Tab_Normal",
+          "path": "Chat/Tabs/Chat_Tab_Normal.png",
+          "url": "./assets/craftpix/Chat/Tabs/Chat_Tab_Normal.png",
+          "label": "Chat Tab Normal",
+          "name": "Chat_Tab_Normal.png"
+        },
+        {
+          "id": "Chat--Tabs--Chat_Tab_Press",
+          "path": "Chat/Tabs/Chat_Tab_Press.png",
+          "url": "./assets/craftpix/Chat/Tabs/Chat_Tab_Press.png",
+          "label": "Chat Tab Press",
+          "name": "Chat_Tab_Press.png"
+        }
+      ]
+    },
+    {
+      "name": "Cursors",
+      "count": 1,
+      "items": [
+        {
+          "id": "Cursors--Cursor_Normal",
+          "path": "Cursors/Cursor_Normal.png",
+          "url": "./assets/craftpix/Cursors/Cursor_Normal.png",
+          "label": "Cursor Normal",
+          "name": "Cursor_Normal.png"
+        }
+      ]
+    },
+    {
+      "name": "Dialog",
+      "count": 8,
+      "items": [
+        {
+          "id": "Dialog--Dialog_Rewards_ItemSlot_Blue",
+          "path": "Dialog/Dialog_Rewards_ItemSlot_Blue.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_ItemSlot_Blue.png",
+          "label": "Dialog Rewards ItemSlot Blue",
+          "name": "Dialog_Rewards_ItemSlot_Blue.png"
+        },
+        {
+          "id": "Dialog--Dialog_Rewards_ItemSlot_Gray",
+          "path": "Dialog/Dialog_Rewards_ItemSlot_Gray.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_ItemSlot_Gray.png",
+          "label": "Dialog Rewards ItemSlot Gray",
+          "name": "Dialog_Rewards_ItemSlot_Gray.png"
+        },
+        {
+          "id": "Dialog--Dialog_Rewards_ItemSlot_Green",
+          "path": "Dialog/Dialog_Rewards_ItemSlot_Green.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_ItemSlot_Green.png",
+          "label": "Dialog Rewards ItemSlot Green",
+          "name": "Dialog_Rewards_ItemSlot_Green.png"
+        },
+        {
+          "id": "Dialog--Dialog_Rewards_ItemSlot_Orange",
+          "path": "Dialog/Dialog_Rewards_ItemSlot_Orange.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_ItemSlot_Orange.png",
+          "label": "Dialog Rewards ItemSlot Orange",
+          "name": "Dialog_Rewards_ItemSlot_Orange.png"
+        },
+        {
+          "id": "Dialog--Dialog_Rewards_ItemSlot_Overlay",
+          "path": "Dialog/Dialog_Rewards_ItemSlot_Overlay.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_ItemSlot_Overlay.png",
+          "label": "Dialog Rewards ItemSlot Overlay",
+          "name": "Dialog_Rewards_ItemSlot_Overlay.png"
+        },
+        {
+          "id": "Dialog--Dialog_Rewards_ItemSlot_Purple",
+          "path": "Dialog/Dialog_Rewards_ItemSlot_Purple.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_ItemSlot_Purple.png",
+          "label": "Dialog Rewards ItemSlot Purple",
+          "name": "Dialog_Rewards_ItemSlot_Purple.png"
+        },
+        {
+          "id": "Dialog--Dialog_Rewards_ItemSlot_White",
+          "path": "Dialog/Dialog_Rewards_ItemSlot_White.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_ItemSlot_White.png",
+          "label": "Dialog Rewards ItemSlot White",
+          "name": "Dialog_Rewards_ItemSlot_White.png"
+        },
+        {
+          "id": "Dialog--Dialog_Rewards_Separator",
+          "path": "Dialog/Dialog_Rewards_Separator.png",
+          "url": "./assets/craftpix/Dialog/Dialog_Rewards_Separator.png",
+          "label": "Dialog Rewards Separator",
+          "name": "Dialog_Rewards_Separator.png"
+        }
+      ]
+    },
+    {
+      "name": "Factions",
+      "count": 2,
+      "items": [
+        {
+          "id": "Factions--Faction_Icon_Blue",
+          "path": "Factions/Faction_Icon_Blue.png",
+          "url": "./assets/craftpix/Factions/Faction_Icon_Blue.png",
+          "label": "Faction Icon Blue",
+          "name": "Faction_Icon_Blue.png"
+        },
+        {
+          "id": "Factions--Faction_Icon_Red",
+          "path": "Factions/Faction_Icon_Red.png",
+          "url": "./assets/craftpix/Factions/Faction_Icon_Red.png",
+          "label": "Faction Icon Red",
+          "name": "Faction_Icon_Red.png"
+        }
+      ]
+    },
+    {
+      "name": "Game Menu",
+      "count": 5,
+      "items": [
+        {
+          "id": "Game Menu--GameMenu_Background",
+          "path": "Game Menu/GameMenu_Background.png",
+          "url": "./assets/craftpix/Game Menu/GameMenu_Background.png",
+          "label": "GameMenu Background",
+          "name": "GameMenu_Background.png"
+        },
+        {
+          "id": "Game Menu--GameMenu_Button_Foreground_Brown",
+          "path": "Game Menu/GameMenu_Button_Foreground_Brown.png",
+          "url": "./assets/craftpix/Game Menu/GameMenu_Button_Foreground_Brown.png",
+          "label": "GameMenu Button Foreground Brown",
+          "name": "GameMenu_Button_Foreground_Brown.png"
+        },
+        {
+          "id": "Game Menu--GameMenu_Button_Foreground_Yellow",
+          "path": "Game Menu/GameMenu_Button_Foreground_Yellow.png",
+          "url": "./assets/craftpix/Game Menu/GameMenu_Button_Foreground_Yellow.png",
+          "label": "GameMenu Button Foreground Yellow",
+          "name": "GameMenu_Button_Foreground_Yellow.png"
+        },
+        {
+          "id": "Game Menu--GameMenu_Button_Hover_Brown",
+          "path": "Game Menu/GameMenu_Button_Hover_Brown.png",
+          "url": "./assets/craftpix/Game Menu/GameMenu_Button_Hover_Brown.png",
+          "label": "GameMenu Button Hover Brown",
+          "name": "GameMenu_Button_Hover_Brown.png"
+        },
+        {
+          "id": "Game Menu--GameMenu_Button_Hover_Yellow",
+          "path": "Game Menu/GameMenu_Button_Hover_Yellow.png",
+          "url": "./assets/craftpix/Game Menu/GameMenu_Button_Hover_Yellow.png",
+          "label": "GameMenu Button Hover Yellow",
+          "name": "GameMenu_Button_Hover_Yellow.png"
+        }
+      ]
+    },
+    {
+      "name": "Icons 128x128",
+      "count": 6,
+      "items": [
+        {
+          "id": "Icons 128x128--Icon_Arrows_128",
+          "path": "Icons 128x128/Icon_Arrows_128.png",
+          "url": "./assets/craftpix/Icons 128x128/Icon_Arrows_128.png",
+          "label": "Icon Arrows 128",
+          "name": "Icon_Arrows_128.png"
+        },
+        {
+          "id": "Icons 128x128--Icon_Deathkiss_128",
+          "path": "Icons 128x128/Icon_Deathkiss_128.png",
+          "url": "./assets/craftpix/Icons 128x128/Icon_Deathkiss_128.png",
+          "label": "Icon Deathkiss 128",
+          "name": "Icon_Deathkiss_128.png"
+        },
+        {
+          "id": "Icons 128x128--Icon_Fireball_128",
+          "path": "Icons 128x128/Icon_Fireball_128.png",
+          "url": "./assets/craftpix/Icons 128x128/Icon_Fireball_128.png",
+          "label": "Icon Fireball 128",
+          "name": "Icon_Fireball_128.png"
+        },
+        {
+          "id": "Icons 128x128--Icon_Leafs_128",
+          "path": "Icons 128x128/Icon_Leafs_128.png",
+          "url": "./assets/craftpix/Icons 128x128/Icon_Leafs_128.png",
+          "label": "Icon Leafs 128",
+          "name": "Icon_Leafs_128.png"
+        },
+        {
+          "id": "Icons 128x128--Icon_Shield_128",
+          "path": "Icons 128x128/Icon_Shield_128.png",
+          "url": "./assets/craftpix/Icons 128x128/Icon_Shield_128.png",
+          "label": "Icon Shield 128",
+          "name": "Icon_Shield_128.png"
+        },
+        {
+          "id": "Icons 128x128--Icon_Sword_128",
+          "path": "Icons 128x128/Icon_Sword_128.png",
+          "url": "./assets/craftpix/Icons 128x128/Icon_Sword_128.png",
+          "label": "Icon Sword 128",
+          "name": "Icon_Sword_128.png"
+        }
+      ]
+    },
+    {
+      "name": "Inputs",
+      "count": 2,
+      "items": [
+        {
+          "id": "Inputs--Input_Background",
+          "path": "Inputs/Input_Background.png",
+          "url": "./assets/craftpix/Inputs/Input_Background.png",
+          "label": "Input Background",
+          "name": "Input_Background.png"
+        },
+        {
+          "id": "Inputs--Input_Focus",
+          "path": "Inputs/Input_Focus.png",
+          "url": "./assets/craftpix/Inputs/Input_Focus.png",
+          "label": "Input Focus",
+          "name": "Input_Focus.png"
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "count": 4,
+      "items": [
+        {
+          "id": "Inventory--Coins--Coin_Copper",
+          "path": "Inventory/Coins/Coin_Copper.png",
+          "url": "./assets/craftpix/Inventory/Coins/Coin_Copper.png",
+          "label": "Coin Copper",
+          "name": "Coin_Copper.png"
+        },
+        {
+          "id": "Inventory--Coins--Coin_Gold",
+          "path": "Inventory/Coins/Coin_Gold.png",
+          "url": "./assets/craftpix/Inventory/Coins/Coin_Gold.png",
+          "label": "Coin Gold",
+          "name": "Coin_Gold.png"
+        },
+        {
+          "id": "Inventory--Coins--Coin_Silver",
+          "path": "Inventory/Coins/Coin_Silver.png",
+          "url": "./assets/craftpix/Inventory/Coins/Coin_Silver.png",
+          "label": "Coin Silver",
+          "name": "Coin_Silver.png"
+        },
+        {
+          "id": "Inventory--Inventory_Slot_Background",
+          "path": "Inventory/Inventory_Slot_Background.png",
+          "url": "./assets/craftpix/Inventory/Inventory_Slot_Background.png",
+          "label": "Inventory Slot Background",
+          "name": "Inventory_Slot_Background.png"
+        }
+      ]
+    },
+    {
+      "name": "Loading",
+      "count": 9,
+      "items": [
+        {
+          "id": "Loading--Loading_Radial_Background",
+          "path": "Loading/Loading_Radial_Background.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Background.png",
+          "label": "Loading Radial Background",
+          "name": "Loading_Radial_Background.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame1",
+          "path": "Loading/Loading_Radial_Fill_Frame1.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame1.png",
+          "label": "Loading Radial Fill Frame1",
+          "name": "Loading_Radial_Fill_Frame1.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame2",
+          "path": "Loading/Loading_Radial_Fill_Frame2.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame2.png",
+          "label": "Loading Radial Fill Frame2",
+          "name": "Loading_Radial_Fill_Frame2.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame3",
+          "path": "Loading/Loading_Radial_Fill_Frame3.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame3.png",
+          "label": "Loading Radial Fill Frame3",
+          "name": "Loading_Radial_Fill_Frame3.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame4",
+          "path": "Loading/Loading_Radial_Fill_Frame4.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame4.png",
+          "label": "Loading Radial Fill Frame4",
+          "name": "Loading_Radial_Fill_Frame4.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame5",
+          "path": "Loading/Loading_Radial_Fill_Frame5.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame5.png",
+          "label": "Loading Radial Fill Frame5",
+          "name": "Loading_Radial_Fill_Frame5.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame6",
+          "path": "Loading/Loading_Radial_Fill_Frame6.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame6.png",
+          "label": "Loading Radial Fill Frame6",
+          "name": "Loading_Radial_Fill_Frame6.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame7",
+          "path": "Loading/Loading_Radial_Fill_Frame7.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame7.png",
+          "label": "Loading Radial Fill Frame7",
+          "name": "Loading_Radial_Fill_Frame7.png"
+        },
+        {
+          "id": "Loading--Loading_Radial_Fill_Frame8",
+          "path": "Loading/Loading_Radial_Fill_Frame8.png",
+          "url": "./assets/craftpix/Loading/Loading_Radial_Fill_Frame8.png",
+          "label": "Loading Radial Fill Frame8",
+          "name": "Loading_Radial_Fill_Frame8.png"
+        }
+      ]
+    },
+    {
+      "name": "Minimap",
+      "count": 17,
+      "items": [
+        {
+          "id": "Minimap--Marks--Minimap_Mark_Green",
+          "path": "Minimap/Marks/Minimap_Mark_Green.png",
+          "url": "./assets/craftpix/Minimap/Marks/Minimap_Mark_Green.png",
+          "label": "Minimap Mark Green",
+          "name": "Minimap_Mark_Green.png"
+        },
+        {
+          "id": "Minimap--Marks--Minimap_Mark_Orange",
+          "path": "Minimap/Marks/Minimap_Mark_Orange.png",
+          "url": "./assets/craftpix/Minimap/Marks/Minimap_Mark_Orange.png",
+          "label": "Minimap Mark Orange",
+          "name": "Minimap_Mark_Orange.png"
+        },
+        {
+          "id": "Minimap--Marks--Minimap_Mark_Purple",
+          "path": "Minimap/Marks/Minimap_Mark_Purple.png",
+          "url": "./assets/craftpix/Minimap/Marks/Minimap_Mark_Purple.png",
+          "label": "Minimap Mark Purple",
+          "name": "Minimap_Mark_Purple.png"
+        },
+        {
+          "id": "Minimap--Marks--Minimap_Mark_Red",
+          "path": "Minimap/Marks/Minimap_Mark_Red.png",
+          "url": "./assets/craftpix/Minimap/Marks/Minimap_Mark_Red.png",
+          "label": "Minimap Mark Red",
+          "name": "Minimap_Mark_Red.png"
+        },
+        {
+          "id": "Minimap--Marks--Minimap_Mark_Skull_Gray",
+          "path": "Minimap/Marks/Minimap_Mark_Skull_Gray.png",
+          "url": "./assets/craftpix/Minimap/Marks/Minimap_Mark_Skull_Gray.png",
+          "label": "Minimap Mark Skull Gray",
+          "name": "Minimap_Mark_Skull_Gray.png"
+        },
+        {
+          "id": "Minimap--Marks--Minimap_Mark_Skull_Red",
+          "path": "Minimap/Marks/Minimap_Mark_Skull_Red.png",
+          "url": "./assets/craftpix/Minimap/Marks/Minimap_Mark_Skull_Red.png",
+          "label": "Minimap Mark Skull Red",
+          "name": "Minimap_Mark_Skull_Red.png"
+        },
+        {
+          "id": "Minimap--Menu Button--Minimap_Menu_Button_Background",
+          "path": "Minimap/Menu Button/Minimap_Menu_Button_Background.png",
+          "url": "./assets/craftpix/Minimap/Menu Button/Minimap_Menu_Button_Background.png",
+          "label": "Minimap Menu Button Background",
+          "name": "Minimap_Menu_Button_Background.png"
+        },
+        {
+          "id": "Minimap--Menu Button--Minimap_Menu_Button_Hover",
+          "path": "Minimap/Menu Button/Minimap_Menu_Button_Hover.png",
+          "url": "./assets/craftpix/Minimap/Menu Button/Minimap_Menu_Button_Hover.png",
+          "label": "Minimap Menu Button Hover",
+          "name": "Minimap_Menu_Button_Hover.png"
+        },
+        {
+          "id": "Minimap--Menu Button--Minimap_Menu_Button_Icon",
+          "path": "Minimap/Menu Button/Minimap_Menu_Button_Icon.png",
+          "url": "./assets/craftpix/Minimap/Menu Button/Minimap_Menu_Button_Icon.png",
+          "label": "Minimap Menu Button Icon",
+          "name": "Minimap_Menu_Button_Icon.png"
+        },
+        {
+          "id": "Minimap--Menu Button--Minimap_Menu_Button_Press",
+          "path": "Minimap/Menu Button/Minimap_Menu_Button_Press.png",
+          "url": "./assets/craftpix/Minimap/Menu Button/Minimap_Menu_Button_Press.png",
+          "label": "Minimap Menu Button Press",
+          "name": "Minimap_Menu_Button_Press.png"
+        },
+        {
+          "id": "Minimap--Minimap_Background",
+          "path": "Minimap/Minimap_Background.png",
+          "url": "./assets/craftpix/Minimap/Minimap_Background.png",
+          "label": "Minimap Background",
+          "name": "Minimap_Background.png"
+        },
+        {
+          "id": "Minimap--Minimap_Example",
+          "path": "Minimap/Minimap_Example.png",
+          "url": "./assets/craftpix/Minimap/Minimap_Example.png",
+          "label": "Minimap Example",
+          "name": "Minimap_Example.png"
+        },
+        {
+          "id": "Minimap--Minimap_Overlay",
+          "path": "Minimap/Minimap_Overlay.png",
+          "url": "./assets/craftpix/Minimap/Minimap_Overlay.png",
+          "label": "Minimap Overlay",
+          "name": "Minimap_Overlay.png"
+        },
+        {
+          "id": "Minimap--Zoom Buttons--Minimap_Zoom_Button_Hover",
+          "path": "Minimap/Zoom Buttons/Minimap_Zoom_Button_Hover.png",
+          "url": "./assets/craftpix/Minimap/Zoom Buttons/Minimap_Zoom_Button_Hover.png",
+          "label": "Minimap Zoom Button Hover",
+          "name": "Minimap_Zoom_Button_Hover.png"
+        },
+        {
+          "id": "Minimap--Zoom Buttons--Minimap_Zoom_Button_Minus",
+          "path": "Minimap/Zoom Buttons/Minimap_Zoom_Button_Minus.png",
+          "url": "./assets/craftpix/Minimap/Zoom Buttons/Minimap_Zoom_Button_Minus.png",
+          "label": "Minimap Zoom Button Minus",
+          "name": "Minimap_Zoom_Button_Minus.png"
+        },
+        {
+          "id": "Minimap--Zoom Buttons--Minimap_Zoom_Button_Plus",
+          "path": "Minimap/Zoom Buttons/Minimap_Zoom_Button_Plus.png",
+          "url": "./assets/craftpix/Minimap/Zoom Buttons/Minimap_Zoom_Button_Plus.png",
+          "label": "Minimap Zoom Button Plus",
+          "name": "Minimap_Zoom_Button_Plus.png"
+        },
+        {
+          "id": "Minimap--Zoom Buttons--Minimap_Zoom_Button_Press",
+          "path": "Minimap/Zoom Buttons/Minimap_Zoom_Button_Press.png",
+          "url": "./assets/craftpix/Minimap/Zoom Buttons/Minimap_Zoom_Button_Press.png",
+          "label": "Minimap Zoom Button Press",
+          "name": "Minimap_Zoom_Button_Press.png"
+        }
+      ]
+    },
+    {
+      "name": "Modal Box",
+      "count": 4,
+      "items": [
+        {
+          "id": "Modal Box--ModalBox_Background",
+          "path": "Modal Box/ModalBox_Background.png",
+          "url": "./assets/craftpix/Modal Box/ModalBox_Background.png",
+          "label": "ModalBox Background",
+          "name": "ModalBox_Background.png"
+        },
+        {
+          "id": "Modal Box--ModalBox_CloseButton_Background",
+          "path": "Modal Box/ModalBox_CloseButton_Background.png",
+          "url": "./assets/craftpix/Modal Box/ModalBox_CloseButton_Background.png",
+          "label": "ModalBox CloseButton Background",
+          "name": "ModalBox_CloseButton_Background.png"
+        },
+        {
+          "id": "Modal Box--ModalBox_CloseButton_Hover",
+          "path": "Modal Box/ModalBox_CloseButton_Hover.png",
+          "url": "./assets/craftpix/Modal Box/ModalBox_CloseButton_Hover.png",
+          "label": "ModalBox CloseButton Hover",
+          "name": "ModalBox_CloseButton_Hover.png"
+        },
+        {
+          "id": "Modal Box--ModalBox_CloseButton_Press",
+          "path": "Modal Box/ModalBox_CloseButton_Press.png",
+          "url": "./assets/craftpix/Modal Box/ModalBox_CloseButton_Press.png",
+          "label": "ModalBox CloseButton Press",
+          "name": "ModalBox_CloseButton_Press.png"
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "count": 2,
+      "items": [
+        {
+          "id": "Notifications--Notification_Background",
+          "path": "Notifications/Notification_Background.png",
+          "url": "./assets/craftpix/Notifications/Notification_Background.png",
+          "label": "Notification Background",
+          "name": "Notification_Background.png"
+        },
+        {
+          "id": "Notifications--Notification_LevelUp_Background",
+          "path": "Notifications/Notification_LevelUp_Background.png",
+          "url": "./assets/craftpix/Notifications/Notification_LevelUp_Background.png",
+          "label": "Notification LevelUp Background",
+          "name": "Notification_LevelUp_Background.png"
+        }
+      ]
+    },
+    {
+      "name": "Quest Tracker",
+      "count": 8,
+      "items": [
+        {
+          "id": "Quest Tracker--QuestTracker_Background",
+          "path": "Quest Tracker/QuestTracker_Background.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Background.png",
+          "label": "QuestTracker Background",
+          "name": "QuestTracker_Background.png"
+        },
+        {
+          "id": "Quest Tracker--QuestTracker_Button_Arrow",
+          "path": "Quest Tracker/QuestTracker_Button_Arrow.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Button_Arrow.png",
+          "label": "QuestTracker Button Arrow",
+          "name": "QuestTracker_Button_Arrow.png"
+        },
+        {
+          "id": "Quest Tracker--QuestTracker_Button_Background",
+          "path": "Quest Tracker/QuestTracker_Button_Background.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Button_Background.png",
+          "label": "QuestTracker Button Background",
+          "name": "QuestTracker_Button_Background.png"
+        },
+        {
+          "id": "Quest Tracker--QuestTracker_Button_Hover",
+          "path": "Quest Tracker/QuestTracker_Button_Hover.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Button_Hover.png",
+          "label": "QuestTracker Button Hover",
+          "name": "QuestTracker_Button_Hover.png"
+        },
+        {
+          "id": "Quest Tracker--QuestTracker_Button_Press",
+          "path": "Quest Tracker/QuestTracker_Button_Press.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Button_Press.png",
+          "label": "QuestTracker Button Press",
+          "name": "QuestTracker_Button_Press.png"
+        },
+        {
+          "id": "Quest Tracker--QuestTracker_Objective_Tickbox",
+          "path": "Quest Tracker/QuestTracker_Objective_Tickbox.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Objective_Tickbox.png",
+          "label": "QuestTracker Objective Tickbox",
+          "name": "QuestTracker_Objective_Tickbox.png"
+        },
+        {
+          "id": "Quest Tracker--QuestTracker_Objective_Tickbox_Check",
+          "path": "Quest Tracker/QuestTracker_Objective_Tickbox_Check.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Objective_Tickbox_Check.png",
+          "label": "QuestTracker Objective Tickbox Check",
+          "name": "QuestTracker_Objective_Tickbox_Check.png"
+        },
+        {
+          "id": "Quest Tracker--QuestTracker_Objective_Tickbox_Cross",
+          "path": "Quest Tracker/QuestTracker_Objective_Tickbox_Cross.png",
+          "url": "./assets/craftpix/Quest Tracker/QuestTracker_Objective_Tickbox_Cross.png",
+          "label": "QuestTracker Objective Tickbox Cross",
+          "name": "QuestTracker_Objective_Tickbox_Cross.png"
+        }
+      ]
+    },
+    {
+      "name": "Root",
+      "count": 4,
+      "items": [
+        {
+          "id": "Background",
+          "path": "Background.png",
+          "url": "./assets/craftpix/Background.png",
+          "label": "Background",
+          "name": "Background.png"
+        },
+        {
+          "id": "Demo_Race_Icon",
+          "path": "Demo_Race_Icon.png",
+          "url": "./assets/craftpix/Demo_Race_Icon.png",
+          "label": "Demo Race Icon",
+          "name": "Demo_Race_Icon.png"
+        },
+        {
+          "id": "Logo_Large",
+          "path": "Logo_Large.png",
+          "url": "./assets/craftpix/Logo_Large.png",
+          "label": "Logo Large",
+          "name": "Logo_Large.png"
+        },
+        {
+          "id": "Logo_Medium",
+          "path": "Logo_Medium.png",
+          "url": "./assets/craftpix/Logo_Medium.png",
+          "label": "Logo Medium",
+          "name": "Logo_Medium.png"
+        }
+      ]
+    },
+    {
+      "name": "Scroll Bars & Sliders",
+      "count": 3,
+      "items": [
+        {
+          "id": "Scroll Bars & Sliders--ScrollBar_Background",
+          "path": "Scroll Bars & Sliders/ScrollBar_Background.png",
+          "url": "./assets/craftpix/Scroll Bars & Sliders/ScrollBar_Background.png",
+          "label": "ScrollBar Background",
+          "name": "ScrollBar_Background.png"
+        },
+        {
+          "id": "Scroll Bars & Sliders--ScrollBar_Handle",
+          "path": "Scroll Bars & Sliders/ScrollBar_Handle.png",
+          "url": "./assets/craftpix/Scroll Bars & Sliders/ScrollBar_Handle.png",
+          "label": "ScrollBar Handle",
+          "name": "ScrollBar_Handle.png"
+        },
+        {
+          "id": "Scroll Bars & Sliders--ScrollBar_Hover",
+          "path": "Scroll Bars & Sliders/ScrollBar_Hover.png",
+          "url": "./assets/craftpix/Scroll Bars & Sliders/ScrollBar_Hover.png",
+          "label": "ScrollBar Hover",
+          "name": "ScrollBar_Hover.png"
+        }
+      ]
+    },
+    {
+      "name": "Select Field",
+      "count": 7,
+      "items": [
+        {
+          "id": "Select Field--SelectField_Arrow_Down",
+          "path": "Select Field/SelectField_Arrow_Down.png",
+          "url": "./assets/craftpix/Select Field/SelectField_Arrow_Down.png",
+          "label": "SelectField Arrow Down",
+          "name": "SelectField_Arrow_Down.png"
+        },
+        {
+          "id": "Select Field--SelectField_Arrow_Up",
+          "path": "Select Field/SelectField_Arrow_Up.png",
+          "url": "./assets/craftpix/Select Field/SelectField_Arrow_Up.png",
+          "label": "SelectField Arrow Up",
+          "name": "SelectField_Arrow_Up.png"
+        },
+        {
+          "id": "Select Field--SelectField_Background",
+          "path": "Select Field/SelectField_Background.png",
+          "url": "./assets/craftpix/Select Field/SelectField_Background.png",
+          "label": "SelectField Background",
+          "name": "SelectField_Background.png"
+        },
+        {
+          "id": "Select Field--SelectField_List_Background",
+          "path": "Select Field/SelectField_List_Background.png",
+          "url": "./assets/craftpix/Select Field/SelectField_List_Background.png",
+          "label": "SelectField List Background",
+          "name": "SelectField_List_Background.png"
+        },
+        {
+          "id": "Select Field--SelectField_List_Separator",
+          "path": "Select Field/SelectField_List_Separator.png",
+          "url": "./assets/craftpix/Select Field/SelectField_List_Separator.png",
+          "label": "SelectField List Separator",
+          "name": "SelectField_List_Separator.png"
+        },
+        {
+          "id": "Select Field--SelectField_Option_Hover",
+          "path": "Select Field/SelectField_Option_Hover.png",
+          "url": "./assets/craftpix/Select Field/SelectField_Option_Hover.png",
+          "label": "SelectField Option Hover",
+          "name": "SelectField_Option_Hover.png"
+        },
+        {
+          "id": "Select Field--SelectField_Option_Press",
+          "path": "Select Field/SelectField_Option_Press.png",
+          "url": "./assets/craftpix/Select Field/SelectField_Option_Press.png",
+          "label": "SelectField Option Press",
+          "name": "SelectField_Option_Press.png"
+        }
+      ]
+    },
+    {
+      "name": "Slider",
+      "count": 6,
+      "items": [
+        {
+          "id": "Slider--Slider_Horizontal_Background",
+          "path": "Slider/Slider_Horizontal_Background.png",
+          "url": "./assets/craftpix/Slider/Slider_Horizontal_Background.png",
+          "label": "Slider Horizontal Background",
+          "name": "Slider_Horizontal_Background.png"
+        },
+        {
+          "id": "Slider--Slider_Horizontal_Bar_Background",
+          "path": "Slider/Slider_Horizontal_Bar_Background.png",
+          "url": "./assets/craftpix/Slider/Slider_Horizontal_Bar_Background.png",
+          "label": "Slider Horizontal Bar Background",
+          "name": "Slider_Horizontal_Bar_Background.png"
+        },
+        {
+          "id": "Slider--Slider_Horizontal_Bar_Fill_Green",
+          "path": "Slider/Slider_Horizontal_Bar_Fill_Green.png",
+          "url": "./assets/craftpix/Slider/Slider_Horizontal_Bar_Fill_Green.png",
+          "label": "Slider Horizontal Bar Fill Green",
+          "name": "Slider_Horizontal_Bar_Fill_Green.png"
+        },
+        {
+          "id": "Slider--Slider_Horizontal_Handle",
+          "path": "Slider/Slider_Horizontal_Handle.png",
+          "url": "./assets/craftpix/Slider/Slider_Horizontal_Handle.png",
+          "label": "Slider Horizontal Handle",
+          "name": "Slider_Horizontal_Handle.png"
+        },
+        {
+          "id": "Slider--Slider_Horizontal_Handle_Extended",
+          "path": "Slider/Slider_Horizontal_Handle_Extended.png",
+          "url": "./assets/craftpix/Slider/Slider_Horizontal_Handle_Extended.png",
+          "label": "Slider Horizontal Handle Extended",
+          "name": "Slider_Horizontal_Handle_Extended.png"
+        },
+        {
+          "id": "Slider--Slider_Horizontal_Handle_Hover",
+          "path": "Slider/Slider_Horizontal_Handle_Hover.png",
+          "url": "./assets/craftpix/Slider/Slider_Horizontal_Handle_Hover.png",
+          "label": "Slider Horizontal Handle Hover",
+          "name": "Slider_Horizontal_Handle_Hover.png"
+        }
+      ]
+    },
+    {
+      "name": "Spell Book",
+      "count": 24,
+      "items": [
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Down",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Down.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Down.png",
+          "label": "SpellBook Talent Arrow Down",
+          "name": "SpellBook_Talent_Arrow_Down.png"
+        },
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Down_Left",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Down_Left.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Down_Left.png",
+          "label": "SpellBook Talent Arrow Down Left",
+          "name": "SpellBook_Talent_Arrow_Down_Left.png"
+        },
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Down_Right",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Down_Right.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Down_Right.png",
+          "label": "SpellBook Talent Arrow Down Right",
+          "name": "SpellBook_Talent_Arrow_Down_Right.png"
+        },
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Down_Start",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Down_Start.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Down_Start.png",
+          "label": "SpellBook Talent Arrow Down Start",
+          "name": "SpellBook_Talent_Arrow_Down_Start.png"
+        },
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Left",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Left.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Left.png",
+          "label": "SpellBook Talent Arrow Left",
+          "name": "SpellBook_Talent_Arrow_Left.png"
+        },
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Left_End",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Left_End.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Left_End.png",
+          "label": "SpellBook Talent Arrow Left End",
+          "name": "SpellBook_Talent_Arrow_Left_End.png"
+        },
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Right",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Right.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Right.png",
+          "label": "SpellBook Talent Arrow Right",
+          "name": "SpellBook_Talent_Arrow_Right.png"
+        },
+        {
+          "id": "Spell Book--Arrows--SpellBook_Talent_Arrow_Right_End",
+          "path": "Spell Book/Arrows/SpellBook_Talent_Arrow_Right_End.png",
+          "url": "./assets/craftpix/Spell Book/Arrows/SpellBook_Talent_Arrow_Right_End.png",
+          "label": "SpellBook Talent Arrow Right End",
+          "name": "SpellBook_Talent_Arrow_Right_End.png"
+        },
+        {
+          "id": "Spell Book--Slots--Spells--SpellBook_Spell_Slot_Background",
+          "path": "Spell Book/Slots/Spells/SpellBook_Spell_Slot_Background.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Spells/SpellBook_Spell_Slot_Background.png",
+          "label": "SpellBook Spell Slot Background",
+          "name": "SpellBook_Spell_Slot_Background.png"
+        },
+        {
+          "id": "Spell Book--Slots--Spells--SpellBook_Spell_Slot_Overlay",
+          "path": "Spell Book/Slots/Spells/SpellBook_Spell_Slot_Overlay.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Spells/SpellBook_Spell_Slot_Overlay.png",
+          "label": "SpellBook Spell Slot Overlay",
+          "name": "SpellBook_Spell_Slot_Overlay.png"
+        },
+        {
+          "id": "Spell Book--Slots--Talents--SpellBook_Talent_Slot_Background",
+          "path": "Spell Book/Slots/Talents/SpellBook_Talent_Slot_Background.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Talents/SpellBook_Talent_Slot_Background.png",
+          "label": "SpellBook Talent Slot Background",
+          "name": "SpellBook_Talent_Slot_Background.png"
+        },
+        {
+          "id": "Spell Book--Slots--Talents--SpellBook_Talent_Slot_Background_Special",
+          "path": "Spell Book/Slots/Talents/SpellBook_Talent_Slot_Background_Special.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Talents/SpellBook_Talent_Slot_Background_Special.png",
+          "label": "SpellBook Talent Slot Background Special",
+          "name": "SpellBook_Talent_Slot_Background_Special.png"
+        },
+        {
+          "id": "Spell Book--Slots--Talents--SpellBook_Talent_Slot_Glow",
+          "path": "Spell Book/Slots/Talents/SpellBook_Talent_Slot_Glow.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Talents/SpellBook_Talent_Slot_Glow.png",
+          "label": "SpellBook Talent Slot Glow",
+          "name": "SpellBook_Talent_Slot_Glow.png"
+        },
+        {
+          "id": "Spell Book--Slots--Talents--SpellBook_Talent_Slot_Overlay",
+          "path": "Spell Book/Slots/Talents/SpellBook_Talent_Slot_Overlay.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Talents/SpellBook_Talent_Slot_Overlay.png",
+          "label": "SpellBook Talent Slot Overlay",
+          "name": "SpellBook_Talent_Slot_Overlay.png"
+        },
+        {
+          "id": "Spell Book--Slots--Talents--SpellBook_Talent_Slot_PointBox",
+          "path": "Spell Book/Slots/Talents/SpellBook_Talent_Slot_PointBox.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Talents/SpellBook_Talent_Slot_PointBox.png",
+          "label": "SpellBook Talent Slot PointBox",
+          "name": "SpellBook_Talent_Slot_PointBox.png"
+        },
+        {
+          "id": "Spell Book--Slots--Talents--SpellBook_Talent_Slot_PointBox_Special",
+          "path": "Spell Book/Slots/Talents/SpellBook_Talent_Slot_PointBox_Special.png",
+          "url": "./assets/craftpix/Spell Book/Slots/Talents/SpellBook_Talent_Slot_PointBox_Special.png",
+          "label": "SpellBook Talent Slot PointBox Special",
+          "name": "SpellBook_Talent_Slot_PointBox_Special.png"
+        },
+        {
+          "id": "Spell Book--SpellBook_Spell_Background",
+          "path": "Spell Book/SpellBook_Spell_Background.png",
+          "url": "./assets/craftpix/Spell Book/SpellBook_Spell_Background.png",
+          "label": "SpellBook Spell Background",
+          "name": "SpellBook_Spell_Background.png"
+        },
+        {
+          "id": "Spell Book--Tabs--SpellBook_Tab_Background",
+          "path": "Spell Book/Tabs/SpellBook_Tab_Background.png",
+          "url": "./assets/craftpix/Spell Book/Tabs/SpellBook_Tab_Background.png",
+          "label": "SpellBook Tab Background",
+          "name": "SpellBook_Tab_Background.png"
+        },
+        {
+          "id": "Spell Book--Tabs--SpellBook_Tab_Background_Active",
+          "path": "Spell Book/Tabs/SpellBook_Tab_Background_Active.png",
+          "url": "./assets/craftpix/Spell Book/Tabs/SpellBook_Tab_Background_Active.png",
+          "label": "SpellBook Tab Background Active",
+          "name": "SpellBook_Tab_Background_Active.png"
+        },
+        {
+          "id": "Spell Book--Tabs--SpellBook_Tab_Hover",
+          "path": "Spell Book/Tabs/SpellBook_Tab_Hover.png",
+          "url": "./assets/craftpix/Spell Book/Tabs/SpellBook_Tab_Hover.png",
+          "label": "SpellBook Tab Hover",
+          "name": "SpellBook_Tab_Hover.png"
+        },
+        {
+          "id": "Spell Book--Tabs--SpellBook_Tab_Icon_Flame",
+          "path": "Spell Book/Tabs/SpellBook_Tab_Icon_Flame.png",
+          "url": "./assets/craftpix/Spell Book/Tabs/SpellBook_Tab_Icon_Flame.png",
+          "label": "SpellBook Tab Icon Flame",
+          "name": "SpellBook_Tab_Icon_Flame.png"
+        },
+        {
+          "id": "Spell Book--Tabs--SpellBook_Tab_Icon_Shield",
+          "path": "Spell Book/Tabs/SpellBook_Tab_Icon_Shield.png",
+          "url": "./assets/craftpix/Spell Book/Tabs/SpellBook_Tab_Icon_Shield.png",
+          "label": "SpellBook Tab Icon Shield",
+          "name": "SpellBook_Tab_Icon_Shield.png"
+        },
+        {
+          "id": "Spell Book--Tabs--SpellBook_Tab_Icon_Sword",
+          "path": "Spell Book/Tabs/SpellBook_Tab_Icon_Sword.png",
+          "url": "./assets/craftpix/Spell Book/Tabs/SpellBook_Tab_Icon_Sword.png",
+          "label": "SpellBook Tab Icon Sword",
+          "name": "SpellBook_Tab_Icon_Sword.png"
+        },
+        {
+          "id": "Spell Book--Tabs--SpellBook_Tab_Press",
+          "path": "Spell Book/Tabs/SpellBook_Tab_Press.png",
+          "url": "./assets/craftpix/Spell Book/Tabs/SpellBook_Tab_Press.png",
+          "label": "SpellBook Tab Press",
+          "name": "SpellBook_Tab_Press.png"
+        }
+      ]
+    },
+    {
+      "name": "Switch Select",
+      "count": 4,
+      "items": [
+        {
+          "id": "Switch Select--SwitchSelect_ArrowLeft",
+          "path": "Switch Select/SwitchSelect_ArrowLeft.png",
+          "url": "./assets/craftpix/Switch Select/SwitchSelect_ArrowLeft.png",
+          "label": "SwitchSelect ArrowLeft",
+          "name": "SwitchSelect_ArrowLeft.png"
+        },
+        {
+          "id": "Switch Select--SwitchSelect_ArrowLeft_Hover",
+          "path": "Switch Select/SwitchSelect_ArrowLeft_Hover.png",
+          "url": "./assets/craftpix/Switch Select/SwitchSelect_ArrowLeft_Hover.png",
+          "label": "SwitchSelect ArrowLeft Hover",
+          "name": "SwitchSelect_ArrowLeft_Hover.png"
+        },
+        {
+          "id": "Switch Select--SwitchSelect_ArrowLeft_Press",
+          "path": "Switch Select/SwitchSelect_ArrowLeft_Press.png",
+          "url": "./assets/craftpix/Switch Select/SwitchSelect_ArrowLeft_Press.png",
+          "label": "SwitchSelect ArrowLeft Press",
+          "name": "SwitchSelect_ArrowLeft_Press.png"
+        },
+        {
+          "id": "Switch Select--SwitchSelect_Background",
+          "path": "Switch Select/SwitchSelect_Background.png",
+          "url": "./assets/craftpix/Switch Select/SwitchSelect_Background.png",
+          "label": "SwitchSelect Background",
+          "name": "SwitchSelect_Background.png"
+        }
+      ]
+    },
+    {
+      "name": "Text Boxes",
+      "count": 5,
+      "items": [
+        {
+          "id": "Text Boxes--TextBox_Background",
+          "path": "Text Boxes/TextBox_Background.png",
+          "url": "./assets/craftpix/Text Boxes/TextBox_Background.png",
+          "label": "TextBox Background",
+          "name": "TextBox_Background.png"
+        },
+        {
+          "id": "Text Boxes--TextBox_Icon_Circle",
+          "path": "Text Boxes/TextBox_Icon_Circle.png",
+          "url": "./assets/craftpix/Text Boxes/TextBox_Icon_Circle.png",
+          "label": "TextBox Icon Circle",
+          "name": "TextBox_Icon_Circle.png"
+        },
+        {
+          "id": "Text Boxes--TextBox_Icon_SomethingRed",
+          "path": "Text Boxes/TextBox_Icon_SomethingRed.png",
+          "url": "./assets/craftpix/Text Boxes/TextBox_Icon_SomethingRed.png",
+          "label": "TextBox Icon SomethingRed",
+          "name": "TextBox_Icon_SomethingRed.png"
+        },
+        {
+          "id": "Text Boxes--TextBox_Icon_Star",
+          "path": "Text Boxes/TextBox_Icon_Star.png",
+          "url": "./assets/craftpix/Text Boxes/TextBox_Icon_Star.png",
+          "label": "TextBox Icon Star",
+          "name": "TextBox_Icon_Star.png"
+        },
+        {
+          "id": "Text Boxes--TextBox_Warning_Background",
+          "path": "Text Boxes/TextBox_Warning_Background.png",
+          "url": "./assets/craftpix/Text Boxes/TextBox_Warning_Background.png",
+          "label": "TextBox Warning Background",
+          "name": "TextBox_Warning_Background.png"
+        }
+      ]
+    },
+    {
+      "name": "Toggles",
+      "count": 14,
+      "items": [
+        {
+          "id": "Toggles--Checkbox--Checkbox_Background",
+          "path": "Toggles/Checkbox/Checkbox_Background.png",
+          "url": "./assets/craftpix/Toggles/Checkbox/Checkbox_Background.png",
+          "label": "Checkbox Background",
+          "name": "Checkbox_Background.png"
+        },
+        {
+          "id": "Toggles--Checkbox--Checkbox_Checkmark",
+          "path": "Toggles/Checkbox/Checkbox_Checkmark.png",
+          "url": "./assets/craftpix/Toggles/Checkbox/Checkbox_Checkmark.png",
+          "label": "Checkbox Checkmark",
+          "name": "Checkbox_Checkmark.png"
+        },
+        {
+          "id": "Toggles--Checkbox--Checkbox_Checkmark_2",
+          "path": "Toggles/Checkbox/Checkbox_Checkmark_2.png",
+          "url": "./assets/craftpix/Toggles/Checkbox/Checkbox_Checkmark_2.png",
+          "label": "Checkbox Checkmark 2",
+          "name": "Checkbox_Checkmark_2.png"
+        },
+        {
+          "id": "Toggles--Checkbox--Checkbox_Hover",
+          "path": "Toggles/Checkbox/Checkbox_Hover.png",
+          "url": "./assets/craftpix/Toggles/Checkbox/Checkbox_Hover.png",
+          "label": "Checkbox Hover",
+          "name": "Checkbox_Hover.png"
+        },
+        {
+          "id": "Toggles--Checkbox--Checkbox_Hover_2",
+          "path": "Toggles/Checkbox/Checkbox_Hover_2.png",
+          "url": "./assets/craftpix/Toggles/Checkbox/Checkbox_Hover_2.png",
+          "label": "Checkbox Hover 2",
+          "name": "Checkbox_Hover_2.png"
+        },
+        {
+          "id": "Toggles--Checkbox--Checkbox_Press_2",
+          "path": "Toggles/Checkbox/Checkbox_Press_2.png",
+          "url": "./assets/craftpix/Toggles/Checkbox/Checkbox_Press_2.png",
+          "label": "Checkbox Press 2",
+          "name": "Checkbox_Press_2.png"
+        },
+        {
+          "id": "Toggles--OnOff--Toggle_OnOff_Foreground",
+          "path": "Toggles/OnOff/Toggle_OnOff_Foreground.png",
+          "url": "./assets/craftpix/Toggles/OnOff/Toggle_OnOff_Foreground.png",
+          "label": "Toggle OnOff Foreground",
+          "name": "Toggle_OnOff_Foreground.png"
+        },
+        {
+          "id": "Toggles--OnOff--Toggle_OnOff_Hover",
+          "path": "Toggles/OnOff/Toggle_OnOff_Hover.png",
+          "url": "./assets/craftpix/Toggles/OnOff/Toggle_OnOff_Hover.png",
+          "label": "Toggle OnOff Hover",
+          "name": "Toggle_OnOff_Hover.png"
+        },
+        {
+          "id": "Toggles--OnOff--Toggle_OnOff_Press",
+          "path": "Toggles/OnOff/Toggle_OnOff_Press.png",
+          "url": "./assets/craftpix/Toggles/OnOff/Toggle_OnOff_Press.png",
+          "label": "Toggle OnOff Press",
+          "name": "Toggle_OnOff_Press.png"
+        },
+        {
+          "id": "Toggles--Radio--Checkbox_Radio_Background",
+          "path": "Toggles/Radio/Checkbox_Radio_Background.png",
+          "url": "./assets/craftpix/Toggles/Radio/Checkbox_Radio_Background.png",
+          "label": "Checkbox Radio Background",
+          "name": "Checkbox_Radio_Background.png"
+        },
+        {
+          "id": "Toggles--Radio--Checkbox_Radio_Checkmark",
+          "path": "Toggles/Radio/Checkbox_Radio_Checkmark.png",
+          "url": "./assets/craftpix/Toggles/Radio/Checkbox_Radio_Checkmark.png",
+          "label": "Checkbox Radio Checkmark",
+          "name": "Checkbox_Radio_Checkmark.png"
+        },
+        {
+          "id": "Toggles--Radio--Checkbox_Radio_Hover",
+          "path": "Toggles/Radio/Checkbox_Radio_Hover.png",
+          "url": "./assets/craftpix/Toggles/Radio/Checkbox_Radio_Hover.png",
+          "label": "Checkbox Radio Hover",
+          "name": "Checkbox_Radio_Hover.png"
+        },
+        {
+          "id": "Toggles--Radio--Checkbox_Radio_Press",
+          "path": "Toggles/Radio/Checkbox_Radio_Press.png",
+          "url": "./assets/craftpix/Toggles/Radio/Checkbox_Radio_Press.png",
+          "label": "Checkbox Radio Press",
+          "name": "Checkbox_Radio_Press.png"
+        },
+        {
+          "id": "Toggles--Toggle_Background",
+          "path": "Toggles/Toggle_Background.png",
+          "url": "./assets/craftpix/Toggles/Toggle_Background.png",
+          "label": "Toggle Background",
+          "name": "Toggle_Background.png"
+        }
+      ]
+    },
+    {
+      "name": "Tooltip",
+      "count": 2,
+      "items": [
+        {
+          "id": "Tooltip--Tooltip_Anchor",
+          "path": "Tooltip/Tooltip_Anchor.png",
+          "url": "./assets/craftpix/Tooltip/Tooltip_Anchor.png",
+          "label": "Tooltip Anchor",
+          "name": "Tooltip_Anchor.png"
+        },
+        {
+          "id": "Tooltip--Tooltip_Background",
+          "path": "Tooltip/Tooltip_Background.png",
+          "url": "./assets/craftpix/Tooltip/Tooltip_Background.png",
+          "label": "Tooltip Background",
+          "name": "Tooltip_Background.png"
+        }
+      ]
+    },
+    {
+      "name": "Unit Frames",
+      "count": 38,
+      "items": [
+        {
+          "id": "Unit Frames--Main--Avatar--UnitFrame_Avatar_Example",
+          "path": "Unit Frames/Main/Avatar/UnitFrame_Avatar_Example.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Avatar/UnitFrame_Avatar_Example.png",
+          "label": "UnitFrame Avatar Example",
+          "name": "UnitFrame_Avatar_Example.png"
+        },
+        {
+          "id": "Unit Frames--Main--Avatar--UnitFrame_Avatar_Mask",
+          "path": "Unit Frames/Main/Avatar/UnitFrame_Avatar_Mask.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Avatar/UnitFrame_Avatar_Mask.png",
+          "label": "UnitFrame Avatar Mask",
+          "name": "UnitFrame_Avatar_Mask.png"
+        },
+        {
+          "id": "Unit Frames--Main--Avatar--UnitFrame_Avatar_Overlay",
+          "path": "Unit Frames/Main/Avatar/UnitFrame_Avatar_Overlay.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Avatar/UnitFrame_Avatar_Overlay.png",
+          "label": "UnitFrame Avatar Overlay",
+          "name": "UnitFrame_Avatar_Overlay.png"
+        },
+        {
+          "id": "Unit Frames--Main--Bars--UnitFrame_HP_Fill_Grayscale",
+          "path": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Grayscale.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Bars/UnitFrame_HP_Fill_Grayscale.png",
+          "label": "UnitFrame HP Fill Grayscale",
+          "name": "UnitFrame_HP_Fill_Grayscale.png"
+        },
+        {
+          "id": "Unit Frames--Main--Bars--UnitFrame_HP_Fill_Red",
+          "path": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Red.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Bars/UnitFrame_HP_Fill_Red.png",
+          "label": "UnitFrame HP Fill Red",
+          "name": "UnitFrame_HP_Fill_Red.png"
+        },
+        {
+          "id": "Unit Frames--Main--Bars--UnitFrame_MP_Fill_Brown",
+          "path": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Brown.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Bars/UnitFrame_MP_Fill_Brown.png",
+          "label": "UnitFrame MP Fill Brown",
+          "name": "UnitFrame_MP_Fill_Brown.png"
+        },
+        {
+          "id": "Unit Frames--Main--Bars--UnitFrame_MP_Fill_Grayscale",
+          "path": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Grayscale.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Bars/UnitFrame_MP_Fill_Grayscale.png",
+          "label": "UnitFrame MP Fill Grayscale",
+          "name": "UnitFrame_MP_Fill_Grayscale.png"
+        },
+        {
+          "id": "Unit Frames--Main--Bars--UnitFrame_MP_Fill_Green",
+          "path": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Green.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Bars/UnitFrame_MP_Fill_Green.png",
+          "label": "UnitFrame MP Fill Green",
+          "name": "UnitFrame_MP_Fill_Green.png"
+        },
+        {
+          "id": "Unit Frames--Main--Buffs--UnitFrame_Buffs_Frame_Blue",
+          "path": "Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Blue.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Blue.png",
+          "label": "UnitFrame Buffs Frame Blue",
+          "name": "UnitFrame_Buffs_Frame_Blue.png"
+        },
+        {
+          "id": "Unit Frames--Main--Buffs--UnitFrame_Buffs_Frame_Brown",
+          "path": "Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Brown.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Brown.png",
+          "label": "UnitFrame Buffs Frame Brown",
+          "name": "UnitFrame_Buffs_Frame_Brown.png"
+        },
+        {
+          "id": "Unit Frames--Main--Buffs--UnitFrame_Buffs_Frame_Green",
+          "path": "Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Green.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Green.png",
+          "label": "UnitFrame Buffs Frame Green",
+          "name": "UnitFrame_Buffs_Frame_Green.png"
+        },
+        {
+          "id": "Unit Frames--Main--Buffs--UnitFrame_Buffs_Frame_Red",
+          "path": "Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Red.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Buffs/UnitFrame_Buffs_Frame_Red.png",
+          "label": "UnitFrame Buffs Frame Red",
+          "name": "UnitFrame_Buffs_Frame_Red.png"
+        },
+        {
+          "id": "Unit Frames--Main--Level--UnitFrame_Level_Background",
+          "path": "Unit Frames/Main/Level/UnitFrame_Level_Background.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Level/UnitFrame_Level_Background.png",
+          "label": "UnitFrame Level Background",
+          "name": "UnitFrame_Level_Background.png"
+        },
+        {
+          "id": "Unit Frames--Main--Level--UnitFrame_Level_Skull",
+          "path": "Unit Frames/Main/Level/UnitFrame_Level_Skull.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Level/UnitFrame_Level_Skull.png",
+          "label": "UnitFrame Level Skull",
+          "name": "UnitFrame_Level_Skull.png"
+        },
+        {
+          "id": "Unit Frames--Main--Points--UnitFrame_Point_Background",
+          "path": "Unit Frames/Main/Points/UnitFrame_Point_Background.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Points/UnitFrame_Point_Background.png",
+          "label": "UnitFrame Point Background",
+          "name": "UnitFrame_Point_Background.png"
+        },
+        {
+          "id": "Unit Frames--Main--Points--UnitFrame_Point_Fill",
+          "path": "Unit Frames/Main/Points/UnitFrame_Point_Fill.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Points/UnitFrame_Point_Fill.png",
+          "label": "UnitFrame Point Fill",
+          "name": "UnitFrame_Point_Fill.png"
+        },
+        {
+          "id": "Unit Frames--Main--Role--UnitFrame_Role_Background",
+          "path": "Unit Frames/Main/Role/UnitFrame_Role_Background.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Role/UnitFrame_Role_Background.png",
+          "label": "UnitFrame Role Background",
+          "name": "UnitFrame_Role_Background.png"
+        },
+        {
+          "id": "Unit Frames--Main--Role--UnitFrame_Role_Lightning",
+          "path": "Unit Frames/Main/Role/UnitFrame_Role_Lightning.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Role/UnitFrame_Role_Lightning.png",
+          "label": "UnitFrame Role Lightning",
+          "name": "UnitFrame_Role_Lightning.png"
+        },
+        {
+          "id": "Unit Frames--Main--Role--UnitFrame_Role_Shield",
+          "path": "Unit Frames/Main/Role/UnitFrame_Role_Shield.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Role/UnitFrame_Role_Shield.png",
+          "label": "UnitFrame Role Shield",
+          "name": "UnitFrame_Role_Shield.png"
+        },
+        {
+          "id": "Unit Frames--Main--Role--UnitFrame_Role_Sword",
+          "path": "Unit Frames/Main/Role/UnitFrame_Role_Sword.png",
+          "url": "./assets/craftpix/Unit Frames/Main/Role/UnitFrame_Role_Sword.png",
+          "label": "UnitFrame Role Sword",
+          "name": "UnitFrame_Role_Sword.png"
+        },
+        {
+          "id": "Unit Frames--Main--UnitFrame_Background",
+          "path": "Unit Frames/Main/UnitFrame_Background.png",
+          "url": "./assets/craftpix/Unit Frames/Main/UnitFrame_Background.png",
+          "label": "UnitFrame Background",
+          "name": "UnitFrame_Background.png"
+        },
+        {
+          "id": "Unit Frames--Main--UnitFrame_Elite",
+          "path": "Unit Frames/Main/UnitFrame_Elite.png",
+          "url": "./assets/craftpix/Unit Frames/Main/UnitFrame_Elite.png",
+          "label": "UnitFrame Elite",
+          "name": "UnitFrame_Elite.png"
+        },
+        {
+          "id": "Unit Frames--Main--UnitFrame_Red_Border",
+          "path": "Unit Frames/Main/UnitFrame_Red_Border.png",
+          "url": "./assets/craftpix/Unit Frames/Main/UnitFrame_Red_Border.png",
+          "label": "UnitFrame Red Border",
+          "name": "UnitFrame_Red_Border.png"
+        },
+        {
+          "id": "Unit Frames--Party--Avatar--UnitFrame_Party_Avatar_Example",
+          "path": "Unit Frames/Party/Avatar/UnitFrame_Party_Avatar_Example.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Avatar/UnitFrame_Party_Avatar_Example.png",
+          "label": "UnitFrame Party Avatar Example",
+          "name": "UnitFrame_Party_Avatar_Example.png"
+        },
+        {
+          "id": "Unit Frames--Party--Avatar--UnitFrame_Party_Avatar_Mask",
+          "path": "Unit Frames/Party/Avatar/UnitFrame_Party_Avatar_Mask.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Avatar/UnitFrame_Party_Avatar_Mask.png",
+          "label": "UnitFrame Party Avatar Mask",
+          "name": "UnitFrame_Party_Avatar_Mask.png"
+        },
+        {
+          "id": "Unit Frames--Party--Avatar--UnitFrame_Party_Avatar_Overlay",
+          "path": "Unit Frames/Party/Avatar/UnitFrame_Party_Avatar_Overlay.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Avatar/UnitFrame_Party_Avatar_Overlay.png",
+          "label": "UnitFrame Party Avatar Overlay",
+          "name": "UnitFrame_Party_Avatar_Overlay.png"
+        },
+        {
+          "id": "Unit Frames--Party--Bars--UnitFrame_Party_HP_Fill_Grayscale",
+          "path": "Unit Frames/Party/Bars/UnitFrame_Party_HP_Fill_Grayscale.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Bars/UnitFrame_Party_HP_Fill_Grayscale.png",
+          "label": "UnitFrame Party HP Fill Grayscale",
+          "name": "UnitFrame_Party_HP_Fill_Grayscale.png"
+        },
+        {
+          "id": "Unit Frames--Party--Bars--UnitFrame_Party_HP_Fill_Red",
+          "path": "Unit Frames/Party/Bars/UnitFrame_Party_HP_Fill_Red.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Bars/UnitFrame_Party_HP_Fill_Red.png",
+          "label": "UnitFrame Party HP Fill Red",
+          "name": "UnitFrame_Party_HP_Fill_Red.png"
+        },
+        {
+          "id": "Unit Frames--Party--Bars--UnitFrame_Party_MP_Fill_Blue",
+          "path": "Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Blue.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Blue.png",
+          "label": "UnitFrame Party MP Fill Blue",
+          "name": "UnitFrame_Party_MP_Fill_Blue.png"
+        },
+        {
+          "id": "Unit Frames--Party--Bars--UnitFrame_Party_MP_Fill_Brown",
+          "path": "Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Brown.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Brown.png",
+          "label": "UnitFrame Party MP Fill Brown",
+          "name": "UnitFrame_Party_MP_Fill_Brown.png"
+        },
+        {
+          "id": "Unit Frames--Party--Bars--UnitFrame_Party_MP_Fill_Grayscale",
+          "path": "Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Grayscale.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Grayscale.png",
+          "label": "UnitFrame Party MP Fill Grayscale",
+          "name": "UnitFrame_Party_MP_Fill_Grayscale.png"
+        },
+        {
+          "id": "Unit Frames--Party--Bars--UnitFrame_Party_MP_Fill_Green",
+          "path": "Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Green.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Bars/UnitFrame_Party_MP_Fill_Green.png",
+          "label": "UnitFrame Party MP Fill Green",
+          "name": "UnitFrame_Party_MP_Fill_Green.png"
+        },
+        {
+          "id": "Unit Frames--Party--Role--UnitFrame_Party_Role_Background",
+          "path": "Unit Frames/Party/Role/UnitFrame_Party_Role_Background.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Role/UnitFrame_Party_Role_Background.png",
+          "label": "UnitFrame Party Role Background",
+          "name": "UnitFrame_Party_Role_Background.png"
+        },
+        {
+          "id": "Unit Frames--Party--Role--UnitFrame_Party_Role_Lightning",
+          "path": "Unit Frames/Party/Role/UnitFrame_Party_Role_Lightning.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Role/UnitFrame_Party_Role_Lightning.png",
+          "label": "UnitFrame Party Role Lightning",
+          "name": "UnitFrame_Party_Role_Lightning.png"
+        },
+        {
+          "id": "Unit Frames--Party--Role--UnitFrame_Party_Role_Shield",
+          "path": "Unit Frames/Party/Role/UnitFrame_Party_Role_Shield.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Role/UnitFrame_Party_Role_Shield.png",
+          "label": "UnitFrame Party Role Shield",
+          "name": "UnitFrame_Party_Role_Shield.png"
+        },
+        {
+          "id": "Unit Frames--Party--Role--UnitFrame_Party_Role_Sword",
+          "path": "Unit Frames/Party/Role/UnitFrame_Party_Role_Sword.png",
+          "url": "./assets/craftpix/Unit Frames/Party/Role/UnitFrame_Party_Role_Sword.png",
+          "label": "UnitFrame Party Role Sword",
+          "name": "UnitFrame_Party_Role_Sword.png"
+        },
+        {
+          "id": "Unit Frames--Party--UnitFrame_Party_Background",
+          "path": "Unit Frames/Party/UnitFrame_Party_Background.png",
+          "url": "./assets/craftpix/Unit Frames/Party/UnitFrame_Party_Background.png",
+          "label": "UnitFrame Party Background",
+          "name": "UnitFrame_Party_Background.png"
+        },
+        {
+          "id": "Unit Frames--Party--UnitFrame_Party_Level_Background",
+          "path": "Unit Frames/Party/UnitFrame_Party_Level_Background.png",
+          "url": "./assets/craftpix/Unit Frames/Party/UnitFrame_Party_Level_Background.png",
+          "label": "UnitFrame Party Level Background",
+          "name": "UnitFrame_Party_Level_Background.png"
+        }
+      ]
+    },
+    {
+      "name": "Window",
+      "count": 12,
+      "items": [
+        {
+          "id": "Window--Menu--Window_Menu_Active",
+          "path": "Window/Menu/Window_Menu_Active.png",
+          "url": "./assets/craftpix/Window/Menu/Window_Menu_Active.png",
+          "label": "Window Menu Active",
+          "name": "Window_Menu_Active.png"
+        },
+        {
+          "id": "Window--Menu--Window_Menu_Background",
+          "path": "Window/Menu/Window_Menu_Background.png",
+          "url": "./assets/craftpix/Window/Menu/Window_Menu_Background.png",
+          "label": "Window Menu Background",
+          "name": "Window_Menu_Background.png"
+        },
+        {
+          "id": "Window--Menu--Window_Menu_Hover",
+          "path": "Window/Menu/Window_Menu_Hover.png",
+          "url": "./assets/craftpix/Window/Menu/Window_Menu_Hover.png",
+          "label": "Window Menu Hover",
+          "name": "Window_Menu_Hover.png"
+        },
+        {
+          "id": "Window--Menu--Window_Menu_Press",
+          "path": "Window/Menu/Window_Menu_Press.png",
+          "url": "./assets/craftpix/Window/Menu/Window_Menu_Press.png",
+          "label": "Window Menu Press",
+          "name": "Window_Menu_Press.png"
+        },
+        {
+          "id": "Window--Menu--Window_Menu_Separator",
+          "path": "Window/Menu/Window_Menu_Separator.png",
+          "url": "./assets/craftpix/Window/Menu/Window_Menu_Separator.png",
+          "label": "Window Menu Separator",
+          "name": "Window_Menu_Separator.png"
+        },
+        {
+          "id": "Window--Window_Background",
+          "path": "Window/Window_Background.png",
+          "url": "./assets/craftpix/Window/Window_Background.png",
+          "label": "Window Background",
+          "name": "Window_Background.png"
+        },
+        {
+          "id": "Window--Window_CloseBtn_Background",
+          "path": "Window/Window_CloseBtn_Background.png",
+          "url": "./assets/craftpix/Window/Window_CloseBtn_Background.png",
+          "label": "Window CloseBtn Background",
+          "name": "Window_CloseBtn_Background.png"
+        },
+        {
+          "id": "Window--Window_CloseBtn_Hover",
+          "path": "Window/Window_CloseBtn_Hover.png",
+          "url": "./assets/craftpix/Window/Window_CloseBtn_Hover.png",
+          "label": "Window CloseBtn Hover",
+          "name": "Window_CloseBtn_Hover.png"
+        },
+        {
+          "id": "Window--Window_CloseBtn_Press",
+          "path": "Window/Window_CloseBtn_Press.png",
+          "url": "./assets/craftpix/Window/Window_CloseBtn_Press.png",
+          "label": "Window CloseBtn Press",
+          "name": "Window_CloseBtn_Press.png"
+        },
+        {
+          "id": "Window--Window_Header_Background",
+          "path": "Window/Window_Header_Background.png",
+          "url": "./assets/craftpix/Window/Window_Header_Background.png",
+          "label": "Window Header Background",
+          "name": "Window_Header_Background.png"
+        },
+        {
+          "id": "Window--Window_Separator_Horizontal",
+          "path": "Window/Window_Separator_Horizontal.png",
+          "url": "./assets/craftpix/Window/Window_Separator_Horizontal.png",
+          "label": "Window Separator Horizontal",
+          "name": "Window_Separator_Horizontal.png"
+        },
+        {
+          "id": "Window--Window_Separator_Vertical",
+          "path": "Window/Window_Separator_Vertical.png",
+          "url": "./assets/craftpix/Window/Window_Separator_Vertical.png",
+          "label": "Window Separator Vertical",
+          "name": "Window_Separator_Vertical.png"
+        }
+      ]
+    }
+  ]
+}

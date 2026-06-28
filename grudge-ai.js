@@ -7,6 +7,29 @@
   const AUTH = "https://id.grudge-studio.com";
   const KEY_LS = "gsk";
 
+  /** Pick up Grudge ID launch tokens from auth redirect (?grudge_token= / ?sso_token=). */
+  function pickupAuthFromUrl() {
+    try {
+      const qs = new URLSearchParams(global.location.search);
+      const token = qs.get("grudge_token") || qs.get("sso_token") || qs.get("token");
+      if (!token) return;
+      global.localStorage?.setItem("grudge_auth_token", token);
+      const gid = qs.get("grudge_id");
+      const un = qs.get("grudge_username") || qs.get("username");
+      if (gid) global.localStorage?.setItem("grudge_id", gid);
+      if (un) global.localStorage?.setItem("grudge_username", un);
+      ["grudge_token", "sso_token", "token", "grudge_id", "grudge_username", "username"].forEach((k) =>
+        qs.delete(k)
+      );
+      const tail = qs.toString();
+      const clean =
+        global.location.pathname + (tail ? "?" + tail : "") + (global.location.hash || "");
+      global.history.replaceState({}, "", clean);
+    } catch {}
+  }
+
+  pickupAuthFromUrl();
+
   function getUserKey() {
     try {
       return (global.localStorage?.getItem(KEY_LS) || "").trim();
@@ -22,11 +45,17 @@
   }
 
   function loggedIn() {
+    if (global.GrudgeCloud?.isLoggedIn?.()) return true;
     try {
       if (typeof puter !== "undefined" && puter.auth?.isSignedIn?.()) return true;
     } catch {}
     try {
-      return !!(global.localStorage?.getItem("grudge_auth_token") || global.localStorage?.getItem("grudge_id"));
+      const token = global.localStorage?.getItem("grudge_auth_token");
+      if (token) {
+        const p = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+        if (p?.exp && p.exp * 1000 <= Date.now()) return false;
+      }
+      return !!(token || global.localStorage?.getItem("grudge_id"));
     } catch {
       return false;
     }
