@@ -25,13 +25,14 @@
       characters = [];
       return [];
     }
-    const urls = ['/api/characters', 'https://grudge-builder-production.up.railway.app/api/characters'];
+    const urls = ['/api/characters', 'https://grudge-api-production-0d46.up.railway.app/api/characters'];
     for (const url of urls) {
       try {
         const res = await fetch(url, { headers: authHeaders() });
         if (!res.ok) continue;
         const data = await res.json();
         characters = Array.isArray(data) ? data : data.characters || data.data || [];
+        characters = characters.filter((c) => c?.userId !== 'guest');
         const stored = global.localStorage?.getItem('grudge_active_character');
         if (stored && characters.some((c) => c.id === stored)) activeCharacterId = stored;
         else if (characters[0]) activeCharacterId = characters[0].id;

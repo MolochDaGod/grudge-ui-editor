@@ -5,7 +5,7 @@
 (function (global) {
   const API = 'https://api.grudge-studio.com';
   const AUTH = 'https://id.grudge-studio.com';
-  const RAILWAY = 'https://grudge-builder-production.up.railway.app';
+  const RAILWAY = 'https://grudge-api-production-0d46.up.railway.app';
   const LS_PACKS_LEGACY = 'grudge_ui_packs_v1';
   const LEGACY_KV = {
     pack: (id) => `grudge:ui-pack:${id}`,
