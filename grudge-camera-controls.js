@@ -82,6 +82,29 @@
       setStatus('Camera: ' + name);
     }
 
+    function orbitBy(dt, lx, ly) {
+      const rotL = controls._rotateLeft || controls.rotateLeft;
+      const rotU = controls._rotateUp || controls.rotateUp;
+      if (!rotL && !rotU) return false;
+      if (lx && rotL) rotL.call(controls, (lx * speed.orbit * dt) / 60);
+      if (ly && rotU) rotU.call(controls, (ly * speed.orbit * dt) / 60);
+      return !!(lx || ly);
+    }
+
+    function zoomBy(dt, amount) {
+      if (!amount) return false;
+      const getScale = controls._getZoomScale || controls.getZoomScale;
+      const dIn = controls._dollyIn || controls.dollyIn;
+      const dOut = controls._dollyOut || controls.dollyOut;
+      const scale = getScale
+        ? getScale.call(controls, amount * speed.zoom * dt)
+        : Math.pow(0.95, -amount * speed.zoom * dt * 0.15);
+      if (amount > 0 && dIn) dIn.call(controls, scale);
+      else if (amount < 0 && dOut) dOut.call(controls, 1 / scale);
+      else return false;
+      return true;
+    }
+
     function pollGamepad(dt) {
       const pads = navigator.getGamepads?.() || [];
       if (padIndex === null) {
@@ -89,7 +112,7 @@
         if (padIndex >= 0) setStatus('Gamepad ' + (padIndex + 1) + ' — L orbit · R zoom');
       }
       const gp = padIndex >= 0 ? pads[padIndex] : null;
-      if (!gp) return;
+      if (!gp) return false;
 
       const lx = applyDeadzone(gp.axes[0] || 0);
       const ly = applyDeadzone(gp.axes[1] || 0);
@@ -97,37 +120,36 @@
       const rt = gp.buttons[7]?.value ?? (gp.buttons[7]?.pressed ? 1 : 0);
       const lt = gp.buttons[6]?.value ?? (gp.buttons[6]?.pressed ? 1 : 0);
 
-      if (lx || ly) {
-        controls.rotateLeft((lx * speed.orbit * dt) / 60);
-        controls.rotateUp((ly * speed.orbit * dt) / 60);
-      }
-      if (rt || lt) {
-        controls.dollyIn?.((rt - lt) * speed.zoom * dt * 0.02);
-      }
+      let moved = orbitBy(dt, lx, ly);
+      moved = zoomBy(dt, rt - lt) || moved;
       if (rx) {
         controls.target.x += rx * speed.pan * dt * 0.04;
+        moved = true;
       }
 
       if (gp.buttons[0]?.pressed) applyPreset('orbit');
       if (gp.buttons[1]?.pressed) scheduleSave();
+      return moved;
     }
 
     function keyboardFly(dt) {
       const move = speed.pan * dt * 0.08;
-      if (flyKeys.KeyW || flyKeys.ArrowUp) controls.target.z -= move;
-      if (flyKeys.KeyS || flyKeys.ArrowDown) controls.target.z += move;
-      if (flyKeys.KeyA || flyKeys.ArrowLeft) controls.target.x -= move;
-      if (flyKeys.KeyD || flyKeys.ArrowRight) controls.target.x += move;
-      if (flyKeys.KeyQ) controls.target.y -= move;
-      if (flyKeys.KeyE) controls.target.y += move;
+      let moved = false;
+      if (flyKeys.KeyW || flyKeys.ArrowUp) { controls.target.z -= move; moved = true; }
+      if (flyKeys.KeyS || flyKeys.ArrowDown) { controls.target.z += move; moved = true; }
+      if (flyKeys.KeyA || flyKeys.ArrowLeft) { controls.target.x -= move; moved = true; }
+      if (flyKeys.KeyD || flyKeys.ArrowRight) { controls.target.x += move; moved = true; }
+      if (flyKeys.KeyQ) { controls.target.y -= move; moved = true; }
+      if (flyKeys.KeyE) { controls.target.y += move; moved = true; }
+      return moved;
     }
 
     let last = performance.now();
     function tick(now) {
       const dt = Math.min(32, now - last);
       last = now;
-      pollGamepad(dt);
-      keyboardFly(dt);
+      const moved = pollGamepad(dt) || keyboardFly(dt);
+      if (moved) controls.update();
       requestAnimationFrame(tick);
     }
 

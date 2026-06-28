@@ -27,12 +27,13 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 
 | Path | Backend |
 |------|---------|
-| `/api/auth/me` | Railway GrudgeBuilder |
-| `/api/auth/verify` | Railway GrudgeBuilder |
+| `/api/auth/me` | `grudge-api-production` (Railway) |
+| `/api/auth/verify` | `grudge-api-production` (Railway) |
 | `/api/auth/session/exchange` | `api.grudge-studio.com` |
-| `/api/auth/*` | Railway GrudgeBuilder |
+| `/api/auth/puter-sso` | `api.grudge-studio.com` (no JWT in body yet — use `/api/auth/puter`) |
+| `/api/auth/*` | `grudge-api-production` (Railway) |
 | `/api/registry` | `api.grudge-studio.com/assets` (D1 asset browser) |
-| `/api/characters` | Railway GrudgeBuilder (fleet characters) |
+| `/api/characters` | `grudge-api-production` (JWT required; guest roster blocked) |
 
 ## localStorage keys
 

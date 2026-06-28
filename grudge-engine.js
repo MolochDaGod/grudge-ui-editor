@@ -25,10 +25,12 @@
       characters = [];
       return [];
     }
-    const urls = ['/api/characters', 'https://grudge-api-production-0d46.up.railway.app/api/characters'];
+    const railway = global.GrudgeCloud?.RAILWAY || 'https://grudge-api-production-0d46.up.railway.app';
+    const urls = ['/api/characters', `${railway}/api/characters`];
     for (const url of urls) {
       try {
         const res = await fetch(url, { headers: authHeaders() });
+        if (res.status === 401 || res.status === 403) return [];
         if (!res.ok) continue;
         const data = await res.json();
         characters = Array.isArray(data) ? data : data.characters || data.data || [];

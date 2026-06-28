@@ -743,6 +743,8 @@
   }
 
   const GrudgeCloud = {
+    API,
+    RAILWAY,
     bootstrapAuth,
     getToken,
     getUser,

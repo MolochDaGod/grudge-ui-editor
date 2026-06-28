@@ -257,12 +257,28 @@
       if (c) mergeFleetCharacter(c);
     });
 
+    function migratePortrait(url) {
+      if (!url || !url.includes('replit.app')) return url;
+      return window.grudgePortraitForRace?.('human') || PORTRAITS.player;
+    }
+
+    function sanitizeEntities(entities) {
+      if (!entities) return entities;
+      const out = { ...entities };
+      for (const [id, ent] of Object.entries(out)) {
+        if (!ent) continue;
+        out[id] = { ...ent, portrait: migratePortrait(ent.portrait) };
+      }
+      return out;
+    }
+
     (async function boot() {
       if (window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
       if (window.GrudgeEngine?.init) await GrudgeEngine.init();
       const saved = window.GrudgeCloud?.loadMainPanel ? await GrudgeCloud.loadMainPanel() : null;
       if (saved) {
-        state = { ...state, ...saved, entities: { ...DEFAULT_ENTITIES, ...saved.entities } };
+        const entities = sanitizeEntities({ ...DEFAULT_ENTITIES, ...saved.entities });
+        state = { ...state, ...saved, entities };
       }
       applyTab(state.activeTab || 'equipment');
       applyEntity(state.activeEntity || 'player');
