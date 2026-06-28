@@ -183,9 +183,12 @@
       { puterUuid: pu.uuid, puterId: pu.uuid, puterUsername: pu.username, email: pu.email || undefined },
       { puterId: pu.uuid, puterUsername: pu.username, email: pu.email || undefined },
     ];
+    const ssoUrls = sameOriginApi()
+      ? ['/api/auth/puter-sso', `${RAILWAY}/api/auth/puter-sso`]
+      : [`${RAILWAY}/api/auth/puter-sso`, '/api/auth/puter-sso'];
     const endpoints = [
       ...puterUrls.map((url) => ({ url, body: bodies[0] })),
-      ...puterUrls.map((url) => ({ url: url.replace('/puter', '/puter-sso'), body: bodies[1] })),
+      ...ssoUrls.map((url) => ({ url, body: bodies[1] })),
     ];
     for (const { url, body } of endpoints) {
       try {
@@ -290,6 +293,14 @@
       } catch {}
     }
     return null;
+  }
+
+  /** Apply a JWT from parent embed / GRUDGE_AUTH postMessage (no redirect). */
+  async function acceptSession({ token, user, grudgeId, username } = {}) {
+    if (!token) return null;
+    const profile = storeSession(token, user || { grudgeId, username });
+    await linkPuterCloud().catch(() => {});
+    return profile;
   }
 
   function storeSession(token, user) {
@@ -746,6 +757,7 @@
     API,
     RAILWAY,
     bootstrapAuth,
+    acceptSession,
     getToken,
     getUser,
     getGrudgeId,

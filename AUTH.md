@@ -30,7 +30,7 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 | `/api/auth/me` | `grudge-api-production` (Railway) |
 | `/api/auth/verify` | `grudge-api-production` (Railway) |
 | `/api/auth/session/exchange` | `api.grudge-studio.com` |
-| `/api/auth/puter-sso` | `api.grudge-studio.com` (no JWT in body yet — use `/api/auth/puter`) |
+| `/api/auth/puter-sso` | `grudge-api-production` (Railway — JWT in JSON after deploy) |
 | `/api/auth/*` | `grudge-api-production` (Railway) |
 | `/api/registry` | `api.grudge-studio.com/assets` (D1 asset browser) |
 | `/api/characters` | `grudge-api-production` (JWT required; guest roster blocked) |
@@ -71,6 +71,22 @@ Local studio packs: `grudge_ui_packs_{grudgeId}` (falls back to `grudge_ui_packs
 If the session JWT expires but Puter is still signed in, `bootstrapAuth()` calls `silentReauthFromPuter()`:
 
 `POST /api/auth/puter` with `{ puterUuid, puterUsername, email }` → fresh JWT in JSON (no redirect).
+
+## Embed handshake (`GRUDGE_AUTH` / `GRUDGE_READY`)
+
+When `main-panel.html` (or any ui-editor page) loads inside an iframe, `grudge-engine.js` posts `GRUDGE_READY` to the parent. The parent should reply with:
+
+```js
+iframe.contentWindow.postMessage({
+  type: 'GRUDGE_AUTH',
+  token: '<session-jwt>',
+  grudgeId: 'GRUDGE_…',
+  username: 'Player',
+  characterId: 'optional-char-uuid',
+}, 'https://ui.grudge-studio.com');
+```
+
+`GrudgeCloud.acceptSession()` stores the JWT, fires `grudge:auth:ready`, and links Puter cloud.
 
 ## Popup auth (editor pages)
 

@@ -75,19 +75,14 @@
   }
 
   function initEmbedded() {
-    global.addEventListener('message', (e) => {
+    global.addEventListener('message', async (e) => {
       if (e.data?.type !== 'GRUDGE_AUTH') return;
-      const { token, characterId, grudgeId, username } = e.data;
-      if (token && global.GrudgeCloud) {
-        global.GrudgeCloud.bootstrapAuth?.();
-        try {
-          global.localStorage.setItem('grudge_auth_token', token);
-          if (grudgeId) global.localStorage.setItem('grudge_id', grudgeId);
-          if (username) global.localStorage.setItem('grudge_username', username);
-        } catch {}
+      const { token, characterId, grudgeId, username, user } = e.data;
+      if (token && global.GrudgeCloud?.acceptSession) {
+        await GrudgeCloud.acceptSession({ token, user, grudgeId, username });
       }
       if (characterId) selectCharacter(characterId);
-      fetchCharacters();
+      await fetchCharacters();
     });
     if (global.parent !== global) {
       global.parent.postMessage({ type: 'GRUDGE_READY' }, '*');
@@ -116,4 +111,8 @@
   global.addEventListener('grudge:auth:ready', () => {
     fetchCharacters().catch(() => {});
   });
+
+  if (global.parent !== global) {
+    initEmbedded();
+  }
 })(typeof window !== 'undefined' ? window : globalThis);
