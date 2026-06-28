@@ -3,13 +3,19 @@
   "outputDirectory": ".",
   "framework": null,
   "rewrites": [
-    { "source": "/favicon.ico",  "destination": "/favicon.svg" },
-    { "source": "/hotkeys",      "destination": "/hotkeys.html" },
-    { "source": "/studio",       "destination": "/studio.html" },
-    { "source": "/assets",       "destination": "/assets.html" },
-    { "source": "/main-panel",   "destination": "/main-panel.html" },
-    { "source": "/equipment",    "destination": "/index.html" },
-    { "source": "/((?!hotkeys|studio|assets|main-panel|equipment|favicon|grudge-shell|prim-packs).*)", "destination": "/index.html" }
+    { "source": "/api/auth/me", "destination": "https://grudge-builder-production.up.railway.app/api/auth/me" },
+    { "source": "/api/auth/verify", "destination": "https://grudge-builder-production.up.railway.app/api/auth/verify" },
+    { "source": "/api/auth/session/exchange", "destination": "https://api.grudge-studio.com/api/auth/session/exchange" },
+    { "source": "/api/auth/:path*", "destination": "https://grudge-builder-production.up.railway.app/api/auth/:path*" },
+    { "source": "/api/registry/:path*", "destination": "https://api.grudge-studio.com/assets/:path*" },
+    { "source": "/api/registry", "destination": "https://api.grudge-studio.com/assets" },
+    { "source": "/favicon.ico", "destination": "/favicon.svg" },
+    { "source": "/hotkeys", "destination": "/hotkeys.html" },
+    { "source": "/studio", "destination": "/studio.html" },
+    { "source": "/assets", "destination": "/assets.html" },
+    { "source": "/main-panel", "destination": "/main-panel.html" },
+    { "source": "/equipment", "destination": "/index.html" },
+    { "source": "/((?!hotkeys|studio|assets|main-panel|equipment|favicon|grudge-shell|prim-packs|api).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

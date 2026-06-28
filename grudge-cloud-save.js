@@ -4,6 +4,7 @@
 (function (global) {
   const API = 'https://api.grudge-studio.com';
   const AUTH = 'https://id.grudge-studio.com';
+  const RAILWAY = 'https://grudge-builder-production.up.railway.app';
   const KV_PACK = (id) => `grudge:ui-pack:${id}`;
   const KV_INDEX = 'grudge:ui-packs:index';
   const KV_LAST = 'grudge:ui-pack:last';
@@ -11,6 +12,15 @@
   const LS_LAST = 'grudge_ui_pack_last';
   const LS_TOKEN = 'grudge_auth_token';
   const LS_USER = 'grudge_ui_user';
+
+  function sameOriginApi() {
+    const host = global.location?.hostname || '';
+    return (
+      host === 'ui.grudge-studio.com' ||
+      host === 'localhost' ||
+      host.endsWith('.vercel.app')
+    );
+  }
 
   function lsGet(k) {
     try {
@@ -90,38 +100,66 @@
   }
 
   async function exchangeLaunchToken(token) {
-    const endpoints = [
-      `${AUTH}/api/auth/session/exchange`,
-      `${API}/api/auth/session/exchange`,
-      `${AUTH}/api/auth/verify`,
-    ];
-    for (const url of endpoints) {
+    const audience = global.location?.origin || '';
+    const exchangeUrls = sameOriginApi()
+      ? ['/api/auth/session/exchange', `${API}/api/auth/session/exchange`]
+      : [`${API}/api/auth/session/exchange`, '/api/auth/session/exchange'];
+
+    for (const url of exchangeUrls) {
       try {
         const res = await fetch(url, {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ token }),
+          body: JSON.stringify({ token, audience }),
         });
         if (!res.ok) continue;
         const data = await res.json();
-        if (data.token) return data;
-        if (data.valid && token) return { token, user: data.user };
+        const session = data.token || data.sessionToken;
+        if (session) {
+          return {
+            token: session,
+            user: {
+              username: data.username || data.displayName,
+              grudgeId: data.grudgeId,
+              userId: data.id || data.userId,
+            },
+          };
+        }
       } catch {}
     }
+
+    const verifyUrls = sameOriginApi()
+      ? [`/api/auth/verify?token=${encodeURIComponent(token)}`, `${RAILWAY}/api/auth/verify?token=${encodeURIComponent(token)}`]
+      : [`${RAILWAY}/api/auth/verify?token=${encodeURIComponent(token)}`, `/api/auth/verify?token=${encodeURIComponent(token)}`];
+
+    for (const url of verifyUrls) {
+      try {
+        const res = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (data.valid) return { token, user: data.user || parseJwt(token) };
+      } catch {}
+    }
+
     return tokenValid(token) ? { token, user: parseJwt(token) } : null;
   }
 
   async function fetchProfile(token) {
-    try {
-      const res = await fetch(`${API}/api/auth/user`, {
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
-      });
-      if (!res.ok) return null;
-      return await res.json();
-    } catch {
-      return null;
+    const profileUrls = sameOriginApi()
+      ? ['/api/auth/me', `${RAILWAY}/api/auth/me`]
+      : [`${RAILWAY}/api/auth/me`, '/api/auth/me'];
+
+    for (const url of profileUrls) {
+      try {
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+        });
+        if (!res.ok) continue;
+        return await res.json();
+      } catch {}
     }
+    return null;
   }
 
   function storeSession(token, user) {
@@ -129,7 +167,7 @@
     lsSet(LS_TOKEN, token);
     const p = parseJwt(token);
     const profile = {
-      username: user?.username || p?.username || 'Player',
+      username: user?.username || user?.displayName || p?.username || 'Player',
       grudgeId: user?.grudgeId || p?.grudgeId || lsGet('grudge_id') || '',
       userId: user?.id || user?.userId || p?.sub || null,
     };

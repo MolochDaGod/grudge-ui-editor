@@ -1,6 +1,17 @@
 /** Grudge Studio — unified asset sources (Prim packs, D1/R2 registry, icons). */
 
-export const API_BASE = 'https://api.grudge-studio.com';
+/** D1 asset registry — same-origin proxy on ui.grudge-studio.com avoids CORS drift. */
+function resolveRegistryBase() {
+  if (typeof location !== 'undefined') {
+    const host = location.hostname || '';
+    if (host === 'ui.grudge-studio.com' || host === 'localhost' || host.endsWith('.vercel.app')) {
+      return '/api/registry';
+    }
+  }
+  return 'https://api.grudge-studio.com/assets';
+}
+
+export const API_BASE = resolveRegistryBase();
 export const ICON_INDEX_URL = 'https://assets.grudge-studio.com/game-assets/api/v1/icon-path-index.json';
 
 const IMAGE_EXTS = new Set(['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'svg']);
@@ -121,7 +132,7 @@ export function iconEntryToItem(relativePath, meta, packFolder) {
 /** Fetch first batch from D1 category route (max 500, no offset on API). */
 export async function fetchD1Category(category, { limit = 500 } = {}) {
   const cap = Math.min(limit, 500);
-  const res = await fetch(`${API_BASE}/assets/category/${encodeURIComponent(category)}?limit=${cap}`);
+  const res = await fetch(`${API_BASE}/category/${encodeURIComponent(category)}?limit=${cap}`);
   if (!res.ok) throw new Error(`D1 ${category}: ${res.status}`);
   const data = await res.json();
   const assets = data.assets || [];
@@ -135,7 +146,7 @@ export async function fetchD1CategoryMore(category, knownIds, { scanOffset = 0, 
   let total = Infinity;
 
   while (batch.length < limit && offset < total) {
-    const res = await fetch(`${API_BASE}/assets?limit=500&offset=${offset}`);
+    const res = await fetch(`${API_BASE}?limit=500&offset=${offset}`);
     if (!res.ok) break;
     const data = await res.json();
     total = data.total ?? total;
@@ -151,7 +162,7 @@ export async function fetchD1CategoryMore(category, knownIds, { scanOffset = 0, 
 
 /** Fetch total registered assets from asset-api root listing. */
 export async function fetchD1Total() {
-  const res = await fetch(`${API_BASE}/assets?limit=1&offset=0`);
+  const res = await fetch(`${API_BASE}?limit=1&offset=0`);
   if (!res.ok) return 0;
   const data = await res.json();
   return data.total ?? 0;
