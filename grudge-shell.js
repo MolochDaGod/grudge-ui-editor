@@ -180,6 +180,7 @@
 
   window.addEventListener('grudge:auth:ready', () => refreshAiPill());
   window.addEventListener('grudge:auth:logout', () => refreshAiPill());
+  window.addEventListener('grudge:auth:storage', () => refreshAiPill());
   window.addEventListener('grudge:cloud:ready', () => refreshAiPill());
   window.addEventListener('grudge:cloud:off', () => refreshAiPill());
 

@@ -35,6 +35,7 @@ Persistence layers:
 - **Grudge ID JWT** — session across pages (silent re-auth via Puter when JWT expires)
 - **Puter KV** — cloud packs/hotkeys scoped to `grudge:{grudgeId}:…`
 - **localStorage** — offline fallback per account
+- **UI Kit** (`/`) — `grudge-uikit-persist.js` mirrors `gameuikit:*` to Puter KV; cross-tab reload on edit
 
 ## Deployment
 

@@ -13,6 +13,8 @@
     last: 'grudge:ui-pack:last',
     input: 'grudge:ui-input:default',
   };
+  const UIKIT_LS_PREFIX = 'gameuikit:';
+  const UIKIT_SLICES = ['editor-state', 'profiles'];
   const LS_LAST = 'grudge_ui_pack_last';
   const LS_TOKEN = 'grudge_auth_token';
   const LS_USER = 'grudge_ui_user';
@@ -100,6 +102,14 @@
 
   function kvInputKey() {
     return scopedKv('ui-input:default');
+  }
+
+  function kvUIKitKey(slice) {
+    return scopedKv(`ui-kit:${slice}`);
+  }
+
+  function uikitLsKey(slice) {
+    return UIKIT_LS_PREFIX + slice;
   }
 
   function localPacksLsKey() {
@@ -527,6 +537,66 @@
     }
   }
 
+  async function saveUIKitSlice(slice, data) {
+    if (await puterReady()) {
+      try {
+        await puter.kv.set(kvUIKitKey(slice), { data, savedAt: Date.now() });
+      } catch (e) {
+        console.warn('[GrudgeCloud] ui-kit kv save failed', e);
+      }
+    }
+  }
+
+  async function restoreUIKitFromCloud() {
+    if (!(await puterReady())) return false;
+    let restored = false;
+    for (const slice of UIKIT_SLICES) {
+      try {
+        const cloud = await puter.kv.get(kvUIKitKey(slice));
+        if (!cloud?.data) continue;
+        const lsKey = uikitLsKey(slice);
+        const localRaw = global.localStorage.getItem(lsKey);
+        let apply = !localRaw;
+        if (localRaw && cloud.savedAt) {
+          try {
+            const metaKey = uikitLsKey('_meta:' + slice);
+            const meta = JSON.parse(global.localStorage.getItem(metaKey) || '{}');
+            apply = (cloud.savedAt || 0) > (meta.savedAt || 0);
+          } catch {
+            apply = true;
+          }
+        }
+        if (apply) {
+          global.localStorage.setItem(lsKey, JSON.stringify(cloud.data));
+          global.localStorage.setItem(
+            uikitLsKey('_meta:' + slice),
+            JSON.stringify({ savedAt: cloud.savedAt || Date.now() })
+          );
+          restored = true;
+        }
+      } catch {}
+    }
+    if (restored) global.dispatchEvent(new CustomEvent('grudge:uikit:restored'));
+    return restored;
+  }
+
+  function installCrossTabSync() {
+    if (global.__grudgeCrossTabSync) return;
+    global.__grudgeCrossTabSync = true;
+    global.addEventListener('storage', (e) => {
+      if (!e.key) return;
+      if (e.key === LS_TOKEN || e.key === LS_USER || e.key === 'grudge_id') {
+        global.dispatchEvent(new CustomEvent('grudge:auth:storage', { detail: { key: e.key } }));
+      }
+      if (e.key.startsWith(UIKIT_LS_PREFIX)) {
+        global.dispatchEvent(new CustomEvent('grudge:uikit:storage', { detail: { key: e.key } }));
+      }
+      if (e.key.startsWith('grudge_ui_packs')) {
+        global.dispatchEvent(new CustomEvent('grudge:packs:storage'));
+      }
+    });
+  }
+
   async function loadInputConfig() {
     if (await puterReady()) {
       try {
@@ -559,6 +629,8 @@
     ensurePuterSignIn,
     saveInputConfig,
     loadInputConfig,
+    saveUIKitSlice,
+    restoreUIKitFromCloud,
     savePack,
     loadPack,
     listPacks,
@@ -568,6 +640,8 @@
   };
 
   global.GrudgeCloud = GrudgeCloud;
+
+  installCrossTabSync();
 
   global.addEventListener('DOMContentLoaded', () => {
     bootstrapAuth().catch(() => {});

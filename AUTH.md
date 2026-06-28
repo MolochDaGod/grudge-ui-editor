@@ -50,8 +50,12 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 | `grudge:{grudgeId}:ui-packs:index` | Pack id list |
 | `grudge:{grudgeId}:ui-pack:last` | Last pack id |
 | `grudge:{grudgeId}:ui-input:default` | `/hotkeys` bindings |
+| `grudge:{grudgeId}:ui-kit:editor-state` | `/` UI Kit theme editor (zustand) |
+| `grudge:{grudgeId}:ui-kit:profiles` | `/` saved theme profiles |
 
 Legacy unscoped keys (`grudge:ui-pack:…`) are still read for migration; new writes use the scoped form.
+
+Local UI Kit keys (mirrored to cloud): `gameuikit:editor-state`, `gameuikit:profiles` — synced by `grudge-uikit-persist.js`.
 
 Local studio packs: `grudge_ui_packs_{grudgeId}` (falls back to `grudge_ui_packs_v1`).
 
@@ -86,6 +90,10 @@ if (GrudgeCloud.isLoggedIn()) {
   await GrudgeCloud.linkPuterCloud(); // if not auto-called
 }
 ```
+
+## Cross-tab sync
+
+`grudge-cloud-save.js` listens for `storage` events on auth and pack keys; the nav pill refreshes on `grudge:auth:storage`. UI Kit page reloads when another tab updates `gameuikit:editor-state`.
 
 ## Related fleet docs
 
