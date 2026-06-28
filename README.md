@@ -36,6 +36,9 @@ Persistence layers:
 - **Puter KV** — cloud packs/hotkeys scoped to `grudge:{grudgeId}:…`
 - **localStorage** — offline fallback per account
 - **UI Kit** (`/`) — `grudge-uikit-persist.js` mirrors `gameuikit:*` to Puter KV; cross-tab reload on edit
+- **Popup auth** on editor routes — sign in without losing studio/workbench state
+- **Grudge Engine** (`grudge-engine.js`) — `/api/characters` + island preview link from `/assets`
+- **Camera** (`grudge-camera-controls.js`) — gamepad + WASD on 3D asset browser
 
 ## Deployment
 

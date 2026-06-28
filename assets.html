@@ -323,6 +323,10 @@
         <button class="tool-btn on" id="btn-snap">Snap</button>
         <button class="tool-btn on" id="btn-gizmo">Gizmo</button>
         <button class="tool-btn" id="btn-reset">Reset view</button>
+        <button class="tool-btn" id="btn-cam-orbit" title="Camera preset 1">Cam 1</button>
+        <button class="tool-btn" id="btn-cam-front" title="Camera preset 2">Cam 2</button>
+        <button class="tool-btn" id="btn-cam-top" title="Camera preset 3">Cam 3</button>
+        <button class="tool-btn" id="btn-engine" title="Open island engine preview">Engine</button>
         <button class="tool-btn" id="btn-renorm">Re-normalize</button>
         <button class="tool-btn" id="btn-add-scene" title="Keep current assets and add another">+ Scene</button>
         <button class="tool-btn" id="btn-clear-scene">Clear scene</button>
@@ -424,6 +428,8 @@
   <script src="https://js.puter.com/v2/" async></script>
   <script src="./grudge-ai.js"></script>
   <script src="./grudge-cloud-save.js"></script>
+  <script src="./grudge-engine.js"></script>
+  <script src="./grudge-camera-controls.js"></script>
   <script src="./grudge-shell.js"></script>
   <script type="module">
     import * as THREE from 'three';
@@ -479,6 +485,16 @@
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.target.set(0, 1, 0);
+
+    const statusEl = document.getElementById('status');
+    const grudgeCam = window.GrudgeCamera?.attach?.({
+      camera,
+      controls,
+      domElement: renderer.domElement,
+      sceneId: 'assets',
+      statusEl,
+    });
+    window.GrudgeEngine?.init?.().catch(() => {});
 
     const studio = createStudioRig(scene, renderer);
 
@@ -1413,6 +1429,15 @@
       camera.position.copy(defaultCam);
       controls.target.set(0, 1, 0);
       controls.update();
+      grudgeCam?.applyPreset?.('orbit');
+    };
+    document.getElementById('btn-cam-orbit').onclick = () => grudgeCam?.applyPreset?.('orbit');
+    document.getElementById('btn-cam-front').onclick = () => grudgeCam?.applyPreset?.('front');
+    document.getElementById('btn-cam-top').onclick = () => grudgeCam?.applyPreset?.('top');
+    document.getElementById('btn-engine').onclick = () => {
+      const url = window.GrudgeEngine?.islandPreviewUrl?.({ mode: 'lobby', map: 'pirate-islands' })
+        || 'https://client.grudge-studio.com/island-3d?engine=legacy&mode=lobby';
+      window.open(url, '_blank', 'noopener');
     };
 
     document.getElementById('btn-add-scene').onclick = () => {

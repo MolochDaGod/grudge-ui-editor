@@ -7,6 +7,8 @@
     { "source": "/api/auth/verify", "destination": "https://grudge-builder-production.up.railway.app/api/auth/verify" },
     { "source": "/api/auth/session/exchange", "destination": "https://api.grudge-studio.com/api/auth/session/exchange" },
     { "source": "/api/auth/:path*", "destination": "https://grudge-builder-production.up.railway.app/api/auth/:path*" },
+    { "source": "/api/characters", "destination": "https://grudge-builder-production.up.railway.app/api/characters" },
+    { "source": "/api/characters/:path*", "destination": "https://grudge-builder-production.up.railway.app/api/characters/:path*" },
     { "source": "/api/registry/:path*", "destination": "https://api.grudge-studio.com/assets/:path*" },
     { "source": "/api/registry", "destination": "https://api.grudge-studio.com/assets" },
     { "source": "/favicon.ico", "destination": "/favicon.svg" },

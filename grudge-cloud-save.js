@@ -179,18 +179,21 @@
       ? ['/api/auth/puter', `${RAILWAY}/api/auth/puter`]
       : [`${RAILWAY}/api/auth/puter`, '/api/auth/puter'];
 
-    for (const url of puterUrls) {
+    const bodies = [
+      { puterUuid: pu.uuid, puterId: pu.uuid, puterUsername: pu.username, email: pu.email || undefined },
+      { puterId: pu.uuid, puterUsername: pu.username, email: pu.email || undefined },
+    ];
+    const endpoints = [
+      ...puterUrls.map((url) => ({ url, body: bodies[0] })),
+      ...puterUrls.map((url) => ({ url: url.replace('/puter', '/puter-sso'), body: bodies[1] })),
+    ];
+    for (const { url, body } of endpoints) {
       try {
         const res = await fetch(url, {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            puterUuid: pu.uuid,
-            puterId: pu.uuid,
-            puterUsername: pu.username,
-            email: pu.email || undefined,
-          }),
+          body: JSON.stringify(body),
         });
         if (!res.ok) continue;
         const data = await res.json();
@@ -199,7 +202,7 @@
         return {
           token,
           user: data.user || {
-            username: data.username,
+            username: data.username || data.displayName,
             grudgeId: data.grudgeId,
             userId: data.userId || data.id,
           },
@@ -372,10 +375,136 @@
     }
   }
 
-  function login(returnUrl) {
+  function login(returnUrl, opts) {
+    const usePopup = opts?.popup ?? shouldPreferPopup();
+    if (usePopup && typeof global.open === 'function') {
+      return loginPopup(returnUrl);
+    }
     const ret = returnUrl || global.location.href.split('?')[0];
     global.location.href =
       AUTH + '/api/auth/page?app=ui-editor&redirect=' + encodeURIComponent(ret);
+  }
+
+  function shouldPreferPopup() {
+    const path = (global.location?.pathname || '/').replace(/\/$/, '') || '/';
+    return path === '/' || ['/studio', '/assets', '/hotkeys', '/main-panel'].includes(path);
+  }
+
+  let popupListenerInstalled = false;
+
+  function installPopupAuthListener() {
+    if (popupListenerInstalled) return;
+    popupListenerInstalled = true;
+    global.addEventListener('message', async (e) => {
+      const okOrigin =
+        e.origin === 'https://id.grudge-studio.com' ||
+        e.origin === 'https://grudge-studio.com' ||
+        e.origin.endsWith('.grudge-studio.com');
+      if (!okOrigin || e.data?.type !== 'grudge-auth:success') return;
+      try {
+        const launch = e.data.token;
+        if (!launch) return;
+        const exchanged = await exchangeLaunchToken(launch);
+        const token = exchanged?.token || launch;
+        storeSession(token, e.data.user || exchanged?.user);
+        await linkPuterCloud();
+      } catch (err) {
+        console.warn('[GrudgeCloud] popup auth failed', err);
+      }
+    });
+  }
+
+  function loginPopup() {
+    installPopupAuthListener();
+    const origin = global.location.origin;
+    const url =
+      AUTH +
+      '/api/auth/page?app=ui-editor&handoff=1&origin=' +
+      encodeURIComponent(origin);
+    const popup = global.open(url, 'grudge-auth', 'width=480,height=740,noopener');
+    if (!popup) {
+      return login(null, { popup: false });
+    }
+    return new Promise((resolve) => {
+      const done = async () => {
+        global.removeEventListener('grudge:auth:ready', onReady);
+        resolve(getUser());
+      };
+      const onReady = () => done();
+      global.addEventListener('grudge:auth:ready', onReady);
+      setTimeout(() => {
+        if (isLoggedIn()) done();
+      }, 120000);
+    });
+  }
+
+  function kvMainPanelKey() {
+    return scopedKv('main-panel:state');
+  }
+
+  function mainPanelLsKey() {
+    const gid = getGrudgeId();
+    return gid ? `grudge_main_panel_${gid}` : 'grudge_main_panel_v1';
+  }
+
+  async function saveMainPanel(state) {
+    const payload = { ...state, savedAt: Date.now(), version: 1 };
+    lsSet(mainPanelLsKey(), JSON.stringify(payload));
+    if (await puterReady()) {
+      try {
+        await puter.kv.set(kvMainPanelKey(), payload);
+      } catch (e) {
+        console.warn('[GrudgeCloud] main-panel save failed', e);
+      }
+    }
+    return payload;
+  }
+
+  async function loadMainPanel() {
+    if (await puterReady()) {
+      try {
+        const cloud = await puter.kv.get(kvMainPanelKey());
+        if (cloud) return cloud;
+      } catch {}
+    }
+    try {
+      return JSON.parse(lsGet(mainPanelLsKey()) || 'null');
+    } catch {
+      return null;
+    }
+  }
+
+  async function saveCameraState(sceneId, pose) {
+    const slice = `camera:${sceneId || 'default'}`;
+    const payload = { ...pose, savedAt: Date.now() };
+    const lsKey = getGrudgeId()
+      ? `grudge_camera_${getGrudgeId()}_${sceneId || 'default'}`
+      : `grudge_camera_${sceneId || 'default'}`;
+    lsSet(lsKey, JSON.stringify(payload));
+    if (await puterReady()) {
+      try {
+        await puter.kv.set(scopedKv(slice), payload);
+      } catch {}
+    }
+    return payload;
+  }
+
+  async function loadCameraState(sceneId) {
+    const slice = `camera:${sceneId || 'default'}`;
+    if (await puterReady()) {
+      try {
+        const cloud = await puter.kv.get(scopedKv(slice));
+        if (cloud) return cloud;
+      } catch {}
+    }
+    const lsKey = getGrudgeId()
+      ? `grudge_camera_${getGrudgeId()}_${sceneId || 'default'}`
+      : `grudge_camera_${sceneId || 'default'}`;
+    try {
+      return JSON.parse(lsGet(lsKey) || 'null');
+    } catch {
+      return null;
+    }
   }
 
   async function logout() {
@@ -624,8 +753,13 @@
     linkPuterCloud,
     silentReauthFromPuter,
     login,
+    loginPopup,
     logout,
     switchAccount,
+    saveMainPanel,
+    loadMainPanel,
+    saveCameraState,
+    loadCameraState,
     ensurePuterSignIn,
     saveInputConfig,
     loadInputConfig,
@@ -642,6 +776,7 @@
   global.GrudgeCloud = GrudgeCloud;
 
   installCrossTabSync();
+  installPopupAuthListener();
 
   global.addEventListener('DOMContentLoaded', () => {
     bootstrapAuth().catch(() => {});

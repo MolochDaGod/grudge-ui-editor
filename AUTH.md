@@ -19,6 +19,9 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 | `grudge-cloud-save.js` | Auth bootstrap, logout, pack CRUD (local + Puter KV) |
 | `grudge-ai.js` | AI chat / UI Kit director (Puter AI or Anthropic key) |
 | `grudge-shell.js` | Fleet nav + account menu (sign out, switch account, cloud status) |
+| `grudge-uikit-persist.js` | UI Kit `gameuikit:*` → Puter KV (index only) |
+| `grudge-engine.js` | Characters API + island engine preview URLs |
+| `grudge-camera-controls.js` | Gamepad/keyboard camera for `/assets` |
 
 ## Vercel API proxies (`vercel.json`)
 
@@ -29,6 +32,7 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 | `/api/auth/session/exchange` | `api.grudge-studio.com` |
 | `/api/auth/*` | Railway GrudgeBuilder |
 | `/api/registry` | `api.grudge-studio.com/assets` (D1 asset browser) |
+| `/api/characters` | Railway GrudgeBuilder (fleet characters) |
 
 ## localStorage keys
 
@@ -52,6 +56,8 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 | `grudge:{grudgeId}:ui-input:default` | `/hotkeys` bindings |
 | `grudge:{grudgeId}:ui-kit:editor-state` | `/` UI Kit theme editor (zustand) |
 | `grudge:{grudgeId}:ui-kit:profiles` | `/` saved theme profiles |
+| `grudge:{grudgeId}:main-panel:state` | `/main-panel` tab + entity selection |
+| `grudge:{grudgeId}:camera:assets` | `/assets` orbit camera pose |
 
 Legacy unscoped keys (`grudge:ui-pack:…`) are still read for migration; new writes use the scoped form.
 
@@ -64,6 +70,14 @@ Local studio packs: `grudge_ui_packs_{grudgeId}` (falls back to `grudge_ui_packs
 If the session JWT expires but Puter is still signed in, `bootstrapAuth()` calls `silentReauthFromPuter()`:
 
 `POST /api/auth/puter` with `{ puterUuid, puterUsername, email }` → fresh JWT in JSON (no redirect).
+
+## Popup auth (editor pages)
+
+On `/`, `/studio`, `/assets`, `/hotkeys`, `/main-panel`, `login()` opens a **popup** to `id.grudge-studio.com` instead of a full redirect (preserves unsaved editor state).
+
+The auth page posts `grudge-auth:success` with a launch token; `grudge-cloud-save.js` exchanges it and calls `linkPuterCloud()`.
+
+Use `GrudgeCloud.login(null, { popup: false })` to force redirect.
 
 ## Account menu (nav pill)
 

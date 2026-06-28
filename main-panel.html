@@ -6,9 +6,14 @@
   <title>Grudge Main Panel — Mini</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./grudge-shell.css" />
   <link rel="stylesheet" href="./main-panel.css" />
+  <script src="https://js.puter.com/v2/" async></script>
+  <script src="./grudge-cloud-save.js"></script>
+  <script src="./grudge-engine.js"></script>
+  <script src="./grudge-shell.js"></script>
 </head>
-<body class="mp-root">
+<body class="mp-root gs-has-nav">
   <div class="app">
     <header class="top-bar">
       <div class="logo">
@@ -17,9 +22,9 @@
       </div>
       <div class="player-info">
         <div class="resource-bars" style="display:flex;gap:6px">
-          <div class="res-bar"><div class="fill hp" style="width:78%"></div><span class="lbl">HP 780/1000</span></div>
-          <div class="res-bar"><div class="fill mp" style="width:62%"></div><span class="lbl">MP 310/500</span></div>
-          <div class="res-bar"><div class="fill sp" style="width:91%"></div><span class="lbl">SP 91/100</span></div>
+          <div class="res-bar"><div class="fill hp" id="bar-hp" style="width:78%"></div><span class="lbl" id="lbl-hp">HP 780/1000</span></div>
+          <div class="res-bar"><div class="fill mp" id="bar-mp" style="width:62%"></div><span class="lbl" id="lbl-mp">MP 310/500</span></div>
+          <div class="res-bar"><div class="fill sp" id="bar-sp" style="width:91%"></div><span class="lbl" id="lbl-sp">SP 91/100</span></div>
         </div>
         <span style="color:var(--gold);font-family:'Cinzel',serif;font-weight:700" id="entity-name">Korgath the Sworn</span>
         <span style="color:var(--muted);font-size:10px" id="entity-meta">Lv.42 Barbarian Warrior</span>
@@ -73,7 +78,7 @@
             <div class="equip-panel">
               <div style="text-align:center;margin-bottom:8px">
                 <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:#fbbf24">EQUIPMENT LOADOUT</div>
-                <div style="font-size:10px;color:var(--muted);margin-top:2px">12-slot paper doll · Tactical Infinity grid</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:2px">12-slot paper doll · fleet character sync</div>
               </div>
               <div class="equip-grid" id="equip-grid">
                 <div class="equip-slot" style="grid-column:1;grid-row:1" title="Helmet">⛑</div>
@@ -82,7 +87,7 @@
                 <div class="equip-slot" style="grid-column:1;grid-row:4" title="Legs">👖</div>
                 <div class="equip-slot" style="grid-column:1;grid-row:5" title="Boots">🥾</div>
                 <div class="equip-portrait" style="grid-column:2;grid-row:1/6">
-                  <img id="portrait" src="https://tactical-infinity.replit.app/assets/Barbarian_1777036154778-D1yd9ddH.png" alt="Character portrait" />
+                  <img id="portrait" src="" alt="Character portrait" />
                 </div>
                 <div class="equip-slot" style="grid-column:3;grid-row:1" title="Main Hand">⚔</div>
                 <div class="equip-slot" style="grid-column:3;grid-row:2" title="Off Hand">🛡</div>
@@ -145,6 +150,22 @@
     </div>
   </div>
   <script>
+    const PORTRAITS = {
+      player: 'https://tactical-infinity.replit.app/assets/Barbarian_1777036154778-D1yd9ddH.png',
+      shadowfang: 'https://tactical-infinity.replit.app/assets/Elf_1777036154780-DJEQzQzJ.png',
+    };
+    const DEFAULT_ENTITIES = {
+      player: { name: 'Korgath the Sworn', meta: 'Lv.42 Barbarian Warrior', portrait: PORTRAITS.player },
+      shadowfang: { name: 'Shadowfang', meta: 'Lv.38 Elf Ranger', portrait: PORTRAITS.shadowfang },
+    };
+
+    let state = {
+      activeTab: 'equipment',
+      activeEntity: 'player',
+      entities: structuredClone(DEFAULT_ENTITIES),
+      bars: { hp: 78, mp: 62, sp: 91 },
+    };
+
     const items = ['⚔','👒','🥋','🥾','🛡','🧪','🍖','⛓','💎','','','','','','',''];
     const grids = ['inv-grid', 'rcol-inv'];
     grids.forEach((id) => {
@@ -157,26 +178,96 @@
       }
     });
 
+    function applyEntity(id) {
+      const ent = state.entities[id] || DEFAULT_ENTITIES[id];
+      if (!ent) return;
+      document.getElementById('entity-name').textContent = ent.name;
+      document.getElementById('entity-meta').textContent = ent.meta;
+      document.getElementById('portrait').src = ent.portrait || PORTRAITS.player;
+      document.querySelectorAll('.entity-chip').forEach((c) => {
+        c.classList.toggle('active', c.dataset.id === id);
+      });
+    }
+
+    function applyTab(tab) {
+      state.activeTab = tab;
+      document.querySelectorAll('#tabs .tab-btn').forEach((b) => {
+        b.classList.toggle('active', b.dataset.tab === tab);
+      });
+      document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
+      document.getElementById('tab-' + tab)?.classList.add('active');
+    }
+
+    function applyBars() {
+      const b = state.bars || {};
+      document.getElementById('bar-hp').style.width = (b.hp || 78) + '%';
+      document.getElementById('bar-mp').style.width = (b.mp || 62) + '%';
+      document.getElementById('bar-sp').style.width = (b.sp || 91) + '%';
+    }
+
+    function collectState() {
+      return {
+        activeTab: state.activeTab,
+        activeEntity: state.activeEntity,
+        entities: state.entities,
+        bars: state.bars,
+      };
+    }
+
+    let saveTimer;
+    function scheduleSave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(async () => {
+        if (window.GrudgeCloud?.saveMainPanel) await GrudgeCloud.saveMainPanel(collectState());
+      }, 1200);
+    }
+
     document.getElementById('tabs').addEventListener('click', (e) => {
       const btn = e.target.closest('.tab-btn');
       if (!btn) return;
-      document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
-      document.getElementById('tab-' + btn.dataset.tab)?.classList.add('active');
+      applyTab(btn.dataset.tab);
+      scheduleSave();
     });
 
     document.querySelectorAll('.entity-chip').forEach((chip) => {
       chip.addEventListener('click', () => {
-        document.querySelectorAll('.entity-chip').forEach((c) => c.classList.remove('active'));
-        chip.classList.add('active');
-        const names = { player: ['Korgath the Sworn', 'Lv.42 Barbarian Warrior', 'Barbarian_1777036154778-D1yd9ddH.png'], shadowfang: ['Shadowfang', 'Lv.38 Elf Ranger', 'Elf_1777036154780-DJEQzQzJ.png'] };
-        const [n, m, img] = names[chip.dataset.id] || names.player;
-        document.getElementById('entity-name').textContent = n;
-        document.getElementById('entity-meta').textContent = m;
-        document.getElementById('portrait').src = 'https://tactical-infinity.replit.app/assets/' + img;
+        state.activeEntity = chip.dataset.id;
+        applyEntity(state.activeEntity);
+        scheduleSave();
       });
     });
+
+    function mergeFleetCharacter(char) {
+      if (!char) return;
+      const id = 'player';
+      state.entities[id] = {
+        name: char.name || char.displayName || state.entities[id].name,
+        meta: `Lv.${char.level || 1} ${char.race || ''} ${char.class || char.classId || ''}`.trim(),
+        portrait: state.entities[id].portrait,
+      };
+      applyEntity(state.activeEntity);
+      scheduleSave();
+    }
+
+    window.addEventListener('grudge:engine:character', (e) => mergeFleetCharacter(e.detail));
+    window.addEventListener('grudge:engine:characters', () => {
+      const c = window.GrudgeEngine?.getActiveCharacter?.();
+      if (c) mergeFleetCharacter(c);
+    });
+
+    (async function boot() {
+      if (window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
+      if (window.GrudgeEngine?.init) await GrudgeEngine.init();
+      const saved = window.GrudgeCloud?.loadMainPanel ? await GrudgeCloud.loadMainPanel() : null;
+      if (saved) {
+        state = { ...state, ...saved, entities: { ...DEFAULT_ENTITIES, ...saved.entities } };
+      }
+      applyTab(state.activeTab || 'equipment');
+      applyEntity(state.activeEntity || 'player');
+      applyBars();
+      const c = window.GrudgeEngine?.getActiveCharacter?.();
+      if (c) mergeFleetCharacter(c);
+    })();
   </script>
 </body>
 </html>
