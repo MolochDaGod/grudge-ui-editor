@@ -92,9 +92,11 @@
     { "source": "/games", "destination": "/games.html" },
     { "source": "/assets", "destination": "/assets.html" },
     { "source": "/main-panel", "destination": "/main-panel.html" },
-    { "source": "/equipment", "destination": "/index.html" },
+    { "source": "/main-panel/", "destination": "/main-panel.html" },
+    { "source": "/equipment", "destination": "/main-panel.html?tab=equipment&era=warlords" },
+    { "source": "/eras", "destination": "/eras/index.json" },
     {
-      "source": "/((?!hotkeys|studio|games|assets|main-panel|equipment|favicon|grudge-shell|prim-packs|game-ui|api|auth).*)",
+      "source": "/((?!hotkeys|studio|games|assets|main-panel|equipment|eras|favicon|grudge-shell|prim-packs|game-ui|equipment-paperdoll|api|auth).*)",
       "destination": "/index.html"
     }
   ],
@@ -110,6 +112,31 @@
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=300" },
         { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/eras/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=120" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/equipment-paperdoll.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/main-panel.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=60" },
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://*.grudge-studio.com https://*.vercel.app https://grudgewarlords.com https://*.replit.app"
+        }
       ]
     },
     {

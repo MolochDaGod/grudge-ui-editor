@@ -217,17 +217,22 @@
     },
     {
       "id": "eq1",
-      "type": "equipment-slots",
-      "x": 200,
-      "y": 200,
-      "w": 300,
-      "h": 480,
+      "type": "paperdoll-equipment",
+      "x": 160,
+      "y": 160,
+      "w": 420,
+      "h": 560,
       "rot": 0,
       "op": 1,
       "br": 6,
       "shd": true,
       "props": {
-        "label": "Equipment"
+        "label": "GRUDGE WARLORD",
+        "title": "GRUDGE WARLORD",
+        "race": "Hero",
+        "portraitUrl": "https://client.grudge-studio.com/images/portraits/barbarian.png",
+        "layout": "tactical-paperdoll",
+        "mainPanel": "https://ui.grudge-studio.com/main-panel.html?era=warlords&tab=equipment"
       },
       "groups": [
         "inventory",
@@ -398,10 +403,15 @@
     "playUrl": "https://client.grudge-studio.com",
     "genre": "fantasy-mmo",
     "engine": "Three.js + Colyseus",
-    "description": "Full Warlords play HUD: vitals, target, hotbar, bag, equipment, craft/trade, quests. 8-attr SSOT.",
+    "description": "Full Warlords play HUD: vitals, target, hotbar, bag, tactical paperdoll equipment, craft/trade, quests. Main panel host: ui.grudge-studio.com/main-panel?era=warlords.",
+    "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords",
+    "mainPanelEmbed": "https://ui.grudge-studio.com/main-panel.html?era=warlords&embed=1",
+    "equipmentLayout": "paperdoll-tactical",
     "features": [
       "inventory",
       "equipment",
+      "paperdoll",
+      "main-panel",
       "crafting",
       "quests",
       "combat",
@@ -520,5 +530,5 @@
     }
   },
   "id": "warlords",
-  "version": "1.0.0"
+  "version": "1.1.0"
 }

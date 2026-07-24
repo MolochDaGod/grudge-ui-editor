@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "description": "Era main-panel + UI host registry. ui.grudge-studio.com is SSOT for edit/host; info.grudge-studio.com/main-panel.html migrates here.",
+  "host": "https://ui.grudge-studio.com",
+  "legacyInfoPanel": "https://info.grudge-studio.com/main-panel.html",
+  "eras": [
+    {
+      "id": "warlords",
+      "name": "Warlords",
+      "status": "canonical",
+      "mainPanel": "/main-panel.html?era=warlords",
+      "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords",
+      "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords&embed=1",
+      "equipmentUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords&tab=equipment",
+      "packId": "warlords",
+      "packUrl": "/game-ui-packs/warlords.json",
+      "playUrls": [
+        "https://client.grudge-studio.com",
+        "https://grudgewarlords.com",
+        "https://tactical-infinity.replit.app"
+      ],
+      "equipmentLayout": "paperdoll-tactical",
+      "slots": [
+        "helmet",
+        "chest",
+        "gloves",
+        "legs",
+        "boots",
+        "weapon",
+        "offhand",
+        "amulet",
+        "belt",
+        "cloak",
+        "ring",
+        "add"
+      ],
+      "dataBindings": {
+        "characters": "/api/characters?era=warlords",
+        "equipment": "/api/characters/:id",
+        "accountBag": "/api/account/resources"
+      }
+    }
+  ]
+}

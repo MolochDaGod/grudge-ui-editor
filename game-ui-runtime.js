@@ -75,7 +75,26 @@
         return `<div class="gtitle">${esc(p.label || "Bag")}</div><div class="sgrid" style="grid-template-columns:repeat(${cols},1fr);gap:${gap}px">${cells}</div>`;
       }
       case "equipment-slots":
-        return `<div class="gtitle">${esc(p.label || "Equipment")}</div><div class="eqgrid">${["Head", "Chest", "Hands", "Legs", "Main", "Off", "Ring", "Neck", "Back", "Feet", "Belt", "Trinket"].map((n) => `<div class="eqsl"><i>◇</i><span class="eqn">${n}</span></div>`).join("")}</div>`;
+      case "paperdoll-equipment": {
+        // Tactical paperdoll (portrait + left/right slots) — Warlords era SSOT.
+        const title = esc(p.label || p.title || "Equipment");
+        const race = esc(p.race || "Hero");
+        const portrait = esc(
+          p.portraitUrl ||
+            "https://client.grudge-studio.com/images/portraits/human.png",
+        );
+        const left = ["Helmet", "Chest", "Gloves", "Legs", "Boots"];
+        const right = ["Main", "Off", "Amulet", "Belt", "Cloak"];
+        return `<div class="pdwrap">
+          <div class="pdtitle">${title}</div>
+          <div class="pdrace">${race}</div>
+          <div class="pdgrid">
+            <div class="pdcol">${left.map((n) => `<div class="eqsl"><i>◇</i><span class="eqn">${n}</span></div>`).join("")}</div>
+            <div class="pdport"><img src="${portrait}" alt="" /></div>
+            <div class="pdcol">${right.map((n) => `<div class="eqsl"><i>◇</i><span class="eqn">${n}</span></div>`).join("")}</div>
+          </div>
+        </div>`;
+      }
       case "minimap":
         return `<div class="mmwrap" style="border-radius:${p.shape === "circle" ? "50%" : "8px"}"><div class="mmbg"></div><div class="mmgrid"></div><div class="mmdot"></div><div class="mmbd" style="border-radius:inherit"></div></div>`;
       case "currency-display":
@@ -152,6 +171,14 @@
 .eqgrid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(4,1fr);gap:3px;padding:5px;height:calc(100% - 22px)}
 .eqsl{background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.5rem;color:var(--ca)}
 .eqn{font-size:.38rem;color:rgba(255,255,255,.4)}
+.pdwrap{display:flex;flex-direction:column;height:100%;background:linear-gradient(180deg,rgba(28,25,23,.95),rgba(12,10,9,.98))}
+.pdtitle{font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ca);text-align:center;padding:6px;border-bottom:1px solid var(--sb)}
+.pdrace{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ct);text-align:center;padding:4px;opacity:.85}
+.pdgrid{flex:1;display:grid;grid-template-columns:minmax(40px,56px) 1fr minmax(40px,56px);gap:4px;padding:6px;min-height:0}
+.pdcol{display:flex;flex-direction:column;gap:3px;justify-content:space-between}
+.pdcol .eqsl{flex:1;min-height:0}
+.pdport{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--sb);background:#000}
+.pdport img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 62%;transform:scale(1.45)}
 .ufwrap,.afwrap{display:flex;align-items:center;gap:6px;padding:4px 6px;height:100%}
 .ufface,.afface{border-radius:4px;background:var(--slot);border:2px solid var(--ca);display:flex;align-items:center;justify-content:center;color:var(--ca);flex-shrink:0}
 .ufface{width:40px;height:40px}.afface{width:26px;height:26px;border-width:1px}

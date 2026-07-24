@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grudge Main Panel — Mini</title>
+  <title>Grudge Main Panel — Warlords</title>
+  <meta name="description" content="Warlords-era main panel + tactical equipment paperdoll. Hosted by ui.grudge-studio.com (SSOT)." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./grudge-shell.css" />
@@ -11,6 +12,7 @@
   <script src="https://js.puter.com/v2/" async></script>
   <script src="./grudge-cloud-save.js"></script>
   <script src="./race-portraits.js"></script>
+  <script src="./equipment-paperdoll.js"></script>
   <script src="./grudge-engine.js"></script>
   <script src="./grudge-shell.js"></script>
 </head>
@@ -19,7 +21,7 @@
     <header class="top-bar">
       <div class="logo">
         <h1>⚔ Grudge Warlords</h1>
-        <span class="sub">Main Panel · Mini</span>
+        <span class="sub">Main Panel · Era host</span>
       </div>
       <div class="player-info">
         <div class="resource-bars" style="display:flex;gap:6px">
@@ -32,37 +34,43 @@
       </div>
     </header>
 
+    <div class="mp-era-bar" id="era-bar">
+      <span style="color:var(--muted)">Era</span>
+      <button type="button" class="era-pill active" data-era="warlords">Warlords</button>
+      <a href="https://ui.grudge-studio.com/games" target="_blank" rel="noopener">Game UI packs</a>
+      <a href="https://ui.grudge-studio.com/studio" target="_blank" rel="noopener">Studio</a>
+      <a href="./eras/index.json" target="_blank" rel="noopener">eras/index.json</a>
+    </div>
+
     <div class="main-body">
       <aside class="left-col">
         <div class="stat-section">
           <h3>Entities</h3>
-          <div class="entity-chip active" data-id="player">
+          <div class="entity-chip active" data-id="player" data-mode="self">
             <div>
-              <div class="name">Korgath the Sworn</div>
-              <div class="meta">Lv.42 · Warrior · 6/12 equipped</div>
+              <div class="name" id="chip-player-name">You</div>
+              <div class="meta" id="chip-player-meta">Fleet character</div>
             </div>
           </div>
-          <div class="entity-chip" data-id="shadowfang">
+          <div class="entity-chip" data-id="shadowfang" data-mode="inspect">
             <div>
               <div class="name">Shadowfang</div>
-              <div class="meta">Lv.38 · Ranger · Ally</div>
+              <div class="meta">Lv.38 · Ranger · Inspect</div>
             </div>
           </div>
         </div>
         <div class="stat-section">
           <h3>Combat Power</h3>
           <div class="stat-row"><span class="k">Rating</span><span class="v" style="color:var(--gold)">A+</span></div>
-          <div class="stat-row"><span class="k">Tier</span><span class="v">T6</span></div>
-          <div class="stat-row"><span class="k">Damage</span><span class="v">142</span></div>
-          <div class="stat-row"><span class="k">Defense</span><span class="v">89</span></div>
-          <div class="stat-row"><span class="k">Crit</span><span class="v">18.2%</span></div>
+          <div class="stat-row"><span class="k">Equipped</span><span class="v" id="eq-count">0/11</span></div>
+          <div class="stat-row"><span class="k">Mode</span><span class="v" id="eq-mode">self</span></div>
         </div>
         <div class="stat-section">
           <h3>Attributes</h3>
-          <div class="stat-row"><span class="k">Strength</span><span class="v">28</span></div>
-          <div class="stat-row"><span class="k">Vitality</span><span class="v">32</span></div>
-          <div class="stat-row"><span class="k">Dexterity</span><span class="v">18</span></div>
-          <div class="stat-row"><span class="k">Tactics</span><span class="v">22</span></div>
+          <div class="stat-row"><span class="k">Strength</span><span class="v" id="attr-str">—</span></div>
+          <div class="stat-row"><span class="k">Vitality</span><span class="v" id="attr-vit">—</span></div>
+          <div class="stat-row"><span class="k">Dexterity</span><span class="v" id="attr-dex">—</span></div>
+          <div class="stat-row"><span class="k">Tactics</span><span class="v" id="attr-tac">—</span></div>
         </div>
       </aside>
 
@@ -76,44 +84,26 @@
         </div>
         <div class="content-area">
           <div class="tab-panel active" id="tab-equipment">
-            <div class="equip-panel">
-              <div style="text-align:center;margin-bottom:8px">
-                <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:#fbbf24">EQUIPMENT LOADOUT</div>
-                <div style="font-size:10px;color:var(--muted);margin-top:2px">12-slot paper doll · fleet character sync</div>
-              </div>
-              <div class="equip-grid" id="equip-grid">
-                <div class="equip-slot" style="grid-column:1;grid-row:1" title="Helmet">⛑</div>
-                <div class="equip-slot" style="grid-column:1;grid-row:2" title="Chest">🥋</div>
-                <div class="equip-slot" style="grid-column:1;grid-row:3" title="Gloves">🧤</div>
-                <div class="equip-slot" style="grid-column:1;grid-row:4" title="Legs">👖</div>
-                <div class="equip-slot" style="grid-column:1;grid-row:5" title="Boots">🥾</div>
-                <div class="equip-portrait" style="grid-column:2;grid-row:1/6">
-                  <img id="portrait" src="" alt="Character portrait" />
-                </div>
-                <div class="equip-slot" style="grid-column:3;grid-row:1" title="Main Hand">⚔</div>
-                <div class="equip-slot" style="grid-column:3;grid-row:2" title="Off Hand">🛡</div>
-                <div class="equip-slot" style="grid-column:3;grid-row:3" title="Amulet">📿</div>
-                <div class="equip-slot" style="grid-column:3;grid-row:4" title="Belt">🔗</div>
-                <div class="equip-slot" style="grid-column:3;grid-row:5" title="Cloak">🧥</div>
-                <div class="equip-slot" style="grid-column:1;grid-row:6" title="Ring">💍</div>
-                <div class="equip-slot" style="grid-column:3;grid-row:6;border-color:rgba(251,191,36,.5);color:#fbbf24" title="Add">＋</div>
-              </div>
-            </div>
+            <!-- Tactical paperdoll replaces old emoji-only equipment tab -->
+            <div id="paperdoll-host"></div>
+            <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:10px">
+              Layout: tactical-infinity equipment · Host: ui.grudge-studio.com · Era: <span id="era-label">warlords</span>
+            </p>
           </div>
           <div class="tab-panel" id="tab-inventory">
-            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Shared bag · 4×4 grid (UI kit default)</p>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Shared account bag · Railway SSOT</p>
             <div class="inv-grid" id="inv-grid"></div>
           </div>
           <div class="tab-panel" id="tab-skills">
             <div class="qc-grid">
-              <div class="qc-card"><h4>Power Strike</h4><p>150% overhead strike · Slot 1</p></div>
+              <div class="qc-card"><h4>Power Strike</h4><p>150% overhead · Slot 1</p></div>
               <div class="qc-card"><h4>Shield Bash</h4><p>Stun 1.5s · Slot 2</p></div>
               <div class="qc-card"><h4>War Cry</h4><p>AoE taunt · Slot 3</p></div>
               <div class="qc-card"><h4>Cleave</h4><p>Wide arc · Slot 4</p></div>
             </div>
           </div>
           <div class="tab-panel" id="tab-craft">
-            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Quick Craft · T0–T1 recipes</p>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Quick Craft · ObjectStore recipes</p>
             <div class="qc-grid">
               <div class="qc-card"><h4>Iron Ingot</h4><p>Miner · 3 ore → 1 ingot</p></div>
               <div class="qc-card"><h4>Healing Tonic</h4><p>Chef · herbs + water</p></div>
@@ -122,8 +112,8 @@
             </div>
           </div>
           <div class="tab-panel" id="tab-quests">
-            <div class="qc-card" style="margin-bottom:8px"><h4>The Storm Awakens</h4><p>Main · Step 3/3 — Defeat Tempest Herald</p></div>
-            <div class="qc-card"><h4>Iron for the Forge</h4><p>Side · Collect 10 iron ingots (4/10)</p></div>
+            <div class="qc-card" style="margin-bottom:8px"><h4>The Storm Awakens</h4><p>Main · Step 3/3</p></div>
+            <div class="qc-card"><h4>Iron for the Forge</h4><p>Side · 4/10 iron ingots</p></div>
           </div>
         </div>
         <div class="action-bar-wrap">
@@ -140,74 +130,168 @@
 
       <aside class="right-col">
         <div class="stat-section" style="padding:8px">
-          <h3 id="rcol-title">Inventory</h3>
-          <div style="display:flex;gap:4px;margin-bottom:6px">
-            <button class="tab-btn active" style="padding:4px 8px;font-size:8px" id="btn-inv">Bag</button>
-            <button class="tab-btn" style="padding:4px 8px;font-size:8px" id="btn-skills">Skills</button>
-          </div>
+          <h3 id="rcol-title">Bag</h3>
           <div class="inv-grid" id="rcol-inv"></div>
         </div>
       </aside>
     </div>
   </div>
   <script>
-    const PORTRAITS = {
-      player: window.grudgePortraitForRace?.('barbarian') || 'https://client.grudge-studio.com/images/portraits/barbarian.png',
-      shadowfang: window.grudgePortraitForRace?.('elf') || 'https://client.grudge-studio.com/images/portraits/elf.png',
+    const params = new URLSearchParams(location.search);
+    const ERA = params.get("era") || "warlords";
+    const EMBED = params.get("embed") === "1" || params.get("embed") === "true";
+    const TAB = params.get("tab") || "equipment";
+    const INSPECT = params.get("inspect") || params.get("characterId") || null;
+
+    if (EMBED) document.body.classList.add("embed-mode");
+    document.getElementById("era-label").textContent = ERA;
+
+    const DEMO_EQUIP = {
+      player: {
+        head: { id: "helm_iron", name: "Iron Helm", rarity: "uncommon" },
+        chest: { id: "chest_iron", name: "Iron Cuirass", rarity: "rare" },
+        weapon: { id: "w_sword", name: "Cutlass", rarity: "uncommon" },
+        feet: { id: "boots_leather", name: "March Boots", rarity: "common" },
+      },
+      shadowfang: {
+        weapon: { id: "bow_yew", name: "Yew Longbow", rarity: "rare" },
+        chest: { id: "leather_vest", name: "Ranger Vest", rarity: "uncommon" },
+        cape: { id: "cape_leaf", name: "Leaf Cloak", rarity: "epic" },
+      },
     };
+
     const DEFAULT_ENTITIES = {
-      player: { name: 'Korgath the Sworn', meta: 'Lv.42 Barbarian Warrior', portrait: PORTRAITS.player },
-      shadowfang: { name: 'Shadowfang', meta: 'Lv.38 Elf Ranger', portrait: PORTRAITS.shadowfang },
+      player: {
+        name: "Korgath the Sworn",
+        meta: "Lv.42 Barbarian Warrior",
+        race: "barbarian",
+        portrait: window.grudgePortraitForRace?.("barbarian"),
+        equipment: DEMO_EQUIP.player,
+        mode: "self",
+      },
+      shadowfang: {
+        name: "Shadowfang",
+        meta: "Lv.38 Elf Ranger · Ally",
+        race: "elf",
+        portrait: window.grudgePortraitForRace?.("elf"),
+        equipment: DEMO_EQUIP.shadowfang,
+        mode: "inspect",
+      },
     };
 
     let state = {
-      activeTab: 'equipment',
-      activeEntity: 'player',
+      era: ERA,
+      activeTab: TAB,
+      activeEntity: INSPECT ? "shadowfang" : "player",
       entities: structuredClone(DEFAULT_ENTITIES),
       bars: { hp: 78, mp: 62, sp: 91 },
+      equipMode: "self",
     };
 
-    const items = ['⚔','👒','🥋','🥾','🛡','🧪','🍖','⛓','💎','','','','','','',''];
-    const grids = ['inv-grid', 'rcol-inv'];
-    grids.forEach((id) => {
+    let paperdollApi = null;
+
+    const items = ["⚔", "👒", "🥋", "🥾", "🛡", "🧪", "🍖", "⛓", "💎", "", "", "", "", "", "", ""];
+    ["inv-grid", "rcol-inv"].forEach((id) => {
       const g = document.getElementById(id);
       for (let i = 0; i < 16; i++) {
-        const s = document.createElement('div');
-        s.className = 'inv-slot' + (items[i] ? ' has-item' : '');
-        s.textContent = items[i] || '';
+        const s = document.createElement("div");
+        s.className = "inv-slot" + (items[i] ? " has-item" : "");
+        s.textContent = items[i] || "";
         g.appendChild(s);
       }
     });
 
+    function equipCount(eq) {
+      return Object.keys(eq || {}).filter((k) => eq[k]).length;
+    }
+
+    function renderPaperdoll() {
+      const host = document.getElementById("paperdoll-host");
+      if (!host || !window.GrudgeEquipmentPaperdoll) return;
+      const ent = state.entities[state.activeEntity] || DEFAULT_ENTITIES.player;
+      const mode = ent.mode === "inspect" || state.activeEntity !== "player" ? "inspect" : "self";
+      state.equipMode = mode;
+      document.getElementById("eq-mode").textContent = mode;
+      document.getElementById("eq-count").textContent = equipCount(ent.equipment) + "/11";
+      paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
+        title: "GRUDGE WARLORD",
+        subtitle: (ent.race || "hero").toUpperCase() + (mode === "inspect" ? " · INSPECT" : " · LOADOUT"),
+        race: ent.race || "human",
+        portraitUrl: ent.portrait,
+        equipped: ent.equipment || {},
+        mode,
+        entityId: state.activeEntity,
+        width: 420,
+        onSlotClick: (slotId, gearKey) => {
+          if (mode === "inspect") return;
+          console.info("[main-panel] equip slot", slotId, gearKey);
+        },
+      });
+    }
+
     function applyEntity(id) {
       const ent = state.entities[id] || DEFAULT_ENTITIES[id];
       if (!ent) return;
-      document.getElementById('entity-name').textContent = ent.name;
-      document.getElementById('entity-meta').textContent = ent.meta;
-      document.getElementById('portrait').src = ent.portrait || PORTRAITS.player;
-      document.querySelectorAll('.entity-chip').forEach((c) => {
-        c.classList.toggle('active', c.dataset.id === id);
+      state.activeEntity = id;
+      document.getElementById("entity-name").textContent = ent.name;
+      document.getElementById("entity-meta").textContent = ent.meta;
+      document.getElementById("chip-player-name").textContent =
+        state.entities.player?.name || "You";
+      document.getElementById("chip-player-meta").textContent =
+        state.entities.player?.meta || "Fleet character";
+      document.querySelectorAll(".entity-chip").forEach((c) => {
+        c.classList.toggle("active", c.dataset.id === id);
       });
+      renderPaperdoll();
     }
 
     function applyTab(tab) {
       state.activeTab = tab;
-      document.querySelectorAll('#tabs .tab-btn').forEach((b) => {
-        b.classList.toggle('active', b.dataset.tab === tab);
+      document.querySelectorAll("#tabs .tab-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.tab === tab);
       });
-      document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
-      document.getElementById('tab-' + tab)?.classList.add('active');
+      document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+      document.getElementById("tab-" + tab)?.classList.add("active");
+      if (tab === "equipment") renderPaperdoll();
     }
 
     function applyBars() {
       const b = state.bars || {};
-      document.getElementById('bar-hp').style.width = (b.hp || 78) + '%';
-      document.getElementById('bar-mp').style.width = (b.mp || 62) + '%';
-      document.getElementById('bar-sp').style.width = (b.sp || 91) + '%';
+      document.getElementById("bar-hp").style.width = (b.hp || 78) + "%";
+      document.getElementById("bar-mp").style.width = (b.mp || 62) + "%";
+      document.getElementById("bar-sp").style.width = (b.sp || 91) + "%";
+    }
+
+    function setAttr(id, v) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = v != null ? String(v) : "—";
+    }
+
+    function mergeFleetCharacter(char) {
+      if (!char) return;
+      const race = char.raceId || char.race || "human";
+      const equipment = char.equipment || char.model3d?.equipment || char.gear || DEMO_EQUIP.player;
+      const attrs = char.attributes || char.stats || {};
+      state.entities.player = {
+        name: char.name || char.displayName || "Hero",
+        meta: `Lv.${char.level || 1} ${race} ${char.classId || char.class || ""}`.trim(),
+        race,
+        portrait: window.grudgePortraitForRace?.(race) || state.entities.player.portrait,
+        equipment,
+        mode: "self",
+        characterId: char.id,
+      };
+      setAttr("attr-str", attrs.strength ?? attrs.str);
+      setAttr("attr-vit", attrs.vitality ?? attrs.vit);
+      setAttr("attr-dex", attrs.dexterity ?? attrs.dex);
+      setAttr("attr-tac", attrs.tactics ?? attrs.tac);
+      if (state.activeEntity === "player") applyEntity("player");
+      scheduleSave();
     }
 
     function collectState() {
       return {
+        era: state.era,
         activeTab: state.activeTab,
         activeEntity: state.activeEntity,
         entities: state.entities,
@@ -223,68 +307,69 @@
       }, 1200);
     }
 
-    document.getElementById('tabs').addEventListener('click', (e) => {
-      const btn = e.target.closest('.tab-btn');
+    document.getElementById("tabs").addEventListener("click", (e) => {
+      const btn = e.target.closest(".tab-btn");
       if (!btn) return;
       applyTab(btn.dataset.tab);
       scheduleSave();
     });
 
-    document.querySelectorAll('.entity-chip').forEach((chip) => {
-      chip.addEventListener('click', () => {
-        state.activeEntity = chip.dataset.id;
-        applyEntity(state.activeEntity);
+    document.querySelectorAll(".entity-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        applyEntity(chip.dataset.id);
         scheduleSave();
       });
     });
 
-    function mergeFleetCharacter(char) {
-      if (!char) return;
-      const id = 'player';
-      const race = char.raceId || char.race || '';
-      state.entities[id] = {
-        name: char.name || char.displayName || state.entities[id].name,
-        meta: `Lv.${char.level || 1} ${race} ${char.class || char.classId || ''}`.trim(),
-        portrait: window.grudgePortraitForRace?.(race) || state.entities[id].portrait,
-      };
-      applyEntity(state.activeEntity);
-      scheduleSave();
-    }
-
-    window.addEventListener('grudge:engine:character', (e) => mergeFleetCharacter(e.detail));
-    window.addEventListener('grudge:engine:characters', () => {
+    window.addEventListener("grudge:engine:character", (e) => mergeFleetCharacter(e.detail));
+    window.addEventListener("grudge:engine:characters", () => {
       const c = window.GrudgeEngine?.getActiveCharacter?.();
       if (c) mergeFleetCharacter(c);
     });
 
-    function migratePortrait(url) {
-      if (!url || !url.includes('replit.app')) return url;
-      return window.grudgePortraitForRace?.('human') || PORTRAITS.player;
-    }
-
-    function sanitizeEntities(entities) {
-      if (!entities) return entities;
-      const out = { ...entities };
-      for (const [id, ent] of Object.entries(out)) {
-        if (!ent) continue;
-        out[id] = { ...ent, portrait: migratePortrait(ent.portrait) };
+    // Parent game can push inspect target: postMessage { type: 'GRUDGE_MAIN_PANEL', entity, equipment, mode }
+    window.addEventListener("message", (e) => {
+      const d = e.data;
+      if (!d || d.type !== "GRUDGE_MAIN_PANEL") return;
+      if (d.tab) applyTab(d.tab);
+      if (d.entity) {
+        const id = d.entity.id || "inspect";
+        state.entities[id] = {
+          name: d.entity.name || "Unit",
+          meta: d.entity.meta || "Inspect",
+          race: d.entity.race || "human",
+          portrait: d.entity.portrait || window.grudgePortraitForRace?.(d.entity.race),
+          equipment: d.equipment || d.entity.equipment || {},
+          mode: d.mode === "self" ? "self" : "inspect",
+        };
+        applyEntity(id);
       }
-      return out;
-    }
+      if (d.equipment && state.activeEntity === "player") {
+        state.entities.player.equipment = d.equipment;
+        renderPaperdoll();
+      }
+    });
 
     (async function boot() {
       if (window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
       if (window.GrudgeEngine?.init) await GrudgeEngine.init();
       const saved = window.GrudgeCloud?.loadMainPanel ? await GrudgeCloud.loadMainPanel() : null;
       if (saved) {
-        const entities = sanitizeEntities({ ...DEFAULT_ENTITIES, ...saved.entities });
-        state = { ...state, ...saved, entities };
+        state = {
+          ...state,
+          ...saved,
+          era: ERA,
+          entities: { ...DEFAULT_ENTITIES, ...(saved.entities || {}) },
+        };
       }
-      applyTab(state.activeTab || 'equipment');
-      applyEntity(state.activeEntity || 'player');
+      applyTab(state.activeTab || "equipment");
+      applyEntity(state.activeEntity || "player");
       applyBars();
       const c = window.GrudgeEngine?.getActiveCharacter?.();
       if (c) mergeFleetCharacter(c);
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: "GRUDGE_MAIN_PANEL_READY", era: ERA }, "*");
+      }
     })();
   </script>
 </body>

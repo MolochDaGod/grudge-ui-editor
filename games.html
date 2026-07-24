@@ -36,6 +36,19 @@
       color: var(--gold);
     }
     .lead { color: var(--muted); font-size: .9rem; margin: 0 0 22px; max-width: 62ch; line-height: 1.5; }
+    .era-banner {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      padding: 12px 14px; margin-bottom: 18px;
+      background: linear-gradient(90deg, rgba(201,149,10,.12), transparent);
+      border: 1px solid var(--border); border-radius: 10px;
+      font-size: .8rem;
+    }
+    .era-banner a {
+      color: var(--gold); text-decoration: none; font-family: Cinzel, serif;
+      letter-spacing: .06em; text-transform: uppercase; font-size: .75rem;
+      padding: 4px 10px; border: 1px solid rgba(201,149,10,.4); border-radius: 6px;
+    }
+    .era-banner a:hover { background: rgba(201,149,10,.12); }
     .toolbar {
       display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
       margin-bottom: 20px;
@@ -171,6 +184,13 @@
 
   <div class="wrap">
     <h1>Game-Ready UI Packs</h1>
+    <div class="era-banner">
+      <span style="color:var(--muted)">Era main panel (SSOT host)</span>
+      <a href="./main-panel.html?era=warlords">Warlords main panel</a>
+      <a href="./main-panel.html?era=warlords&amp;tab=equipment">Equipment paperdoll</a>
+      <a href="./eras/index.json">eras/index.json</a>
+      <a href="https://client.grudge-studio.com/main-panel" target="_blank" rel="noopener">client /main-panel</a>
+    </div>
     <p class="lead">
       Saved HYDRA layouts for every fleet game — combat HUD, inventory, crafting, party, scoreboards, and usage states.
       Open in Studio to edit, export HTML, or mount in-game with <code>GrudgeGameUI</code>.
