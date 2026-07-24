@@ -556,9 +556,10 @@ input,select,textarea{font-family:inherit;}
           <button id="aisend" onclick="sendAI()"><i class="fa fa-arrow-up"></i></button>
         </div>
         <div class="aicfg">
-          <span class="aicfgl">Grudge AI</span>
-          <input type="password" id="aikey" placeholder="sk-ant-… or sign in via nav" oninput="G.ai.key=this.value;lsSet('gsk',this.value);window.GrudgeAI?.setUserKey?.(this.value)"/>
+          <span class="aicfgl" id="ai-status">Grudge AI</span>
+          <input type="password" id="aikey" placeholder="optional sk-ant-… · prefer sign-in" oninput="G.ai.key=this.value;lsSet('gsk',this.value);window.GrudgeAI?.setUserKey?.(this.value)"/>
         </div>
+        <div id="ai-route" style="font-size:.62rem;color:var(--muted);padding:2px 4px 6px;line-height:1.35"></div>
       </div>
     </div>
   </div>
@@ -1624,7 +1625,14 @@ async function aiSendMsg(msg){
     if(!window.GrudgeAI?.isReady?.() && !key.startsWith('sk-ant')){
       throw new Error('Sign in with Grudge ID (nav pill) or paste an Anthropic key (sk-ant-…).');
     }
-    const text=await window.GrudgeAI.chat({system:AISYS,messages:msgs,max_tokens:2048,key});
+    // Prefer fleet UI agent (JWT → ai.grudge-studio.com via /api/ai)
+    const text=await window.GrudgeAI.chat({
+      role:'ui',
+      system:AISYS,
+      messages:msgs,
+      max_tokens:2048,
+      key
+    });
 
     const jm=text.match(/\{[\s\S]*\}/);
     if(!jm)throw new Error('No JSON in response:\n'+text.slice(0,300));
@@ -1636,9 +1644,14 @@ async function aiSendMsg(msg){
     aiThink(false);
     aiAppend('ai',act.message||'Done!');
     renderAll();
+    refreshAiStatus();
   }catch(err){
     aiThink(false);
-    aiAppend('ai',err.message,true);
+    const hint=window.GrudgeAI?.getJwt?.()
+      ? ''
+      : ' Sign in via the nav pill so JWT can hit the AI Hub.';
+    aiAppend('ai',err.message+hint,true);
+    refreshAiStatus();
   }
   G.ai.busy=false;
   document.getElementById('aisend').disabled=false;
@@ -1677,6 +1690,35 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowDown')selArr().forEach(c=>{c.y+=step;renderAll();});
 });
 
+/* ─── AI status (hub + JWT) ─── */
+async function refreshAiStatus(){
+  const st=document.getElementById('ai-status');
+  const rt=document.getElementById('ai-route');
+  if(!st||!window.GrudgeAI) return;
+  try{
+    const p=await window.GrudgeAI.probe();
+    if(p.ready && p.hasJwt && p.hubOk){
+      st.textContent='AI Hub · JWT';
+      st.style.color='var(--teal,#4ade80)';
+      if(rt) rt.textContent='Route '+p.route+' · role=ui · signed in';
+    }else if(p.hubOk && p.hasJwt){
+      st.textContent='Hub OK · JWT';
+      st.style.color='var(--teal,#4ade80)';
+      if(rt) rt.textContent='Route '+p.route;
+    }else if(p.hubOk){
+      st.textContent='Hub OK · sign in';
+      st.style.color='var(--amber,#f59e0b)';
+      if(rt) rt.textContent='AI Hub healthy — sign in for JWT, or paste sk-ant-…';
+    }else{
+      st.textContent='AI offline';
+      st.style.color='var(--red,#f43f5e)';
+      if(rt) rt.textContent='Cannot reach /api/ai/health';
+    }
+  }catch{
+    st.textContent='AI ?';
+  }
+}
+
 /* ─── INIT ─── */
 async function bootStudio(){
   if(window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
@@ -1695,9 +1737,13 @@ async function bootStudio(){
   initVP();
   renderAll();
   setTimeout(fitView,80);
+  await refreshAiStatus();
+  window.addEventListener('grudge:auth:ready',()=>refreshAiStatus());
+  window.addEventListener('grudge:auth:logout',()=>refreshAiStatus());
   const user=window.GrudgeCloud?.getUser?.();
   const greet=user?.username?`Signed in as ${user.username}. `:'';
-  setTimeout(()=>aiAppend('ai',greet+'Craftpix textures are in the left “Craftpix” tab. Layouts auto-save locally; sign in for cloud packs. Example: "RPG HUD 1920×1080 with inventory and minimap"'),400);
+  const jwt=window.GrudgeAI?.getJwt?.()?'Fleet AI Hub (role=ui) is ready. ':'Sign in for fleet AI (or paste sk-ant-…). ';
+  setTimeout(()=>aiAppend('ai',greet+jwt+'Craftpix is in the left tab. Example: "RPG HUD 1920×1080 with inventory and minimap"'),400);
 }
 bootStudio();
 </script>

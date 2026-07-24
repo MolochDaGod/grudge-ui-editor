@@ -139,9 +139,12 @@
         '" title="' +
         (cloudIn ? 'Cloud saves on' : 'Cloud saves off — click menu → Enable cloud saves') +
         '"></span>';
-      aiPill.title = cloudIn
-        ? 'Signed in as ' + cloudUser.username + ' · cloud on'
-        : 'Signed in as ' + cloudUser.username + ' · cloud off';
+      const hasJwt = !!window.GrudgeAI?.getJwt?.();
+      aiPill.title =
+        'Signed in as ' +
+        cloudUser.username +
+        (cloudIn ? ' · cloud on' : ' · cloud off') +
+        (hasJwt ? ' · AI JWT ready' : '');
       if (head) {
         head.innerHTML =
           '<strong>' +
@@ -150,6 +153,7 @@
           (cloudUser.grudgeId ? '<span>' + cloudUser.grudgeId + '</span>' : '') +
           '<em>' +
           (cloudIn ? 'Cloud saves enabled' : 'Local only — enable cloud in menu') +
+          (hasJwt ? ' · fleet AI ready' : '') +
           '</em>';
       }
       if (cloudBtn) cloudBtn.textContent = cloudIn ? 'Cloud saves on' : 'Enable cloud saves';

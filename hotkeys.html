@@ -260,6 +260,9 @@
         <i class="fa-solid fa-triangle-exclamation" style="font-size:10px;"></i>
         <span id="conflict-badge-text">0 conflicts</span>
       </div>
+      <button id="ai-suggest-btn" onclick="aiSuggestBindings()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.35);border-radius:10px;font-size:0.72rem;color:var(--hydra);cursor:pointer;" title="AI Hub role=ui — fleet combat defaults">
+        <i class="fa-solid fa-wand-magic-sparkles" style="font-size:10px;"></i> AI Suggest
+      </button>
       <button onclick="restoreDefaults()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:var(--surf-1);border:1px solid var(--border-2);border-radius:10px;font-size:0.72rem;color:var(--muted);cursor:pointer;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
         <i class="fa-solid fa-rotate-left" style="font-size:10px;"></i> Defaults
       </button>
@@ -886,6 +889,60 @@ function handleImport(input) {
   const r=new FileReader();
   r.onload=e=>{ try { const d=JSON.parse(e.target.result); if(d.bindings) Object.assign(bindings,d.bindings); if(d.hotbar) Object.assign(hotbar,d.hotbar); updateAll(); renderDetail(); toast('Config imported'); } catch { toast('Invalid config file'); } };
   r.readAsText(file); input.value='';
+}
+
+/** Fleet combat defaults (player-and-grass / Warlords): Q=weapon swap, hold Q radial, X/AA/DD dodge. */
+async function aiSuggestBindings() {
+  const btn = document.getElementById('ai-suggest-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+  const actionIds = ACTIONS.map(a => a.id);
+  const prompt =
+    'Propose hotkey bindings for Grudge Warlords 3D combat. Action ids: ' +
+    actionIds.join(', ') +
+    '. Fleet rules: Q = weapon swap (tap) and hold-Q stance radial (Combat/Harvest/Mount); dodge on KeyX and double-tap A/D (not Q); LCtrl roll; LMB attack RMB block; 1-9 skills. ' +
+    'Respond ONLY JSON: {"type":"hotkeys","bindings":{"action_id":"KEY_OR_LMB"},"message":"short"}. ' +
+    'Keys uppercase like W,S,A,D,X,Q,LSHIFT,LCTRL,SPACE,LMB,RMB,1-9. Only include action_ids from the list.';
+
+  try {
+    if (!window.GrudgeAI?.isReady?.()) {
+      throw new Error('Sign in for AI Hub (or paste sk-ant-… via Studio)');
+    }
+    let data = null;
+    if (window.GrudgeAI.generateHotkeys) {
+      data = await window.GrudgeAI.generateHotkeys(prompt);
+    } else {
+      const text = await window.GrudgeAI.chat({ role: 'ui', message: prompt, max_tokens: 1200 });
+      const jm = text.match(/\{[\s\S]*\}/);
+      if (!jm) throw new Error('No JSON from AI');
+      data = JSON.parse(jm[0]);
+    }
+    const map = data.bindings || data.hotkeys || {};
+    let n = 0;
+    Object.keys(map).forEach((id) => {
+      if (!bindings[id]) return;
+      let key = map[id];
+      let modifier = 'none';
+      if (typeof key === 'object' && key) {
+        modifier = key.modifier || 'none';
+        key = key.key;
+      }
+      if (!key) return;
+      key = String(key).toUpperCase().replace(/^KEY/, '').replace('LEFTSHIFT', 'LSHIFT').replace('LEFTCTRL', 'LCTRL');
+      bindings[id] = { key, modifier: MODS.includes(modifier) ? modifier : 'none' };
+      n++;
+    });
+    // Hard-apply fleet non-negotiables if AI missed them
+    if (bindings.dodge) bindings.dodge = { key: 'X', modifier: 'none' };
+    if (bindings.block) bindings.block = { key: 'RMB', modifier: 'none' };
+    if (bindings.attack) bindings.attack = { key: 'LMB', modifier: 'none' };
+    updateAll();
+    renderDetail();
+    toast((data.message || 'AI bindings applied') + (n ? ` (${n})` : ''));
+  } catch (err) {
+    toast(err.message || 'AI suggest failed');
+  } finally {
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
