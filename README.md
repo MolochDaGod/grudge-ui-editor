@@ -45,7 +45,12 @@ Persistence layers:
 ### Vercel (primary)
 Push to `main` → Vercel auto-deploys. Static site — no build step.
 
-Fleet API rewrites live in `vercel.json` (`/api/auth/*`, `/api/registry`).
+Fleet API rewrites live in `vercel.json`:
+- `/api/auth/*`, `/api/characters` → Railway game-data
+- `/api/ai/*` → **ai.grudge-studio.com** (UI/UX agents, JWT)
+- `/api/objectstore/*`, `/api/assets/*` → ObjectStore + R2 CDN
+
+AI client: `grudge-ai.js` → hub-first with Grudge JWT. Architecture: [docs/UI_API_ARCHITECTURE.md](./docs/UI_API_ARCHITECTURE.md).
 
 ### Puter (mirror)
 ```bash

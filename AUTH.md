@@ -29,11 +29,17 @@ Live: [ui.grudge-studio.com](https://ui.grudge-studio.com)
 |------|---------|
 | `/api/auth/me` | `grudge-api-production` (Railway) |
 | `/api/auth/verify` | `grudge-api-production` (Railway) |
-| `/api/auth/session/exchange` | `api.grudge-studio.com` |
+| `/api/auth/session/exchange` | `grudge-api-production` (Railway) |
 | `/api/auth/puter-sso` | `grudge-api-production` (Railway — JWT in JSON after deploy) |
 | `/api/auth/*` | `grudge-api-production` (Railway) |
-| `/api/registry` | `api.grudge-studio.com/assets` (D1 asset browser) |
+| `/api/ai/*` | `ai.grudge-studio.com/v1/*` (UI/UX agents; JWT Bearer) |
+| `/api/ai/health` | `ai.grudge-studio.com/health` |
+| `/api/objectstore/*` | `objectstore.grudge-studio.com/api/v1/*` |
+| `/api/registry` | ObjectStore catalog (docs-catalog / v1 paths) |
+| `/api/assets/*` | `assets.grudge-studio.com` R2 CDN |
 | `/api/characters` | `grudge-api-production` (JWT required; guest roster blocked) |
+
+Architecture: [docs/UI_API_ARCHITECTURE.md](./docs/UI_API_ARCHITECTURE.md)
 
 ## localStorage keys
 
