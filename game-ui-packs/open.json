@@ -1,0 +1,218 @@
+{
+  "name": "Open Launcher — Lobby UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "d",
+  "comps": [
+    {
+      "id": "pf1",
+      "type": "player-frame",
+      "x": 40,
+      "y": 40,
+      "w": 340,
+      "h": 100,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Commander",
+        "level": 12,
+        "hp": 100,
+        "hpMax": 100,
+        "mp": 100,
+        "mpMax": 100
+      },
+      "groups": [
+        "hud",
+        "lobby"
+      ]
+    },
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 40,
+      "y": 180,
+      "w": 520,
+      "h": 360,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 4,
+        "rows": 4,
+        "slotSize": 64,
+        "gap": 8,
+        "label": "Heroes (4 slots)"
+      },
+      "groups": [
+        "character",
+        "lobby"
+      ]
+    },
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 600,
+      "y": 180,
+      "w": 720,
+      "h": 520,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Play · Games"
+      },
+      "groups": [
+        "lobby"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 1360,
+      "y": 180,
+      "w": 480,
+      "h": 320,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "News / Patch"
+      },
+      "groups": [
+        "lobby"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 1360,
+      "y": 560,
+      "w": 480,
+      "h": 80,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Account,Foundry,Forge,Settings"
+      },
+      "groups": [
+        "lobby",
+        "hud"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 600,
+      "y": 40,
+      "w": 720,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Connecting to Grudge ID…",
+        "type": "info"
+      },
+      "groups": [
+        "loading"
+      ]
+    },
+    {
+      "id": "cur1",
+      "type": "currency-display",
+      "x": 40,
+      "y": 900,
+      "w": 280,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "—",
+        "label": "Wallet"
+      },
+      "groups": [
+        "lobby"
+      ]
+    }
+  ],
+  "gameId": "open",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://open.grudge-studio.com",
+    "genre": "launcher",
+    "engine": "React + Three.js",
+    "description": "Launcher / lobby: character strip, game tiles, account vitals, news.",
+    "features": [
+      "character-select",
+      "game-list",
+      "account",
+      "news"
+    ],
+    "usageStates": [
+      "lobby",
+      "character-select",
+      "loading"
+    ],
+    "dataBindings": {
+      "characters": {
+        "path": "/api/characters",
+        "fills": [
+          "inv1"
+        ]
+      },
+      "account": {
+        "path": "/api/account",
+        "fills": [
+          "pf1"
+        ]
+      }
+    },
+    "inputProfile": "menu",
+    "tags": [
+      "launcher",
+      "hub"
+    ]
+  },
+  "states": {
+    "lobby": {
+      "show": [
+        "hud",
+        "lobby"
+      ],
+      "hide": [
+        "loading"
+      ]
+    },
+    "character-select": {
+      "show": [
+        "character",
+        "lobby"
+      ],
+      "hide": [
+        "loading"
+      ]
+    },
+    "loading": {
+      "show": [
+        "loading"
+      ],
+      "hide": [
+        "lobby"
+      ]
+    }
+  },
+  "id": "open",
+  "version": "1.0.0"
+}

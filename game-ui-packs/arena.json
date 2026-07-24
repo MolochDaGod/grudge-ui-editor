@@ -1,0 +1,309 @@
+{
+  "name": "Arena — PvP FPS UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "q",
+  "comps": [
+    {
+      "id": "xh1",
+      "type": "crosshair",
+      "x": 940,
+      "y": 520,
+      "w": 40,
+      "h": 40,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {},
+      "groups": [
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "hb-hp",
+      "type": "healthbar",
+      "x": 40,
+      "y": 980,
+      "w": 320,
+      "h": 32,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "value": 100,
+        "max": 100,
+        "label": "HP",
+        "color": "#fff"
+      },
+      "groups": [
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "tx1",
+      "type": "text-label",
+      "x": 1600,
+      "y": 980,
+      "w": 280,
+      "h": 40,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "12 / 30 AMMO",
+        "size": 18,
+        "align": "right"
+      },
+      "groups": [
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 860,
+      "y": 24,
+      "w": 200,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "2:45"
+      },
+      "groups": [
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "cur1",
+      "type": "currency-display",
+      "x": 40,
+      "y": 24,
+      "w": 200,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "3 - 2",
+        "label": "Score"
+      },
+      "groups": [
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "cl1",
+      "type": "combat-log",
+      "x": 1500,
+      "y": 120,
+      "w": 380,
+      "h": 280,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Kill Feed"
+      },
+      "groups": [
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 560,
+      "y": 400,
+      "w": 800,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "ELIMINATED",
+        "type": "danger"
+      },
+      "groups": [
+        "dead"
+      ]
+    },
+    {
+      "id": "alb2",
+      "type": "alert-banner",
+      "x": 560,
+      "y": 400,
+      "w": 800,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "VICTORY",
+        "type": "success"
+      },
+      "groups": [
+        "victory"
+      ]
+    },
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 480,
+      "y": 160,
+      "w": 960,
+      "h": 640,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Scoreboard"
+      },
+      "groups": [
+        "scoreboard"
+      ]
+    },
+    {
+      "id": "hb1",
+      "type": "hotbar",
+      "x": 640,
+      "y": 900,
+      "w": 640,
+      "h": 72,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "slots": 5,
+        "slotSize": 56,
+        "label": "Loadout"
+      },
+      "groups": [
+        "loadout"
+      ]
+    },
+    {
+      "id": "ws1",
+      "type": "weapon-selector",
+      "x": 40,
+      "y": 900,
+      "w": 240,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Primary / Sidearm"
+      },
+      "groups": [
+        "loadout",
+        "match"
+      ]
+    }
+  ],
+  "gameId": "arena",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://grudge-arena.grudge-studio.com",
+    "genre": "pvp-arena",
+    "engine": "Three.js + Socket.IO",
+    "description": "Crosshair, ammo, scoreboard, kill feed, match timer, death cam.",
+    "features": [
+      "scoreboard",
+      "killfeed",
+      "loadout",
+      "match-timer"
+    ],
+    "usageStates": [
+      "match",
+      "scoreboard",
+      "dead",
+      "victory",
+      "loadout"
+    ],
+    "dataBindings": {
+      "match": {
+        "path": "/api/arena/match",
+        "fills": [
+          "obj1",
+          "cur1"
+        ]
+      },
+      "loadout": {
+        "path": "/api/arena/loadout",
+        "fills": [
+          "hb1"
+        ]
+      }
+    },
+    "inputProfile": "fps",
+    "tags": [
+      "pvp",
+      "fps"
+    ]
+  },
+  "states": {
+    "match": {
+      "show": [
+        "hud",
+        "match"
+      ],
+      "hide": [
+        "scoreboard",
+        "loadout"
+      ]
+    },
+    "scoreboard": {
+      "show": [
+        "scoreboard"
+      ],
+      "hide": []
+    },
+    "dead": {
+      "show": [
+        "dead",
+        "hud"
+      ],
+      "hide": [
+        "loadout"
+      ]
+    },
+    "victory": {
+      "show": [
+        "victory"
+      ],
+      "hide": [
+        "match"
+      ]
+    },
+    "loadout": {
+      "show": [
+        "loadout"
+      ],
+      "hide": [
+        "match"
+      ]
+    }
+  },
+  "id": "arena",
+  "version": "1.0.0"
+}

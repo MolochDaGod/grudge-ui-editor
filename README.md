@@ -17,9 +17,21 @@ A visual UI editor and showcase for building game interfaces used across Grudge 
 
 **HYDRA tools** on the same domain:
 - `/studio` — drag-and-drop UI scene editor + Craftpix assets
+- `/games` — **game-ready fleet UI packs** (inventory, crafting, combat states per game)
 - `/hotkeys` — input binding configurator
 - `/assets` — 3D / D1 asset browser
 - `/main-panel` — character panel preview
+
+### Game-ready packs
+15 saved layouts under `/game-ui-packs/` (Warlords, Open, GRUDOX, Grass, Survival, Arena, Mech, …).
+Each pack includes **usage states**, **features** (inventory/craft/etc.), and **dataBindings** for live APIs.
+
+```js
+// In any game client:
+const ui = await GrudgeGameUI.load('warlords'); // from game-ui-runtime.js
+ui.mount(document.getElementById('hud'));
+ui.setState('combat'); // explore | inventory | crafting | ...
+```
 
 ## Account & cloud saves
 

@@ -3,6 +3,7 @@
   const links = [
     { href: '/', label: 'UI Kit', match: (p) => p === '/' || p === '/index.html' },
     { href: '/studio', label: 'Studio', match: (p) => p === '/studio' },
+    { href: '/games', label: 'Game Packs', badge: '15', match: (p) => p === '/games' },
     { href: '/hotkeys', label: 'Input', match: (p) => p === '/hotkeys' },
     { href: '/main-panel', label: 'Main Panel', match: (p) => p === '/main-panel' },
     { href: '/assets', label: '3D Assets', badge: '276', match: (p) => p === '/assets' },

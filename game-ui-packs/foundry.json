@@ -1,0 +1,249 @@
+{
+  "name": "Character Foundry — Create UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "f",
+  "comps": [
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 80,
+      "y": 160,
+      "w": 480,
+      "h": 480,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 2,
+        "rows": 2,
+        "slotSize": 160,
+        "gap": 16,
+        "label": "Hero Slots (4)"
+      },
+      "groups": [
+        "slots"
+      ]
+    },
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 620,
+      "y": 160,
+      "w": 480,
+      "h": 520,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Race · Kit"
+      },
+      "groups": [
+        "create",
+        "slots"
+      ]
+    },
+    {
+      "id": "attr1",
+      "type": "attr-panel",
+      "x": 1140,
+      "y": 160,
+      "w": 320,
+      "h": 400,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "8 Attributes"
+      },
+      "groups": [
+        "create",
+        "preview"
+      ]
+    },
+    {
+      "id": "eq1",
+      "type": "equipment-slots",
+      "x": 1500,
+      "y": 160,
+      "w": 300,
+      "h": 400,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Starter Gear"
+      },
+      "groups": [
+        "create",
+        "preview"
+      ]
+    },
+    {
+      "id": "pf1",
+      "type": "player-frame",
+      "x": 1140,
+      "y": 600,
+      "w": 320,
+      "h": 100,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "New Hero",
+        "level": 1,
+        "hp": 100,
+        "hpMax": 100,
+        "mp": 50,
+        "mpMax": 50
+      },
+      "groups": [
+        "create",
+        "preview",
+        "hud"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 1140,
+      "y": 740,
+      "w": 320,
+      "h": 72,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Save,Enter Play,Back"
+      },
+      "groups": [
+        "create",
+        "confirm",
+        "slots"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 620,
+      "y": 40,
+      "w": 680,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Create-only Foundry — play on client.grudge-studio.com",
+        "type": "info"
+      },
+      "groups": [
+        "hud",
+        "slots"
+      ]
+    },
+    {
+      "id": "dlg1",
+      "type": "dialogue-box",
+      "x": 400,
+      "y": 820,
+      "w": 1120,
+      "h": 140,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "speaker": "Foundry",
+        "text": "Confirm this hero and enter your home island."
+      },
+      "groups": [
+        "confirm"
+      ]
+    }
+  ],
+  "gameId": "foundry",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://character.grudge-studio.com",
+    "genre": "character-creator",
+    "engine": "React + Three",
+    "description": "4-slot hero camp, race/kit select, attributes, enter-play CTA.",
+    "features": [
+      "slots",
+      "race",
+      "attributes",
+      "equip-preview",
+      "enter-play"
+    ],
+    "usageStates": [
+      "slots",
+      "create",
+      "preview",
+      "confirm"
+    ],
+    "dataBindings": {
+      "slots": {
+        "path": "/api/characters",
+        "fills": [
+          "inv1"
+        ]
+      },
+      "races": {
+        "path": "https://objectstore.grudge-studio.com/api/v1/races.json",
+        "fills": [
+          "shop1"
+        ]
+      }
+    },
+    "inputProfile": "menu",
+    "tags": [
+      "foundry",
+      "create"
+    ]
+  },
+  "states": {
+    "slots": {
+      "show": [
+        "slots",
+        "hud"
+      ],
+      "hide": [
+        "create"
+      ]
+    },
+    "create": {
+      "show": [
+        "create",
+        "hud"
+      ],
+      "hide": [
+        "slots"
+      ]
+    },
+    "preview": {
+      "show": [
+        "preview",
+        "create"
+      ],
+      "hide": []
+    },
+    "confirm": {
+      "show": [
+        "confirm",
+        "create"
+      ],
+      "hide": []
+    }
+  },
+  "id": "foundry",
+  "version": "1.0.0"
+}

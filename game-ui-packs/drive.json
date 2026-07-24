@@ -1,0 +1,280 @@
+{
+  "name": "Grudge Drive — Race HUD",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "q",
+  "comps": [
+    {
+      "id": "tx1",
+      "type": "text-label",
+      "x": 40,
+      "y": 40,
+      "w": 200,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "248 KM/H",
+        "size": 28,
+        "align": "left"
+      },
+      "groups": [
+        "hud",
+        "race"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 860,
+      "y": 24,
+      "w": 200,
+      "h": 72,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "LAP 2/3"
+      },
+      "groups": [
+        "hud",
+        "race"
+      ]
+    },
+    {
+      "id": "cur1",
+      "type": "currency-display",
+      "x": 1680,
+      "y": 24,
+      "w": 200,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "P3",
+        "label": "POS"
+      },
+      "groups": [
+        "hud",
+        "race"
+      ]
+    },
+    {
+      "id": "orb1",
+      "type": "action-orb",
+      "x": 1760,
+      "y": 900,
+      "w": 100,
+      "h": 100,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "value": 40,
+        "max": 100,
+        "color": "#a78bfa",
+        "label": "NITRO"
+      },
+      "groups": [
+        "hud",
+        "race"
+      ]
+    },
+    {
+      "id": "mm1",
+      "type": "minimap",
+      "x": 1680,
+      "y": 720,
+      "w": 200,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "shape": "square"
+      },
+      "groups": [
+        "hud",
+        "race"
+      ]
+    },
+    {
+      "id": "hb-hp",
+      "type": "healthbar",
+      "x": 40,
+      "y": 1000,
+      "w": 360,
+      "h": 28,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "value": 70,
+        "max": 100,
+        "label": "Armor",
+        "color": "#38bdf8"
+      },
+      "groups": [
+        "hud",
+        "race"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 560,
+      "y": 400,
+      "w": 800,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "PAUSED",
+        "type": "warning"
+      },
+      "groups": [
+        "pause"
+      ]
+    },
+    {
+      "id": "alb2",
+      "type": "alert-banner",
+      "x": 560,
+      "y": 400,
+      "w": 800,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "FINISH — P2",
+        "type": "success"
+      },
+      "groups": [
+        "finish"
+      ]
+    },
+    {
+      "id": "eq1",
+      "type": "equipment-slots",
+      "x": 400,
+      "y": 200,
+      "w": 320,
+      "h": 400,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Garage Parts"
+      },
+      "groups": [
+        "garage"
+      ]
+    },
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 760,
+      "y": 200,
+      "w": 400,
+      "h": 400,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 4,
+        "rows": 4,
+        "slotSize": 64,
+        "gap": 6,
+        "label": "Upgrades"
+      },
+      "groups": [
+        "garage"
+      ]
+    }
+  ],
+  "gameId": "drive",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://drive.grudge-studio.com",
+    "genre": "racing",
+    "engine": "Three.js",
+    "description": "Speed, lap timer, position, nitro, pause/menu.",
+    "features": [
+      "speed",
+      "laps",
+      "nitro",
+      "minimap"
+    ],
+    "usageStates": [
+      "race",
+      "pause",
+      "finish",
+      "garage"
+    ],
+    "dataBindings": {
+      "race": {
+        "path": "/api/drive/race",
+        "fills": [
+          "obj1",
+          "cur1"
+        ]
+      }
+    },
+    "inputProfile": "driving",
+    "tags": [
+      "racing"
+    ]
+  },
+  "states": {
+    "race": {
+      "show": [
+        "hud",
+        "race"
+      ],
+      "hide": [
+        "pause",
+        "garage"
+      ]
+    },
+    "pause": {
+      "show": [
+        "pause"
+      ],
+      "hide": []
+    },
+    "finish": {
+      "show": [
+        "finish"
+      ],
+      "hide": [
+        "race"
+      ]
+    },
+    "garage": {
+      "show": [
+        "garage"
+      ],
+      "hide": [
+        "race"
+      ]
+    }
+  },
+  "id": "drive",
+  "version": "1.0.0"
+}

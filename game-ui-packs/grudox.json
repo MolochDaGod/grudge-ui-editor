@@ -1,0 +1,275 @@
+{
+  "name": "GRUDOX — Room Hub UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "d",
+  "comps": [
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 40,
+      "y": 80,
+      "w": 480,
+      "h": 640,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Rooms"
+      },
+      "groups": [
+        "lobby"
+      ]
+    },
+    {
+      "id": "chat1",
+      "type": "chat-window",
+      "x": 40,
+      "y": 760,
+      "w": 480,
+      "h": 240,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Lobby Chat"
+      },
+      "groups": [
+        "lobby",
+        "hud"
+      ]
+    },
+    {
+      "id": "af1",
+      "type": "ally-frame",
+      "x": 560,
+      "y": 80,
+      "w": 280,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Ally 1",
+        "level": 20,
+        "hp": 90,
+        "hpMax": 100
+      },
+      "groups": [
+        "party",
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "af2",
+      "type": "ally-frame",
+      "x": 560,
+      "y": 160,
+      "w": 280,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Ally 2",
+        "level": 18,
+        "hp": 70,
+        "hpMax": 100
+      },
+      "groups": [
+        "party",
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 560,
+      "y": 260,
+      "w": 400,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Match Rules"
+      },
+      "groups": [
+        "lobby",
+        "in-room"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 560,
+      "y": 500,
+      "w": 400,
+      "h": 72,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Ready,Leave,Invite,Settings"
+      },
+      "groups": [
+        "lobby",
+        "in-room"
+      ]
+    },
+    {
+      "id": "pf1",
+      "type": "player-frame",
+      "x": 1520,
+      "y": 880,
+      "w": 360,
+      "h": 120,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "You",
+        "level": 22,
+        "hp": 100,
+        "hpMax": 100,
+        "mp": 50,
+        "mpMax": 50
+      },
+      "groups": [
+        "hud",
+        "match"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 640,
+      "y": 40,
+      "w": 640,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "MATCH STARTING",
+        "type": "warning"
+      },
+      "groups": [
+        "match"
+      ]
+    },
+    {
+      "id": "cl1",
+      "type": "combat-log",
+      "x": 1520,
+      "y": 600,
+      "w": 360,
+      "h": 240,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Feed"
+      },
+      "groups": [
+        "match"
+      ]
+    }
+  ],
+  "gameId": "grudox",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://grudox.grudge-studio.com",
+    "genre": "multiplayer-hub",
+    "engine": "Vite + Carrier WS",
+    "description": "Room list, party frames, chat, match ready states for GRUDOX / Carrier.",
+    "features": [
+      "party",
+      "rooms",
+      "chat",
+      "matchmaking"
+    ],
+    "usageStates": [
+      "lobby",
+      "in-room",
+      "match",
+      "spectate"
+    ],
+    "dataBindings": {
+      "rooms": {
+        "path": "/api/carrier/rooms",
+        "fills": [
+          "shop1"
+        ]
+      },
+      "party": {
+        "path": "/api/carrier/party",
+        "fills": [
+          "af1",
+          "af2"
+        ]
+      }
+    },
+    "inputProfile": "social",
+    "tags": [
+      "pvp",
+      "hub",
+      "carrier"
+    ]
+  },
+  "states": {
+    "lobby": {
+      "show": [
+        "lobby",
+        "hud"
+      ],
+      "hide": [
+        "match"
+      ]
+    },
+    "in-room": {
+      "show": [
+        "lobby",
+        "party",
+        "hud"
+      ],
+      "hide": [
+        "match"
+      ]
+    },
+    "match": {
+      "show": [
+        "match",
+        "hud",
+        "party"
+      ],
+      "hide": [
+        "lobby"
+      ]
+    },
+    "spectate": {
+      "show": [
+        "match",
+        "hud"
+      ],
+      "hide": [
+        "lobby"
+      ]
+    }
+  },
+  "id": "grudox",
+  "version": "1.0.0"
+}

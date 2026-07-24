@@ -1,0 +1,336 @@
+{
+  "name": "Grim Armada — Fleet HUD",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "c",
+  "comps": [
+    {
+      "id": "pf1",
+      "type": "player-frame",
+      "x": 24,
+      "y": 880,
+      "w": 360,
+      "h": 120,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Flagship",
+        "level": 14,
+        "hp": 8200,
+        "hpMax": 10000,
+        "mp": 400,
+        "mpMax": 500
+      },
+      "groups": [
+        "hud",
+        "bridge",
+        "combat"
+      ]
+    },
+    {
+      "id": "af1",
+      "type": "ally-frame",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Frigate A",
+        "level": 10,
+        "hp": 60,
+        "hpMax": 100
+      },
+      "groups": [
+        "fleet",
+        "hud"
+      ]
+    },
+    {
+      "id": "af2",
+      "type": "ally-frame",
+      "x": 24,
+      "y": 190,
+      "w": 260,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Frigate B",
+        "level": 9,
+        "hp": 80,
+        "hpMax": 100
+      },
+      "groups": [
+        "fleet",
+        "hud"
+      ]
+    },
+    {
+      "id": "af3",
+      "type": "ally-frame",
+      "x": 24,
+      "y": 260,
+      "w": 260,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Scout",
+        "level": 6,
+        "hp": 40,
+        "hpMax": 100
+      },
+      "groups": [
+        "fleet",
+        "hud"
+      ]
+    },
+    {
+      "id": "mm1",
+      "type": "minimap",
+      "x": 1680,
+      "y": 24,
+      "w": 200,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "shape": "circle"
+      },
+      "groups": [
+        "hud",
+        "bridge",
+        "combat"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 1680,
+      "y": 240,
+      "w": 200,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Orders"
+      },
+      "groups": [
+        "bridge",
+        "combat"
+      ]
+    },
+    {
+      "id": "hb1",
+      "type": "hotbar",
+      "x": 700,
+      "y": 980,
+      "w": 520,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "slots": 8,
+        "slotSize": 48,
+        "label": "Systems"
+      },
+      "groups": [
+        "hud",
+        "combat"
+      ]
+    },
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 560,
+      "y": 180,
+      "w": 400,
+      "h": 480,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 6,
+        "rows": 6,
+        "slotSize": 48,
+        "gap": 4,
+        "label": "Cargo Hold"
+      },
+      "groups": [
+        "cargo"
+      ]
+    },
+    {
+      "id": "cur1",
+      "type": "currency-display",
+      "x": 24,
+      "y": 40,
+      "w": 260,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "4,200",
+        "label": "Credits"
+      },
+      "groups": [
+        "bridge"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 640,
+      "y": 40,
+      "w": 640,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "FTL JUMP CHARGING",
+        "type": "info"
+      },
+      "groups": [
+        "jump"
+      ]
+    },
+    {
+      "id": "cl1",
+      "type": "combat-log",
+      "x": 1400,
+      "y": 700,
+      "w": 480,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Tactical Log"
+      },
+      "groups": [
+        "combat"
+      ]
+    }
+  ],
+  "gameId": "grim-armada",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://grim-armada-web.vercel.app",
+    "genre": "space-fleet",
+    "engine": "Three.js + React",
+    "description": "Ship vitals, fleet list, orders panel, sector map, cargo.",
+    "features": [
+      "fleet",
+      "cargo",
+      "orders",
+      "sector-map",
+      "combat"
+    ],
+    "usageStates": [
+      "bridge",
+      "combat",
+      "cargo",
+      "fleet",
+      "jump"
+    ],
+    "dataBindings": {
+      "ship": {
+        "path": "/api/armada/ship",
+        "fills": [
+          "pf1"
+        ]
+      },
+      "fleet": {
+        "path": "/api/armada/fleet",
+        "fills": [
+          "af1",
+          "af2",
+          "af3"
+        ]
+      },
+      "cargo": {
+        "path": "/api/armada/cargo",
+        "fills": [
+          "inv1"
+        ]
+      }
+    },
+    "inputProfile": "space",
+    "tags": [
+      "space",
+      "rts-lite"
+    ]
+  },
+  "states": {
+    "bridge": {
+      "show": [
+        "hud",
+        "bridge"
+      ],
+      "hide": [
+        "cargo"
+      ]
+    },
+    "combat": {
+      "show": [
+        "hud",
+        "combat"
+      ],
+      "hide": [
+        "cargo"
+      ]
+    },
+    "cargo": {
+      "show": [
+        "cargo"
+      ],
+      "hide": [
+        "combat"
+      ]
+    },
+    "fleet": {
+      "show": [
+        "fleet",
+        "hud"
+      ],
+      "hide": [
+        "cargo"
+      ]
+    },
+    "jump": {
+      "show": [
+        "jump",
+        "hud"
+      ],
+      "hide": [
+        "cargo"
+      ]
+    }
+  },
+  "id": "grim-armada",
+  "version": "1.0.0"
+}

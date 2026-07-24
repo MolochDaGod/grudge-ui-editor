@@ -1,0 +1,312 @@
+{
+  "name": "Dungeon Crawler Quest — Loot UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "f",
+  "comps": [
+    {
+      "id": "pf1",
+      "type": "player-frame",
+      "x": 24,
+      "y": 24,
+      "w": 280,
+      "h": 90,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Leader",
+        "level": 7,
+        "hp": 90,
+        "hpMax": 100,
+        "mp": 40,
+        "mpMax": 50
+      },
+      "groups": [
+        "hud",
+        "combat",
+        "dungeon"
+      ]
+    },
+    {
+      "id": "af1",
+      "type": "ally-frame",
+      "x": 24,
+      "y": 130,
+      "w": 240,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Mage",
+        "level": 6,
+        "hp": 50,
+        "hpMax": 70
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "af2",
+      "type": "ally-frame",
+      "x": 24,
+      "y": 200,
+      "w": 240,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Rogue",
+        "level": 6,
+        "hp": 65,
+        "hpMax": 80
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "hb1",
+      "type": "hotbar",
+      "x": 700,
+      "y": 980,
+      "w": 520,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "slots": 8,
+        "slotSize": 48,
+        "label": "Actions"
+      },
+      "groups": [
+        "hud",
+        "combat"
+      ]
+    },
+    {
+      "id": "mm1",
+      "type": "minimap",
+      "x": 1680,
+      "y": 24,
+      "w": 200,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "shape": "square"
+      },
+      "groups": [
+        "hud",
+        "map",
+        "dungeon"
+      ]
+    },
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 560,
+      "y": 160,
+      "w": 420,
+      "h": 520,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 6,
+        "rows": 7,
+        "slotSize": 48,
+        "gap": 4,
+        "label": "Loot"
+      },
+      "groups": [
+        "loot",
+        "inventory"
+      ]
+    },
+    {
+      "id": "eq1",
+      "type": "equipment-slots",
+      "x": 200,
+      "y": 280,
+      "w": 280,
+      "h": 400,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Gear"
+      },
+      "groups": [
+        "loot",
+        "inventory"
+      ]
+    },
+    {
+      "id": "qt1",
+      "type": "quest-tracker",
+      "x": 1500,
+      "y": 260,
+      "w": 280,
+      "h": 180,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "title": "Deep Vault",
+        "objective": "Find the Gouldstone",
+        "label": "Quest"
+      },
+      "groups": [
+        "hud",
+        "dungeon"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 640,
+      "y": 40,
+      "w": 640,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Camp — recover HP/MP",
+        "type": "success"
+      },
+      "groups": [
+        "camp"
+      ]
+    },
+    {
+      "id": "dlg1",
+      "type": "dialogue-box",
+      "x": 480,
+      "y": 780,
+      "w": 960,
+      "h": 140,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "speaker": "Dungeon Spirit",
+        "text": "Only the sworn may pass the iron door."
+      },
+      "groups": [
+        "dialogue",
+        "dungeon"
+      ]
+    }
+  ],
+  "gameId": "dcq",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://dcq.grudge-studio.com",
+    "genre": "dungeon-crawler",
+    "engine": "Three.js + Voxel + Rapier",
+    "description": "Party frames, loot grid, map fog, potions, rest/camp states.",
+    "features": [
+      "party",
+      "loot",
+      "map",
+      "potions",
+      "rest"
+    ],
+    "usageStates": [
+      "dungeon",
+      "loot",
+      "camp",
+      "combat",
+      "map"
+    ],
+    "dataBindings": {
+      "party": {
+        "path": "/api/dcq/party",
+        "fills": [
+          "pf1",
+          "af1",
+          "af2"
+        ]
+      },
+      "loot": {
+        "path": "/api/dcq/loot",
+        "fills": [
+          "inv1"
+        ]
+      }
+    },
+    "inputProfile": "crpg",
+    "tags": [
+      "dungeon",
+      "rpg"
+    ]
+  },
+  "states": {
+    "dungeon": {
+      "show": [
+        "hud"
+      ],
+      "hide": [
+        "loot",
+        "map"
+      ]
+    },
+    "combat": {
+      "show": [
+        "hud",
+        "combat"
+      ],
+      "hide": [
+        "loot"
+      ]
+    },
+    "loot": {
+      "show": [
+        "loot",
+        "inventory"
+      ],
+      "hide": [
+        "combat"
+      ]
+    },
+    "camp": {
+      "show": [
+        "camp",
+        "hud"
+      ],
+      "hide": [
+        "combat"
+      ]
+    },
+    "map": {
+      "show": [
+        "map",
+        "hud"
+      ],
+      "hide": [
+        "loot"
+      ]
+    }
+  },
+  "id": "dcq",
+  "version": "1.0.0"
+}

@@ -371,6 +371,7 @@ input,select,textarea{font-family:inherit;}
   <div class="tgrp">
     <button class="tbtn" onclick="dup()"><i class="fa fa-copy"></i> Dup</button>
     <button class="tbtn" onclick="showLoad()"><i class="fa fa-folder-open"></i> Load</button>
+    <button class="tbtn" onclick="showFleetPacks()" title="Load game-ready fleet UI packs"><i class="fa fa-gamepad"></i> Games</button>
     <button class="tbtn" onclick="doSave()"><i class="fa fa-floppy-disk"></i> Save</button>
     <button class="tbtn" onclick="showMyPacks()" title="Your saved UI packs"><i class="fa fa-cloud"></i> Packs</button>
     <button class="tbtn g" onclick="doExport()"><i class="fa fa-download"></i> Export</button>
@@ -587,6 +588,20 @@ input,select,textarea{font-family:inherit;}
     <div class="mbtns">
       <button class="mbtn s" onclick="closeModal()">Close</button>
       <button class="mbtn p" onclick="doSave(true);closeModal()">Save Current</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-fleet" class="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" style="max-width:640px">
+    <h3><i class="fa fa-gamepad" style="color:var(--teal)"></i> Game-Ready Fleet Packs</h3>
+    <p style="font-size:.67rem;color:var(--sub);margin-bottom:8px">
+      Prebuilt HUD / inventory / craft layouts per game. Also browse
+      <a href="/games" style="color:var(--hydra)">/games</a>.
+    </p>
+    <div id="fleet-packs-list" style="max-height:360px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px;margin-bottom:10px"></div>
+    <div class="mbtns">
+      <button class="mbtn s" onclick="closeModal()">Close</button>
     </div>
   </div>
 </div>
@@ -1357,7 +1372,7 @@ async function showMyPacks(){
   document.getElementById('modal-packs').classList.add('show');
   const packs=await GrudgeCloud.listPacks();
   if(!packs.length){
-    list.innerHTML='<div style="padding:14px;color:var(--muted);font-size:.67rem">No saved packs yet. Hit Save to store your layout.</div>';
+    list.innerHTML='<div style="padding:14px;color:var(--muted);font-size:.67rem">No saved packs yet. Hit Save to store your layout. Or open <b>Games</b> for fleet packs.</div>';
     return;
   }
   list.innerHTML=packs.map(p=>`<div class="packrow">
@@ -1367,6 +1382,52 @@ async function showMyPacks(){
       <button onclick="deletePackId('${p.id}')">Delete</button>
     </div>
   </div>`).join('');
+}
+
+async function showFleetPacks(){
+  const list=document.getElementById('fleet-packs-list');
+  list.innerHTML='<div style="padding:12px;color:var(--muted);font-size:.65rem">Loading fleet packs…</div>';
+  document.getElementById('modal-fleet').classList.add('show');
+  try{
+    const idx=await fetch('/game-ui-packs/index.json').then(r=>r.json());
+    const packs=idx.packs||[];
+    if(!packs.length){list.innerHTML='<div style="padding:14px;color:var(--muted)">No fleet packs found.</div>';return;}
+    list.innerHTML=packs.map(p=>`<div class="packrow">
+      <div>
+        <strong>${p.name}</strong>
+        <div style="font-size:.58rem;color:var(--muted)">${p.gameId} · ${(p.features||[]).slice(0,4).join(', ')} · ${(p.usageStates||[]).length} states</div>
+      </div>
+      <div style="display:flex;gap:4px">
+        <button onclick="loadFleetPack('${p.id}')">Load</button>
+        <a href="/games" style="font-size:.62rem;padding:4px 8px;color:var(--hydra)">Preview</a>
+      </div>
+    </div>`).join('');
+  }catch(e){
+    list.innerHTML='<div style="padding:14px;color:#f87171;font-size:.67rem">Failed: '+e.message+'</div>';
+  }
+}
+
+async function loadFleetPack(id){
+  try{
+    const scene=await fetch('/game-ui-packs/'+encodeURIComponent(id)+'.json').then(r=>{
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    });
+    G.scene={
+      name:scene.name||id,
+      resolution:scene.resolution||{w:1920,h:1080},
+      theme:scene.theme||'f',
+      comps:scene.comps||[],
+      gameId:scene.gameId||id,
+      meta:scene.meta||null,
+      states:scene.states||null,
+    };
+    document.getElementById('scene-name').value=G.scene.name;
+    if(G.scene.resolution)document.getElementById('res-sel').value=`${G.scene.resolution.w}x${G.scene.resolution.h}`;
+    if(G.scene.theme){document.getElementById('theme-sel').value=G.scene.theme;}
+    G.sel.clear(); renderAll(); setTimeout(fitView,50); closeModal();
+    toastSave('Loaded fleet pack “'+G.scene.name+'”');
+  }catch(e){alert('Load failed: '+e.message);}
 }
 
 async function loadPackId(id){
@@ -1722,9 +1783,27 @@ async function refreshAiStatus(){
 /* ─── INIT ─── */
 async function bootStudio(){
   if(window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
-  const restored=window.GrudgeCloud?.restoreLastPack ? await GrudgeCloud.restoreLastPack() : null;
+  // ?pack=warlords → load fleet game-ready pack
+  const qs=new URLSearchParams(location.search);
+  const fleetPackId=qs.get('pack')||qs.get('game');
+  let restored=null;
+  if(fleetPackId){
+    try{
+      const scene=await fetch('/game-ui-packs/'+encodeURIComponent(fleetPackId)+'.json').then(r=>r.json());
+      restored={
+        name:scene.name,
+        resolution:scene.resolution,
+        theme:scene.theme,
+        comps:scene.comps||[],
+        gameId:scene.gameId,
+        meta:scene.meta,
+        states:scene.states,
+      };
+    }catch(e){console.warn('[studio] fleet pack load failed',e);}
+  }
+  if(!restored) restored=window.GrudgeCloud?.restoreLastPack ? await GrudgeCloud.restoreLastPack() : null;
   if(restored){
-    G.scene=restored;
+    G.scene=Object.assign({comps:[]},restored);
     document.getElementById('scene-name').value=restored.name||'Untitled Layout';
     if(restored.resolution)document.getElementById('res-sel').value=`${restored.resolution.w}x${restored.resolution.h}`;
     if(restored.theme){document.getElementById('theme-sel').value=restored.theme;}

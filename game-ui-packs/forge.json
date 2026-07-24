@@ -1,0 +1,204 @@
+{
+  "name": "Studio Forge — Editor Shell UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "d",
+  "comps": [
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 16,
+      "y": 60,
+      "w": 320,
+      "h": 720,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Assets"
+      },
+      "groups": [
+        "edit",
+        "hud"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 16,
+      "y": 800,
+      "w": 320,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Hierarchy"
+      },
+      "groups": [
+        "edit",
+        "hud"
+      ]
+    },
+    {
+      "id": "attr1",
+      "type": "attr-panel",
+      "x": 1580,
+      "y": 60,
+      "w": 320,
+      "h": 480,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Inspector"
+      },
+      "groups": [
+        "edit",
+        "hud"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 400,
+      "y": 16,
+      "w": 720,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Select,Move,Rotate,Scale,Play,Publish"
+      },
+      "groups": [
+        "edit",
+        "hud",
+        "preview"
+      ]
+    },
+    {
+      "id": "chat1",
+      "type": "chat-window",
+      "x": 1580,
+      "y": 580,
+      "w": 320,
+      "h": 240,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Console"
+      },
+      "groups": [
+        "edit"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 560,
+      "y": 900,
+      "w": 800,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Publish to ObjectStore / R2?",
+        "type": "warning"
+      },
+      "groups": [
+        "publish"
+      ]
+    },
+    {
+      "id": "ip1",
+      "type": "interaction-prompt",
+      "x": 860,
+      "y": 500,
+      "w": 200,
+      "h": 40,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "key": "G",
+        "action": "Grab"
+      },
+      "groups": [
+        "preview"
+      ]
+    }
+  ],
+  "gameId": "forge",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://forge.grudge-studio.com",
+    "genre": "editor",
+    "engine": "R3F + ObjectStore",
+    "description": "Scene hierarchy, asset browser, transform tools, publish strip.",
+    "features": [
+      "assets",
+      "hierarchy",
+      "publish",
+      "inspect"
+    ],
+    "usageStates": [
+      "edit",
+      "preview",
+      "publish"
+    ],
+    "dataBindings": {
+      "assets": {
+        "path": "https://objectstore.grudge-studio.com/api/v1/docs-catalog.json",
+        "fills": [
+          "shop1"
+        ]
+      }
+    },
+    "inputProfile": "editor",
+    "tags": [
+      "editor",
+      "tools"
+    ]
+  },
+  "states": {
+    "edit": {
+      "show": [
+        "edit",
+        "hud"
+      ],
+      "hide": [
+        "publish"
+      ]
+    },
+    "preview": {
+      "show": [
+        "preview",
+        "hud"
+      ],
+      "hide": [
+        "edit"
+      ]
+    },
+    "publish": {
+      "show": [
+        "publish",
+        "hud"
+      ],
+      "hide": []
+    }
+  },
+  "id": "forge",
+  "version": "1.0.0"
+}

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game-Ready UI Packs — HYDRA · Grudge Studio</title>
+  <meta name="description" content="Saved, game-ready UI packs for every Grudge Studio fleet game — inventory, crafting, combat states, and more." />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="stylesheet" href="./grudge-shell.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0705;
+      --panel: #14100c;
+      --border: #3a2a1a;
+      --gold: #c9950a;
+      --text: #f5e2c1;
+      --muted: #9b7d52;
+      --hydra: #4ade80;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,149,10,.12), transparent),
+                  var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 80px; }
+    h1 {
+      font-family: Cinzel, serif;
+      font-size: 1.65rem;
+      letter-spacing: .04em;
+      margin: 0 0 6px;
+      color: var(--gold);
+    }
+    .lead { color: var(--muted); font-size: .9rem; margin: 0 0 22px; max-width: 62ch; line-height: 1.5; }
+    .toolbar {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      margin-bottom: 20px;
+    }
+    .toolbar input, .toolbar select {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: .8rem;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .toolbar input { min-width: 200px; flex: 1; }
+    .stat {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      margin-left: auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color .15s, transform .15s;
+    }
+    .card:hover { border-color: var(--gold); transform: translateY(-1px); }
+    .card h2 {
+      font-family: Cinzel, serif;
+      font-size: .95rem;
+      margin: 0;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .card .gid {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .65rem;
+      color: var(--gold);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .card p { margin: 0; font-size: .78rem; color: var(--muted); line-height: 1.45; flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .tag {
+      font-size: .6rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(0,0,0,.25);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .tag.feat { border-color: rgba(74,222,128,.35); color: #86efac; }
+    .tag.state { border-color: rgba(201,149,10,.4); color: #e8c547; }
+    .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .actions a, .actions button {
+      font-size: .7rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #1a140e;
+      color: var(--text);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+    }
+    .actions a.primary, .actions button.primary {
+      background: rgba(201,149,10,.15);
+      border-color: rgba(201,149,10,.5);
+      color: var(--gold);
+    }
+    .actions a:hover, .actions button:hover { border-color: var(--gold); }
+    .preview-shell {
+      margin-top: 28px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #050403;
+    }
+    .preview-bar {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .preview-bar strong { font-family: Cinzel, serif; font-size: .85rem; color: var(--gold); }
+    .preview-bar select, .preview-bar button {
+      background: #1a140e;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: .72rem;
+      cursor: pointer;
+    }
+    #preview {
+      position: relative;
+      width: 100%;
+      height: min(62vh, 640px);
+      background: #000;
+    }
+    .err { color: #f87171; font-size: .8rem; padding: 20px; }
+    .code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .68rem;
+      background: #0c0a08;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #c4b5a0;
+      overflow-x: auto;
+      margin-top: 18px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://js.puter.com/v2/" async></script>
+  <script src="./grudge-cloud-save.js"></script>
+  <script src="./grudge-ai.js"></script>
+  <script src="./grudge-shell.js"></script>
+  <script src="./game-ui-runtime.js"></script>
+
+  <div class="wrap">
+    <h1>Game-Ready UI Packs</h1>
+    <p class="lead">
+      Saved HYDRA layouts for every fleet game — combat HUD, inventory, crafting, party, scoreboards, and usage states.
+      Open in Studio to edit, export HTML, or mount in-game with <code>GrudgeGameUI</code>.
+    </p>
+
+    <div class="toolbar">
+      <input id="q" type="search" placeholder="Filter games, features, states…" />
+      <select id="feat-filter">
+        <option value="">All features</option>
+        <option value="inventory">inventory</option>
+        <option value="crafting">crafting</option>
+        <option value="combat">combat</option>
+        <option value="party">party</option>
+        <option value="equipment">equipment</option>
+      </select>
+      <span class="stat" id="stat">Loading…</span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="preview-shell">
+      <div class="preview-bar">
+        <strong id="prev-title">Preview</strong>
+        <select id="state-sel" title="Usage state"></select>
+        <button type="button" id="btn-remount">Remount</button>
+        <a id="btn-studio" class="primary" href="/studio" style="margin-left:auto;font-size:.72rem;padding:5px 10px;border-radius:6px;border:1px solid rgba(201,149,10,.5);color:var(--gold);text-decoration:none;background:rgba(201,149,10,.12)">Edit in Studio</a>
+      </div>
+      <div id="preview"><div class="err">Select a pack to preview</div></div>
+    </div>
+
+    <pre class="code" id="snippet">// In your game:
+import 'https://ui.grudge-studio.com/game-ui-runtime.js';
+const ui = await GrudgeGameUI.load('warlords');
+ui.mount(document.getElementById('hud'));
+ui.setState('combat');
+ui.bindData({ pf1: { name: 'Korgath', hp: 900, hpMax: 1000 } });</pre>
+  </div>
+
+  <script>
+    let INDEX = null;
+    let current = null;
+    let instance = null;
+
+    async function boot() {
+      try {
+        INDEX = await GrudgeGameUI.list();
+        document.getElementById('stat').textContent =
+          (INDEX.packs?.length || 0) + ' packs · v' + (INDEX.version || '1');
+        renderList();
+        const first = INDEX.packs?.[0];
+        if (first) await selectPack(first.id);
+      } catch (e) {
+        document.getElementById('grid').innerHTML =
+          '<div class="err">Failed to load packs: ' + e.message + '</div>';
+      }
+    }
+
+    function filtered() {
+      const q = (document.getElementById('q').value || '').toLowerCase();
+      const feat = document.getElementById('feat-filter').value;
+      return (INDEX.packs || []).filter((p) => {
+        if (feat && !(p.features || []).includes(feat)) return false;
+        if (!q) return true;
+        const blob = [p.id, p.gameId, p.name, p.genre, ...(p.features || []), ...(p.usageStates || []), ...(p.tags || [])]
+          .join(' ')
+          .toLowerCase();
+        return blob.includes(q);
+      });
+    }
+
+    function renderList() {
+      const packs = filtered();
+      document.getElementById('grid').innerHTML = packs
+        .map(
+          (p) => `
+        <article class="card" data-id="${p.id}">
+          <div class="gid">${p.gameId}</div>
+          <h2>${p.name}</h2>
+          <p>${(p.features || []).slice(0, 6).join(' · ') || p.genre || ''}</p>
+          <div class="tags">
+            ${(p.features || []).slice(0, 5).map((f) => `<span class="tag feat">${f}</span>`).join('')}
+            ${(p.usageStates || []).slice(0, 4).map((s) => `<span class="tag state">${s}</span>`).join('')}
+          </div>
+          <div class="actions">
+            <button type="button" class="primary" data-act="preview" data-id="${p.id}">Preview</button>
+            <a href="/studio?pack=${encodeURIComponent(p.id)}">Studio</a>
+            <a href="${p.url || '/game-ui-packs/' + p.id + '.json'}" target="_blank" rel="noopener">JSON</a>
+            ${p.playUrl ? `<a href="${p.playUrl}" target="_blank" rel="noopener">Play</a>` : ''}
+          </div>
+        </article>`,
+        )
+        .join('');
+    }
+
+    async function selectPack(id) {
+      try {
+        if (instance) instance.unmount();
+        instance = await GrudgeGameUI.load(id);
+        current = instance.pack;
+        document.getElementById('prev-title').textContent = current.name || id;
+        const states = instance.getStates();
+        const sel = document.getElementById('state-sel');
+        sel.innerHTML = states.map((s) => `<option value="${s}">${s}</option>`).join('');
+        const mountEl = document.getElementById('preview');
+        mountEl.innerHTML = '';
+        instance.mount(mountEl);
+        if (states[0]) instance.setState(states[0]);
+        document.getElementById('btn-studio').href = '/studio?pack=' + encodeURIComponent(id);
+        document.getElementById('snippet').textContent =
+          `// ${current.name}\nconst ui = await GrudgeGameUI.load('${id}');\nui.mount(document.getElementById('hud'));\nui.setState('${states[0] || 'hud'}');\n// features: ${(current.meta?.features || []).join(', ')}`;
+      } catch (e) {
+        document.getElementById('preview').innerHTML =
+          '<div class="err">' + e.message + '</div>';
+      }
+    }
+
+    document.getElementById('grid').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-act="preview"]');
+      if (btn) selectPack(btn.dataset.id);
+    });
+    document.getElementById('q').addEventListener('input', renderList);
+    document.getElementById('feat-filter').addEventListener('change', renderList);
+    document.getElementById('state-sel').addEventListener('change', (e) => {
+      if (instance) instance.setState(e.target.value);
+    });
+    document.getElementById('btn-remount').addEventListener('click', () => {
+      if (current) selectPack(current.id || current.gameId);
+    });
+
+    boot();
+  </script>
+</body>
+</html>

@@ -89,11 +89,12 @@
     { "source": "/favicon.ico", "destination": "/favicon.svg" },
     { "source": "/hotkeys", "destination": "/hotkeys.html" },
     { "source": "/studio", "destination": "/studio.html" },
+    { "source": "/games", "destination": "/games.html" },
     { "source": "/assets", "destination": "/assets.html" },
     { "source": "/main-panel", "destination": "/main-panel.html" },
     { "source": "/equipment", "destination": "/index.html" },
     {
-      "source": "/((?!hotkeys|studio|assets|main-panel|equipment|favicon|grudge-shell|prim-packs|api|auth).*)",
+      "source": "/((?!hotkeys|studio|games|assets|main-panel|equipment|favicon|grudge-shell|prim-packs|game-ui|api|auth).*)",
       "destination": "/index.html"
     }
   ],
@@ -102,6 +103,21 @@
       "source": "/assets/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/game-ui-packs/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/game-ui-runtime.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" }
       ]
     },
     {

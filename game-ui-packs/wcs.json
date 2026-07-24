@@ -1,0 +1,262 @@
+{
+  "name": "WCS — Crafting Suite UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "f",
+  "comps": [
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 40,
+      "y": 80,
+      "w": 560,
+      "h": 720,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Recipes"
+      },
+      "groups": [
+        "browse",
+        "craft"
+      ]
+    },
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 640,
+      "y": 80,
+      "w": 400,
+      "h": 480,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 5,
+        "rows": 6,
+        "slotSize": 52,
+        "gap": 4,
+        "label": "Materials"
+      },
+      "groups": [
+        "browse",
+        "craft"
+      ]
+    },
+    {
+      "id": "eq1",
+      "type": "equipment-slots",
+      "x": 1080,
+      "y": 80,
+      "w": 300,
+      "h": 360,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Output Preview"
+      },
+      "groups": [
+        "craft",
+        "result"
+      ]
+    },
+    {
+      "id": "attr1",
+      "type": "attr-panel",
+      "x": 1420,
+      "y": 80,
+      "w": 420,
+      "h": 320,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Quality / Stats"
+      },
+      "groups": [
+        "craft",
+        "result"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 1080,
+      "y": 480,
+      "w": 300,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Craft Queue"
+      },
+      "groups": [
+        "queue",
+        "craft"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 1420,
+      "y": 440,
+      "w": 420,
+      "h": 72,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Craft,Queue,Salvage,Close"
+      },
+      "groups": [
+        "browse",
+        "craft"
+      ]
+    },
+    {
+      "id": "cur1",
+      "type": "currency-display",
+      "x": 40,
+      "y": 840,
+      "w": 280,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "2,100",
+        "label": "Gold"
+      },
+      "groups": [
+        "hud",
+        "browse"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 640,
+      "y": 900,
+      "w": 640,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Craft complete — Legendary!",
+        "type": "success"
+      },
+      "groups": [
+        "result"
+      ]
+    },
+    {
+      "id": "hb1",
+      "type": "hotbar",
+      "x": 640,
+      "y": 980,
+      "w": 520,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "slots": 6,
+        "slotSize": 48,
+        "label": "Stations"
+      },
+      "groups": [
+        "hud"
+      ]
+    }
+  ],
+  "gameId": "wcs",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://wcs.grudge-studio.com",
+    "genre": "crafting",
+    "engine": "Web",
+    "description": "Recipe browser, materials, output preview, station queue, quality.",
+    "features": [
+      "recipes",
+      "materials",
+      "stations",
+      "quality",
+      "inventory"
+    ],
+    "usageStates": [
+      "browse",
+      "craft",
+      "queue",
+      "result"
+    ],
+    "dataBindings": {
+      "recipes": {
+        "path": "https://objectstore.grudge-studio.com/api/v1/recipes.json",
+        "fills": [
+          "shop1"
+        ]
+      },
+      "materials": {
+        "path": "/api/characters/:id/inventory",
+        "fills": [
+          "inv1"
+        ]
+      }
+    },
+    "inputProfile": "menu",
+    "tags": [
+      "crafting",
+      "wcs"
+    ]
+  },
+  "states": {
+    "browse": {
+      "show": [
+        "browse",
+        "hud"
+      ],
+      "hide": [
+        "result"
+      ]
+    },
+    "craft": {
+      "show": [
+        "craft",
+        "browse"
+      ],
+      "hide": [
+        "result"
+      ]
+    },
+    "queue": {
+      "show": [
+        "queue",
+        "craft"
+      ],
+      "hide": []
+    },
+    "result": {
+      "show": [
+        "result"
+      ],
+      "hide": []
+    }
+  },
+  "id": "wcs",
+  "version": "1.0.0"
+}

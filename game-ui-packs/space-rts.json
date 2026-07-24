@@ -1,0 +1,280 @@
+{
+  "name": "Space RTS — Command UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "c",
+  "comps": [
+    {
+      "id": "cur1",
+      "type": "currency-display",
+      "x": 24,
+      "y": 16,
+      "w": 200,
+      "h": 44,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "1,250",
+        "label": "Minerals"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "cur2",
+      "type": "currency-display",
+      "x": 240,
+      "y": 16,
+      "w": 200,
+      "h": 44,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "680",
+        "label": "Gas"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "cur3",
+      "type": "currency-display",
+      "x": 456,
+      "y": 16,
+      "w": 200,
+      "h": 44,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "amount": "12/20",
+        "label": "Supply"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "mm1",
+      "type": "minimap",
+      "x": 1680,
+      "y": 820,
+      "w": 220,
+      "h": 220,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "shape": "square"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "attr1",
+      "type": "attr-panel",
+      "x": 24,
+      "y": 720,
+      "w": 360,
+      "h": 280,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Selection"
+      },
+      "groups": [
+        "hud",
+        "command"
+      ]
+    },
+    {
+      "id": "hb1",
+      "type": "hotbar-2row",
+      "x": 600,
+      "y": 900,
+      "w": 720,
+      "h": 140,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "slots": 12,
+        "slotSize": 48
+      },
+      "groups": [
+        "hud",
+        "build",
+        "command"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 1680,
+      "y": 24,
+      "w": 220,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Objectives"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "cl1",
+      "type": "combat-log",
+      "x": 1400,
+      "y": 500,
+      "w": 260,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Alerts"
+      },
+      "groups": [
+        "combat",
+        "hud"
+      ]
+    },
+    {
+      "id": "sk1",
+      "type": "skill-tree",
+      "x": 400,
+      "y": 120,
+      "w": 1120,
+      "h": 640,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Tech Tree"
+      },
+      "groups": [
+        "tech"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 24,
+      "y": 80,
+      "w": 200,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Build,Tech,Fleet,Menu"
+      },
+      "groups": [
+        "hud"
+      ]
+    }
+  ],
+  "gameId": "space-rts",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://grudge-space-rts.vercel.app",
+    "genre": "rts",
+    "engine": "Three.js",
+    "description": "Resources, selection panel, build queue, minimap, command card.",
+    "features": [
+      "resources",
+      "build-queue",
+      "selection",
+      "minimap",
+      "tech"
+    ],
+    "usageStates": [
+      "command",
+      "build",
+      "combat",
+      "tech"
+    ],
+    "dataBindings": {
+      "resources": {
+        "path": "/api/rts/resources",
+        "fills": [
+          "cur1",
+          "cur2",
+          "cur3"
+        ]
+      },
+      "selection": {
+        "path": "/api/rts/selection",
+        "fills": [
+          "attr1"
+        ]
+      }
+    },
+    "inputProfile": "rts",
+    "tags": [
+      "rts",
+      "space"
+    ]
+  },
+  "states": {
+    "command": {
+      "show": [
+        "hud",
+        "command"
+      ],
+      "hide": [
+        "tech"
+      ]
+    },
+    "build": {
+      "show": [
+        "hud",
+        "build"
+      ],
+      "hide": [
+        "tech"
+      ]
+    },
+    "combat": {
+      "show": [
+        "hud",
+        "combat"
+      ],
+      "hide": [
+        "tech"
+      ]
+    },
+    "tech": {
+      "show": [
+        "tech",
+        "hud"
+      ],
+      "hide": [
+        "build"
+      ]
+    }
+  },
+  "id": "space-rts",
+  "version": "1.0.0"
+}

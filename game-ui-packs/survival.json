@@ -1,0 +1,340 @@
+{
+  "name": "Survival — Craft + Needs",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "f",
+  "comps": [
+    {
+      "id": "hb-hp",
+      "type": "healthbar",
+      "x": 24,
+      "y": 24,
+      "w": 280,
+      "h": 28,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "value": 80,
+        "max": 100,
+        "label": "Health",
+        "color": "#e11d48"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "hb-food",
+      "type": "manabar",
+      "x": 24,
+      "y": 60,
+      "w": 280,
+      "h": 24,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "value": 55,
+        "max": 100,
+        "label": "Hunger",
+        "color": "#f59e0b"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "hb-water",
+      "type": "xp-bar",
+      "x": 24,
+      "y": 92,
+      "w": 280,
+      "h": 24,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "value": 40,
+        "max": 100,
+        "label": "Thirst",
+        "color": "#38bdf8"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "orb1",
+      "type": "action-orb",
+      "x": 1760,
+      "y": 900,
+      "w": 100,
+      "h": 100,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "value": 70,
+        "max": 100,
+        "color": "#a3e635",
+        "label": "Stamina"
+      },
+      "groups": [
+        "hud",
+        "combat"
+      ]
+    },
+    {
+      "id": "hb1",
+      "type": "hotbar",
+      "x": 700,
+      "y": 980,
+      "w": 520,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "slots": 8,
+        "slotSize": 48,
+        "label": "Tools"
+      },
+      "groups": [
+        "hud",
+        "harvest"
+      ]
+    },
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 560,
+      "y": 160,
+      "w": 400,
+      "h": 480,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 6,
+        "rows": 6,
+        "slotSize": 48,
+        "gap": 4,
+        "label": "Resources"
+      },
+      "groups": [
+        "inventory",
+        "crafting"
+      ]
+    },
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 1000,
+      "y": 160,
+      "w": 420,
+      "h": 520,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Workbench"
+      },
+      "groups": [
+        "crafting"
+      ]
+    },
+    {
+      "id": "ip1",
+      "type": "interaction-prompt",
+      "x": 820,
+      "y": 700,
+      "w": 280,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "key": "E",
+        "action": "Gather"
+      },
+      "groups": [
+        "harvest"
+      ]
+    },
+    {
+      "id": "mm1",
+      "type": "minimap",
+      "x": 1680,
+      "y": 24,
+      "w": 200,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "shape": "square"
+      },
+      "groups": [
+        "hud"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 640,
+      "y": 40,
+      "w": 640,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Build mode — place blueprint",
+        "type": "info"
+      },
+      "groups": [
+        "build"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 40,
+      "y": 980,
+      "w": 280,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Craft,Build,Map,Sleep"
+      },
+      "groups": [
+        "hud"
+      ]
+    }
+  ],
+  "gameId": "survival",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://grudges.grudge-studio.com",
+    "genre": "survival",
+    "engine": "R3F + Rapier",
+    "description": "Hunger/thirst/stamina, harvest bag, workbench craft, build radial, shelter status.",
+    "features": [
+      "inventory",
+      "crafting",
+      "building",
+      "needs",
+      "harvest"
+    ],
+    "usageStates": [
+      "explore",
+      "harvest",
+      "craft",
+      "build",
+      "combat",
+      "inventory"
+    ],
+    "dataBindings": {
+      "vitals": {
+        "path": "/api/survival/vitals",
+        "fills": [
+          "hb-hp",
+          "hb-food",
+          "hb-water"
+        ]
+      },
+      "inventory": {
+        "path": "/api/survival/inventory",
+        "fills": [
+          "inv1"
+        ]
+      },
+      "recipes": {
+        "path": "/api/survival/recipes",
+        "fills": [
+          "shop1"
+        ]
+      }
+    },
+    "inputProfile": "survival",
+    "tags": [
+      "survival",
+      "craft"
+    ]
+  },
+  "states": {
+    "explore": {
+      "show": [
+        "hud"
+      ],
+      "hide": [
+        "inventory",
+        "crafting",
+        "build"
+      ]
+    },
+    "harvest": {
+      "show": [
+        "hud",
+        "harvest"
+      ],
+      "hide": [
+        "inventory"
+      ]
+    },
+    "craft": {
+      "show": [
+        "crafting",
+        "inventory"
+      ],
+      "hide": [
+        "combat"
+      ]
+    },
+    "build": {
+      "show": [
+        "build",
+        "hud"
+      ],
+      "hide": [
+        "inventory"
+      ]
+    },
+    "combat": {
+      "show": [
+        "hud",
+        "combat"
+      ],
+      "hide": [
+        "inventory",
+        "crafting"
+      ]
+    },
+    "inventory": {
+      "show": [
+        "inventory"
+      ],
+      "hide": [
+        "crafting"
+      ]
+    }
+  },
+  "id": "survival",
+  "version": "1.0.0"
+}

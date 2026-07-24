@@ -1,0 +1,304 @@
+{
+  "name": "Water Island — Home Base UI",
+  "resolution": {
+    "w": 1920,
+    "h": 1080
+  },
+  "theme": "f",
+  "comps": [
+    {
+      "id": "pf1",
+      "type": "player-frame",
+      "x": 24,
+      "y": 900,
+      "w": 300,
+      "h": 110,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "Settler",
+        "level": 15,
+        "hp": 200,
+        "hpMax": 200,
+        "mp": 80,
+        "mpMax": 80
+      },
+      "groups": [
+        "hud",
+        "island"
+      ]
+    },
+    {
+      "id": "mm1",
+      "type": "minimap",
+      "x": 1680,
+      "y": 24,
+      "w": 200,
+      "h": 200,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "shape": "circle"
+      },
+      "groups": [
+        "hud",
+        "island",
+        "boat"
+      ]
+    },
+    {
+      "id": "obj1",
+      "type": "objectives",
+      "x": 1680,
+      "y": 240,
+      "w": 200,
+      "h": 180,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Island Tasks"
+      },
+      "groups": [
+        "hud",
+        "island"
+      ]
+    },
+    {
+      "id": "inv1",
+      "type": "inventory-grid",
+      "x": 600,
+      "y": 180,
+      "w": 400,
+      "h": 480,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "cols": 6,
+        "rows": 6,
+        "slotSize": 48,
+        "gap": 4,
+        "label": "Island Bag"
+      },
+      "groups": [
+        "inventory",
+        "craft"
+      ]
+    },
+    {
+      "id": "shop1",
+      "type": "shop-panel",
+      "x": 1040,
+      "y": 180,
+      "w": 400,
+      "h": 520,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Craft Station"
+      },
+      "groups": [
+        "craft"
+      ]
+    },
+    {
+      "id": "md1",
+      "type": "menu-dock",
+      "x": 40,
+      "y": 40,
+      "w": 320,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "buttons": "Build,Craft,Boat,Travel"
+      },
+      "groups": [
+        "hud",
+        "island"
+      ]
+    },
+    {
+      "id": "ip1",
+      "type": "interaction-prompt",
+      "x": 820,
+      "y": 700,
+      "w": 280,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "key": "F",
+        "action": "Use Station"
+      },
+      "groups": [
+        "island",
+        "prompt"
+      ]
+    },
+    {
+      "id": "alb1",
+      "type": "alert-banner",
+      "x": 640,
+      "y": 40,
+      "w": 640,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Blueprint placement",
+        "type": "info"
+      },
+      "groups": [
+        "build"
+      ]
+    },
+    {
+      "id": "alb2",
+      "type": "alert-banner",
+      "x": 640,
+      "y": 40,
+      "w": 640,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "text": "Set sail — choose zone",
+        "type": "success"
+      },
+      "groups": [
+        "boat",
+        "travel"
+      ]
+    },
+    {
+      "id": "hb1",
+      "type": "hotbar",
+      "x": 700,
+      "y": 980,
+      "w": 520,
+      "h": 64,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "slots": 8,
+        "slotSize": 48,
+        "label": "Tools"
+      },
+      "groups": [
+        "hud",
+        "build"
+      ]
+    }
+  ],
+  "gameId": "water",
+  "gameReady": true,
+  "meta": {
+    "playUrl": "https://water.grudge-studio.com",
+    "genre": "home-island",
+    "engine": "Three.js + R3F",
+    "description": "Island bag, build, craft station, boat dock, zone travel.",
+    "features": [
+      "inventory",
+      "crafting",
+      "building",
+      "travel",
+      "boat"
+    ],
+    "usageStates": [
+      "island",
+      "build",
+      "craft",
+      "travel",
+      "boat"
+    ],
+    "dataBindings": {
+      "island": {
+        "path": "/api/island/:id",
+        "fills": [
+          "obj1"
+        ]
+      },
+      "inventory": {
+        "path": "/api/characters/:id/inventory",
+        "fills": [
+          "inv1"
+        ]
+      }
+    },
+    "inputProfile": "island",
+    "tags": [
+      "island",
+      "warlords"
+    ]
+  },
+  "states": {
+    "island": {
+      "show": [
+        "hud",
+        "island"
+      ],
+      "hide": [
+        "build",
+        "craft"
+      ]
+    },
+    "build": {
+      "show": [
+        "build",
+        "hud"
+      ],
+      "hide": [
+        "craft"
+      ]
+    },
+    "craft": {
+      "show": [
+        "craft",
+        "inventory"
+      ],
+      "hide": [
+        "build"
+      ]
+    },
+    "travel": {
+      "show": [
+        "travel",
+        "hud"
+      ],
+      "hide": [
+        "build"
+      ]
+    },
+    "boat": {
+      "show": [
+        "boat",
+        "hud"
+      ],
+      "hide": [
+        "build"
+      ]
+    }
+  },
+  "id": "water-island",
+  "version": "1.0.0"
+}
