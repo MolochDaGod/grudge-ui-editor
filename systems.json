@@ -1,0 +1,91 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-07-28",
+  "host": "https://ui.grudge-studio.com",
+  "doc": "/docs/CANONICAL_GAME_UI_SYSTEMS.md",
+  "runtime": "/game-ui-runtime.js",
+  "packsIndex": "/game-ui-packs/index.json",
+  "assetRoots": {
+    "craftpix": "/assets/craftpix/",
+    "craftpixRpgCss": "https://assets.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css",
+    "cyberpunk": "/assets/cyberpunk/",
+    "rpg": "/assets/rpg/",
+    "fantasy": "/assets/fantasy/"
+  },
+  "surfaces": {
+    "mainPanel": {
+      "url": "/main-panel.html?era=warlords",
+      "hotkey": "P",
+      "systems": ["equipment", "inventory", "class-skills", "weapon-skills", "professions", "crafting", "quests"]
+    },
+    "spellbook": {
+      "url": "/spellbook.html",
+      "hotkey": "B",
+      "pack": "grudge6",
+      "systems": ["weapon-skills", "class-skills", "magic", "utility"]
+    },
+    "studio": { "url": "/studio.html", "systems": ["layout-editor", "craftpix-browser"] },
+    "gamesPacks": { "url": "/games.html", "systems": ["pack-gallery"] },
+    "hotkeys": { "url": "/hotkeys.html", "systems": ["bindings"] },
+    "assets": { "url": "/assets.html", "systems": ["3d-browser", "objectstore"] }
+  },
+  "gameSystems": [
+    {
+      "id": "hud-combat",
+      "label": "Combat HUD",
+      "components": ["player-frame", "target-frame", "action-bar", "cast-bar", "minimap", "quest-tracker"],
+      "packStates": ["combat", "explore", "casting"]
+    },
+    {
+      "id": "spellbook",
+      "label": "Spellbook",
+      "components": ["spellbook"],
+      "packStates": ["spellbook", "menu"],
+      "url": "/spellbook.html"
+    },
+    {
+      "id": "character-panel",
+      "label": "Main Panel / Paperdoll",
+      "components": ["paperdoll-equipment", "inventory-grid", "attr-panel", "skill-tree"],
+      "url": "/main-panel.html?era=warlords"
+    },
+    {
+      "id": "hotbar-macros",
+      "label": "Hotbar + Skill Macros",
+      "slots": { "weapon": "1-5", "consumable": "6-8", "class": "Shift+1-5" },
+      "client": "GrudgeBuilder SkillMacroSystem + hotbarLayout"
+    },
+    {
+      "id": "mode-play",
+      "label": "Combat / Harvest dual mode",
+      "client": "ModePlayHUD",
+      "notes": "Interactive controls stay in React; craftpix for slots/frames"
+    }
+  ],
+  "fleetPacks": [
+    "grudge6",
+    "warlords",
+    "open",
+    "grudox",
+    "player-grass",
+    "survival",
+    "arena",
+    "mech",
+    "grim-armada",
+    "dcq",
+    "space-rts",
+    "drive",
+    "foundry",
+    "water-island",
+    "wcs",
+    "forge"
+  ],
+  "bestPractices": [
+    "ui.grudge-studio.com is SSOT — do not host third main-panel/spellbook on random domains",
+    "Warlords/grudge6 chrome = craftpix fantasy; VoxGrudge can use Kenney pixel",
+    "Interactive input in game client; packs are chrome + layout + bindData",
+    "Prefer ObjectStore skill icons; craftpix Icons 128 as fallback",
+    "Embed with ?embed=1 to hide studio nav",
+    "postMessage: GRUDGE_MAIN_PANEL, GRUDGE_SPELLBOOK, GRUDGE_MESH_EQUIP"
+  ]
+}

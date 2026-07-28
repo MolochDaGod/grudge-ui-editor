@@ -49,30 +49,57 @@
     const p = c.props || {};
     switch (c.type) {
       case "player-frame":
-      case "target-frame":
-        return `<div class="ufwrap"><div class="ufface">⚔</div><div class="ufinfo"><div class="ufname">${esc(p.name || "Hero")} <span class="uflvl">Lv.${esc(p.level || 1)}</span></div><div class="ufbar"><div class="ufhp" style="width:${Math.min(100, ((p.hp || 0) / (p.hpMax || 1)) * 100)}%"></div></div>${p.mpMax != null ? `<div class="ufbar ufmpbar"><div class="ufmp" style="width:${Math.min(100, ((p.mp || 0) / (p.mpMax || 1)) * 100)}%"></div></div>` : ""}</div></div>`;
-      case "ally-frame":
-        return `<div class="afwrap"><div class="afface">●</div><div class="afinfo"><div class="afname">${esc(p.name || "Ally")}</div><div class="afbar"><div class="afhp" style="width:${Math.min(100, ((p.hp || 0) / (p.hpMax || 1)) * 100)}%"></div></div></div></div>`;
+      case "target-frame": {
+        // Prefer Craftpix pack classes when craftpix-rpg-ui.css is loaded
+        const hpPct = Math.min(100, ((p.hp || 0) / (p.hpMax || 1)) * 100);
+        const mpPct =
+          p.mpMax != null
+            ? Math.min(100, ((p.mp || 0) / (p.mpMax || 1)) * 100)
+            : null;
+        const hpCls =
+          hpPct <= 25
+            ? "cpx-bar cpx-bar--hp cpx-bar--crit"
+            : hpPct <= 50
+              ? "cpx-bar cpx-bar--hp cpx-bar--warn"
+              : "cpx-bar cpx-bar--hp";
+        return `<div class="cpx-panel cpx-panel--uf ufwrap" style="display:flex;gap:8px;min-width:240px;padding:4px 8px"><div class="ufface" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(0,0,0,.4);border-radius:4px">⚔</div><div class="ufinfo" style="flex:1;min-width:0"><div class="ufname" style="font-weight:800;color:var(--cpx-ink,#f4e6c8);text-shadow:1px 1px 0 #000">${esc(p.name || "Hero")} <span class="uflvl">Lv.${esc(p.level || 1)}</span></div><div class="${hpCls}"><i style="width:${hpPct}%"></i></div>${mpPct != null ? `<div class="cpx-bar" style="margin-top:2px"><i style="width:${mpPct}%;background:var(--cpx-pb-fill-2) left center / auto 100% repeat-x"></i></div>` : ""}</div></div>`;
+      }
+      case "ally-frame": {
+        const hpPct = Math.min(100, ((p.hp || 0) / (p.hpMax || 1)) * 100);
+        return `<div class="cpx-panel cpx-panel--uf afwrap" style="display:flex;gap:6px;min-width:160px;padding:4px 6px"><div class="afface">●</div><div class="afinfo" style="flex:1"><div class="afname">${esc(p.name || "Ally")}</div><div class="cpx-bar cpx-bar--hp"><i style="width:${hpPct}%"></i></div></div></div>`;
+      }
       case "healthbar":
       case "manabar":
-      case "xp-bar":
-        return `<div class="bwrap"><div class="brow"><span class="blbl">${esc(p.label || "")}</span><span class="bval">${esc(p.value)}/${esc(p.max)}</span></div><div class="btrack"><div class="bfill" style="width:${Math.min(100, ((p.value || 0) / (p.max || 1)) * 100)}%;background:${esc(p.color || "var(--ca)")}"></div></div></div>`;
+      case "xp-bar": {
+        const pct = Math.min(100, ((p.value || 0) / (p.max || 1)) * 100);
+        const kind =
+          c.type === "xp-bar"
+            ? "cpx-bar cpx-bar--phase"
+            : c.type === "manabar"
+              ? "cpx-bar"
+              : "cpx-bar cpx-bar--hp";
+        return `<div class="bwrap"><div class="brow"><span class="blbl">${esc(p.label || "")}</span><span class="bval">${esc(p.value)}/${esc(p.max)}</span></div><div class="${kind}"><i style="width:${pct}%"></i></div></div>`;
+      }
       case "hotbar":
       case "hotbar-2row": {
         const n = p.slots || 8;
-        const slots = Array.from({ length: n }, (_, i) => `<div class="hbsl" style="width:${p.slotSize || 48}px;height:${p.slotSize || 48}px"><span class="hbnum">${i + 1}</span></div>`).join("");
+        const slots = Array.from(
+          { length: n },
+          (_, i) =>
+            `<div class="cpx-slot cpx-slot--sm hbsl" style="width:${p.slotSize || 48}px;height:${p.slotSize || 48}px"><span class="hbnum">${i + 1}</span></div>`,
+        ).join("");
         return c.type === "hotbar-2row"
-          ? `<div class="hb2wrap"><div class="hbrow">${slots}</div></div>`
-          : `<div class="hbrow">${slots}</div>`;
+          ? `<div class="hb2wrap"><div class="hbrow" style="display:flex;gap:6px">${slots}</div></div>`
+          : `<div class="hbrow" style="display:flex;gap:6px">${slots}</div>`;
       }
       case "inventory-grid": {
         const cols = p.cols || 5;
         const rows = p.rows || 5;
-        const sz = p.slotSize || 48;
         const gap = p.gap || 4;
         let cells = "";
-        for (let i = 0; i < cols * rows; i++) cells += `<div class="gslot" style="width:${sz}px;height:${sz}px"></div>`;
-        return `<div class="gtitle">${esc(p.label || "Bag")}</div><div class="sgrid" style="grid-template-columns:repeat(${cols},1fr);gap:${gap}px">${cells}</div>`;
+        for (let i = 0; i < cols * rows; i++)
+          cells += `<div class="cpx-slot gslot"></div>`;
+        return `<div class="gtitle">${esc(p.label || "Bag")}</div><div class="sgrid" style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px">${cells}</div>`;
       }
       case "equipment-slots":
       case "paperdoll-equipment": {
@@ -134,6 +161,59 @@
         return `<div class="orbwrap"><div class="orbval" style="color:${esc(p.color || "var(--ca)")}">${esc(p.value ?? 0)}</div><div class="orblbl">${esc(p.label || "")}</div></div>`;
       case "portrait":
         return `<div class="pwrap"><div class="pface">☺</div><div class="pname">${esc(p.name || "")}</div><div class="plvl">Lv.${esc(p.level || 1)}</div></div>`;
+      case "cast-bar": {
+        const pct = Math.min(100, Math.max(0, Number(p.progress ?? p.value ?? 0)));
+        const label = esc(p.label || p.spell || "Casting…");
+        return `<div class="cpx-castbar sb-cast"><div class="sb-cast-ico" style="background-image:url(${esc(p.iconUrl || "")})"></div><div class="sb-cast-body"><div class="sb-cast-name">${label}</div><div class="cpx-bar cpx-bar--phase"><i style="width:${pct}%"></i></div></div></div>`;
+      }
+      case "spellbook":
+      case "spell-book": {
+        // Craftpix Spell Book chrome — tabs + spell grid (Warlords / grudge6 SSOT)
+        const tabs = Array.isArray(p.tabs)
+          ? p.tabs
+          : ["Weapon", "Class", "Magic", "Utility"];
+        const active = Math.min(tabs.length - 1, Math.max(0, Number(p.activeTab || 0)));
+        const spells = Array.isArray(p.spells)
+          ? p.spells
+          : Array.from({ length: p.slots || 12 }, (_, i) => ({
+              id: `spell_${i}`,
+              name: p[`spell${i}Name`] || `Ability ${i + 1}`,
+              iconUrl: p[`spell${i}Icon`] || "",
+              rank: p[`spell${i}Rank`] || 1,
+              locked: false,
+            }));
+        const tabHtml = tabs
+          .map(
+            (t, i) =>
+              `<button type="button" class="sb-tab${i === active ? " is-active" : ""}" data-tab="${i}">${esc(typeof t === "string" ? t : t.label || t.id || "Tab")}</button>`,
+          )
+          .join("");
+        const grid = spells
+          .map((s) => {
+            const name = esc(s.name || s.id || "—");
+            const ico = s.iconUrl
+              ? `style="background-image:url(${esc(s.iconUrl)})"`
+              : "";
+            const lock = s.locked ? " is-locked" : "";
+            return `<div class="sb-slot cpx-slot${lock}" data-spell="${esc(s.id || name)}" title="${name}"><div class="sb-ico" ${ico}></div><span class="sb-name">${name}</span><span class="sb-rank">R${esc(s.rank ?? 1)}</span></div>`;
+          })
+          .join("");
+        return `<div class="sb-root cpx-panel"><div class="sb-header"><span class="sb-title">${esc(p.title || "Spellbook")}</span><span class="sb-sub">${esc(p.subtitle || "Abilities · B")}</span></div><div class="sb-tabs">${tabHtml}</div><div class="sb-grid">${grid}</div></div>`;
+      }
+      case "action-bar": {
+        // Single craftpix action bar row with optional icons
+        const n = p.slots || 8;
+        const icons = Array.isArray(p.icons) ? p.icons : [];
+        const labels = Array.isArray(p.labels) ? p.labels : [];
+        const slots = Array.from({ length: n }, (_, i) => {
+          const ico = icons[i]
+            ? `style="background-image:url(${esc(icons[i])})"`
+            : "";
+          const lab = labels[i] ? `<span class="hb-lbl">${esc(labels[i])}</span>` : "";
+          return `<div class="cpx-slot cpx-slot--sm hbsl hbsl--icon" style="width:${p.slotSize || 48}px;height:${p.slotSize || 48}px"><div class="hb-ico" ${ico}></div>${lab}<span class="hbnum">${i + 1}</span></div>`;
+        }).join("");
+        return `<div class="cpx-actionbar hbrow" style="display:flex;gap:6px;align-items:center">${slots}</div>`;
+      }
       default:
         return `<div class="gtitle">${esc(c.type)}</div>`;
     }
@@ -190,6 +270,28 @@
 .mdwrap{display:flex;align-items:center;gap:3px;padding:3px;height:100%;justify-content:center}
 .mdbtn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 8px;border-radius:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:.46rem;color:rgba(255,255,255,.5);flex:1}
 .qtitle{padding:3px 6px;font-size:.65rem;font-weight:700;color:var(--ca)}.qtobj{padding:0 6px;font-size:.6rem;color:#9496b0;line-height:1.5}
+/* Spellbook + cast bar (craftpix Spell Book pack) */
+.sb-root{display:flex;flex-direction:column;height:100%;padding:6px 8px;background:rgba(12,8,4,.92);border:1px solid var(--sb);border-radius:8px}
+.sb-header{display:flex;justify-content:space-between;align-items:baseline;padding:2px 2px 6px;border-bottom:1px solid var(--sb)}
+.sb-title{font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ca)}
+.sb-sub{font-size:.5rem;color:var(--ct);opacity:.75}
+.sb-tabs{display:flex;gap:4px;padding:6px 0;flex-wrap:wrap}
+.sb-tab{pointer-events:auto;cursor:pointer;border:1px solid var(--sb);background:rgba(0,0,0,.35);color:var(--ct);font-size:.52rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:4px}
+.sb-tab.is-active,.sb-tab:hover{border-color:var(--ca);color:var(--ca);background:var(--cb)}
+.sb-grid{flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;overflow:auto;padding:4px 0;min-height:0}
+.sb-slot{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;min-height:64px;padding:4px;position:relative}
+.sb-ico{position:absolute;inset:6px 6px 22px;background:center/contain no-repeat;opacity:.95}
+.sb-name{font-size:.42rem;color:var(--ct);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;z-index:1}
+.sb-rank{font-size:.38rem;color:var(--ca);z-index:1}
+.sb-slot.is-locked{opacity:.4;filter:grayscale(.8)}
+.sb-cast{display:flex;gap:8px;align-items:center;padding:6px 8px;height:100%}
+.sb-cast-ico{width:36px;height:36px;border-radius:4px;background:var(--slot) center/cover no-repeat;border:1px solid var(--sb);flex-shrink:0}
+.sb-cast-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.sb-cast-name{font-size:.58rem;font-weight:700;color:var(--ct)}
+.hbsl--icon{position:relative;align-items:flex-end}
+.hb-ico{position:absolute;inset:4px 4px 12px;background:center/contain no-repeat}
+.hb-lbl{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:.36rem;color:var(--ct);z-index:1;pointer-events:none}
+.cpx-actionbar{padding:4px 6px}
 .shitem{display:flex;align-items:center;gap:4px;padding:3px 4px;border-radius:3px;background:var(--slot);border:1px solid var(--sb)}
 .shico{width:17px;height:17px;border-radius:3px;background:var(--cb);display:flex;align-items:center;justify-content:center;font-size:.56rem}
 .shnm{flex:1;font-size:.54rem;color:var(--ct)}.shpr{font-size:.54rem;font-weight:700;color:var(--ca)}
@@ -225,6 +327,27 @@
     doc.head.appendChild(style);
   }
 
+  /** Production Craftpix on R2 CDN first; client / same-origin fallback. */
+  function injectCraftpixCss(doc) {
+    if (doc.getElementById("ggui-craftpix-rpg-css")) return;
+    const candidates = [
+      "https://assets.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css",
+      "https://client.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css",
+      "/ui/craftpix-rpg/craftpix-rpg-ui.css",
+    ];
+    const link = doc.createElement("link");
+    link.id = "ggui-craftpix-rpg-css";
+    link.rel = "stylesheet";
+    link.href = candidates[0];
+    let i = 0;
+    link.onerror = function () {
+      i += 1;
+      if (i < candidates.length) link.href = candidates[i];
+    };
+    doc.head.appendChild(link);
+    if (doc.documentElement) doc.documentElement.classList.add("cpx-theme");
+  }
+
   class GameUIInstance {
     constructor(pack, baseUrl) {
       this.pack = pack;
@@ -238,6 +361,7 @@
       opts = opts || {};
       const doc = el.ownerDocument || document;
       injectCss(doc);
+      injectCraftpixCss(doc);
       const th = this.pack.theme || "f";
       const res = this.pack.resolution || { w: 1920, h: 1080 };
       const scale = opts.scale !== false;

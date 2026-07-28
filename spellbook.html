@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grudge Spellbook — Warlords / Grudge6</title>
+  <meta name="description" content="Canonical spellbook surface — craftpix Spell Book chrome, skill tabs, fleet pack bind. SSOT ui.grudge-studio.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://assets.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css" />
+  <link rel="stylesheet" href="./grudge-shell.css" />
+  <style>
+    :root {
+      --gold: #d4a017;
+      --ink: #f4e6c8;
+      --muted: #9a8b6e;
+      --panel: rgba(12, 8, 4, 0.94);
+      --line: rgba(212, 160, 23, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body.sb-page {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(80, 50, 10, 0.35), transparent 55%),
+        #0a0704;
+      color: var(--ink);
+      font-family: Jost, system-ui, sans-serif;
+    }
+    body.sb-page.embed .gs-nav,
+    body.sb-page.embed .sb-page-chrome { display: none !important; }
+    .sb-page-chrome {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.45);
+    }
+    .sb-page-chrome h1 {
+      margin: 0;
+      font-family: Cinzel, serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+    }
+    .sb-page-chrome a {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-decoration: none;
+    }
+    .sb-page-chrome a:hover { color: var(--gold); }
+    .sb-stage {
+      position: relative;
+      width: min(1200px, 96vw);
+      height: min(780px, 86vh);
+      margin: 18px auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+      background: #120c06;
+    }
+    .sb-stage .ggui-root { width: 100% !important; height: 100% !important; }
+    .sb-hint {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 0 16px 20px;
+    }
+    .sb-hint kbd {
+      border: 1px solid var(--line);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+  </style>
+</head>
+<body class="sb-page">
+  <header class="sb-page-chrome">
+    <h1>⚔ Spellbook</h1>
+    <nav style="display:flex;gap:14px;flex-wrap:wrap">
+      <a href="./main-panel.html?era=warlords">Main Panel</a>
+      <a href="./games.html">Game packs</a>
+      <a href="./studio.html">Studio</a>
+      <a href="./hotkeys.html">Hotkeys</a>
+      <a href="https://grudge6.grudge-studio.com/">Grudge6 hub</a>
+      <a href="https://client.grudge-studio.com/island-3d">Play</a>
+    </nav>
+  </header>
+
+  <div id="spellbook-root" class="sb-stage" aria-label="Spellbook pack stage"></div>
+  <p class="sb-hint">
+    Canonical surface · craftpix Spell Book · pack <code>grudge6</code> · open with <kbd>B</kbd> from play shell
+  </p>
+
+  <script src="./game-ui-runtime.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      if (params.get("embed") === "1") document.body.classList.add("embed");
+
+      const root = document.getElementById("spellbook-root");
+      const CPX = "https://ui.grudge-studio.com/assets/craftpix/Icons%20128x128/";
+
+      async function boot() {
+        if (!window.GrudgeGameUI) {
+          root.innerHTML = "<p style='color:#c44;padding:24px'>game-ui-runtime failed to load</p>";
+          return;
+        }
+        try {
+          const ui = await GrudgeGameUI.load("grudge6");
+          // Show only spellbook group for this page
+          ui.mount(root, { scale: true });
+          ui.setState("spellbook");
+          // Optional live bind from query / parent postMessage
+          const name = params.get("name") || "Hero";
+          ui.bindData({
+            pf1: { name: name, level: Number(params.get("level") || 1) },
+          });
+        } catch (e) {
+          console.error(e);
+          // Fallback: mount minimal spellbook-only comps inline
+          const fallback = {
+            name: "Spellbook fallback",
+            theme: "f",
+            resolution: { w: 1080, h: 720 },
+            comps: [
+              {
+                id: "sb1",
+                type: "spellbook",
+                x: 40,
+                y: 40,
+                w: 1000,
+                h: 640,
+                props: {
+                  title: "Spellbook",
+                  tabs: ["Weapon", "Class", "Magic", "Utility"],
+                  spells: [
+                    { id: "slash", name: "Slash", rank: 1, iconUrl: CPX + "Icon_Sword_128.png" },
+                    { id: "guard", name: "Guard", rank: 1, iconUrl: CPX + "Icon_Shield_128.png" },
+                    { id: "fire", name: "Fireball", rank: 2, iconUrl: CPX + "Icon_Fireball_128.png" },
+                    { id: "shot", name: "Aimed Shot", rank: 1, iconUrl: CPX + "Icon_Arrows_128.png" },
+                    { id: "heal", name: "Nature Touch", rank: 1, iconUrl: CPX + "Icon_Leafs_128.png" },
+                    { id: "exe", name: "Execute", rank: 3, iconUrl: CPX + "Icon_Deathkiss_128.png" },
+                  ],
+                },
+                groups: ["spellbook"],
+              },
+            ],
+          };
+          const ui = await GrudgeGameUI.loadFromUrl
+            ? null
+            : null;
+          // Direct render via temporary object URL
+          const blob = new Blob([JSON.stringify(fallback)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const u2 = await GrudgeGameUI.loadFromUrl(url);
+          u2.mount(root, { scale: true });
+          u2.setState("spellbook");
+        }
+      }
+
+      window.addEventListener("message", (ev) => {
+        const d = ev.data;
+        if (!d || d.type !== "GRUDGE_SPELLBOOK") return;
+        if (d.spells && window.__sbUi) {
+          window.__sbUi.bindData({ sb1: { spells: d.spells } });
+        }
+      });
+
+      boot();
+    })();
+  </script>
+</body>
+</html>

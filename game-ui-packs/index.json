@@ -7,6 +7,41 @@
   "runtime": "./game-ui-runtime.js",
   "packs": [
     {
+      "id": "grudge6",
+      "gameId": "grudge6",
+      "name": "Grudge6 — HUD + Spellbook + Panel",
+      "file": "./grudge6.json",
+      "url": "/game-ui-packs/grudge6.json",
+      "playUrl": "https://grudge6.grudge-studio.com",
+      "theme": "f",
+      "genre": "fantasy-mmo",
+      "features": [
+        "combat",
+        "spellbook",
+        "equipment",
+        "inventory",
+        "cast-bar",
+        "hotbar",
+        "quests"
+      ],
+      "usageStates": [
+        "explore",
+        "combat",
+        "casting",
+        "spellbook",
+        "panel",
+        "inventory",
+        "menu"
+      ],
+      "tags": [
+        "grudge6",
+        "flagship",
+        "toon-rts",
+        "craftpix"
+      ],
+      "componentCount": 9
+    },
+    {
       "id": "warlords",
       "gameId": "warlords",
       "name": "Warlords — Combat + Bag + Craft",
