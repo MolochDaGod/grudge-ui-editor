@@ -103,13 +103,51 @@
             </div>
           </div>
           <div class="tab-panel" id="tab-craft">
-            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Quick Craft · ObjectStore recipes</p>
-            <div class="qc-grid">
+            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">
+              Quick Craft · full suite on
+              <a href="https://grudge-crafting.puter.site/" target="_blank" rel="noopener" style="color:var(--gold)">grudge-crafting.puter.site</a>
+              · definitions from info.grudge-studio.com
+            </p>
+            <div class="qc-grid" id="qc-stations">
+              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=smithing" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <h4>⚒️ Smithing</h4><p>Miner · anvil / forge / grind</p>
+              </a>
+              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=cooking" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <h4>🍳 Cooking</h4><p>Chef · campfire / kitchen</p>
+              </a>
+              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=lumber" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <h4>🌲 Lumber</h4><p>Forester · planks / leather</p>
+              </a>
+              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=loom" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <h4>🧵 Loom</h4><p>Mystic · cloth / essence</p>
+              </a>
+              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=tinker" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <h4>🔧 Tinker</h4><p>Engineer · workshop</p>
+              </a>
+              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=camp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <h4>⛺ Camp Bench</h4><p>T0 universal · starter camp</p>
+              </a>
+            </div>
+            <div class="qc-grid" style="margin-top:10px">
               <div class="qc-card"><h4>Iron Ingot</h4><p>Miner · 3 ore → 1 ingot</p></div>
               <div class="qc-card"><h4>Healing Tonic</h4><p>Chef · herbs + water</p></div>
               <div class="qc-card"><h4>Wooden Shield</h4><p>Forester · 8 planks</p></div>
               <div class="qc-card"><h4>Mana Dust</h4><p>Mystic · crystal shard</p></div>
             </div>
+            <p style="margin-top:12px;text-align:center">
+              <a href="https://grudge-crafting.puter.site/" target="_blank" rel="noopener"
+                 style="display:inline-block;padding:10px 16px;border-radius:8px;border:1px solid rgba(212,168,67,0.45);background:rgba(212,168,67,0.12);color:var(--gold);font-weight:700;text-decoration:none;font-size:12px">
+                Open full Crafting Suite →
+              </a>
+            </p>
+            <iframe
+              id="craft-suite-frame"
+              title="Grudge Crafting Suite"
+              src="https://grudge-crafting.puter.site/?embed=1"
+              style="width:100%;height:min(420px,50vh);margin-top:12px;border:1px solid rgba(212,168,67,0.2);border-radius:10px;background:#0a0a10"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
           <div class="tab-panel" id="tab-quests">
             <div class="qc-card" style="margin-bottom:8px"><h4>The Storm Awakens</h4><p>Main · Step 3/3</p></div>
