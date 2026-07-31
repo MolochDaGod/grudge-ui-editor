@@ -11,6 +11,22 @@
   --gs-nav-h: 46px;
 }
 
+/* Open Create UI iframe / Forge embed: no top fleet chrome */
+html.gs-embed,
+html.gs-embed body,
+body.gs-embed {
+  --gs-nav-h: 0px;
+}
+html.gs-embed #gs-fleet-nav,
+body.gs-embed #gs-fleet-nav {
+  display: none !important;
+}
+html.gs-embed body.gs-has-nav,
+body.gs-embed.gs-has-nav {
+  height: 100vh !important;
+  padding-top: 0 !important;
+}
+
 #gs-fleet-nav {
   position: fixed;
   top: 0;

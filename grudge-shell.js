@@ -1,5 +1,31 @@
 (function () {
   const path = window.location.pathname.replace(/\/$/, '') || '/';
+  const qs = new URLSearchParams(window.location.search || '');
+  const embed = qs.get('embed') === '1' || qs.get('embed') === 'true';
+  const from = (qs.get('from') || '').toLowerCase();
+  const returnUrl =
+    qs.get('return') ||
+    (from === 'open'
+      ? 'https://open.grudge-studio.com/'
+      : from === 'forge'
+        ? 'https://forge.grudge-studio.com/'
+        : '');
+
+  // Embed mode (Open Create UI iframe): hide fleet nav chrome so the studio fills the frame.
+  if (embed) {
+    document.documentElement.classList.add('gs-embed');
+    document.body && document.body.classList.add('gs-embed');
+    try {
+      window.parent &&
+        window.parent !== window &&
+        window.parent.postMessage(
+          { source: 'grudge-ui', type: 'ready', pack: qs.get('pack') || null, from },
+          '*',
+        );
+    } catch (_) { /* ignore */ }
+    return;
+  }
+
   const links = [
     { href: '/', label: 'UI Kit', match: (p) => p === '/' || p === '/index.html' },
     { href: '/studio', label: 'Studio', match: (p) => p === '/studio' },
@@ -17,6 +43,15 @@
   brand.className = 'gs-brand';
   brand.innerHTML = '<strong>Grudge</strong><span>UI · HYDRA</span>';
   nav.appendChild(brand);
+
+  if (returnUrl) {
+    const back = document.createElement('a');
+    back.href = returnUrl;
+    back.className = 'gs-pill';
+    back.textContent = from === 'forge' ? '← Forge' : from === 'open' ? '← Open' : '← Back';
+    back.title = 'Return to host editor';
+    nav.appendChild(back);
+  }
 
   links.forEach((l) => {
     const a = document.createElement('a');
