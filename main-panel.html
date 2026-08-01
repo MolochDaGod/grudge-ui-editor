@@ -12,6 +12,7 @@
   <script src="https://js.puter.com/v2/" async></script>
   <script src="./grudge-cloud-save.js"></script>
   <script src="./race-portraits.js"></script>
+  <script src="./item-icons.js"></script>
   <script src="./equipment-paperdoll.js"></script>
   <script src="./grudge-engine.js"></script>
   <script src="./grudge-shell.js"></script>
@@ -184,19 +185,36 @@
     if (EMBED) document.body.classList.add("embed-mode");
     document.getElementById("era-label").textContent = ERA;
 
+    /** Panel-slot equipment (MainHand / OffHand / SecondaryWeapon + armor). */
     const DEMO_EQUIP = {
       player: {
-        head: { id: "helm_iron", name: "Iron Helm", rarity: "uncommon" },
-        chest: { id: "chest_iron", name: "Iron Cuirass", rarity: "rare" },
-        weapon: { id: "w_sword", name: "Cutlass", rarity: "uncommon" },
-        feet: { id: "boots_leather", name: "March Boots", rarity: "common" },
+        Head: { id: "helm_iron", name: "Iron Helm", rarity: "uncommon" },
+        Chest: { id: "chest_iron", name: "Iron Cuirass", rarity: "rare" },
+        MainHand: { id: "w_sword", name: "Cutlass", rarity: "uncommon" },
+        SecondaryWeapon: { id: "w_axe", name: "Boarding Axe", rarity: "common" },
+        OffHand: { id: "shield_wood", name: "Oak Shield", rarity: "common" },
+        Feet: { id: "boots_leather", name: "March Boots", rarity: "common" },
+        Back: { id: "bag_leather", name: "Field Pack", rarity: "common" },
       },
       shadowfang: {
-        weapon: { id: "bow_yew", name: "Yew Longbow", rarity: "rare" },
-        chest: { id: "leather_vest", name: "Ranger Vest", rarity: "uncommon" },
-        cape: { id: "cape_leaf", name: "Leaf Cloak", rarity: "epic" },
+        MainHand: { id: "bow_yew", name: "Yew Longbow", rarity: "rare" },
+        SecondaryWeapon: { id: "w_dagger", name: "Hunting Knife", rarity: "uncommon" },
+        Chest: { id: "leather_vest", name: "Ranger Vest", rarity: "uncommon" },
+        Back: { id: "cape_leaf", name: "Leaf Cloak", rarity: "epic" },
       },
     };
+
+    /** Shared account bag (demo) — equipable items + mats with icons */
+    const DEMO_BAG = [
+      { itemId: "iron_ore", name: "Iron Ore", quantity: 12, category: "ore" },
+      { itemId: "oak_plank", name: "Oak Plank", quantity: 8, category: "wood" },
+      { itemId: "w_hammer", name: "War Hammer", quantity: 1, category: "hammer" },
+      { itemId: "potion_health", name: "Health Potion", quantity: 5, category: "potion" },
+      { itemId: "w_staff", name: "Ash Staff", quantity: 1, category: "staff" },
+      { itemId: "hide_thick", name: "Thick Hide", quantity: 4, category: "hide" },
+      { itemId: "chest_leather", name: "Leather Vest", quantity: 1, category: "armor" },
+      { itemId: "w_bow", name: "Short Bow", quantity: 1, category: "bow" },
+    ];
 
     const DEFAULT_ENTITIES = {
       player: {
@@ -227,21 +245,115 @@
     };
 
     let paperdollApi = null;
-
-    const items = ["⚔", "👒", "🥋", "🥾", "🛡", "🧪", "🍖", "⛓", "💎", "", "", "", "", "", "", ""];
-    ["inv-grid", "rcol-inv"].forEach((id) => {
-      const g = document.getElementById(id);
-      for (let i = 0; i < 16; i++) {
-        const s = document.createElement("div");
-        s.className = "inv-slot" + (items[i] ? " has-item" : "");
-        s.textContent = items[i] || "";
-        g.appendChild(s);
-      }
-    });
+    /** Account bag state — shared across characters; SecondaryWeapon is equip reserve */
+    let bagItems = DEMO_BAG.map((r) => ({ ...r }));
+    let selectedBagIndex = -1;
 
     function equipCount(eq) {
-      return Object.keys(eq || {}).filter((k) => eq[k]).length;
+      return Object.keys(eq || {}).filter((k) => eq[k] && k !== "SecondaryWeapon").length;
     }
+
+    function renderBagGrids() {
+      const icons = window.GrudgeItemIcons;
+      ["inv-grid", "rcol-inv"].forEach((id) => {
+        const g = document.getElementById(id);
+        if (!g) return;
+        g.innerHTML = "";
+        const slots = 24;
+        for (let i = 0; i < slots; i++) {
+          const row = bagItems[i];
+          const s = document.createElement("button");
+          s.type = "button";
+          s.className = "inv-slot" + (row ? " has-item" : "") + (selectedBagIndex === i ? " selected" : "");
+          s.dataset.index = String(i);
+          if (row) {
+            const url = icons
+              ? icons.resolve({ itemId: row.itemId, name: row.name, category: row.category, iconUrl: row.iconUrl })
+              : "";
+            s.innerHTML =
+              (icons ? icons.imgTag(url, row.name, 28) : "") +
+              (row.quantity > 1
+                ? `<span class="inv-qty">${row.quantity}</span>`
+                : "") +
+              `<span class="inv-tip">${row.name}</span>`;
+            s.title = row.name + (row.quantity > 1 ? " ×" + row.quantity : "");
+            s.onclick = () => onBagSlotClick(i);
+          } else {
+            s.title = "Empty bag slot";
+          }
+          g.appendChild(s);
+        }
+      });
+    }
+
+    function onBagSlotClick(index) {
+      if (state.equipMode === "inspect") return;
+      selectedBagIndex = index;
+      renderBagGrids();
+      const row = bagItems[index];
+      if (!row) return;
+      // Quick equip weapons / armor into correct panel slot
+      const id = row.itemId;
+      const lower = (id + " " + (row.name || "")).toLowerCase();
+      let slot = null;
+      if (/shield/.test(lower)) slot = "OffHand";
+      else if (/sword|axe|hammer|bow|staff|dagger|spear|gun|weapon/.test(lower)) {
+        // If MainHand filled, offer SecondaryWeapon (non-drop reserve)
+        const eq = state.entities.player.equipment || {};
+        slot = eq.MainHand || eq.weapon ? "SecondaryWeapon" : "MainHand";
+      } else if (/helm|hood|head/.test(lower)) slot = "Head";
+      else if (/chest|vest|cuirass|robe|armor/.test(lower)) slot = "Chest";
+      else if (/boot|feet/.test(lower)) slot = "Feet";
+      else if (/glove|hand/.test(lower)) slot = "Hands";
+      else if (/bag|pack|cape|cloak|back/.test(lower)) slot = "Back";
+      if (!slot) {
+        console.info("[main-panel] bag item (material — not equippable):", row.name);
+        return;
+      }
+      equipFromBag(index, slot);
+    }
+
+    function equipFromBag(bagIndex, panelSlot) {
+      const row = bagItems[bagIndex];
+      if (!row) return;
+      const ent = state.entities.player;
+      if (!ent || ent.mode === "inspect") return;
+      const eq = { ...(ent.equipment || {}) };
+      const prev = eq[panelSlot];
+      eq[panelSlot] = {
+        id: row.itemId,
+        name: row.name,
+        rarity: row.rarity || "common",
+        iconUrl: window.GrudgeItemIcons?.resolve({ itemId: row.itemId, name: row.name, category: row.category }),
+      };
+      // Return previous gear to bag
+      if (prev) {
+        const pid = typeof prev === "string" ? prev : prev.id;
+        const pname = typeof prev === "string" ? prev : prev.name || pid;
+        bagItems.push({ itemId: pid, name: pname, quantity: 1 });
+      }
+      // Consume one from bag
+      if (row.quantity > 1) row.quantity -= 1;
+      else bagItems.splice(bagIndex, 1);
+      ent.equipment = eq;
+      selectedBagIndex = -1;
+      renderPaperdoll();
+      renderBagGrids();
+      scheduleSave();
+      // Notify parent game to re-apply mesh equipment
+      if (window.parent !== window) {
+        window.parent.postMessage(
+          {
+            type: "GRUDGE_EQUIP_CHANGE",
+            equipment: eq,
+            characterId: ent.characterId || null,
+          },
+          "*",
+        );
+      }
+    }
+
+    renderBagGrids();
 
     function renderPaperdoll() {
       const host = document.getElementById("paperdoll-host");
@@ -262,7 +374,44 @@
         width: 420,
         onSlotClick: (slotId, gearKey) => {
           if (mode === "inspect") return;
-          console.info("[main-panel] equip slot", slotId, gearKey);
+          // Unequip to bag on click when slot filled
+          const eq = ent.equipment || {};
+          const panelKey =
+            gearKey ||
+            ({
+              helmet: "Head",
+              chest: "Chest",
+              gloves: "Hands",
+              legs: "Legs",
+              boots: "Feet",
+              weapon: "MainHand",
+              offhand: "OffHand",
+              secondary: "SecondaryWeapon",
+              amulet: "Accessory2",
+              cloak: "Back",
+              ring: "Accessory1",
+            }[slotId] || slotId);
+          const item = eq[panelKey] || eq[slotId];
+          if (!item) {
+            // Empty slot — if bag selection, equip into it
+            if (selectedBagIndex >= 0) equipFromBag(selectedBagIndex, panelKey);
+            return;
+          }
+          const id = typeof item === "string" ? item : item.id;
+          const name = typeof item === "string" ? item : item.name || id;
+          bagItems.push({ itemId: id, name, quantity: 1 });
+          delete eq[panelKey];
+          delete eq[slotId];
+          ent.equipment = eq;
+          renderPaperdoll();
+          renderBagGrids();
+          scheduleSave();
+          if (window.parent !== window) {
+            window.parent.postMessage(
+              { type: "GRUDGE_EQUIP_CHANGE", equipment: eq, characterId: ent.characterId || null },
+              "*",
+            );
+          }
         },
       });
     }

@@ -16,21 +16,28 @@
   "use strict";
 
   const SLOTS_LEFT = [
-    { id: "helmet", gear: "head", label: "Helmet", emoji: "⛑" },
-    { id: "chest", gear: "chest", label: "Chest", emoji: "🥋" },
-    { id: "gloves", gear: "hands", label: "Gloves", emoji: "🧤" },
-    { id: "legs", gear: "legs", label: "Legs", emoji: "👖" },
-    { id: "boots", gear: "feet", label: "Boots", emoji: "🥾" },
+    { id: "helmet", gear: "Head", label: "Helmet", emoji: "⛑" },
+    { id: "chest", gear: "Chest", label: "Chest", emoji: "🥋" },
+    { id: "gloves", gear: "Hands", label: "Gloves", emoji: "🧤" },
+    { id: "legs", gear: "Legs", label: "Legs", emoji: "👖" },
+    { id: "boots", gear: "Feet", label: "Boots", emoji: "🥾" },
   ];
   const SLOTS_RIGHT = [
-    { id: "weapon", gear: "weapon", label: "Main Hand", emoji: "⚔" },
-    { id: "offhand", gear: "offhand", label: "Off Hand", emoji: "🛡" },
-    { id: "amulet", gear: "accessory", label: "Amulet", emoji: "📿" },
+    { id: "weapon", gear: "MainHand", label: "Main Hand", emoji: "⚔" },
+    { id: "offhand", gear: "OffHand", label: "Off Hand", emoji: "🛡" },
+    { id: "amulet", gear: "Accessory2", label: "Amulet", emoji: "📿" },
     { id: "belt", gear: "belt", label: "Belt", emoji: "🔗" },
-    { id: "cloak", gear: "cape", label: "Cloak", emoji: "🧥" },
+    { id: "cloak", gear: "Back", label: "Cloak / Bag", emoji: "🧥" },
   ];
-  const SLOT_RING = { id: "ring", gear: "ring", label: "Ring", emoji: "💍" };
-  const SLOT_ADD = { id: "add", gear: null, label: "Add", emoji: "＋" };
+  /** Non-drop Q-swap reserve — not a corpse drop slot */
+  const SLOT_SECONDARY = {
+    id: "secondary",
+    gear: "SecondaryWeapon",
+    label: "2nd Weapon (Q)",
+    emoji: "⚔",
+  };
+  const SLOT_RING = { id: "ring", gear: "Accessory1", label: "Ring", emoji: "💍" };
+  const SLOT_ADD = { id: "add", gear: null, label: "Bag", emoji: "＋" };
 
   const RARITY_CLASS = {
     common: "eq-r-common",
@@ -40,29 +47,41 @@
     legendary: "eq-r-legendary",
   };
 
-  /** Map fleet/model3d equipment bag → paperdoll slot items. */
+  /** Map fleet/model3d equipment bag → paperdoll slot items (+ resolve icons). */
   function normalizeEquipped(raw) {
     if (!raw || typeof raw !== "object") return {};
     const out = {};
     const alias = {
       head: "helmet",
+      Head: "helmet",
       helmet: "helmet",
       chest: "chest",
+      Chest: "chest",
       body: "chest",
       armor: "chest",
       hands: "gloves",
+      Hands: "gloves",
       gloves: "gloves",
       legs: "legs",
+      Legs: "legs",
       pants: "legs",
       feet: "boots",
+      Feet: "boots",
       boots: "boots",
       weapon: "weapon",
+      MainHand: "weapon",
       mainhand: "weapon",
       mainHand: "weapon",
       offhand: "offhand",
+      OffHand: "offhand",
       offHand: "offhand",
       shield: "offhand",
+      SecondaryWeapon: "secondary",
+      secondaryweapon: "secondary",
+      secondary: "secondary",
+      weapon2: "secondary",
       accessory: "amulet",
+      Accessory2: "amulet",
       amulet: "amulet",
       neck: "amulet",
       necklace: "amulet",
@@ -71,21 +90,35 @@
       cape: "cloak",
       cloak: "cloak",
       back: "cloak",
+      Back: "cloak",
       shoulders: "cloak",
+      Shoulder: "cloak",
       ring: "ring",
+      Accessory1: "ring",
       ring1: "ring",
     };
+    const resolveIcon = global.GrudgeItemIcons?.resolve;
     for (const [k, v] of Object.entries(raw)) {
       if (v == null || v === "") continue;
       const slot = alias[k] || alias[String(k).toLowerCase()];
       if (!slot) continue;
       if (typeof v === "string") {
-        out[slot] = { id: v, name: v, iconUrl: null };
+        const iconUrl = resolveIcon
+          ? resolveIcon({ itemId: v, name: v })
+          : null;
+        out[slot] = { id: v, name: v, iconUrl };
       } else if (typeof v === "object") {
+        const id = v.id || v.itemId || v.meshId || "";
+        const name = v.name || v.label || id || "Item";
+        const iconUrl =
+          v.iconUrl ||
+          v.icon ||
+          v.image ||
+          (resolveIcon ? resolveIcon({ itemId: id, name }) : null);
         out[slot] = {
-          id: v.id || v.itemId || v.meshId || "",
-          name: v.name || v.label || v.id || "Item",
-          iconUrl: v.iconUrl || v.icon || v.image || null,
+          id,
+          name,
+          iconUrl,
           rarity: v.rarity || v.tier || "common",
         };
       }
@@ -97,11 +130,13 @@
     const equipped = !!item;
     const rar = item?.rarity ? RARITY_CLASS[item.rarity] || "" : "";
     const title = item?.name || def.label;
+    const fb = global.GrudgeItemIcons?.fallback?.() || "";
     const icon = item?.iconUrl
-      ? `<img class="eq-slot-icon" src="${esc(item.iconUrl)}" alt="" draggable="false" />`
+      ? `<img class="eq-slot-icon" src="${esc(item.iconUrl)}" alt="" draggable="false" onerror="if(!this.dataset.fb&&'${fb}'){this.dataset.fb=1;this.src='${fb}'}" />`
       : `<span class="eq-slot-ph">${def.emoji}</span>`;
     const ro = opts.readOnly ? " data-readonly=\"1\"" : "";
-    return `<button type="button" class="eq-slot ${equipped ? "equipped" : ""} ${rar}" data-slot="${def.id}" data-gear="${def.gear || ""}" title="${esc(title)}"${ro}>
+    const nonDrop = def.id === "secondary" ? " data-nondrop=\"1\"" : "";
+    return `<button type="button" class="eq-slot ${equipped ? "equipped" : ""} ${rar}${def.id === "secondary" ? " eq-secondary" : ""}" data-slot="${def.id}" data-gear="${def.gear || ""}" title="${esc(title)}"${ro}${nonDrop}>
       ${icon}
       <span class="eq-slot-label">${esc(def.label)}</span>
     </button>`;
@@ -161,9 +196,12 @@
           <div class="eq-bottom">
             ${slotHtml(SLOT_RING, equipped.ring, { readOnly })}
             <div class="eq-bottom-rule"></div>
+            ${slotHtml(SLOT_SECONDARY, equipped.secondary, { readOnly })}
+            <div class="eq-bottom-rule"></div>
             ${slotHtml(SLOT_ADD, null, { readOnly })}
           </div>
         </div>
+        <p class="eq-secondary-hint">2nd Weapon is a non-drop Q-swap reserve (not looted off your corpse).</p>
         ${mode === "inspect" ? `<div class="eq-inspect-badge">Inspecting</div>` : ""}
       </div>
     `;
