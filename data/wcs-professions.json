@@ -1,0 +1,6486 @@
+{
+  "miner": {
+    "id": "miner",
+    "name": "Miner",
+    "role": "Weaponsmith & Armorsmith",
+    "color": "text-amber-500",
+    "icon": "/icons/resources/Res_80.png",
+    "bgImage": "/assets/professions/miner_skill_tree_background_illustrated_style.png",
+    "treeData": [
+      {
+        "id": 1,
+        "n": "Miner's Initiation",
+        "x": 50,
+        "y": 92,
+        "req": 0,
+        "p": null,
+        "branch": "Core",
+        "desc": "Begin your journey into the depths. Learn the fundamentals of mining and metalwork.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 5,
+            "target": "all"
+          }
+        ],
+        "unlocks": [
+          "Flint Pickaxe",
+          "Basic Smelting"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 2,
+        "n": "Ore Identification",
+        "x": 50,
+        "y": 82,
+        "req": 5,
+        "p": 1,
+        "branch": "Core",
+        "desc": "Learn to identify valuable ore deposits by sight and sound.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 8,
+            "target": "ores"
+          }
+        ],
+        "unlocks": [
+          "Copper Mining",
+          "Iron Mining"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 3,
+        "n": "Metallurgy Basics",
+        "x": 50,
+        "y": 72,
+        "req": 10,
+        "p": 2,
+        "branch": "Core",
+        "desc": "Master the science of working with metals. Unlocks all three specialization paths.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 8,
+            "target": "ingots"
+          }
+        ],
+        "unlocks": [
+          "T2 Smelting",
+          "Steel Crafting"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 10,
+        "n": "Blade Forging",
+        "x": 20,
+        "y": 65,
+        "req": 15,
+        "p": 3,
+        "branch": "Weapons",
+        "desc": "Learn to forge sharp blades from refined metals.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "swords"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 8,
+            "target": "swords"
+          }
+        ],
+        "unlocks": [
+          "Iron Sword",
+          "Bloodfeud Blade T1"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 11,
+        "n": "Edge Tempering",
+        "x": 12,
+        "y": 55,
+        "req": 25,
+        "p": 10,
+        "branch": "Weapons",
+        "desc": "Master the art of tempering blades for maximum sharpness and durability.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "swords"
+          },
+          {
+            "type": "enchantPower",
+            "value": 8,
+            "target": "swords"
+          }
+        ],
+        "unlocks": [
+          "Tempered Blade",
+          "Wraithfang T2"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 12,
+        "n": "Axe Smithing",
+        "x": 8,
+        "y": 42,
+        "req": 35,
+        "p": 11,
+        "branch": "Weapons",
+        "desc": "Forge devastating axes designed to cleave through armor.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 12,
+            "target": "axes"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 10,
+            "target": "axes"
+          }
+        ],
+        "unlocks": [
+          "Gorehowl T3",
+          "Skullsplitter T3",
+          "1H Axes T1-T3"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 13,
+        "n": "Dagger Crafting",
+        "x": 18,
+        "y": 35,
+        "req": 40,
+        "p": 11,
+        "branch": "Weapons",
+        "desc": "Craft precise daggers for quick, deadly strikes.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "daggers"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "daggers"
+          }
+        ],
+        "unlocks": [
+          "Nightfang T4",
+          "Bloodshiv T4",
+          "Daggers T1-T4"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 14,
+        "n": "Hammer Forging",
+        "x": 5,
+        "y": 28,
+        "req": 50,
+        "p": 12,
+        "branch": "Weapons",
+        "desc": "Create mighty hammers that crush bones and shatter shields.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 12,
+            "target": "hammers"
+          },
+          {
+            "type": "enchantPower",
+            "value": 10,
+            "target": "hammers"
+          }
+        ],
+        "unlocks": [
+          "Titanmaul T5",
+          "1H Hammers T1-T5"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 15,
+        "n": "Greataxe Mastery",
+        "x": 15,
+        "y": 20,
+        "req": 65,
+        "p": 14,
+        "branch": "Weapons",
+        "desc": "Forge massive two-handed axes that cleave through multiple foes.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 18,
+            "target": "greataxes"
+          },
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "greataxes"
+          }
+        ],
+        "unlocks": [
+          "Skullsunder T7",
+          "Bloodreaver T7",
+          "Greataxes T1-T7"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 16,
+        "n": "Legendary Weaponsmith",
+        "x": 10,
+        "y": 10,
+        "req": 90,
+        "p": 15,
+        "branch": "Weapons",
+        "desc": "Achieve legendary status. Craft weapons spoken of in tales.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "weapons"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 25,
+            "target": "weapons"
+          },
+          {
+            "type": "doubleYield",
+            "value": 10,
+            "target": "weapons"
+          }
+        ],
+        "unlocks": [
+          "World Breaker",
+          "All Weapons T8"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 20,
+        "n": "Efficient Mining",
+        "x": 42,
+        "y": 62,
+        "req": 15,
+        "p": 3,
+        "branch": "Gathering",
+        "desc": "Mine faster with improved technique and tool handling.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 15,
+            "target": "mining"
+          },
+          {
+            "type": "doubleYield",
+            "value": 8,
+            "target": "ores"
+          }
+        ],
+        "unlocks": [
+          "Faster Mining",
+          "Double Ore Chance"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 21,
+        "n": "Deep Vein Sensing",
+        "x": 35,
+        "y": 50,
+        "req": 28,
+        "p": 20,
+        "branch": "Gathering",
+        "desc": "Sense hidden ore veins deep within the rock.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "ores"
+          },
+          {
+            "type": "doubleYield",
+            "value": 12,
+            "target": "ores"
+          }
+        ],
+        "unlocks": [
+          "Rare Ore Detection",
+          "Hidden Vein Finder"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 22,
+        "n": "Master Smelting",
+        "x": 50,
+        "y": 45,
+        "req": 40,
+        "p": 21,
+        "branch": "Gathering",
+        "desc": "Smelt ores with minimal waste and maximum purity.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 15,
+            "target": "ingots"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 18,
+            "target": "ingots"
+          }
+        ],
+        "unlocks": [
+          "Pure Ingots",
+          "Alloy Crafting"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 23,
+        "n": "Gem Extraction",
+        "x": 42,
+        "y": 35,
+        "req": 50,
+        "p": 22,
+        "branch": "Gathering",
+        "desc": "Extract gems from ore without damaging their structure.",
+        "bonuses": [
+          {
+            "type": "gemQuality",
+            "value": 20
+          },
+          {
+            "type": "doubleYield",
+            "value": 15,
+            "target": "gems"
+          }
+        ],
+        "unlocks": [
+          "Gem Mining",
+          "Pristine Gems"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 24,
+        "n": "Relic Detection",
+        "x": 58,
+        "y": 35,
+        "req": 55,
+        "p": 22,
+        "branch": "Gathering",
+        "desc": "Sense ancient relics buried in the earth.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 25,
+            "target": "relics"
+          },
+          {
+            "type": "doubleYield",
+            "value": 10,
+            "target": "relics"
+          }
+        ],
+        "unlocks": [
+          "Ancient Relic Mining",
+          "Artifact Discovery"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 25,
+        "n": "Mythril Prospecting",
+        "x": 50,
+        "y": 22,
+        "req": 75,
+        "p": 23,
+        "branch": "Gathering",
+        "desc": "Locate and extract the legendary mythril ore.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "ores"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 20,
+            "target": "ores"
+          }
+        ],
+        "unlocks": [
+          "Mythril Mining",
+          "T7 Ores"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 26,
+        "n": "Divine Ore Mastery",
+        "x": 50,
+        "y": 10,
+        "req": 95,
+        "p": 25,
+        "branch": "Gathering",
+        "desc": "Master the extraction of divine ores from the planet's core.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "ores"
+          },
+          {
+            "type": "doubleYield",
+            "value": 20,
+            "target": "all"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 30,
+            "target": "ores"
+          }
+        ],
+        "unlocks": [
+          "Divine Ore Mining",
+          "T8 Resources"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 30,
+        "n": "Plate Shaping",
+        "x": 80,
+        "y": 65,
+        "req": 15,
+        "p": 3,
+        "branch": "Armor",
+        "desc": "Shape metal plates into protective armor pieces.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "armor"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 8,
+            "target": "armor"
+          }
+        ],
+        "unlocks": [
+          "Iron Helm",
+          "Guardian Set T1"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 31,
+        "n": "Reinforced Plating",
+        "x": 88,
+        "y": 55,
+        "req": 28,
+        "p": 30,
+        "branch": "Armor",
+        "desc": "Add reinforced layers for extra protection.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "armor"
+          },
+          {
+            "type": "enchantPower",
+            "value": 10,
+            "target": "armor"
+          }
+        ],
+        "unlocks": [
+          "Steel Plate",
+          "Guardian Set T2-T3"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 32,
+        "n": "Shield Crafting",
+        "x": 92,
+        "y": 42,
+        "req": 40,
+        "p": 31,
+        "branch": "Armor",
+        "desc": "Forge mighty shields that can block devastating blows.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "shields"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "shields"
+          }
+        ],
+        "unlocks": [
+          "Iron Shield",
+          "Tower Shield",
+          "Obsidian Shield"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 33,
+        "n": "Berserker Smithing",
+        "x": 82,
+        "y": 38,
+        "req": 45,
+        "p": 31,
+        "branch": "Armor",
+        "desc": "Craft armor that enhances offensive capabilities.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 15,
+            "target": "armor"
+          },
+          {
+            "type": "socketChance",
+            "value": 12,
+            "target": "armor"
+          }
+        ],
+        "unlocks": [
+          "Berserker Set T1-T4",
+          "Offensive Plate"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 34,
+        "n": "Elemental Resistance",
+        "x": 95,
+        "y": 28,
+        "req": 60,
+        "p": 32,
+        "branch": "Armor",
+        "desc": "Imbue armor with elemental resistances.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 20,
+            "target": "armor"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "armor"
+          }
+        ],
+        "unlocks": [
+          "Fire Resistant Plate",
+          "Frost Resistant Plate"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 35,
+        "n": "Masterwork Plate",
+        "x": 85,
+        "y": 20,
+        "req": 75,
+        "p": 34,
+        "branch": "Armor",
+        "desc": "Craft masterwork quality plate armor with exceptional stats.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "armor"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 22,
+            "target": "armor"
+          }
+        ],
+        "unlocks": [
+          "Masterwork Set T7",
+          "All Metal Armor T7"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 36,
+        "n": "Divine Armorsmith",
+        "x": 90,
+        "y": 10,
+        "req": 95,
+        "p": 35,
+        "branch": "Armor",
+        "desc": "Forge armor blessed by the gods themselves.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "armor"
+          },
+          {
+            "type": "doubleYield",
+            "value": 15,
+            "target": "armor"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 30,
+            "target": "armor"
+          }
+        ],
+        "unlocks": [
+          "Divine Plate Set T8",
+          "All Metal Armor T8"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 40,
+        "n": "Weapon Sockets",
+        "x": 25,
+        "y": 48,
+        "req": 45,
+        "p": 12,
+        "branch": "Hybrid",
+        "desc": "Add gem sockets to weapons during forging.",
+        "bonuses": [
+          {
+            "type": "socketChance",
+            "value": 18,
+            "target": "weapons"
+          },
+          {
+            "type": "gemQuality",
+            "value": 10
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 41,
+        "n": "Armor Sockets",
+        "x": 75,
+        "y": 48,
+        "req": 45,
+        "p": 31,
+        "branch": "Hybrid",
+        "desc": "Add gem sockets to armor pieces during crafting.",
+        "bonuses": [
+          {
+            "type": "socketChance",
+            "value": 18,
+            "target": "armor"
+          },
+          {
+            "type": "gemQuality",
+            "value": 10
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 42,
+        "n": "Ore Efficiency",
+        "x": 60,
+        "y": 55,
+        "req": 35,
+        "p": 21,
+        "branch": "Hybrid",
+        "desc": "Use less ore when crafting without sacrificing quality.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 12,
+            "target": "weapons"
+          },
+          {
+            "type": "materialReduction",
+            "value": 12,
+            "target": "armor"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      }
+    ],
+    "recipes": [
+      {
+        "id": "sword_1",
+        "n": "Bloodfeud Blade",
+        "lvl": 1,
+        "icon": "/icons/weapons/Sword_01.png",
+        "mats": {
+          "Iron Ingot": 3,
+          "Leather": 1
+        },
+        "type": "Sword",
+        "desc": "Forged in endless clan blood feuds. Vengeful Slash: Builds Grudge Mark stack.",
+        "category": null
+      },
+      {
+        "id": "sword_2",
+        "n": "Wraithfang",
+        "lvl": 5,
+        "icon": "/icons/weapons/Sword_02.png",
+        "mats": {
+          "Steel Ingot": 3,
+          "Void Dust": 1
+        },
+        "type": "Sword",
+        "desc": "Whispers forgotten grudges. Shadow Edge: Dash + Stun.",
+        "category": null
+      },
+      {
+        "id": "sword_3",
+        "n": "Oathbreaker",
+        "lvl": 10,
+        "icon": "/icons/weapons/Sword_03.png",
+        "mats": {
+          "Dark Iron Ingot": 3,
+          "Obsidian": 1
+        },
+        "type": "Sword",
+        "desc": "Breaks ancient oaths. Lunging Strike: Ranged thrust.",
+        "category": null
+      },
+      {
+        "id": "sword_4",
+        "n": "Kinrend",
+        "lvl": 15,
+        "icon": "/icons/weapons/Sword_04.png",
+        "mats": {
+          "Blood Stone": 3,
+          "Bone": 2
+        },
+        "type": "Sword",
+        "desc": "Rends bonds of kinship. Kin Strike: High single target damage.",
+        "category": null
+      },
+      {
+        "id": "sword_5",
+        "n": "Dusksinger",
+        "lvl": 20,
+        "icon": "/icons/weapons/Sword_05.png",
+        "mats": {
+          "Shadow Ingot": 3,
+          "Gem": 1
+        },
+        "type": "Sword",
+        "desc": "Sings of twilight. Dusk Blade: Invisible dash.",
+        "category": null
+      },
+      {
+        "id": "sword_6",
+        "n": "Emberclad",
+        "lvl": 25,
+        "icon": "/icons/weapons/Sword_06.png",
+        "mats": {
+          "Fire Essence": 3,
+          "Steel Ingot": 2
+        },
+        "type": "Sword",
+        "desc": "Clad in flames. Flame Slash: Applies burn.",
+        "category": null
+      },
+      {
+        "id": "axe_1",
+        "n": "Gorehowl",
+        "lvl": 1,
+        "icon": "/icons/weapons/Axe_01.png",
+        "mats": {
+          "Iron Ingot": 3,
+          "Wood": 2
+        },
+        "type": "Axe",
+        "desc": "Howls with gore. Rending Chop: Applies Bleed.",
+        "category": null
+      },
+      {
+        "id": "axe_2",
+        "n": "Skullsplitter",
+        "lvl": 5,
+        "icon": "/icons/weapons/Axe_02.png",
+        "mats": {
+          "Steel Ingot": 3,
+          "Bone": 2
+        },
+        "type": "Axe",
+        "desc": "Splits skulls. Headcracker: Stun + Damage.",
+        "category": null
+      },
+      {
+        "id": "axe_3",
+        "n": "Veinreaver",
+        "lvl": 10,
+        "icon": "/icons/weapons/Axe_03.png",
+        "mats": {
+          "Dark Iron Ingot": 3,
+          "Blood": 2
+        },
+        "type": "Axe",
+        "desc": "Reaves veins. Blood Harvest: AoE Lifesteal.",
+        "category": null
+      },
+      {
+        "id": "axe_4",
+        "n": "Ironmaw",
+        "lvl": 15,
+        "icon": "/icons/weapons/Axe_04.png",
+        "mats": {
+          "Iron Ingot": 5,
+          "Obsidian": 1
+        },
+        "type": "Axe",
+        "desc": "Maw of iron. Iron Bite: Ignores defense.",
+        "category": null
+      },
+      {
+        "id": "axe_5",
+        "n": "Dreadcleaver",
+        "lvl": 20,
+        "icon": "/icons/weapons/Axe_05.png",
+        "mats": {
+          "Shadow Ingot": 3,
+          "Void Dust": 2
+        },
+        "type": "Axe",
+        "desc": "Cleaves dread. Frenzied Chop: High burst damage.",
+        "category": null
+      },
+      {
+        "id": "axe_6",
+        "n": "Bonehew",
+        "lvl": 25,
+        "icon": "/icons/weapons/Axe_06.png",
+        "mats": {
+          "Bone": 5,
+          "Steel Ingot": 2
+        },
+        "type": "Axe",
+        "desc": "Hews bone. Bone Break: Reduces armor.",
+        "category": null
+      },
+      {
+        "id": "dagger_1",
+        "n": "Nightfang",
+        "lvl": 1,
+        "icon": "/icons/weapons/Dagger_01.png",
+        "mats": {
+          "Iron Ingot": 2,
+          "Leather": 1
+        },
+        "type": "Dagger",
+        "desc": "Fang of night. Shadow Stab: Builds Mark.",
+        "category": null
+      },
+      {
+        "id": "dagger_2",
+        "n": "Bloodshiv",
+        "lvl": 5,
+        "icon": "/icons/weapons/Dagger_02.png",
+        "mats": {
+          "Steel Ingot": 2,
+          "Blood": 1
+        },
+        "type": "Dagger",
+        "desc": "Drips blood. Crimson Stab: High bleed.",
+        "category": null
+      },
+      {
+        "id": "dagger_3",
+        "n": "Wraithclaw",
+        "lvl": 10,
+        "icon": "/icons/weapons/Dagger_03.png",
+        "mats": {
+          "Dark Iron Ingot": 2,
+          "Void Dust": 1
+        },
+        "type": "Dagger",
+        "desc": "Claw of wraith. Shadow Strike: AoE Silence.",
+        "category": null
+      },
+      {
+        "id": "dagger_4",
+        "n": "Emberfang",
+        "lvl": 15,
+        "icon": "/icons/weapons/Dagger_04.png",
+        "mats": {
+          "Fire Essence": 2,
+          "Steel Ingot": 1
+        },
+        "type": "Dagger",
+        "desc": "Burning hate. Flame Dagger: Burn DoT.",
+        "category": null
+      },
+      {
+        "id": "dagger_5",
+        "n": "Ironspike",
+        "lvl": 20,
+        "icon": "/icons/weapons/Dagger_05.png",
+        "mats": {
+          "Iron Ingot": 4
+        },
+        "type": "Dagger",
+        "desc": "Unyielding iron. Pinning Stab: Root burst.",
+        "category": null
+      },
+      {
+        "id": "dagger_6",
+        "n": "Duskblade",
+        "lvl": 25,
+        "icon": "/icons/weapons/Dagger_06.png",
+        "mats": {
+          "Shadow Ingot": 2,
+          "Gem": 1
+        },
+        "type": "Dagger",
+        "desc": "Blade of dusk. Frenzied Cuts: Multi burst.",
+        "category": null
+      },
+      {
+        "id": "spear_1",
+        "n": "Iron Pike",
+        "lvl": 1,
+        "icon": "/icons/weapons/Spear_01.png",
+        "mats": {
+          "Iron Ingot": 4,
+          "Wood": 3
+        },
+        "type": "Spear",
+        "desc": "Basic iron spear. Thrust: Long range poke.",
+        "category": null
+      },
+      {
+        "id": "spear_2",
+        "n": "Steel Lance",
+        "lvl": 5,
+        "icon": "/icons/weapons/Spear_02.png",
+        "mats": {
+          "Steel Ingot": 4,
+          "Wood": 3
+        },
+        "type": "Spear",
+        "desc": "Cavalry lance. Charge: Gap closer.",
+        "category": null
+      },
+      {
+        "id": "spear_3",
+        "n": "Mithril Javelin",
+        "lvl": 10,
+        "icon": "/icons/weapons/Spear_03.png",
+        "mats": {
+          "Mithril Ingot": 4,
+          "Leather": 2
+        },
+        "type": "Spear",
+        "desc": "Throwable spear. Hurl: Ranged attack.",
+        "category": null
+      },
+      {
+        "id": "spear_4",
+        "n": "Bloodspear",
+        "lvl": 15,
+        "icon": "/icons/weapons/Spear_04.png",
+        "mats": {
+          "Dark Iron Ingot": 5,
+          "Blood": 3
+        },
+        "type": "Spear",
+        "desc": "Thirsting spear. Impale: Lifesteal.",
+        "category": null
+      },
+      {
+        "id": "spear_5",
+        "n": "Voidpiercer",
+        "lvl": 20,
+        "icon": "/icons/weapons/Spear_05.png",
+        "mats": {
+          "Shadow Ingot": 5,
+          "Void Essence": 2
+        },
+        "type": "Spear",
+        "desc": "Pierces dimensions. Phase Strike: Ignore armor.",
+        "category": null
+      },
+      {
+        "id": "spear_6",
+        "n": "Divine Trident",
+        "lvl": 25,
+        "icon": "/icons/weapons/Spear_06.png",
+        "mats": {
+          "Divine Ingot": 6,
+          "Holy Essence": 3
+        },
+        "type": "Spear",
+        "desc": "Holy trident. Trinity Strike: Triple hit.",
+        "category": null
+      },
+      {
+        "id": "mace_1",
+        "n": "Iron Cudgel",
+        "lvl": 1,
+        "icon": "/icons/weapons/Hammer_01.png",
+        "mats": {
+          "Iron Ingot": 5,
+          "Wood": 2
+        },
+        "type": "Mace",
+        "desc": "Simple iron mace. Bash: Stun chance.",
+        "category": null
+      },
+      {
+        "id": "mace_2",
+        "n": "Steel Flail",
+        "lvl": 5,
+        "icon": "/icons/weapons/Hammer_02.png",
+        "mats": {
+          "Steel Ingot": 5,
+          "Chain": 2
+        },
+        "type": "Mace",
+        "desc": "Chained flail. Whirl: AoE damage.",
+        "category": null
+      },
+      {
+        "id": "mace_3",
+        "n": "Spiked Morningstar",
+        "lvl": 10,
+        "icon": "/icons/weapons/Hammer_03.png",
+        "mats": {
+          "Mithril Ingot": 5,
+          "Iron Ingot": 3
+        },
+        "type": "Mace",
+        "desc": "Spiked ball. Crush: Armor break.",
+        "category": null
+      },
+      {
+        "id": "mace_4",
+        "n": "Bloodbludgeon",
+        "lvl": 15,
+        "icon": "/icons/weapons/Hammer_04.png",
+        "mats": {
+          "Dark Iron Ingot": 6,
+          "Blood": 3
+        },
+        "type": "Mace",
+        "desc": "Blood-soaked mace. Splatter: Bleed AoE.",
+        "category": null
+      },
+      {
+        "id": "mace_5",
+        "n": "Obsidian Crusher",
+        "lvl": 20,
+        "icon": "/icons/weapons/Hammer_05.png",
+        "mats": {
+          "Obsidian": 8,
+          "Shadow Ingot": 3
+        },
+        "type": "Mace",
+        "desc": "Volcanic mace. Shatter: Shield break.",
+        "category": null
+      },
+      {
+        "id": "mace_6",
+        "n": "Divine Scepter",
+        "lvl": 25,
+        "icon": "/icons/weapons/Hammer_06.png",
+        "mats": {
+          "Divine Ingot": 6,
+          "Holy Essence": 2
+        },
+        "type": "Mace",
+        "desc": "Holy scepter. Judgment: True damage.",
+        "category": null
+      },
+      {
+        "id": "hammer_1",
+        "n": "Titanmaul",
+        "lvl": 1,
+        "icon": "/icons/weapons/Hammer_07.png",
+        "mats": {
+          "Iron Ingot": 6,
+          "Stone": 4
+        },
+        "type": "Hammer",
+        "desc": "Titanic grudge. Earthshatter: AoE Slow.",
+        "category": null
+      },
+      {
+        "id": "hammer_2",
+        "n": "Bloodcrusher",
+        "lvl": 5,
+        "icon": "/icons/weapons/Hammer_08.png",
+        "mats": {
+          "Steel Ingot": 6,
+          "Blood": 4
+        },
+        "type": "Hammer",
+        "desc": "Crushes with blood. Crimson Smash: AoE Bleed.",
+        "category": null
+      },
+      {
+        "id": "hammer_3",
+        "n": "Stonebreaker",
+        "lvl": 10,
+        "icon": "/icons/weapons/Hammer_09.png",
+        "mats": {
+          "Mithril Ingot": 6,
+          "Obsidian": 4
+        },
+        "type": "Hammer",
+        "desc": "Breaks stone. Shattering Blow: Armor Break.",
+        "category": null
+      },
+      {
+        "id": "hammer_4",
+        "n": "Oathcrusher",
+        "lvl": 15,
+        "icon": "/icons/weapons/Hammer_10.png",
+        "mats": {
+          "Dark Iron Ingot": 6,
+          "Void Dust": 2
+        },
+        "type": "Hammer",
+        "desc": "Crushes oaths. Oath Shatter: Dispel Buffs.",
+        "category": null
+      },
+      {
+        "id": "hammer_5",
+        "n": "Doomhammer",
+        "lvl": 20,
+        "icon": "/icons/weapons/Hammer_11.png",
+        "mats": {
+          "Shadow Ingot": 6,
+          "Bone": 4
+        },
+        "type": "Hammer",
+        "desc": "Hammer of doom. Cataclysmic Strike: Stun AoE.",
+        "category": null
+      },
+      {
+        "id": "hammer_6",
+        "n": "Divine Maul",
+        "lvl": 25,
+        "icon": "/icons/weapons/Hammer_12.png",
+        "mats": {
+          "Divine Ingot": 6,
+          "Holy Essence": 2
+        },
+        "type": "Hammer",
+        "desc": "Divine judgment. Holy Smash: True Damage.",
+        "category": null
+      },
+      {
+        "id": "gaxe_1",
+        "n": "Skullsunder",
+        "lvl": 1,
+        "icon": "/icons/weapons/Axe_07.png",
+        "mats": {
+          "Iron Ingot": 5,
+          "Wood": 3
+        },
+        "type": "Greataxe",
+        "desc": "Sunders skulls. Brutal Hew: AoE Bleed.",
+        "category": null
+      },
+      {
+        "id": "gaxe_2",
+        "n": "Bloodreaver",
+        "lvl": 5,
+        "icon": "/icons/weapons/Axe_08.png",
+        "mats": {
+          "Steel Ingot": 5,
+          "Blood": 3
+        },
+        "type": "Greataxe",
+        "desc": "Reaves in arcs. Crimson Harvest: AoE Heal.",
+        "category": null
+      },
+      {
+        "id": "gaxe_3",
+        "n": "Worldsplitter",
+        "lvl": 10,
+        "icon": "/icons/weapons/Axe_09.png",
+        "mats": {
+          "Mithril Ingot": 8,
+          "Void Essence": 3
+        },
+        "type": "Greataxe",
+        "desc": "Splits the world. Cataclysm: Massive AoE.",
+        "category": null
+      },
+      {
+        "id": "gaxe_4",
+        "n": "Oathcleaver",
+        "lvl": 15,
+        "icon": "/icons/weapons/Axe_10.png",
+        "mats": {
+          "Dark Iron Ingot": 6,
+          "Obsidian": 2
+        },
+        "type": "Greataxe",
+        "desc": "Cleaves oaths. Betrayer's Arc: Bonus vs Allies.",
+        "category": null
+      },
+      {
+        "id": "gaxe_5",
+        "n": "Duskrend",
+        "lvl": 20,
+        "icon": "/icons/weapons/Axe_11.png",
+        "mats": {
+          "Shadow Ingot": 6,
+          "Gem": 2
+        },
+        "type": "Greataxe",
+        "desc": "Rends at dusk. Twilight Cleave: Invisible.",
+        "category": null
+      },
+      {
+        "id": "gaxe_6",
+        "n": "World Breaker",
+        "lvl": 25,
+        "icon": "/icons/weapons/Axe_12.png",
+        "mats": {
+          "Divine Ingot": 8,
+          "Void Essence": 5
+        },
+        "type": "Greataxe",
+        "desc": "Breaks worlds. Apocalypse: Screen Clear.",
+        "category": null
+      },
+      {
+        "id": "gsword_1",
+        "n": "Vengeance Blade",
+        "lvl": 1,
+        "icon": "/icons/weapons/Sword_07.png",
+        "mats": {
+          "Iron Ingot": 8,
+          "Leather": 2
+        },
+        "type": "Greatsword",
+        "desc": "Blade of vengeance. Grudge Sweep: Builds Mark.",
+        "category": null
+      },
+      {
+        "id": "gsword_2",
+        "n": "Bloodwrath",
+        "lvl": 5,
+        "icon": "/icons/weapons/Sword_08.png",
+        "mats": {
+          "Steel Ingot": 8,
+          "Blood": 4
+        },
+        "type": "Greatsword",
+        "desc": "Wrath of blood. Crimson Arc: AoE Lifesteal.",
+        "category": null
+      },
+      {
+        "id": "gsword_3",
+        "n": "Shadowcleave",
+        "lvl": 10,
+        "icon": "/icons/weapons/Sword_09.png",
+        "mats": {
+          "Dark Iron Ingot": 8,
+          "Void Dust": 2
+        },
+        "type": "Greatsword",
+        "desc": "Cleaves shadows. Shadow Slash: Dash + AoE.",
+        "category": null
+      },
+      {
+        "id": "gsword_4",
+        "n": "Kinslayer",
+        "lvl": 15,
+        "icon": "/icons/weapons/Sword_10.png",
+        "mats": {
+          "Blood Stone": 6,
+          "Bone": 4
+        },
+        "type": "Greatsword",
+        "desc": "Slays kin. Family Grudge: High Single Target.",
+        "category": null
+      },
+      {
+        "id": "gsword_5",
+        "n": "Duskbringer",
+        "lvl": 20,
+        "icon": "/icons/weapons/Sword_11.png",
+        "mats": {
+          "Shadow Ingot": 8,
+          "Gem": 2
+        },
+        "type": "Greatsword",
+        "desc": "Brings dusk. Twilight Wave: AoE Blind.",
+        "category": null
+      },
+      {
+        "id": "gsword_6",
+        "n": "Divine Judgment",
+        "lvl": 25,
+        "icon": "/icons/weapons/Sword_12.png",
+        "mats": {
+          "Divine Ingot": 10,
+          "Holy Essence": 3
+        },
+        "type": "Greatsword",
+        "desc": "Divine judgment. Holy Cleave: True Damage.",
+        "category": null
+      }
+    ]
+  },
+  "forester": {
+    "id": "forester",
+    "name": "Forester",
+    "role": "Forester Specialization System",
+    "color": "text-green-500",
+    "icon": "🌲",
+    "bgImage": "/assets/professions/forester_skill_tree_background_illustrated_style.png",
+    "treeData": [
+      {
+        "id": 1,
+        "n": "Logging Basics",
+        "x": 50,
+        "y": 90,
+        "req": 0,
+        "p": null,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 2,
+        "n": "Skinning Basics",
+        "x": 50,
+        "y": 80,
+        "req": 5,
+        "p": 1,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 3,
+        "n": "Wood Seasoning",
+        "x": 40,
+        "y": 70,
+        "req": 10,
+        "p": 2,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 4,
+        "n": "Hide Curing",
+        "x": 60,
+        "y": 70,
+        "req": 10,
+        "p": 2,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 5,
+        "n": "Axe Forging I",
+        "x": 25,
+        "y": 65,
+        "req": 15,
+        "p": 3,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 6,
+        "n": "Wood Wall Fab",
+        "x": 10,
+        "y": 60,
+        "req": 20,
+        "p": 5,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 7,
+        "n": "Hardwood Mastery",
+        "x": 20,
+        "y": 50,
+        "req": 30,
+        "p": 5,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 8,
+        "n": "Skullsplitter Spec",
+        "x": 30,
+        "y": 45,
+        "req": 35,
+        "p": 7,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 9,
+        "n": "Stone Reinforce",
+        "x": 5,
+        "y": 45,
+        "req": 40,
+        "p": 6,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 10,
+        "n": "Ironmaw Forging",
+        "x": 25,
+        "y": 30,
+        "req": 60,
+        "p": 8,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 11,
+        "n": "Gorehowl Smith",
+        "x": 15,
+        "y": 15,
+        "req": 85,
+        "p": 10,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 12,
+        "n": "Iron Clad Walls",
+        "x": 5,
+        "y": 20,
+        "req": 90,
+        "p": 9,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 13,
+        "n": "Leather Stitching",
+        "x": 50,
+        "y": 55,
+        "req": 15,
+        "p": 4,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 14,
+        "n": "Berry Foraging",
+        "x": 40,
+        "y": 45,
+        "req": 25,
+        "p": 13,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 15,
+        "n": "Leather Armor (Sets)",
+        "x": 60,
+        "y": 45,
+        "req": 30,
+        "p": 13,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 16,
+        "n": "Pristine Skinning",
+        "x": 50,
+        "y": 40,
+        "req": 45,
+        "p": 15,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 17,
+        "n": "Exotic Dyes",
+        "x": 45,
+        "y": 30,
+        "req": 55,
+        "p": 16,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 18,
+        "n": "Legendary Pelts",
+        "x": 55,
+        "y": 25,
+        "req": 75,
+        "p": 16,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 19,
+        "n": "Mythic Skinning",
+        "x": 50,
+        "y": 10,
+        "req": 95,
+        "p": 18,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 20,
+        "n": "Fletching Basics",
+        "x": 75,
+        "y": 65,
+        "req": 15,
+        "p": 4,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 21,
+        "n": "Arrow Smithing",
+        "x": 90,
+        "y": 60,
+        "req": 20,
+        "p": 20,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 22,
+        "n": "Crossbow Tech",
+        "x": 80,
+        "y": 50,
+        "req": 30,
+        "p": 20,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 23,
+        "n": "Watchtower Blueprint",
+        "x": 95,
+        "y": 45,
+        "req": 40,
+        "p": 21,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 24,
+        "n": "Wraithbone Bow",
+        "x": 70,
+        "y": 45,
+        "req": 50,
+        "p": 22,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 25,
+        "n": "Shipbuilding I",
+        "x": 80,
+        "y": 35,
+        "req": 60,
+        "p": 24,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 26,
+        "n": "Elemental Arrows",
+        "x": 90,
+        "y": 30,
+        "req": 70,
+        "p": 21,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 27,
+        "n": "Naval Architecture",
+        "x": 75,
+        "y": 20,
+        "req": 80,
+        "p": 25,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 28,
+        "n": "War Galleon",
+        "x": 85,
+        "y": 10,
+        "req": 95,
+        "p": 27,
+        "branch": null,
+        "desc": "",
+        "bonuses": [],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      }
+    ],
+    "recipes": [
+      {
+        "id": "bow_1",
+        "n": "Wraithbone Bow",
+        "lvl": 1,
+        "icon": "🏹",
+        "mats": {
+          "Bone": 3,
+          "String": 2
+        },
+        "type": "Bow",
+        "desc": "Carved from wraith bones. Grudge Arrow: Builds Mark.",
+        "category": null
+      },
+      {
+        "id": "bow_2",
+        "n": "Bloodstring Bow",
+        "lvl": 5,
+        "icon": "🏹",
+        "mats": {
+          "Wood": 3,
+          "Blood": 2
+        },
+        "type": "Bow",
+        "desc": "Strung with blood. Crimson Shot: High bleed.",
+        "category": null
+      },
+      {
+        "id": "bow_3",
+        "n": "Shadowflight Bow",
+        "lvl": 10,
+        "icon": "🏹",
+        "mats": {
+          "Dark Wood": 3,
+          "Void Dust": 2
+        },
+        "type": "Bow",
+        "desc": "Flies shadows. Night Barrage: AoE Silence.",
+        "category": null
+      },
+      {
+        "id": "bow_4",
+        "n": "Emberthorn Bow",
+        "lvl": 15,
+        "icon": "🏹",
+        "mats": {
+          "Fire Wood": 3,
+          "Thorn": 2
+        },
+        "type": "Bow",
+        "desc": "Thorns of ember. Explosive Arrows: DoT AoE.",
+        "category": null
+      },
+      {
+        "id": "bow_5",
+        "n": "Ironvine Bow",
+        "lvl": 20,
+        "icon": "🏹",
+        "mats": {
+          "Iron": 3,
+          "Vine": 2
+        },
+        "type": "Bow",
+        "desc": "Vines of iron. Rooting Shot: Single Root.",
+        "category": null
+      },
+      {
+        "id": "bow_6",
+        "n": "Duskreaver Bow",
+        "lvl": 25,
+        "icon": "🏹",
+        "mats": {
+          "Shadow Wood": 3,
+          "Gem": 2
+        },
+        "type": "Bow",
+        "desc": "Reaves at dusk. Phantom Arrows: Multi hit.",
+        "category": null
+      },
+      {
+        "id": "arm_stalker_head",
+        "n": "Stalker Hood",
+        "lvl": 5,
+        "icon": "🥷",
+        "mats": {
+          "Leather": 4,
+          "Silk": 1
+        },
+        "type": "Armor",
+        "desc": "Stalker Set (1/6): +Dex. Shadow hunter.",
+        "category": null
+      },
+      {
+        "id": "arm_stalker_chest",
+        "n": "Stalker Tunic",
+        "lvl": 10,
+        "icon": "🧥",
+        "mats": {
+          "Leather": 8,
+          "Silk": 2
+        },
+        "type": "Armor",
+        "desc": "Stalker Set (2/6): +Crit Chance. Silent.",
+        "category": null
+      },
+      {
+        "id": "arm_stalker_legs",
+        "n": "Stalker Leggings",
+        "lvl": 8,
+        "icon": "👖",
+        "mats": {
+          "Leather": 6,
+          "Silk": 1
+        },
+        "type": "Armor",
+        "desc": "Stalker Set (3/6): +Move Speed. Swift.",
+        "category": null
+      },
+      {
+        "id": "arm_stalker_hands",
+        "n": "Stalker Gloves",
+        "lvl": 6,
+        "icon": "🧤",
+        "mats": {
+          "Leather": 3,
+          "Silk": 1
+        },
+        "type": "Armor",
+        "desc": "Stalker Set (4/6): +Range. Precise.",
+        "category": null
+      },
+      {
+        "id": "arm_stalker_feet",
+        "n": "Stalker Boots",
+        "lvl": 7,
+        "icon": "👢",
+        "mats": {
+          "Leather": 4
+        },
+        "type": "Armor",
+        "desc": "Stalker Set (5/6): +Stealth. Quiet.",
+        "category": null
+      },
+      {
+        "id": "arm_stalker_shoulder",
+        "n": "Stalker Pauldrons",
+        "lvl": 9,
+        "icon": "🎖️",
+        "mats": {
+          "Leather": 5,
+          "Silk": 1
+        },
+        "type": "Armor",
+        "desc": "Stalker Set (6/6): Set Bonus +20% Crit.",
+        "category": null
+      },
+      {
+        "id": "arm_brawler_head",
+        "n": "Brawler Cap",
+        "lvl": 15,
+        "icon": "🧢",
+        "mats": {
+          "Hide": 5
+        },
+        "type": "Armor",
+        "desc": "Brawler Set (1/6): +Str. Street tough.",
+        "category": null
+      },
+      {
+        "id": "arm_brawler_chest",
+        "n": "Brawler Jerkin",
+        "lvl": 20,
+        "icon": "🎽",
+        "mats": {
+          "Hide": 10
+        },
+        "type": "Armor",
+        "desc": "Brawler Set (2/6): +Dodge. Agile.",
+        "category": null
+      },
+      {
+        "id": "arm_brawler_legs",
+        "n": "Brawler Pants",
+        "lvl": 18,
+        "icon": "👖",
+        "mats": {
+          "Hide": 8
+        },
+        "type": "Armor",
+        "desc": "Brawler Set (3/6): +Stamina. Enduring.",
+        "category": null
+      },
+      {
+        "id": "arm_brawler_hands",
+        "n": "Brawler Wraps",
+        "lvl": 16,
+        "icon": "🧤",
+        "mats": {
+          "Hide": 4
+        },
+        "type": "Armor",
+        "desc": "Brawler Set (4/6): +Unarmed Dmg. Fighter.",
+        "category": null
+      },
+      {
+        "id": "arm_brawler_feet",
+        "n": "Brawler Boots",
+        "lvl": 17,
+        "icon": "👢",
+        "mats": {
+          "Hide": 4,
+          "Leather": 2
+        },
+        "type": "Armor",
+        "desc": "Brawler Set (5/6): +Kick Dmg. Brutal.",
+        "category": null
+      },
+      {
+        "id": "arm_brawler_shoulder",
+        "n": "Brawler Guards",
+        "lvl": 19,
+        "icon": "🎖️",
+        "mats": {
+          "Hide": 6
+        },
+        "type": "Armor",
+        "desc": "Brawler Set (6/6): Set Bonus +25% Dodge.",
+        "category": null
+      },
+      {
+        "id": "wood_1",
+        "n": "Pine Planks",
+        "lvl": 1,
+        "icon": "🪵",
+        "mats": {
+          "Pine Log": 3
+        },
+        "type": "Wood",
+        "desc": "Basic wooden planks.",
+        "category": null
+      },
+      {
+        "id": "wood_2",
+        "n": "Oak Planks",
+        "lvl": 10,
+        "icon": "🪵",
+        "mats": {
+          "Oak Log": 3
+        },
+        "type": "Wood",
+        "desc": "Sturdy oak planks.",
+        "category": null
+      },
+      {
+        "id": "wood_3",
+        "n": "Maple Planks",
+        "lvl": 20,
+        "icon": "🪵",
+        "mats": {
+          "Maple Log": 3
+        },
+        "type": "Wood",
+        "desc": "Quality maple planks.",
+        "category": null
+      },
+      {
+        "id": "wood_4",
+        "n": "Ash Planks",
+        "lvl": 30,
+        "icon": "🪵",
+        "mats": {
+          "Ash Log": 3
+        },
+        "type": "Wood",
+        "desc": "Flexible ash planks.",
+        "category": null
+      },
+      {
+        "id": "wood_5",
+        "n": "Ironwood Planks",
+        "lvl": 40,
+        "icon": "🪵",
+        "mats": {
+          "Ironwood Log": 3
+        },
+        "type": "Wood",
+        "desc": "Metal-hard planks.",
+        "category": null
+      },
+      {
+        "id": "wood_6",
+        "n": "Worldtree Planks",
+        "lvl": 50,
+        "icon": "🪵",
+        "mats": {
+          "Worldtree Log": 3
+        },
+        "type": "Wood",
+        "desc": "Divine planks.",
+        "category": null
+      },
+      {
+        "id": "leather_1",
+        "n": "Rawhide Leather",
+        "lvl": 1,
+        "icon": "🦴",
+        "mats": {
+          "Rawhide": 3
+        },
+        "type": "Leather",
+        "desc": "Basic leather.",
+        "category": null
+      },
+      {
+        "id": "leather_2",
+        "n": "Thick Leather",
+        "lvl": 10,
+        "icon": "🦴",
+        "mats": {
+          "Thick Hide": 3
+        },
+        "type": "Leather",
+        "desc": "Sturdy leather.",
+        "category": null
+      },
+      {
+        "id": "leather_3",
+        "n": "Rugged Leather",
+        "lvl": 20,
+        "icon": "🦴",
+        "mats": {
+          "Rugged Hide": 3
+        },
+        "type": "Leather",
+        "desc": "Tough leather.",
+        "category": null
+      },
+      {
+        "id": "leather_4",
+        "n": "Hardened Leather",
+        "lvl": 30,
+        "icon": "🦴",
+        "mats": {
+          "Hardened Hide": 3
+        },
+        "type": "Leather",
+        "desc": "Armored leather.",
+        "category": null
+      },
+      {
+        "id": "leather_5",
+        "n": "Wyrm Leather",
+        "lvl": 40,
+        "icon": "🦴",
+        "mats": {
+          "Wyrm Hide": 3
+        },
+        "type": "Leather",
+        "desc": "Dragon leather.",
+        "category": null
+      },
+      {
+        "id": "leather_6",
+        "n": "Divine Leather",
+        "lvl": 50,
+        "icon": "🦴",
+        "mats": {
+          "Divine Hide": 3
+        },
+        "type": "Leather",
+        "desc": "Holy leather.",
+        "category": null
+      },
+      {
+        "id": "back_1",
+        "n": "Traveler's Cloak",
+        "lvl": 5,
+        "icon": "🧥",
+        "mats": {
+          "Leather": 4,
+          "Silk": 2
+        },
+        "type": "Back",
+        "desc": "+Move Speed. Road worn.",
+        "category": null
+      },
+      {
+        "id": "back_2",
+        "n": "Hunter's Cape",
+        "lvl": 15,
+        "icon": "🧥",
+        "mats": {
+          "Hide": 6,
+          "Leather": 3
+        },
+        "type": "Back",
+        "desc": "+Stealth. Forest camouflage.",
+        "category": null
+      },
+      {
+        "id": "back_3",
+        "n": "Stalker's Shroud",
+        "lvl": 25,
+        "icon": "🧥",
+        "mats": {
+          "Rugged Leather": 5,
+          "Void Dust": 2
+        },
+        "type": "Back",
+        "desc": "+Crit Chance. Silent death.",
+        "category": null
+      },
+      {
+        "id": "back_4",
+        "n": "Beastmaster Cape",
+        "lvl": 35,
+        "icon": "🧥",
+        "mats": {
+          "Wyrm Leather": 4,
+          "Bone": 5
+        },
+        "type": "Back",
+        "desc": "+Pet Damage. Wild bond.",
+        "category": null
+      },
+      {
+        "id": "back_5",
+        "n": "Ranger's Mantle",
+        "lvl": 45,
+        "icon": "🧥",
+        "mats": {
+          "Hardened Leather": 6,
+          "Gem": 2
+        },
+        "type": "Back",
+        "desc": "+Range. Eagle eye.",
+        "category": null
+      },
+      {
+        "id": "back_6",
+        "n": "Shadowstalker Cloak",
+        "lvl": 55,
+        "icon": "🧥",
+        "mats": {
+          "Divine Leather": 5,
+          "Shadow Ingot": 2
+        },
+        "type": "Back",
+        "desc": "+Invisibility. Vanish.",
+        "category": null
+      },
+      {
+        "id": "neck_1",
+        "n": "Bone Pendant",
+        "lvl": 5,
+        "icon": "📿",
+        "mats": {
+          "Bone": 3,
+          "String": 1
+        },
+        "type": "Necklace",
+        "desc": "+5 Dexterity. Hunter trophy.",
+        "category": null
+      },
+      {
+        "id": "neck_2",
+        "n": "Fang Necklace",
+        "lvl": 15,
+        "icon": "📿",
+        "mats": {
+          "Bone": 5,
+          "Leather": 2
+        },
+        "type": "Necklace",
+        "desc": "+Crit Damage. Predator's.",
+        "category": null
+      },
+      {
+        "id": "neck_3",
+        "n": "Treeheart Amulet",
+        "lvl": 25,
+        "icon": "📿",
+        "mats": {
+          "Ironwood Log": 2,
+          "Gem": 1
+        },
+        "type": "Necklace",
+        "desc": "+Nature Resist. Forest gift.",
+        "category": null
+      },
+      {
+        "id": "neck_4",
+        "n": "Beastclaw Pendant",
+        "lvl": 35,
+        "icon": "📿",
+        "mats": {
+          "Wyrm Hide": 3,
+          "Bone": 5
+        },
+        "type": "Necklace",
+        "desc": "+Attack Speed. Savage.",
+        "category": null
+      },
+      {
+        "id": "neck_5",
+        "n": "Woodsinger Charm",
+        "lvl": 45,
+        "icon": "📿",
+        "mats": {
+          "Worldtree Log": 1,
+          "Gem": 2
+        },
+        "type": "Necklace",
+        "desc": "+All Skills. Nature's voice.",
+        "category": null
+      },
+      {
+        "id": "neck_6",
+        "n": "Spirit of the Wild",
+        "lvl": 55,
+        "icon": "📿",
+        "mats": {
+          "Divine Leather": 3,
+          "Holy Essence": 1
+        },
+        "type": "Necklace",
+        "desc": "+Dodge. Untamed spirit.",
+        "category": null
+      },
+      {
+        "id": "relic_1",
+        "n": "Acorn Charm",
+        "lvl": 10,
+        "icon": "🔮",
+        "mats": {
+          "Oak Log": 3,
+          "Leaf": 5
+        },
+        "type": "Relic",
+        "desc": "+Gathering Speed. Nature's luck.",
+        "category": null
+      },
+      {
+        "id": "relic_2",
+        "n": "Feather Token",
+        "lvl": 20,
+        "icon": "🔮",
+        "mats": {
+          "Feather": 5,
+          "Leather": 2
+        },
+        "type": "Relic",
+        "desc": "+Range Damage. Swift shot.",
+        "category": null
+      },
+      {
+        "id": "relic_3",
+        "n": "Antler Relic",
+        "lvl": 30,
+        "icon": "🔮",
+        "mats": {
+          "Bone": 8,
+          "Hide": 4
+        },
+        "type": "Relic",
+        "desc": "+Stamina Regen. Wild endurance.",
+        "category": null
+      },
+      {
+        "id": "relic_4",
+        "n": "Treant's Eye",
+        "lvl": 40,
+        "icon": "🔮",
+        "mats": {
+          "Ironwood Log": 3,
+          "Gem": 2
+        },
+        "type": "Relic",
+        "desc": "+Nature Magic. Ancient sight.",
+        "category": null
+      },
+      {
+        "id": "relic_5",
+        "n": "Wolf Fang Totem",
+        "lvl": 50,
+        "icon": "🔮",
+        "mats": {
+          "Wyrm Hide": 4,
+          "Bone": 6
+        },
+        "type": "Relic",
+        "desc": "+Pack Bonus. Alpha wolf.",
+        "category": null
+      },
+      {
+        "id": "relic_6",
+        "n": "Heart of the Forest",
+        "lvl": 60,
+        "icon": "🔮",
+        "mats": {
+          "Worldtree Log": 2,
+          "Divine Hide": 2
+        },
+        "type": "Relic",
+        "desc": "+All Stats. Nature's blessing.",
+        "category": null
+      }
+    ]
+  },
+  "engineer": {
+    "id": "engineer",
+    "name": "Engineer",
+    "role": "Mechanist & Siege Master",
+    "color": "text-orange-500",
+    "icon": "🔧",
+    "bgImage": "/assets/professions/engineer_skill_tree_background_illustrated_style.png",
+    "treeData": [
+      {
+        "id": 1,
+        "n": "Tinkering Basics",
+        "x": 50,
+        "y": 92,
+        "req": 0,
+        "p": null,
+        "branch": "Core",
+        "desc": "The fundamentals of mechanical engineering. Every great invention starts here.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 5,
+            "target": "all"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 2,
+        "n": "Copper Wiring",
+        "x": 50,
+        "y": 82,
+        "req": 5,
+        "p": 1,
+        "branch": "Core",
+        "desc": "Master electrical connections for powering devices.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 8,
+            "target": "components"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 3,
+        "n": "Gear Grinding",
+        "x": 40,
+        "y": 72,
+        "req": 10,
+        "p": 2,
+        "branch": "Weaponry",
+        "desc": "Precision gear crafting for mechanical weapons.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 8,
+            "target": "weapons"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 4,
+        "n": "Soldering I",
+        "x": 60,
+        "y": 72,
+        "req": 10,
+        "p": 2,
+        "branch": "Automata",
+        "desc": "Join metal components with molten solder for durable constructs.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 10,
+            "target": "automata"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 5,
+        "n": "Gunpowder Alchemy",
+        "x": 25,
+        "y": 65,
+        "req": 15,
+        "p": 3,
+        "branch": "Weaponry",
+        "desc": "Mix volatile compounds to create explosive propellants.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "explosives"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 6,
+        "n": "Crossbow Tuning",
+        "x": 10,
+        "y": 60,
+        "req": 20,
+        "p": 5,
+        "branch": "Weaponry",
+        "desc": "Fine-tune crossbow mechanisms for maximum power and accuracy.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "crossbows"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 7,
+        "n": "Explosive Shells",
+        "x": 20,
+        "y": 50,
+        "req": 30,
+        "p": 5,
+        "branch": "Weaponry",
+        "desc": "Craft ammunition that detonates on impact.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "ammo"
+          },
+          {
+            "type": "speedBoost",
+            "value": 10,
+            "target": "ammo"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 8,
+        "n": "Precision Sights",
+        "x": 30,
+        "y": 45,
+        "req": 35,
+        "p": 7,
+        "branch": "Weaponry",
+        "desc": "Craft optical sights for enhanced accuracy at range.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 18,
+            "target": "scopes"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 9,
+        "n": "Hidden Traps",
+        "x": 5,
+        "y": 45,
+        "req": 40,
+        "p": 6,
+        "branch": "Weaponry",
+        "desc": "Design concealed mechanical traps for ambushes.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 20,
+            "target": "traps"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 10,
+        "n": "Mortar Battery",
+        "x": 25,
+        "y": 30,
+        "req": 60,
+        "p": 8,
+        "branch": "Weaponry",
+        "desc": "Construct multi-barrel mortar systems for area bombardment.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 6,
+            "target": "siege"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "siege"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 11,
+        "n": "Nuke-In-A-Box",
+        "x": 15,
+        "y": 15,
+        "req": 85,
+        "p": 10,
+        "branch": "Weaponry",
+        "desc": "The ultimate portable explosive device. Handle with extreme caution.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "explosives"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 30,
+            "target": "explosives"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 12,
+        "n": "Railgun Tech",
+        "x": 5,
+        "y": 20,
+        "req": 90,
+        "p": 9,
+        "branch": "Weaponry",
+        "desc": "Electromagnetic projectile acceleration for devastating firepower.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "guns"
+          },
+          {
+            "type": "doubleYield",
+            "value": 10,
+            "target": "guns"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 13,
+        "n": "Clockwork Heart",
+        "x": 50,
+        "y": 58,
+        "req": 15,
+        "p": 4,
+        "branch": "Automata",
+        "desc": "Create beating mechanical hearts to power automatons.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 12,
+            "target": "automata"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 14,
+        "n": "Simple Drones",
+        "x": 40,
+        "y": 48,
+        "req": 25,
+        "p": 13,
+        "branch": "Automata",
+        "desc": "Build basic autonomous flying machines for reconnaissance.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 15,
+            "target": "drones"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 15,
+        "n": "Mecha-Skeleton",
+        "x": 60,
+        "y": 48,
+        "req": 30,
+        "p": 13,
+        "branch": "Automata",
+        "desc": "Construct the internal framework for wearable mechanical suits.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 15,
+            "target": "mechs"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 16,
+        "n": "A.I. Neural Net",
+        "x": 50,
+        "y": 40,
+        "req": 45,
+        "p": 15,
+        "branch": "Automata",
+        "desc": "Program basic artificial intelligence for autonomous operation.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 20,
+            "target": "automata"
+          },
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "automata"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 17,
+        "n": "Power Cell Tech",
+        "x": 45,
+        "y": 30,
+        "req": 55,
+        "p": 16,
+        "branch": "Automata",
+        "desc": "Develop high-capacity power cells for extended operation.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 12,
+            "target": "power"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 10,
+            "target": "power"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 18,
+        "n": "Mecha Mk.I Suit",
+        "x": 55,
+        "y": 25,
+        "req": 75,
+        "p": 16,
+        "branch": "Automata",
+        "desc": "The first pilotable mechanical battle suit. A marvel of engineering.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "mechs"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 19,
+        "n": "Giga-Mech Lord",
+        "x": 50,
+        "y": 10,
+        "req": 95,
+        "p": 18,
+        "branch": "Automata",
+        "desc": "The ultimate mechanical titan. A walking fortress of destruction.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "mechs"
+          },
+          {
+            "type": "doubleYield",
+            "value": 15,
+            "target": "mechs"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 20,
+        "n": "Steel Framework",
+        "x": 75,
+        "y": 65,
+        "req": 15,
+        "p": 4,
+        "branch": "Siege",
+        "desc": "Build reinforced steel frames for large-scale constructions.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 10,
+            "target": "siege"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 21,
+        "n": "Catapult Rigging",
+        "x": 90,
+        "y": 60,
+        "req": 20,
+        "p": 20,
+        "branch": "Siege",
+        "desc": "Design tension-based launching mechanisms for siege weapons.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "catapults"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 22,
+        "n": "Advanced Hydraulics",
+        "x": 80,
+        "y": 50,
+        "req": 30,
+        "p": 20,
+        "branch": "Siege",
+        "desc": "Master fluid-powered systems for heavy machinery.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 12,
+            "target": "vehicles"
+          },
+          {
+            "type": "materialReduction",
+            "value": 8,
+            "target": "vehicles"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 23,
+        "n": "Ballista Array",
+        "x": 95,
+        "y": 45,
+        "req": 40,
+        "p": 21,
+        "branch": "Siege",
+        "desc": "Deploy multiple synchronized ballistae for rapid fire.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 18,
+            "target": "ballistae"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 24,
+        "n": "Steam Engines",
+        "x": 70,
+        "y": 45,
+        "req": 50,
+        "p": 22,
+        "branch": "Siege",
+        "desc": "Harness steam power for mobile siege platforms.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "engines"
+          },
+          {
+            "type": "speedBoost",
+            "value": 15,
+            "target": "engines"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 25,
+        "n": "Airship Skeleton",
+        "x": 80,
+        "y": 35,
+        "req": 60,
+        "p": 24,
+        "branch": "Siege",
+        "desc": "Construct the lightweight framework for flying vessels.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 18,
+            "target": "airships"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 26,
+        "n": "Torsion Springs",
+        "x": 90,
+        "y": 30,
+        "req": 70,
+        "p": 21,
+        "branch": "Siege",
+        "desc": "Create powerful torsion mechanisms for siege artillery.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 20,
+            "target": "artillery"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 27,
+        "n": "Aeronautics II",
+        "x": 75,
+        "y": 20,
+        "req": 80,
+        "p": 25,
+        "branch": "Siege",
+        "desc": "Advanced flight mechanics and navigation systems.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "airships"
+          },
+          {
+            "type": "successChance",
+            "value": 18,
+            "target": "airships"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 28,
+        "n": "The Dreadnaught",
+        "x": 85,
+        "y": 10,
+        "req": 95,
+        "p": 27,
+        "branch": "Siege",
+        "desc": "The ultimate flying fortress. Armed to the teeth and nearly indestructible.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "airships"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 25,
+            "target": "airships"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      }
+    ],
+    "recipes": [
+      {
+        "id": "xbow_1",
+        "n": "Ironveil Repeater",
+        "lvl": 1,
+        "icon": "🏹",
+        "mats": {
+          "Iron": 3,
+          "Wood": 2
+        },
+        "type": "Crossbow",
+        "desc": "Rapid fire. Heavy Bolt: Builds Mark.",
+        "category": null
+      },
+      {
+        "id": "xbow_2",
+        "n": "Skullpiercer",
+        "lvl": 5,
+        "icon": "🏹",
+        "mats": {
+          "Steel": 3,
+          "Bone": 2
+        },
+        "type": "Crossbow",
+        "desc": "Pierces skulls. Headshot: Silence.",
+        "category": null
+      },
+      {
+        "id": "xbow_3",
+        "n": "Bloodreaver",
+        "lvl": 10,
+        "icon": "🏹",
+        "mats": {
+          "Dark Iron": 3,
+          "Blood": 2
+        },
+        "type": "Crossbow",
+        "desc": "Reaves blood. Explosive Round: AoE.",
+        "category": null
+      },
+      {
+        "id": "xbow_4",
+        "n": "Wraithspike",
+        "lvl": 15,
+        "icon": "🏹",
+        "mats": {
+          "Void Dust": 3,
+          "Wood": 2
+        },
+        "type": "Crossbow",
+        "desc": "Spikes of wraith. Shadow Trap: Slow.",
+        "category": null
+      },
+      {
+        "id": "xbow_5",
+        "n": "Emberbolt",
+        "lvl": 20,
+        "icon": "🏹",
+        "mats": {
+          "Fire Essence": 3,
+          "Steel": 2
+        },
+        "type": "Crossbow",
+        "desc": "Burning ember. Firestorm Bolt: DoT.",
+        "category": null
+      },
+      {
+        "id": "xbow_6",
+        "n": "Ironshard",
+        "lvl": 25,
+        "icon": "🏹",
+        "mats": {
+          "Iron": 5,
+          "Obsidian": 1
+        },
+        "type": "Crossbow",
+        "desc": "Shards of iron. Shrapnel: Armor break.",
+        "category": null
+      },
+      {
+        "id": "gun_1",
+        "n": "Blackpowder Blaster",
+        "lvl": 1,
+        "icon": "🔫",
+        "mats": {
+          "Iron": 3,
+          "Powder": 2
+        },
+        "type": "Gun",
+        "desc": "Blackpowder grudge. Grudge Shot: Mark.",
+        "category": null
+      },
+      {
+        "id": "gun_2",
+        "n": "Ironstorm Gun",
+        "lvl": 5,
+        "icon": "🔫",
+        "mats": {
+          "Steel": 3,
+          "Iron": 2
+        },
+        "type": "Gun",
+        "desc": "Iron bullets. Sniper Round: Range.",
+        "category": null
+      },
+      {
+        "id": "gun_3",
+        "n": "Bloodcannon",
+        "lvl": 10,
+        "icon": "🔫",
+        "mats": {
+          "Dark Iron": 3,
+          "Blood": 2
+        },
+        "type": "Gun",
+        "desc": "Blood tribute. Crimson Blast: Lifesteal.",
+        "category": null
+      },
+      {
+        "id": "gun_4",
+        "n": "Wraithbarrel",
+        "lvl": 15,
+        "icon": "🔫",
+        "mats": {
+          "Void Dust": 3,
+          "Steel": 2
+        },
+        "type": "Gun",
+        "desc": "Wraith whispers. Shadow Shot: Silence.",
+        "category": null
+      },
+      {
+        "id": "gun_5",
+        "n": "Emberrifle",
+        "lvl": 20,
+        "icon": "🔫",
+        "mats": {
+          "Fire Essence": 3,
+          "Iron": 2
+        },
+        "type": "Gun",
+        "desc": "Ember flames. Flame Burst: DoT AoE.",
+        "category": null
+      },
+      {
+        "id": "gun_6",
+        "n": "Duskblaster",
+        "lvl": 25,
+        "icon": "🔫",
+        "mats": {
+          "Shadow Ingot": 3,
+          "Gem": 1
+        },
+        "type": "Gun",
+        "desc": "Dusk power. Shrapnel Spray: Pierce.",
+        "category": null
+      },
+      {
+        "id": "arm_mech_head",
+        "n": "Mechanist Helm",
+        "lvl": 5,
+        "icon": "🥽",
+        "mats": {
+          "Iron": 4,
+          "Glass": 2
+        },
+        "type": "Armor",
+        "desc": "Mechanist Set (1/6): +Perception.",
+        "category": null
+      },
+      {
+        "id": "arm_mech_chest",
+        "n": "Mechanist Chestplate",
+        "lvl": 10,
+        "icon": "👕",
+        "mats": {
+          "Steel": 8,
+          "Gears": 4
+        },
+        "type": "Armor",
+        "desc": "Mechanist Set (2/6): +Defense.",
+        "category": null
+      },
+      {
+        "id": "arm_mech_legs",
+        "n": "Mechanist Legplates",
+        "lvl": 8,
+        "icon": "👖",
+        "mats": {
+          "Iron": 6,
+          "Gears": 2
+        },
+        "type": "Armor",
+        "desc": "Mechanist Set (3/6): +Mobility.",
+        "category": null
+      },
+      {
+        "id": "arm_mech_hands",
+        "n": "Mechanist Gauntlets",
+        "lvl": 6,
+        "icon": "🧤",
+        "mats": {
+          "Iron": 3,
+          "Gears": 1
+        },
+        "type": "Armor",
+        "desc": "Mechanist Set (4/6): +Craft Speed.",
+        "category": null
+      },
+      {
+        "id": "arm_mech_feet",
+        "n": "Mechanist Boots",
+        "lvl": 7,
+        "icon": "👢",
+        "mats": {
+          "Iron": 4,
+          "Leather": 2
+        },
+        "type": "Armor",
+        "desc": "Mechanist Set (5/6): +Speed.",
+        "category": null
+      },
+      {
+        "id": "arm_mech_shoulder",
+        "n": "Mechanist Pauldrons",
+        "lvl": 9,
+        "icon": "🎖️",
+        "mats": {
+          "Steel": 5,
+          "Gears": 2
+        },
+        "type": "Armor",
+        "desc": "Mechanist Set (6/6): +20% Craft.",
+        "category": null
+      },
+      {
+        "id": "arm_inv_head",
+        "n": "Inventor's Goggles",
+        "lvl": 15,
+        "icon": "🥽",
+        "mats": {
+          "Steel": 4,
+          "Glass": 3,
+          "Gem": 1
+        },
+        "type": "Armor",
+        "desc": "Inventor Set (1/6): +Analysis.",
+        "category": null
+      },
+      {
+        "id": "arm_inv_chest",
+        "n": "Inventor's Coat",
+        "lvl": 20,
+        "icon": "🥼",
+        "mats": {
+          "Leather": 8,
+          "Steel": 4
+        },
+        "type": "Armor",
+        "desc": "Inventor Set (2/6): +Pocket slots.",
+        "category": null
+      },
+      {
+        "id": "arm_inv_legs",
+        "n": "Inventor's Pants",
+        "lvl": 18,
+        "icon": "👖",
+        "mats": {
+          "Leather": 6,
+          "Steel": 2
+        },
+        "type": "Armor",
+        "desc": "Inventor Set (3/6): +Tool belt.",
+        "category": null
+      },
+      {
+        "id": "arm_inv_hands",
+        "n": "Inventor's Gloves",
+        "lvl": 16,
+        "icon": "🧤",
+        "mats": {
+          "Leather": 3,
+          "Steel": 1
+        },
+        "type": "Armor",
+        "desc": "Inventor Set (4/6): +Precision.",
+        "category": null
+      },
+      {
+        "id": "arm_inv_feet",
+        "n": "Inventor's Boots",
+        "lvl": 17,
+        "icon": "👢",
+        "mats": {
+          "Leather": 4,
+          "Steel": 2
+        },
+        "type": "Armor",
+        "desc": "Inventor Set (5/6): +Jump Jets.",
+        "category": null
+      },
+      {
+        "id": "arm_inv_shoulder",
+        "n": "Inventor's Harness",
+        "lvl": 19,
+        "icon": "🎖️",
+        "mats": {
+          "Steel": 6,
+          "Gears": 4
+        },
+        "type": "Armor",
+        "desc": "Inventor Set (6/6): +25% Success.",
+        "category": null
+      },
+      {
+        "id": "tool_wrench",
+        "n": "Rusty Wrench",
+        "lvl": 1,
+        "icon": "🔧",
+        "mats": {
+          "Scrap": 2,
+          "Oil": 1
+        },
+        "type": "Tool",
+        "desc": "Basic tool.",
+        "category": null
+      },
+      {
+        "id": "tool_bolt",
+        "n": "Iron Bolt",
+        "lvl": 5,
+        "icon": "🔩",
+        "mats": {
+          "Scrap": 1
+        },
+        "type": "Component",
+        "desc": "Crafting part.",
+        "category": null
+      },
+      {
+        "id": "tool_gears",
+        "n": "Precision Gears",
+        "lvl": 10,
+        "icon": "⚙️",
+        "mats": {
+          "Iron": 2,
+          "Oil": 1
+        },
+        "type": "Component",
+        "desc": "Precision parts.",
+        "category": null
+      },
+      {
+        "id": "tool_springs",
+        "n": "Coiled Springs",
+        "lvl": 15,
+        "icon": "🔩",
+        "mats": {
+          "Steel": 2
+        },
+        "type": "Component",
+        "desc": "Tension springs.",
+        "category": null
+      },
+      {
+        "id": "tool_circuits",
+        "n": "Power Circuits",
+        "lvl": 20,
+        "icon": "⚡",
+        "mats": {
+          "Copper": 3,
+          "Glass": 1
+        },
+        "type": "Component",
+        "desc": "Electrical circuits.",
+        "category": null
+      },
+      {
+        "id": "tool_core",
+        "n": "Power Core",
+        "lvl": 25,
+        "icon": "💠",
+        "mats": {
+          "Titanium": 2,
+          "Crystal": 1
+        },
+        "type": "Component",
+        "desc": "Energy core.",
+        "category": null
+      },
+      {
+        "id": "ring_1",
+        "n": "Gear Ring",
+        "lvl": 5,
+        "icon": "💍",
+        "mats": {
+          "Iron": 2,
+          "Gears": 1
+        },
+        "type": "Ring",
+        "desc": "+Craft Speed. Mechanical.",
+        "category": null
+      },
+      {
+        "id": "ring_2",
+        "n": "Copper Coil Ring",
+        "lvl": 15,
+        "icon": "💍",
+        "mats": {
+          "Copper": 3,
+          "Glass": 1
+        },
+        "type": "Ring",
+        "desc": "+Energy. Conductive.",
+        "category": null
+      },
+      {
+        "id": "ring_3",
+        "n": "Precision Band",
+        "lvl": 25,
+        "icon": "💍",
+        "mats": {
+          "Steel": 2,
+          "Gem": 1
+        },
+        "type": "Ring",
+        "desc": "+Accuracy. Fine tuned.",
+        "category": null
+      },
+      {
+        "id": "ring_4",
+        "n": "Power Core Ring",
+        "lvl": 35,
+        "icon": "💍",
+        "mats": {
+          "Titanium": 2,
+          "Crystal": 1
+        },
+        "type": "Ring",
+        "desc": "+Damage. Powered up.",
+        "category": null
+      },
+      {
+        "id": "ring_5",
+        "n": "Tesla Coil Band",
+        "lvl": 45,
+        "icon": "💍",
+        "mats": {
+          "Copper": 5,
+          "Storm Essence": 2
+        },
+        "type": "Ring",
+        "desc": "+Lightning Dmg. Shocking.",
+        "category": null
+      },
+      {
+        "id": "ring_6",
+        "n": "Quantum Ring",
+        "lvl": 55,
+        "icon": "💍",
+        "mats": {
+          "Titanium": 3,
+          "Void Essence": 2
+        },
+        "type": "Ring",
+        "desc": "+All Stats. Advanced tech.",
+        "category": null
+      },
+      {
+        "id": "relic_1",
+        "n": "Pocket Watch",
+        "lvl": 10,
+        "icon": "🔮",
+        "mats": {
+          "Gears": 3,
+          "Glass": 1
+        },
+        "type": "Relic",
+        "desc": "+Cooldown Reduction. Timekeeping.",
+        "category": null
+      },
+      {
+        "id": "relic_2",
+        "n": "Gyroscope",
+        "lvl": 20,
+        "icon": "🔮",
+        "mats": {
+          "Iron": 3,
+          "Gears": 3
+        },
+        "type": "Relic",
+        "desc": "+Stability. Balanced.",
+        "category": null
+      },
+      {
+        "id": "relic_3",
+        "n": "Power Cell",
+        "lvl": 30,
+        "icon": "🔮",
+        "mats": {
+          "Copper": 5,
+          "Crystal": 1
+        },
+        "type": "Relic",
+        "desc": "+Energy Regen. Rechargeable.",
+        "category": null
+      },
+      {
+        "id": "relic_4",
+        "n": "Targeting Module",
+        "lvl": 40,
+        "icon": "🔮",
+        "mats": {
+          "Steel": 3,
+          "Glass": 2,
+          "Gem": 1
+        },
+        "type": "Relic",
+        "desc": "+Accuracy. Lock-on.",
+        "category": null
+      },
+      {
+        "id": "relic_5",
+        "n": "Overcharge Core",
+        "lvl": 50,
+        "icon": "🔮",
+        "mats": {
+          "Titanium": 3,
+          "Storm Essence": 3
+        },
+        "type": "Relic",
+        "desc": "+Crit Damage. Supercharged.",
+        "category": null
+      },
+      {
+        "id": "relic_6",
+        "n": "Infinity Engine",
+        "lvl": 60,
+        "icon": "🔮",
+        "mats": {
+          "Titanium": 5,
+          "PowerCell": 3,
+          "Void Essence": 2
+        },
+        "type": "Relic",
+        "desc": "+All Stats. Perpetual motion.",
+        "category": null
+      },
+      {
+        "id": "neck_1",
+        "n": "Gear Pendant",
+        "lvl": 5,
+        "icon": "📿",
+        "mats": {
+          "Iron": 2,
+          "Gears": 2
+        },
+        "type": "Necklace",
+        "desc": "+Craft Bonus. Tinkerer's.",
+        "category": null
+      },
+      {
+        "id": "neck_2",
+        "n": "Bullet Chain",
+        "lvl": 15,
+        "icon": "📿",
+        "mats": {
+          "Steel": 3,
+          "Powder": 2
+        },
+        "type": "Necklace",
+        "desc": "+Ranged Damage. Gunslinger.",
+        "category": null
+      },
+      {
+        "id": "neck_3",
+        "n": "Circuit Necklace",
+        "lvl": 25,
+        "icon": "📿",
+        "mats": {
+          "Copper": 4,
+          "Glass": 2
+        },
+        "type": "Necklace",
+        "desc": "+Tech Bonus. Wired.",
+        "category": null
+      },
+      {
+        "id": "neck_4",
+        "n": "Steam Whistle",
+        "lvl": 35,
+        "icon": "📿",
+        "mats": {
+          "Steel": 4,
+          "Gears": 3
+        },
+        "type": "Necklace",
+        "desc": "+Siege Damage. Loud.",
+        "category": null
+      },
+      {
+        "id": "neck_5",
+        "n": "Tesla Amulet",
+        "lvl": 45,
+        "icon": "📿",
+        "mats": {
+          "Titanium": 3,
+          "Storm Essence": 2
+        },
+        "type": "Necklace",
+        "desc": "+Lightning. Electric field.",
+        "category": null
+      },
+      {
+        "id": "neck_6",
+        "n": "Core Reactor Pendant",
+        "lvl": 55,
+        "icon": "📿",
+        "mats": {
+          "Titanium": 4,
+          "PowerCell": 2,
+          "Crystal": 2
+        },
+        "type": "Necklace",
+        "desc": "+All Stats. Fusion powered.",
+        "category": null
+      }
+    ]
+  },
+  "mystic": {
+    "id": "mystic",
+    "name": "Mystic",
+    "role": "Arcane Crafter & Enchanter",
+    "color": "text-purple-400",
+    "icon": "🔮",
+    "bgImage": "/assets/professions/mystic_flames_chemistry_background.png",
+    "treeData": [
+      {
+        "id": 1,
+        "n": "Astral Nexus",
+        "x": 50,
+        "y": 92,
+        "req": 0,
+        "p": null,
+        "branch": "Nexus",
+        "desc": "The center of all mystical power. Begin your journey into the arcane arts.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 5,
+            "target": "all"
+          }
+        ],
+        "unlocks": [
+          "Basic Enchanting",
+          "Mana Potion"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 2,
+        "n": "Mana Weaving",
+        "x": 50,
+        "y": 82,
+        "req": 5,
+        "p": 1,
+        "branch": "Nexus",
+        "desc": "Learn to weave raw mana into stable patterns for crafting.",
+        "bonuses": [
+          {
+            "type": "essenceEfficiency",
+            "value": 8
+          }
+        ],
+        "unlocks": [
+          "Essence Refinement"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 3,
+        "n": "Arcane Attunement",
+        "x": 50,
+        "y": 72,
+        "req": 10,
+        "p": 2,
+        "branch": "Nexus",
+        "desc": "Attune yourself to the cosmic energies. Unlocks all 5 constellation paths.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 5,
+            "target": "all"
+          }
+        ],
+        "unlocks": [
+          "T2 Crafting"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 10,
+        "n": "Rune Inscription",
+        "x": 20,
+        "y": 65,
+        "req": 15,
+        "p": 3,
+        "branch": "Enchanter",
+        "desc": "Inscribe basic runes onto equipment to grant minor bonuses.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 10,
+            "target": "enchants"
+          }
+        ],
+        "unlocks": [
+          "Minor Enchant: Strength",
+          "Minor Enchant: Intellect"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 11,
+        "n": "Glyph Mastery",
+        "x": 12,
+        "y": 55,
+        "req": 25,
+        "p": 10,
+        "branch": "Enchanter",
+        "desc": "Master complex glyphs that provide powerful stat increases.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 15,
+            "target": "enchants"
+          },
+          {
+            "type": "successChance",
+            "value": 8,
+            "target": "enchants"
+          }
+        ],
+        "unlocks": [
+          "Major Enchant: Might",
+          "Major Enchant: Wisdom"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 12,
+        "n": "Elemental Infusion",
+        "x": 8,
+        "y": 42,
+        "req": 35,
+        "p": 11,
+        "branch": "Enchanter",
+        "desc": "Infuse weapons with elemental damage types.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 12,
+            "target": "weapons"
+          }
+        ],
+        "unlocks": [
+          "Fire Infusion",
+          "Frost Infusion",
+          "Lightning Infusion"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 13,
+        "n": "Soul Binding",
+        "x": 18,
+        "y": 35,
+        "req": 50,
+        "p": 11,
+        "branch": "Enchanter",
+        "desc": "Bind souls to items, granting them sentience and power.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "enchants"
+          },
+          {
+            "type": "doubleYield",
+            "value": 5,
+            "target": "enchants"
+          }
+        ],
+        "unlocks": [
+          "Soul Enchant: Lifesteal",
+          "Soul Enchant: Mana Leech"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 14,
+        "n": "Arcane Overcharge",
+        "x": 5,
+        "y": 25,
+        "req": 70,
+        "p": 12,
+        "branch": "Enchanter",
+        "desc": "Push enchantments beyond normal limits. Risk of failure but massive power.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 25,
+            "target": "enchants"
+          }
+        ],
+        "unlocks": [
+          "Overcharged Enchantment"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 15,
+        "n": "Cosmic Inscription",
+        "x": 15,
+        "y": 12,
+        "req": 90,
+        "p": 14,
+        "branch": "Enchanter",
+        "desc": "Write enchantments using the language of the cosmos itself.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 30,
+            "target": "enchants"
+          },
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "enchants"
+          }
+        ],
+        "unlocks": [
+          "Divine Enchantment",
+          "T8 Enchanting"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 20,
+        "n": "Scroll Scribing",
+        "x": 32,
+        "y": 62,
+        "req": 15,
+        "p": 3,
+        "branch": "Spellwright",
+        "desc": "Learn to scribe spells onto scrolls for single-use casting.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "scrolls"
+          }
+        ],
+        "unlocks": [
+          "Scroll: Fireball",
+          "Scroll: Frost Nova"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 21,
+        "n": "Spell Page Crafting",
+        "x": 28,
+        "y": 50,
+        "req": 30,
+        "p": 20,
+        "branch": "Spellwright",
+        "desc": "Create spell pages that teach permanent spell upgrades.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "spellpages"
+          }
+        ],
+        "unlocks": [
+          "Spell Page: Tier II",
+          "Spell Page: Tier III"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 22,
+        "n": "Arcane Lexicon",
+        "x": 22,
+        "y": 40,
+        "req": 45,
+        "p": 21,
+        "branch": "Spellwright",
+        "desc": "Compile spell pages into powerful lexicons of knowledge.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 15,
+            "target": "spellpages"
+          },
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "spellpages"
+          }
+        ],
+        "unlocks": [
+          "Lexicon of Fire",
+          "Lexicon of Frost"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 23,
+        "n": "Grimoire Binding",
+        "x": 35,
+        "y": 32,
+        "req": 60,
+        "p": 22,
+        "branch": "Spellwright",
+        "desc": "Bind multiple spell pages into grimoires of immense power.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 6,
+            "target": "spellpages"
+          }
+        ],
+        "unlocks": [
+          "Spell Page: Tier V",
+          "Spell Page: Tier VI"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 24,
+        "n": "Tome of Mastery",
+        "x": 28,
+        "y": 20,
+        "req": 80,
+        "p": 23,
+        "branch": "Spellwright",
+        "desc": "Create master tomes that grant entire spell schools.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 20,
+            "target": "spellpages"
+          },
+          {
+            "type": "doubleYield",
+            "value": 10,
+            "target": "scrolls"
+          }
+        ],
+        "unlocks": [
+          "Tome of Destruction",
+          "Tome of Restoration"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 25,
+        "n": "Codex of Infinity",
+        "x": 32,
+        "y": 8,
+        "req": 95,
+        "p": 24,
+        "branch": "Spellwright",
+        "desc": "The ultimate spellcraft. Create codexes with limitless spell potential.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "spellpages"
+          },
+          {
+            "type": "successChance",
+            "value": 20,
+            "target": "spellpages"
+          }
+        ],
+        "unlocks": [
+          "Spell Page: Tier VIII",
+          "Codex of the Void"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 30,
+        "n": "Staff Shaping",
+        "x": 50,
+        "y": 60,
+        "req": 15,
+        "p": 3,
+        "branch": "Arcanist",
+        "desc": "Shape magical wood into conduits for arcane energy.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "staffs"
+          }
+        ],
+        "unlocks": [
+          "Apprentice Staff",
+          "Fire Staff T1"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 31,
+        "n": "Crystal Focus",
+        "x": 50,
+        "y": 48,
+        "req": 30,
+        "p": 30,
+        "branch": "Arcanist",
+        "desc": "Embed crystals into staves to focus and amplify magical power.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "staffs"
+          },
+          {
+            "type": "socketChance",
+            "value": 10,
+            "target": "staffs"
+          }
+        ],
+        "unlocks": [
+          "Crystal-Tipped Staff",
+          "Frost Staff T2"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 32,
+        "n": "Elemental Core",
+        "x": 42,
+        "y": 38,
+        "req": 45,
+        "p": 31,
+        "branch": "Arcanist",
+        "desc": "Craft elemental cores that define a staff's magical affinity.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 15,
+            "target": "staffs"
+          }
+        ],
+        "unlocks": [
+          "Fire Core",
+          "Frost Core",
+          "Holy Core",
+          "Arcane Core"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 33,
+        "n": "Void Channeling",
+        "x": 58,
+        "y": 38,
+        "req": 45,
+        "p": 31,
+        "branch": "Arcanist",
+        "desc": "Channel void energy through staves for devastating attacks.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "staffs"
+          },
+          {
+            "type": "enchantPower",
+            "value": 10,
+            "target": "staffs"
+          }
+        ],
+        "unlocks": [
+          "Void Staff T4",
+          "Lightning Staff T4"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 34,
+        "n": "Archmage Crafting",
+        "x": 50,
+        "y": 25,
+        "req": 70,
+        "p": 32,
+        "branch": "Arcanist",
+        "desc": "Craft staves worthy of archmages with multiple elemental affinities.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "staffs"
+          },
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "staffs"
+          }
+        ],
+        "unlocks": [
+          "Staff of Elements T7",
+          "Archmage Staff"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 35,
+        "n": "Staff of the Grudge",
+        "x": 50,
+        "y": 10,
+        "req": 95,
+        "p": 34,
+        "branch": "Arcanist",
+        "desc": "The legendary Staff of the Grudge. Ultimate mystical weapon.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "staffs"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 25,
+            "target": "staffs"
+          }
+        ],
+        "unlocks": [
+          "Staff of the Grudge",
+          "T8 Staff Crafting"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 40,
+        "n": "Gem Cutting",
+        "x": 68,
+        "y": 62,
+        "req": 15,
+        "p": 3,
+        "branch": "Soulbinder",
+        "desc": "Cut raw gems into shapes that can hold magical energy.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "gems"
+          }
+        ],
+        "unlocks": [
+          "Cut Ruby",
+          "Cut Sapphire",
+          "Cut Emerald"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 41,
+        "n": "Gem Faceting",
+        "x": 75,
+        "y": 52,
+        "req": 30,
+        "p": 40,
+        "branch": "Soulbinder",
+        "desc": "Create precise facets that maximize a gem's magical potential.",
+        "bonuses": [
+          {
+            "type": "gemQuality",
+            "value": 15
+          },
+          {
+            "type": "qualityBoost",
+            "value": 10,
+            "target": "gems"
+          }
+        ],
+        "unlocks": [
+          "Brilliant Cut",
+          "Radiant Cut"
+        ],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 42,
+        "n": "Necklace Smithing",
+        "x": 82,
+        "y": 45,
+        "req": 40,
+        "p": 41,
+        "branch": "Soulbinder",
+        "desc": "Craft magical necklaces that channel gem powers directly.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 12,
+            "target": "necklaces"
+          },
+          {
+            "type": "socketChance",
+            "value": 15,
+            "target": "necklaces"
+          }
+        ],
+        "unlocks": [
+          "Mana Pendant",
+          "Amulet of Power"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 43,
+        "n": "Soul Gem Crafting",
+        "x": 70,
+        "y": 38,
+        "req": 55,
+        "p": 41,
+        "branch": "Soulbinder",
+        "desc": "Infuse gems with captured souls for incredible power.",
+        "bonuses": [
+          {
+            "type": "gemQuality",
+            "value": 20
+          },
+          {
+            "type": "enchantPower",
+            "value": 15,
+            "target": "gems"
+          }
+        ],
+        "unlocks": [
+          "Soul Gem",
+          "Trapped Essence"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 44,
+        "n": "Astral Jewelry",
+        "x": 78,
+        "y": 28,
+        "req": 75,
+        "p": 42,
+        "branch": "Soulbinder",
+        "desc": "Create jewelry that connects the wearer to astral planes.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "necklaces"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 18,
+            "target": "necklaces"
+          }
+        ],
+        "unlocks": [
+          "Astral Amulet",
+          "Cosmic Pendant T7"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 45,
+        "n": "Divine Gems",
+        "x": 72,
+        "y": 15,
+        "req": 90,
+        "p": 44,
+        "branch": "Soulbinder",
+        "desc": "Cut gems blessed by the gods themselves.",
+        "bonuses": [
+          {
+            "type": "gemQuality",
+            "value": 30
+          },
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "gems"
+          }
+        ],
+        "unlocks": [
+          "Divine Ruby",
+          "Divine Sapphire",
+          "T8 Gem Cutting"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 46,
+        "n": "Heart of the Cosmos",
+        "x": 85,
+        "y": 12,
+        "req": 95,
+        "p": 45,
+        "branch": "Soulbinder",
+        "desc": "Create the legendary Heart of the Cosmos necklace.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "necklaces"
+          },
+          {
+            "type": "successChance",
+            "value": 25,
+            "target": "necklaces"
+          }
+        ],
+        "unlocks": [
+          "Heart of the Cosmos",
+          "T8 Necklace Crafting"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 50,
+        "n": "Fabric Weaving",
+        "x": 80,
+        "y": 65,
+        "req": 15,
+        "p": 3,
+        "branch": "Chronoweaver",
+        "desc": "Weave magical threads into protective fabrics.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "cloth"
+          }
+        ],
+        "unlocks": [
+          "Linen Robe",
+          "Apprentice Cloth Set"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 51,
+        "n": "Enchanted Threads",
+        "x": 88,
+        "y": 55,
+        "req": 28,
+        "p": 50,
+        "branch": "Chronoweaver",
+        "desc": "Spin threads infused with raw magical essence.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "cloth"
+          },
+          {
+            "type": "materialReduction",
+            "value": 10,
+            "target": "cloth"
+          }
+        ],
+        "unlocks": [
+          "Silk Robe",
+          "Enchanted Cloth T2"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 52,
+        "n": "Moonweave Crafting",
+        "x": 92,
+        "y": 42,
+        "req": 45,
+        "p": 51,
+        "branch": "Chronoweaver",
+        "desc": "Harvest moonlight into threads of ethereal beauty.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "cloth"
+          },
+          {
+            "type": "enchantPower",
+            "value": 10,
+            "target": "cloth"
+          }
+        ],
+        "unlocks": [
+          "Moonweave Robe",
+          "Starweave Set T4"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 53,
+        "n": "Starweave Mastery",
+        "x": 85,
+        "y": 32,
+        "req": 60,
+        "p": 52,
+        "branch": "Chronoweaver",
+        "desc": "Weave starlight into armor that protects against cosmic threats.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 6,
+            "target": "cloth"
+          },
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "cloth"
+          }
+        ],
+        "unlocks": [
+          "Starweave Set T6",
+          "Astral Robes"
+        ],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 54,
+        "n": "Voidweave Secrets",
+        "x": 90,
+        "y": 22,
+        "req": 80,
+        "p": 53,
+        "branch": "Chronoweaver",
+        "desc": "Master the forbidden art of weaving void energy into fabric.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 22,
+            "target": "cloth"
+          },
+          {
+            "type": "enchantPower",
+            "value": 20,
+            "target": "cloth"
+          }
+        ],
+        "unlocks": [
+          "Voidweave Set T7",
+          "Robes of the Void"
+        ],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 55,
+        "n": "Divine Vestments",
+        "x": 95,
+        "y": 10,
+        "req": 95,
+        "p": 54,
+        "branch": "Chronoweaver",
+        "desc": "Create vestments worn by gods and cosmic entities.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "cloth"
+          },
+          {
+            "type": "doubleYield",
+            "value": 15,
+            "target": "cloth"
+          }
+        ],
+        "unlocks": [
+          "Divine Cloth Set T8",
+          "Vestments of Eternity"
+        ],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 60,
+        "n": "Enchanted Fabrics",
+        "x": 55,
+        "y": 50,
+        "req": 40,
+        "p": 31,
+        "branch": "Hybrid",
+        "desc": "Apply enchantments directly during cloth crafting.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 12,
+            "target": "cloth"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 8,
+            "target": "cloth"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 61,
+        "n": "Gemstone Staves",
+        "x": 60,
+        "y": 30,
+        "req": 65,
+        "p": 33,
+        "branch": "Hybrid",
+        "desc": "Integrate gem sockets directly into staff designs.",
+        "bonuses": [
+          {
+            "type": "socketChance",
+            "value": 20,
+            "target": "staffs"
+          },
+          {
+            "type": "gemQuality",
+            "value": 10
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 62,
+        "n": "Spell-Woven Cloth",
+        "x": 40,
+        "y": 55,
+        "req": 35,
+        "p": 20,
+        "branch": "Hybrid",
+        "desc": "Weave spell formulas directly into cloth armor.",
+        "bonuses": [
+          {
+            "type": "enchantPower",
+            "value": 10,
+            "target": "cloth"
+          },
+          {
+            "type": "successChance",
+            "value": 8,
+            "target": "scrolls"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      }
+    ],
+    "recipes": [
+      {
+        "id": "staff_fire_1",
+        "n": "Emberwrath Staff",
+        "lvl": 1,
+        "icon": "🔥",
+        "mats": {
+          "Pine Log": 3,
+          "Minor Fire Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Fire Bolt: Builds Burn stacks.",
+        "category": null
+      },
+      {
+        "id": "staff_fire_2",
+        "n": "Sunfire Staff",
+        "lvl": 5,
+        "icon": "🔥",
+        "mats": {
+          "Oak Log": 3,
+          "Fire Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Solar Flare: AoE Burn.",
+        "category": null
+      },
+      {
+        "id": "staff_fire_3",
+        "n": "Inferno Spire",
+        "lvl": 10,
+        "icon": "🔥",
+        "mats": {
+          "Maple Log": 4,
+          "Greater Fire Essence": 3
+        },
+        "type": "Staff",
+        "desc": "Inferno Wave: Line AoE.",
+        "category": null
+      },
+      {
+        "id": "staff_fire_4",
+        "n": "Phoenix Staff",
+        "lvl": 15,
+        "icon": "🔥",
+        "mats": {
+          "Ash Log": 5,
+          "Phoenix Feather": 1
+        },
+        "type": "Staff",
+        "desc": "Rebirth: Self-resurrect proc.",
+        "category": null
+      },
+      {
+        "id": "staff_fire_5",
+        "n": "Magma Spire",
+        "lvl": 20,
+        "icon": "🔥",
+        "mats": {
+          "Ironwood Log": 6,
+          "Lava Core": 2
+        },
+        "type": "Staff",
+        "desc": "Lava Surge: DoT Zone.",
+        "category": null
+      },
+      {
+        "id": "staff_fire_6",
+        "n": "Solar Judgment",
+        "lvl": 25,
+        "icon": "🔥",
+        "mats": {
+          "Worldtree Log": 8,
+          "Sun Essence": 5
+        },
+        "type": "Staff",
+        "desc": "Solar Strike: Ultimate fire.",
+        "category": null
+      },
+      {
+        "id": "staff_frost_1",
+        "n": "Glacial Spire",
+        "lvl": 1,
+        "icon": "❄️",
+        "mats": {
+          "Pine Log": 3,
+          "Minor Frost Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Frost Bolt: Applies Chill.",
+        "category": null
+      },
+      {
+        "id": "staff_frost_2",
+        "n": "Winter's Grudge",
+        "lvl": 5,
+        "icon": "❄️",
+        "mats": {
+          "Oak Log": 3,
+          "Frost Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Blizzard: AoE Slow.",
+        "category": null
+      },
+      {
+        "id": "staff_frost_3",
+        "n": "Frostbite Staff",
+        "lvl": 10,
+        "icon": "❄️",
+        "mats": {
+          "Maple Log": 4,
+          "Greater Frost Essence": 3
+        },
+        "type": "Staff",
+        "desc": "Deep Freeze: Stun.",
+        "category": null
+      },
+      {
+        "id": "staff_frost_4",
+        "n": "Avalanche Spire",
+        "lvl": 15,
+        "icon": "❄️",
+        "mats": {
+          "Ash Log": 5,
+          "Snowflake Crystal": 1
+        },
+        "type": "Staff",
+        "desc": "Avalanche: Knockback AoE.",
+        "category": null
+      },
+      {
+        "id": "staff_frost_5",
+        "n": "Permafrost Staff",
+        "lvl": 20,
+        "icon": "❄️",
+        "mats": {
+          "Ironwood Log": 6,
+          "Ice Core": 2
+        },
+        "type": "Staff",
+        "desc": "Frozen Ground: Zone control.",
+        "category": null
+      },
+      {
+        "id": "staff_frost_6",
+        "n": "Absolute Zero",
+        "lvl": 25,
+        "icon": "❄️",
+        "mats": {
+          "Worldtree Log": 8,
+          "Void Ice": 5
+        },
+        "type": "Staff",
+        "desc": "Time Stop: Ultimate frost.",
+        "category": null
+      },
+      {
+        "id": "staff_holy_1",
+        "n": "Dawnspire",
+        "lvl": 1,
+        "icon": "✨",
+        "mats": {
+          "Pine Log": 3,
+          "Minor Holy Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Holy Light: Heals allies.",
+        "category": null
+      },
+      {
+        "id": "staff_holy_2",
+        "n": "Redemption Staff",
+        "lvl": 5,
+        "icon": "✨",
+        "mats": {
+          "Oak Log": 3,
+          "Holy Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Cleanse: Remove debuffs.",
+        "category": null
+      },
+      {
+        "id": "staff_holy_3",
+        "n": "Sacred Light",
+        "lvl": 10,
+        "icon": "✨",
+        "mats": {
+          "Maple Log": 4,
+          "Greater Holy Essence": 3
+        },
+        "type": "Staff",
+        "desc": "Divine Shield: Immunity.",
+        "category": null
+      },
+      {
+        "id": "staff_holy_4",
+        "n": "Archangel Staff",
+        "lvl": 15,
+        "icon": "✨",
+        "mats": {
+          "Ash Log": 5,
+          "Angel Feather": 1
+        },
+        "type": "Staff",
+        "desc": "Wings: Movement buff.",
+        "category": null
+      },
+      {
+        "id": "staff_holy_5",
+        "n": "Benediction",
+        "lvl": 20,
+        "icon": "✨",
+        "mats": {
+          "Ironwood Log": 6,
+          "Holy Core": 2
+        },
+        "type": "Staff",
+        "desc": "Mass Heal: Party heal.",
+        "category": null
+      },
+      {
+        "id": "staff_holy_6",
+        "n": "Divine Judgment",
+        "lvl": 25,
+        "icon": "✨",
+        "mats": {
+          "Worldtree Log": 8,
+          "Divine Essence": 5
+        },
+        "type": "Staff",
+        "desc": "Smite Evil: Ultimate holy.",
+        "category": null
+      },
+      {
+        "id": "staff_lightning_1",
+        "n": "Stormwrath",
+        "lvl": 1,
+        "icon": "⚡",
+        "mats": {
+          "Pine Log": 3,
+          "Minor Storm Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Thunder Bolt: Chain lightning.",
+        "category": null
+      },
+      {
+        "id": "staff_lightning_2",
+        "n": "Tempest Spire",
+        "lvl": 5,
+        "icon": "⚡",
+        "mats": {
+          "Oak Log": 3,
+          "Storm Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Thunder Clap: AoE Stun.",
+        "category": null
+      },
+      {
+        "id": "staff_lightning_3",
+        "n": "Thunderlord Staff",
+        "lvl": 10,
+        "icon": "⚡",
+        "mats": {
+          "Maple Log": 4,
+          "Greater Storm Essence": 3
+        },
+        "type": "Staff",
+        "desc": "Lightning Strike: Burst dmg.",
+        "category": null
+      },
+      {
+        "id": "staff_lightning_4",
+        "n": "Stormcaller",
+        "lvl": 15,
+        "icon": "⚡",
+        "mats": {
+          "Ash Log": 5,
+          "Storm Crystal": 1
+        },
+        "type": "Staff",
+        "desc": "Call Storm: Weather control.",
+        "category": null
+      },
+      {
+        "id": "staff_lightning_5",
+        "n": "Mjolnir Staff",
+        "lvl": 20,
+        "icon": "⚡",
+        "mats": {
+          "Ironwood Log": 6,
+          "Thunder Core": 2
+        },
+        "type": "Staff",
+        "desc": "Hammer Throw: Return dmg.",
+        "category": null
+      },
+      {
+        "id": "staff_lightning_6",
+        "n": "Zeus's Fury",
+        "lvl": 25,
+        "icon": "⚡",
+        "mats": {
+          "Worldtree Log": 8,
+          "Divine Storm": 5
+        },
+        "type": "Staff",
+        "desc": "Godly Thunder: Ultimate.",
+        "category": null
+      },
+      {
+        "id": "staff_arcane_1",
+        "n": "Voidspire",
+        "lvl": 1,
+        "icon": "🌀",
+        "mats": {
+          "Pine Log": 3,
+          "Void Dust": 2
+        },
+        "type": "Staff",
+        "desc": "Arcane Bolt: Marks targets.",
+        "category": null
+      },
+      {
+        "id": "staff_arcane_2",
+        "n": "Mystic Grudge",
+        "lvl": 5,
+        "icon": "🌀",
+        "mats": {
+          "Oak Log": 3,
+          "Arcane Essence": 2
+        },
+        "type": "Staff",
+        "desc": "Arcane Missiles: Multi-hit.",
+        "category": null
+      },
+      {
+        "id": "staff_arcane_3",
+        "n": "Ether Heart",
+        "lvl": 10,
+        "icon": "🌀",
+        "mats": {
+          "Maple Log": 4,
+          "Ether Dust": 3
+        },
+        "type": "Staff",
+        "desc": "Mana Burn: Drain mana.",
+        "category": null
+      },
+      {
+        "id": "staff_arcane_4",
+        "n": "Dimensional Staff",
+        "lvl": 15,
+        "icon": "🌀",
+        "mats": {
+          "Ash Log": 5,
+          "Void Crystal": 1
+        },
+        "type": "Staff",
+        "desc": "Blink: Teleport.",
+        "category": null
+      },
+      {
+        "id": "staff_arcane_5",
+        "n": "Reality Bender",
+        "lvl": 20,
+        "icon": "🌀",
+        "mats": {
+          "Ironwood Log": 6,
+          "Reality Core": 2
+        },
+        "type": "Staff",
+        "desc": "Warp: Distort space.",
+        "category": null
+      },
+      {
+        "id": "staff_arcane_6",
+        "n": "Staff of the Grudge",
+        "lvl": 25,
+        "icon": "🔱",
+        "mats": {
+          "Worldtree Log": 10,
+          "Divine Essence": 5,
+          "Soul Core": 3
+        },
+        "type": "Staff",
+        "desc": "Legendary. All elements.",
+        "category": null
+      },
+      {
+        "id": "ench_str",
+        "n": "Enchant: Strength",
+        "lvl": 15,
+        "icon": "💪",
+        "mats": {
+          "Minor Essence": 2,
+          "Iron Dust": 1
+        },
+        "type": "Enchant",
+        "desc": "+10 Strength to weapon.",
+        "category": null
+      },
+      {
+        "id": "ench_int",
+        "n": "Enchant: Intellect",
+        "lvl": 15,
+        "icon": "🧠",
+        "mats": {
+          "Minor Essence": 2,
+          "Mana Dust": 1
+        },
+        "type": "Enchant",
+        "desc": "+10 Intellect to weapon.",
+        "category": null
+      },
+      {
+        "id": "ench_fire",
+        "n": "Fire Infusion",
+        "lvl": 35,
+        "icon": "🔥",
+        "mats": {
+          "Fire Essence": 5,
+          "Ruby": 1
+        },
+        "type": "Enchant",
+        "desc": "+Fire damage to weapon.",
+        "category": null
+      },
+      {
+        "id": "ench_frost",
+        "n": "Frost Infusion",
+        "lvl": 35,
+        "icon": "❄️",
+        "mats": {
+          "Frost Essence": 5,
+          "Sapphire": 1
+        },
+        "type": "Enchant",
+        "desc": "+Frost damage to weapon.",
+        "category": null
+      },
+      {
+        "id": "ench_soul",
+        "n": "Soul Enchant: Lifesteal",
+        "lvl": 50,
+        "icon": "💀",
+        "mats": {
+          "Soul Core": 1,
+          "Blood": 5
+        },
+        "type": "Enchant",
+        "desc": "Lifesteal on hit.",
+        "category": null
+      },
+      {
+        "id": "ench_divine",
+        "n": "Divine Enchantment",
+        "lvl": 90,
+        "icon": "👼",
+        "mats": {
+          "Divine Essence": 3,
+          "Holy Water": 5
+        },
+        "type": "Enchant",
+        "desc": "Ultimate enchant power.",
+        "category": null
+      },
+      {
+        "id": "scroll_fire",
+        "n": "Scroll: Fireball",
+        "lvl": 15,
+        "icon": "📜🔥",
+        "mats": {
+          "Paper": 1,
+          "Fire Essence": 3
+        },
+        "type": "Scroll",
+        "desc": "Single-use fireball spell",
+        "category": null
+      },
+      {
+        "id": "scroll_frost",
+        "n": "Scroll: Frost Nova",
+        "lvl": 15,
+        "icon": "📜❄️",
+        "mats": {
+          "Paper": 1,
+          "Frost Essence": 3
+        },
+        "type": "Scroll",
+        "desc": "Single-use frost nova",
+        "category": null
+      },
+      {
+        "id": "page_t2",
+        "n": "Spell Page: Tier II",
+        "lvl": 30,
+        "icon": "📄",
+        "mats": {
+          "Enchanted Paper": 2,
+          "Lesser Essence": 5
+        },
+        "type": "SpellPage",
+        "desc": "Upgrade spell to Tier II",
+        "category": null
+      },
+      {
+        "id": "page_t5",
+        "n": "Spell Page: Tier V",
+        "lvl": 60,
+        "icon": "📄",
+        "mats": {
+          "Arcane Parchment": 3,
+          "Refined Essence": 10
+        },
+        "type": "SpellPage",
+        "desc": "Upgrade spell to Tier V",
+        "category": null
+      },
+      {
+        "id": "page_t8",
+        "n": "Spell Page: Tier VIII",
+        "lvl": 95,
+        "icon": "📄✨",
+        "mats": {
+          "Divine Parchment": 5,
+          "Divine Essence": 10
+        },
+        "type": "SpellPage",
+        "desc": "Upgrade spell to Tier VIII",
+        "category": null
+      },
+      {
+        "id": "codex_void",
+        "n": "Codex of the Void",
+        "lvl": 95,
+        "icon": "📕🌀",
+        "mats": {
+          "Void Parchment": 10,
+          "Soul Core": 5
+        },
+        "type": "Codex",
+        "desc": "Grants all Void spells",
+        "category": null
+      },
+      {
+        "id": "gem_ruby",
+        "n": "Cut Ruby",
+        "lvl": 15,
+        "icon": "💎",
+        "mats": {
+          "Rough Ruby": 1
+        },
+        "type": "Gem",
+        "desc": "+Fire power when socketed",
+        "category": null
+      },
+      {
+        "id": "gem_sapphire",
+        "n": "Cut Sapphire",
+        "lvl": 15,
+        "icon": "💠",
+        "mats": {
+          "Rough Sapphire": 1
+        },
+        "type": "Gem",
+        "desc": "+Frost power when socketed",
+        "category": null
+      },
+      {
+        "id": "gem_soul",
+        "n": "Soul Gem",
+        "lvl": 55,
+        "icon": "💜",
+        "mats": {
+          "Pristine Gem": 1,
+          "Soul Core": 1
+        },
+        "type": "Gem",
+        "desc": "Stores captured soul essence",
+        "category": null
+      },
+      {
+        "id": "neck_mana",
+        "n": "Mana Pendant",
+        "lvl": 40,
+        "icon": "📿",
+        "mats": {
+          "Silver Chain": 1,
+          "Sapphire": 2
+        },
+        "type": "Necklace",
+        "desc": "+50 Max Mana",
+        "category": null
+      },
+      {
+        "id": "neck_cosmic",
+        "n": "Heart of the Cosmos",
+        "lvl": 95,
+        "icon": "💫",
+        "mats": {
+          "Divine Chain": 1,
+          "Divine Gem": 3,
+          "Stardust": 10
+        },
+        "type": "Necklace",
+        "desc": "Legendary necklace",
+        "category": null
+      },
+      {
+        "id": "cloth_scholar_head",
+        "n": "Scholar's Hood",
+        "lvl": 1,
+        "icon": "🎓",
+        "mats": {
+          "Linen Fabric": 4
+        },
+        "type": "Armor",
+        "desc": "Scholar Set (1/6): +Int. Knowledge.",
+        "category": null
+      }
+    ]
+  },
+  "chef": {
+    "id": "chef",
+    "name": "Chef",
+    "role": "Culinary Master & Alchemist",
+    "color": "text-orange-500",
+    "icon": "🍲",
+    "bgImage": "/assets/professions/chef_tricolor_cauldron.png",
+    "treeData": [
+      {
+        "id": 1,
+        "n": "Fire Management",
+        "x": 50,
+        "y": 92,
+        "req": 0,
+        "p": null,
+        "branch": "Core",
+        "desc": "Master the art of controlling cooking flames. The foundation of all culinary arts.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 5,
+            "target": "food"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 2,
+        "n": "Ingredient Slicing",
+        "x": 50,
+        "y": 82,
+        "req": 5,
+        "p": 1,
+        "branch": "Core",
+        "desc": "Precise knife work for consistent ingredient preparation.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 8,
+            "target": "food"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "stat",
+        "icon": null
+      },
+      {
+        "id": 3,
+        "n": "Salt Refining",
+        "x": 40,
+        "y": 72,
+        "req": 10,
+        "p": 2,
+        "branch": "Butchery",
+        "desc": "Purify and enhance salt for better preservation and flavor.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 10,
+            "target": "preservation"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 4,
+        "n": "Broth Base",
+        "x": 60,
+        "y": 72,
+        "req": 10,
+        "p": 2,
+        "branch": "Baking",
+        "desc": "Create rich, flavorful broth bases for soups and stews.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 8,
+            "target": "food"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 5,
+        "n": "Cleaver Mastery I",
+        "x": 25,
+        "y": 65,
+        "req": 15,
+        "p": 3,
+        "branch": "Butchery",
+        "desc": "Expert cleaver techniques for processing large cuts of meat.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 12,
+            "target": "meat"
+          },
+          {
+            "type": "materialReduction",
+            "value": 5,
+            "target": "meat"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 6,
+        "n": "Slow Smoking",
+        "x": 10,
+        "y": 60,
+        "req": 20,
+        "p": 5,
+        "branch": "Butchery",
+        "desc": "Master the art of slow-smoking meats for deep flavor penetration.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "smoked"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 7,
+        "n": "Prime Rib Spec",
+        "x": 20,
+        "y": 50,
+        "req": 30,
+        "p": 5,
+        "branch": "Butchery",
+        "desc": "Specialize in preparing premium rib cuts for maximum tenderness.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "meat"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 8,
+        "n": "Wild Game Prep",
+        "x": 30,
+        "y": 45,
+        "req": 35,
+        "p": 7,
+        "branch": "Butchery",
+        "desc": "Techniques for preparing exotic wild game meats.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "game"
+          },
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "game"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 9,
+        "n": "Orcish Barbecue",
+        "x": 5,
+        "y": 45,
+        "req": 40,
+        "p": 6,
+        "branch": "Butchery",
+        "desc": "Learn brutal but effective Orcish grilling techniques.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 20,
+            "target": "grilled"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 10,
+        "n": "Cleaver of Feast",
+        "x": 25,
+        "y": 30,
+        "req": 60,
+        "p": 8,
+        "branch": "Butchery",
+        "desc": "Craft the legendary Cleaver of Feast, a weapon and tool in one.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 6,
+            "target": "weapons"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 11,
+        "n": "Dragon Steak",
+        "x": 15,
+        "y": 15,
+        "req": 85,
+        "p": 10,
+        "branch": "Butchery",
+        "desc": "The ultimate meat dish - seared dragon flank with liquid fire.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "meat"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 25,
+            "target": "meat"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 12,
+        "n": "Goliath Roast",
+        "x": 5,
+        "y": 20,
+        "req": 90,
+        "p": 9,
+        "branch": "Butchery",
+        "desc": "Prepare massive roasts capable of feeding entire armies.",
+        "bonuses": [
+          {
+            "type": "doubleYield",
+            "value": 20,
+            "target": "roasts"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 13,
+        "n": "Basic Dough",
+        "x": 50,
+        "y": 58,
+        "req": 15,
+        "p": 4,
+        "branch": "Baking",
+        "desc": "Master the fundamentals of dough preparation.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 10,
+            "target": "baked"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 14,
+        "n": "Hardtack (Preserve)",
+        "x": 40,
+        "y": 48,
+        "req": 25,
+        "p": 13,
+        "branch": "Baking",
+        "desc": "Create long-lasting hardtack for extended journeys.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 15,
+            "target": "preserved"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 15,
+        "n": "Sugar Work",
+        "x": 60,
+        "y": 48,
+        "req": 30,
+        "p": 13,
+        "branch": "Baking",
+        "desc": "Artistry with sugar for decorative and delicious confections.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 18,
+            "target": "sweets"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 16,
+        "n": "Battle Rations",
+        "x": 50,
+        "y": 40,
+        "req": 45,
+        "p": 15,
+        "branch": "Baking",
+        "desc": "Compact, high-energy rations for warriors in combat.",
+        "bonuses": [
+          {
+            "type": "speedBoost",
+            "value": 15,
+            "target": "rations"
+          },
+          {
+            "type": "materialReduction",
+            "value": 10,
+            "target": "rations"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 17,
+        "n": "Honey Glazing",
+        "x": 45,
+        "y": 30,
+        "req": 55,
+        "p": 16,
+        "branch": "Baking",
+        "desc": "Perfect honey glazes for enhanced flavor and preservation.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 12,
+            "target": "glazed"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 18,
+        "n": "Pastry Mastery",
+        "x": 55,
+        "y": 25,
+        "req": 75,
+        "p": 16,
+        "branch": "Baking",
+        "desc": "Advanced pastry techniques for flaky, delicate creations.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 20,
+            "target": "pastry"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "pastry"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 19,
+        "n": "The Eternal Cake",
+        "x": 50,
+        "y": 10,
+        "req": 95,
+        "p": 18,
+        "branch": "Baking",
+        "desc": "A mythical cake that never spoils and grants divine buffs.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "baked"
+          },
+          {
+            "type": "doubleYield",
+            "value": 15,
+            "target": "baked"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 20,
+        "n": "Spice Extraction",
+        "x": 75,
+        "y": 65,
+        "req": 15,
+        "p": 4,
+        "branch": "Alchemy",
+        "desc": "Extract potent essences from herbs and spices.",
+        "bonuses": [
+          {
+            "type": "materialReduction",
+            "value": 12,
+            "target": "spices"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 21,
+        "n": "Fire Chilli Infusion",
+        "x": 90,
+        "y": 60,
+        "req": 20,
+        "p": 20,
+        "branch": "Alchemy",
+        "desc": "Infuse dishes with magical fire chilli for burn damage buffs.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 15,
+            "target": "fire_food"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 22,
+        "n": "Cold-Press Oils",
+        "x": 80,
+        "y": 50,
+        "req": 30,
+        "p": 20,
+        "branch": "Alchemy",
+        "desc": "Create pure oils that preserve magical properties.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 12,
+            "target": "oils"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 23,
+        "n": "Poison Resistance",
+        "x": 95,
+        "y": 45,
+        "req": 40,
+        "p": 21,
+        "branch": "Alchemy",
+        "desc": "Cook dishes that grant temporary poison immunity.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 18,
+            "target": "antidotes"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 24,
+        "n": "Liquid Essence",
+        "x": 70,
+        "y": 45,
+        "req": 50,
+        "p": 22,
+        "branch": "Alchemy",
+        "desc": "Distill ingredients into their pure liquid essence form.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 20,
+            "target": "potions"
+          },
+          {
+            "type": "materialReduction",
+            "value": 10,
+            "target": "potions"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 25,
+        "n": "Grog Brewing",
+        "x": 80,
+        "y": 35,
+        "req": 60,
+        "p": 24,
+        "branch": "Alchemy",
+        "desc": "Brew powerful grog that enhances strength and courage.",
+        "bonuses": [
+          {
+            "type": "successChance",
+            "value": 15,
+            "target": "brews"
+          },
+          {
+            "type": "speedBoost",
+            "value": 12,
+            "target": "brews"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      },
+      {
+        "id": 26,
+        "n": "Static Shock Herb",
+        "x": 90,
+        "y": 30,
+        "req": 70,
+        "p": 21,
+        "branch": "Alchemy",
+        "desc": "Cultivate herbs infused with lightning energy.",
+        "bonuses": [
+          {
+            "type": "qualityBoost",
+            "value": 18,
+            "target": "lightning_food"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "combat",
+        "icon": null
+      },
+      {
+        "id": 27,
+        "n": "Astral Seasoning",
+        "x": 75,
+        "y": 20,
+        "req": 80,
+        "p": 25,
+        "branch": "Alchemy",
+        "desc": "Season dishes with extracts from astral plane ingredients.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 7,
+            "target": "potions"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "effect",
+        "icon": null
+      },
+      {
+        "id": 28,
+        "n": "Nectar of Gods",
+        "x": 85,
+        "y": 10,
+        "req": 95,
+        "p": 27,
+        "branch": "Alchemy",
+        "desc": "The legendary ambrosia - grants temporary divine powers.",
+        "bonuses": [
+          {
+            "type": "tierUnlock",
+            "value": 8,
+            "target": "potions"
+          },
+          {
+            "type": "qualityBoost",
+            "value": 30,
+            "target": "potions"
+          }
+        ],
+        "unlocks": [],
+        "nodeType": "recipe",
+        "icon": null
+      }
+    ],
+    "recipes": [
+      {
+        "id": 1,
+        "n": "Burnt Skewer",
+        "lvl": 1,
+        "icon": "🍡",
+        "mats": {
+          "Scrap Meat": 1,
+          "Twig": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 2,
+        "n": "Roasted Rabbit",
+        "lvl": 5,
+        "icon": "🐰",
+        "mats": {
+          "Rabbit Meat": 1,
+          "Salt": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 3,
+        "n": "Grilled Sausage",
+        "lvl": 10,
+        "icon": "🌭",
+        "mats": {
+          "Ground Meat": 2,
+          "Casing": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 4,
+        "n": "Smoked Haunch",
+        "lvl": 15,
+        "icon": "🍗",
+        "mats": {
+          "Prime Meat": 1,
+          "Salt": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 5,
+        "n": "Grilled Steak",
+        "lvl": 20,
+        "icon": "🥩",
+        "mats": {
+          "Beef": 2,
+          "Pepper": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 6,
+        "n": "Bacon Strips",
+        "lvl": 22,
+        "icon": "🥓",
+        "mats": {
+          "Pork Belly": 2,
+          "Salt": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 7,
+        "n": "Spiced Ribs",
+        "lvl": 30,
+        "icon": "🍖",
+        "mats": {
+          "Ribs": 3,
+          "Spice": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 8,
+        "n": "Venison Cutlet",
+        "lvl": 35,
+        "icon": "🦌",
+        "mats": {
+          "Deer Meat": 2,
+          "Herbs": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 9,
+        "n": "Wild Boar Roast",
+        "lvl": 40,
+        "icon": "🐗",
+        "mats": {
+          "Boar Meat": 2,
+          "Herbs": 3
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 10,
+        "n": "Braised Lamb",
+        "lvl": 45,
+        "icon": "🐑",
+        "mats": {
+          "Lamb": 3,
+          "Wine": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 11,
+        "n": "Inferno Curry",
+        "lvl": 50,
+        "icon": "🥘",
+        "mats": {
+          "Spicy Herb": 5,
+          "Meat": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 12,
+        "n": "Flame-Seared Boar",
+        "lvl": 55,
+        "icon": "🔥",
+        "mats": {
+          "Boar Meat": 3,
+          "Fire Spice": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 13,
+        "n": "Orcish BBQ Platter",
+        "lvl": 60,
+        "icon": "🍖",
+        "mats": {
+          "Mixed Meats": 5,
+          "Fire Spice": 3
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 14,
+        "n": "Bear Roast",
+        "lvl": 65,
+        "icon": "🐻",
+        "mats": {
+          "Bear Meat": 3,
+          "Honey": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 15,
+        "n": "Wyvern Wings",
+        "lvl": 70,
+        "icon": "🦇",
+        "mats": {
+          "Wyvern Meat": 2,
+          "Hot Sauce": 3
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 16,
+        "n": "Hellfire Steak",
+        "lvl": 75,
+        "icon": "🔥",
+        "mats": {
+          "Demon Beef": 2,
+          "Hellfire Salt": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 17,
+        "n": "Chimera Kebab",
+        "lvl": 80,
+        "icon": "🍢",
+        "mats": {
+          "Chimera Meat": 3,
+          "Exotic Spice": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 18,
+        "n": "Dragon Steak",
+        "lvl": 85,
+        "icon": "🐉",
+        "mats": {
+          "Dragon Flank": 1,
+          "Liquid Fire": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 19,
+        "n": "Phoenix Roast",
+        "lvl": 90,
+        "icon": "🔶",
+        "mats": {
+          "Phoenix Meat": 2,
+          "Eternal Flame": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 20,
+        "n": "Titan's Feast",
+        "lvl": 95,
+        "icon": "⚔️",
+        "mats": {
+          "Giant Meat": 3,
+          "Divine Salt": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "red"
+      },
+      {
+        "id": 21,
+        "n": "Simple Salad",
+        "lvl": 1,
+        "icon": "🥗",
+        "mats": {
+          "Lettuce": 2,
+          "Tomato": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 22,
+        "n": "Vegetable Soup",
+        "lvl": 5,
+        "icon": "🥣",
+        "mats": {
+          "Carrot": 1,
+          "Potato": 1,
+          "Water": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 23,
+        "n": "Herb Bundle",
+        "lvl": 10,
+        "icon": "🌿",
+        "mats": {
+          "Herbs": 3
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 24,
+        "n": "Stuffed Mushroom",
+        "lvl": 15,
+        "icon": "🍄",
+        "mats": {
+          "Large Mushroom": 2,
+          "Cheese": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 25,
+        "n": "Garden Medley",
+        "lvl": 20,
+        "icon": "🥕",
+        "mats": {
+          "Carrot": 2,
+          "Celery": 2,
+          "Onion": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 26,
+        "n": "Cucumber Rolls",
+        "lvl": 25,
+        "icon": "🥒",
+        "mats": {
+          "Cucumber": 3,
+          "Rice": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 27,
+        "n": "Elven Greens",
+        "lvl": 30,
+        "icon": "🌱",
+        "mats": {
+          "Forest Herbs": 3,
+          "Moonpetal": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 28,
+        "n": "Healing Herb Tea",
+        "lvl": 35,
+        "icon": "🍵",
+        "mats": {
+          "Healing Herb": 3,
+          "Hot Water": 1
+        },
+        "type": "Potion",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 29,
+        "n": "Vitality Wrap",
+        "lvl": 40,
+        "icon": "🫔",
+        "mats": {
+          "Leaf Wrap": 2,
+          "Healing Herb": 3
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 30,
+        "n": "Forest Stew",
+        "lvl": 45,
+        "icon": "🥬",
+        "mats": {
+          "Wild Vegetables": 4,
+          "Broth": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 31,
+        "n": "Druid's Feast",
+        "lvl": 50,
+        "icon": "🍀",
+        "mats": {
+          "Sacred Vegetables": 5,
+          "Dew": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 32,
+        "n": "Regeneration Salve",
+        "lvl": 55,
+        "icon": "💚",
+        "mats": {
+          "Regen Herb": 4,
+          "Aloe": 2
+        },
+        "type": "Potion",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 33,
+        "n": "Treant Bark Tea",
+        "lvl": 60,
+        "icon": "🌲",
+        "mats": {
+          "Living Bark": 2,
+          "Spring Water": 1
+        },
+        "type": "Potion",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 34,
+        "n": "Nature's Blessing",
+        "lvl": 65,
+        "icon": "🌳",
+        "mats": {
+          "World Tree Fruit": 2,
+          "Life Essence": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 35,
+        "n": "Fairy Ring Salad",
+        "lvl": 70,
+        "icon": "🧚",
+        "mats": {
+          "Fairy Mushroom": 3,
+          "Dewdrops": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 36,
+        "n": "Life Blossom Soup",
+        "lvl": 75,
+        "icon": "🌸",
+        "mats": {
+          "Life Blossom": 3,
+          "Pure Water": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 37,
+        "n": "Ambrosia Salad",
+        "lvl": 80,
+        "icon": "✨",
+        "mats": {
+          "Divine Greens": 3,
+          "Starfruit": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 38,
+        "n": "Eternal Spring Mix",
+        "lvl": 85,
+        "icon": "🌺",
+        "mats": {
+          "Eternal Petals": 4,
+          "Lifewater": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 39,
+        "n": "World Tree Nectar",
+        "lvl": 90,
+        "icon": "🌳",
+        "mats": {
+          "World Tree Sap": 2,
+          "Divine Pollen": 1
+        },
+        "type": "Potion",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 40,
+        "n": "Divine Restoration",
+        "lvl": 95,
+        "icon": "💎",
+        "mats": {
+          "Divine Herbs": 5,
+          "Holy Water": 2
+        },
+        "type": "Potion",
+        "desc": "",
+        "category": "green"
+      },
+      {
+        "id": 41,
+        "n": "Basic Broth",
+        "lvl": 1,
+        "icon": "🥣",
+        "mats": {
+          "Water": 2,
+          "Salt": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "blue"
+      },
+      {
+        "id": 42,
+        "n": "Wheat Bread",
+        "lvl": 5,
+        "icon": "🍞",
+        "mats": {
+          "Flour": 2,
+          "Water": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "blue"
+      },
+      {
+        "id": 43,
+        "n": "Stamina Brew",
+        "lvl": 10,
+        "icon": "🍺",
+        "mats": {
+          "Grain": 2,
+          "Hops": 1
+        },
+        "type": "Potion",
+        "desc": "",
+        "category": "blue"
+      },
+      {
+        "id": 44,
+        "n": "Warrior's Bread",
+        "lvl": 15,
+        "icon": "🥖",
+        "mats": {
+          "Grain": 3,
+          "Water": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "blue"
+      },
+      {
+        "id": 45,
+        "n": "Fish Stew",
+        "lvl": 20,
+        "icon": "🐟",
+        "mats": {
+          "Fish": 2,
+          "Potato": 2,
+          "Broth": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "blue"
+      },
+      {
+        "id": 46,
+        "n": "Hearty Stew",
+        "lvl": 25,
+        "icon": "🍲",
+        "mats": {
+          "Meat": 2,
+          "Potato": 3,
+          "Broth": 1
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "blue"
+      },
+      {
+        "id": 47,
+        "n": "Honey Bread",
+        "lvl": 30,
+        "icon": "🍯",
+        "mats": {
+          "Flour": 3,
+          "Honey": 2
+        },
+        "type": "Food",
+        "desc": "",
+        "category": "blue"
+      },
+      {
+        "id": 48,
+        "n": "Mana Soup",
+        "lvl": 35,
+        "icon": "🔮",
+        "mats": {
+          "Magic Mushroom": 3,
+          "Arcane Water": 1
+        },
+        "type": "Potion",
+        "desc": "",
+        "category": "blue"
+      }
+    ]
+  }
+}
