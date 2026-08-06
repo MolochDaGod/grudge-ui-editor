@@ -1,6 +1,6 @@
 {
   "name": "grudge-ui-editor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "HYDRA UI kit + game-ui packs + Warlords main-panel host (ui.grudge-studio.com)",
   "packageManager": "npm@10.9.2",
@@ -11,6 +11,22 @@
   "scripts": {
     "dev": "npx --yes serve -l 5179 .",
     "build": "node -e \"console.log('static site — no compile step')\"",
-    "start": "npx --yes serve -l 3000 ."
+    "start": "npx --yes serve -l 3000 .",
+    "extract:wcs": "node scripts/extract-wcs-professions.mjs"
+  },
+  "grudgeUi": {
+    "host": "https://ui.grudge-studio.com",
+    "systems": "/systems.json",
+    "uiAssets": "/ui-assets-ssot.js",
+    "fonts": "/grudge-fonts.css",
+    "packs2d": {
+      "craftpix": "/assets/craftpix/",
+      "cyberpunk": "/assets/cyberpunk/",
+      "rpg": "/assets/rpg/",
+      "fantasy": "/assets/fantasy/"
+    },
+    "iconsCdn": "https://assets.grudge-studio.com/game-assets/icons/",
+    "objectStore": "https://objectstore.grudge-studio.com/api/v1/",
+    "professionBackgrounds": "https://grudgewarlords.com/assets/professions/"
   }
 }

@@ -5,15 +5,17 @@
  *   warlords-crafting-suite/client/src/data/{miner,forester,engineer,mystic,chef}.ts
  * Extracted to: data/wcs-professions.json (node scripts/extract-wcs-professions.mjs)
  *
- * Icons: ObjectStore resource pack + craftpix skill slots + node-type glyphs.
+ * Icons: ui-assets-ssot profession game icons + craftpix node slots.
+ * Backgrounds: grudgewarlords.com/assets/professions (WCS art).
  * Wiring: MainPanelContent.PROFESSION_TREES is replaced after load.
  */
 (function (global) {
   "use strict";
 
+  const UA = global.GrudgeUiAssets || null;
   /** Icons SSOT: assets CDN (not github.io ObjectStore pages). */
-  const CDN = "https://assets.grudge-studio.com";
-  const OS_RES = CDN + "/game-assets/icons/resources";
+  const CDN = (UA && UA.ASSETS) || "https://assets.grudge-studio.com";
+  const OS_RES = CDN + "/game-assets/icons/pack/resources";
   const OS_ICONS = CDN + "/game-assets/icons";
   /** Craftpix skill-book slots (local on ui host) — chrome only, not game data. */
   const PIX = "./assets/craftpix/Spell Book/Slots";
@@ -21,13 +23,13 @@
   /** Canonical 5 WCS professions (order = hub display). */
   const PROFESSION_ORDER = ["miner", "forester", "engineer", "mystic", "chef"];
 
-  /** Profession header icons (wired systems — not random emoji only). */
-  const PROFESSION_ICONS = {
-    miner: `${OS_RES}/Res_80.png`,
-    forester: `${OS_RES}/Res_30.png`,
-    engineer: `${OS_RES}/Res_12.png`,
-    mystic: `${OS_RES}/Res_05.png`,
-    chef: `${OS_RES}/Res_03.png`,
+  /** Profession header icons — icon-registry category profession (not Res_* chips). */
+  const PROFESSION_ICONS = (UA && UA.PROFESSION_ICONS) || {
+    miner: CDN + "/game-assets/icons/professions/miner_profession_game_icon.png",
+    forester: CDN + "/game-assets/icons/professions/forester_profession_game_icon.png",
+    engineer: CDN + "/game-assets/icons/professions/engineer_profession_game_icon.png",
+    mystic: CDN + "/game-assets/icons/professions/mystic_profession_game_icon.png",
+    chef: CDN + "/game-assets/icons/professions/chef_profession_game_icon.png",
   };
 
   const PROFESSION_COLORS = {
@@ -104,7 +106,20 @@
   let _loadPromise = null;
 
   function resolveIconPath(raw, professionId) {
-    if (!raw) return PROFESSION_ICONS[professionId] || PROFESSION_ICONS.miner;
+    // Prefer canonical profession game icons over emoji / Res chips when unset
+    if (!raw || (typeof raw === "string" && (raw.length <= 3 || /^[\u{1F300}-\u{1FAFF}]/u.test(raw)))) {
+      return (
+        (UA && UA.professionIcon?.(professionId)) ||
+        PROFESSION_ICONS[professionId] ||
+        PROFESSION_ICONS.miner
+      );
+    }
+    // Explicit profession path
+    if (typeof raw === "string" && /profession_game_icon/i.test(raw)) {
+      if (/^https?:\/\//i.test(raw)) return raw;
+      const name = raw.split("/").pop();
+      return `${CDN}/game-assets/icons/professions/${name}`;
+    }
     if (global.InfoCatalog?.resolveIconPath) {
       const via = global.InfoCatalog.resolveIconPath(raw);
       if (via) return via;
@@ -115,25 +130,38 @@
         .replace(/https?:\/\/molochdagod\.github\.io\/ObjectStore/gi, CDN)
         .replace(/https?:\/\/info\.grudge-studio\.com\/icons\//gi, CDN + "/icons/")
         .replace(/https?:\/\/objectstore\.grudge-studio\.com/gi, CDN);
-      // resources + skill packs live under game-assets/
       s = s.replace(
-        /^(https?:\/\/assets\.grudge-studio\.com)\/icons\/(resources|skill_nobg|pack)\//i,
+        /^(https?:\/\/assets\.grudge-studio\.com)\/icons\/(resources|skill_nobg|pack|professions)\//i,
         "$1/game-assets/icons/$2/",
       );
       return s;
     }
-    if (/^[\u{1F300}-\u{1FAFF}]/u.test(s) || s.length <= 3) {
-      return null; // emoji — render as text only
-    }
-    if (s.includes("/icons/resources/") || /Res_\d+\.png/i.test(s)) {
+    if (s.includes("/icons/resources/") || s.includes("/icons/pack/resources/") || /Res_\d+\.png/i.test(s)) {
       const name = s.split("/").pop();
       return `${OS_RES}/${name}`;
+    }
+    if (s.startsWith("/icons/professions/")) {
+      return `${CDN}/game-assets${s}`;
     }
     if (s.startsWith("/icons/")) {
       return `${CDN}/game-assets${s}`;
     }
     if (s.startsWith("./") || s.startsWith("assets/")) {
       return s.startsWith("./") ? s : `./${s}`;
+    }
+    return s;
+  }
+
+  function resolveBgImage(raw, professionId) {
+    if (UA && UA.professionBackground) {
+      return UA.professionBackground(professionId, raw);
+    }
+    if (!raw) return null;
+    const s = String(raw);
+    if (/^https?:\/\//i.test(s)) return s;
+    if (s.includes("professions/")) {
+      const file = s.split("/").pop();
+      return `https://grudgewarlords.com/assets/professions/${file}`;
     }
     return s;
   }
@@ -166,6 +194,7 @@
   function normalizeProfession(raw) {
     const id = raw.id || String(raw.name).toLowerCase();
     const iconUrl = resolveIconPath(raw.icon, id) || PROFESSION_ICONS[id];
+    const bgImage = resolveBgImage(raw.bgImage || raw.background, id);
     const emojiFallback =
       id === "miner"
         ? "⛏"
@@ -235,7 +264,7 @@
       colorClass: raw.color,
       emoji: emojiFallback,
       iconUrl,
-      bgImage: raw.bgImage,
+      bgImage,
       nodes,
       tiers,
       recipes,
@@ -284,6 +313,7 @@
         name: p.name,
         emoji: p.emoji,
         iconUrl: p.iconUrl,
+        bgImage: p.bgImage,
         color: p.color,
         role: p.role,
         nodes: p.nodes.map((n) => ({

@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grudge Main Panel ΓÇö Warlords</title>
   <meta name="description" content="Warlords main panel: equipment mesh swap, class/weapon skills, professions, craft, inventory, characters. SSOT ui.grudge-studio.com" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./grudge-fonts.css" />
   <link rel="stylesheet" href="./grudge-shell.css" />
   <link rel="stylesheet" href="./main-panel.css" />
   <script src="https://js.puter.com/v2/" async></script>
   <script src="./grudge-cloud-save.js"></script>
   <script src="./race-portraits.js"></script>
+  <script src="./ui-assets-ssot.js"></script>
   <script src="./info-catalog.js"></script>
   <script src="./item-icons.js"></script>
   <script src="./main-panel-content.js"></script>
@@ -698,7 +698,7 @@
         "Novice";
 
       detail.innerHTML = `
-        <div class="prof-hero" style="--pc:${p.color || "#d4a400"}">
+        <div class="prof-hero" style="--pc:${p.color || "#d4a400"};${p.bgImage ? `--prof-bg:url('${esc(p.bgImage)}')` : ''}">
           ${p.iconUrl ? `<img class="prof-hero-icon" src="${esc(p.iconUrl)}" alt="" />` : `<span class="prof-hero-emoji">${p.emoji || "ΓÜÆ"}</span>`}
           <div>
             <div class="prof-hero-name">${esc(p.name)}</div>

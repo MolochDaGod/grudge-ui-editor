@@ -132,6 +132,18 @@
 .mp-root .prof-hero{display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;border:1px solid color-mix(in srgb,var(--pc,#d4a400) 45%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--pc,#d4a400) 14%,#1a120c),#0c0906)}
 .mp-root .prof-hero-icon{width:48px;height:48px;object-fit:contain;image-rendering:pixelated;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:#0a0806;padding:4px}
 .mp-root .prof-hero-emoji{font-size:32px;line-height:1}
+.mp-root .prof-hero{
+  position:relative;overflow:hidden;
+  background-image:var(--prof-bg,none),linear-gradient(135deg,rgba(20,12,6,.92),rgba(10,8,6,.96));
+  background-size:cover;background-position:center;
+}
+.mp-root .prof-hero::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(10,8,6,.88) 35%,rgba(10,8,6,.55) 100%);
+  pointer-events:none;
+}
+.mp-root .prof-hero > *{position:relative;z-index:1}
+.mp-root .prof-hero-icon{width:48px;height:48px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 2px 4px #000)}
 .mp-root .prof-hero-name{font-family:Cinzel,serif;font-size:14px;color:var(--pc,#d4a400);letter-spacing:.1em;text-transform:uppercase}
 .mp-root .prof-hero-role{font-size:11px;color:var(--text);margin-top:2px}
 .mp-root .prof-hero-meta{font-size:9px;color:var(--muted);margin-top:4px}

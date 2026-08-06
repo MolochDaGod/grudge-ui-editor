@@ -1,0 +1,106 @@
+/**
+ * Grudge UI fonts — fontsource via jsDelivr (no fonts.googleapis.com).
+ * Warlords / main-panel: Cinzel + Crimson Text
+ * Tools (studio, assets): Inter + Space Grotesk + JetBrains Mono
+ */
+
+/* Cinzel — display / headers */
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/cinzel@5.2.5/latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/cinzel@5.2.5/latin-700-normal.woff2") format("woff2");
+}
+
+/* Crimson Text — body */
+@font-face {
+  font-family: "Crimson Text";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/crimson-text@5.2.5/latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Crimson Text";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/crimson-text@5.2.5/latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Crimson Text";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/crimson-text@5.2.5/latin-400-italic.woff2") format("woff2");
+}
+
+/* Inter — tools body */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter@5.2.5/latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter@5.2.5/latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter@5.2.5/latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter@5.2.5/latin-700-normal.woff2") format("woff2");
+}
+
+/* Space Grotesk — tools display */
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@5.2.5/latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@5.2.5/latin-700-normal.woff2") format("woff2");
+}
+
+/* JetBrains Mono */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@5.2.5/latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@5.2.5/latin-500-normal.woff2") format("woff2");
+}

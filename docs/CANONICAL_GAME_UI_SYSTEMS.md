@@ -167,3 +167,17 @@ Skill macros: `SkillMacroSystem` (GrudgeBuilder) binds sequences onto the same s
 - Mix Kenney pixel + craftpix in the same Warlords HUD  
 - Store pack SSOT only in localStorage — use Puter KV / fleet packs  
 - Bypass `ui.grudge-studio.com` for main-panel chrome  
+
+
+## Packages / fonts / icons (2026-08-06)
+
+| Layer | SSOT |
+|-------|------|
+| 2D chrome | `/assets/craftpix/` + craftpix-rpg-ui.css on assets CDN |
+| Fonts | `/grudge-fonts.css` (fontsource / jsDelivr) |
+| Item icons | ObjectStore master-items to assets CDN |
+| Profession icons | game-assets/icons/professions/*_profession_game_icon.png |
+| Profession backgrounds | grudgewarlords.com/assets/professions/ |
+| Module map | ui-assets-ssot.js + systems.json |
+
+Profession headers use `*_profession_game_icon.png` — not Res_* resource chips and not emoji.

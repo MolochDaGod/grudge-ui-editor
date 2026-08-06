@@ -4,9 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Game UI Studio — HYDRA</title>
+  <link rel="stylesheet" href="./grudge-fonts.css" />
 <link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
 <link rel="stylesheet" href="./grudge-shell.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -168,10 +168,31 @@ input,select,textarea{font-family:inherit;}
 .chatt{color:var(--ct);}
 .chatinp{display:flex;gap:3px;padding:3px 5px;border-top:1px solid var(--sb);}
 .chatfake{flex:1;height:15px;background:var(--slot);border:1px solid var(--sb);border-radius:3px;}
-.eqgrid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(4,1fr);gap:3px;padding:5px;height:100%;}
-.eqsl{background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
-.eqsl i{font-size:.58rem;color:var(--ca);}
-.eqn{font-size:.38rem;color:var(--muted);letter-spacing:.04em;}
+/* Sci-fi equipment plate — 5 left + silhouette + 5 right (equipment.png layout) */
+.eqplate{position:relative;width:100%;height:100%;display:flex;flex-direction:column;min-height:0;overflow:hidden;border-radius:6px;}
+.eqplate-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 48%,rgba(40,90,140,.35) 0%,rgba(8,14,24,.95) 55%,rgba(4,8,14,1) 100%);pointer-events:none;}
+.eqplate-bg.use-art{background-image:url('./assets/equipment/equipment-panel.png');background-size:100% 100%;background-position:center;background-repeat:no-repeat;opacity:.95;}
+.eqplate-bg.use-art::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,10,18,.15),rgba(4,10,18,.45));}
+.eqplate-tabs{position:relative;z-index:2;display:flex;gap:2px;padding:6px 8px 0;flex-shrink:0;}
+.eqplate-tab{flex:1;text-align:center;font-size:.48rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#6b7a90);padding:4px 2px;border-radius:4px 4px 0 0;border:1px solid rgba(80,120,160,.25);background:rgba(8,16,28,.55);}
+.eqplate-tab.on{color:var(--ca,#7ec8ff);border-color:rgba(100,180,255,.45);background:rgba(20,50,80,.55);box-shadow:inset 0 -1px 0 rgba(100,180,255,.35);}
+.eqplate-body{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:minmax(56px,72px) 1fr minmax(56px,72px);gap:6px;padding:8px 10px 12px;min-height:0;}
+.eqplate-col{display:flex;flex-direction:column;gap:6px;min-height:0;}
+.eqplate-col-h{font-size:.48rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ca,#7ec8ff);text-align:center;padding:3px 2px;border:1px solid rgba(80,140,200,.35);border-radius:4px;background:linear-gradient(180deg,rgba(30,70,110,.45),rgba(10,24,40,.7));text-shadow:0 0 8px rgba(100,180,255,.35);}
+.eqplate-slots{flex:1;display:flex;flex-direction:column;gap:5px;justify-content:space-between;}
+.eqsl{position:relative;flex:1;min-height:36px;background:linear-gradient(160deg,rgba(18,36,58,.85),rgba(6,12,22,.92));border:1px solid rgba(70,130,190,.4);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:inset 0 0 12px rgba(40,100,160,.15),0 0 0 1px rgba(0,0,0,.4);cursor:pointer;transition:border-color .12s,box-shadow .12s,filter .12s;}
+.eqsl:hover{border-color:rgba(120,190,255,.7);box-shadow:inset 0 0 14px rgba(60,140,220,.25),0 0 10px rgba(60,140,220,.2);filter:brightness(1.08);}
+.eqsl.filled{border-color:rgba(120,200,255,.65);background:linear-gradient(160deg,rgba(28,60,95,.9),rgba(10,22,40,.95));}
+.eqsl i{font-size:.62rem;color:rgba(120,180,230,.55);}
+.eqsl.filled i{color:var(--ca,#7ec8ff);}
+.eqn{font-size:.36rem;color:rgba(140,170,200,.7);letter-spacing:.04em;text-transform:uppercase;}
+.eqsl-ico{position:absolute;inset:5px;width:calc(100% - 10px);height:calc(100% - 10px);object-fit:contain;image-rendering:pixelated;pointer-events:none;}
+.eqplate-center{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;border-radius:8px;overflow:hidden;}
+.eqplate-sil{width:72%;height:88%;max-width:180px;background:radial-gradient(ellipse at 50% 40%,rgba(60,120,180,.25) 0%,transparent 60%),linear-gradient(180deg,rgba(30,50,80,.15),transparent);border-radius:50% 50% 40% 40%;position:relative;}
+.eqplate-sil::before{content:'';position:absolute;left:50%;top:8%;transform:translateX(-50%);width:28%;height:18%;border-radius:50%;background:rgba(80,140,200,.22);box-shadow:0 0 20px rgba(80,160,255,.25);}
+.eqplate-sil::after{content:'';position:absolute;left:50%;top:24%;transform:translateX(-50%);width:48%;height:62%;border-radius:42% 42% 38% 38%;background:linear-gradient(180deg,rgba(70,130,190,.28),rgba(20,40,70,.12));box-shadow:0 0 28px rgba(60,140,220,.2);}
+.eqplate-sil-img{position:absolute;inset:6% 12% 4%;width:76%;height:90%;margin:0 auto;left:0;right:0;object-fit:contain;object-position:center bottom;opacity:.9;filter:drop-shadow(0 0 18px rgba(60,140,220,.45));pointer-events:none;}
+.eqplate-ring{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);width:56%;height:10%;border-radius:50%;border:1px solid rgba(80,160,255,.35);box-shadow:0 0 16px rgba(60,140,220,.35),inset 0 0 12px rgba(40,100,180,.25);pointer-events:none;}
 .stwrap{position:relative;width:100%;height:100%;overflow:hidden;}
 .stnode{position:absolute;width:28px;height:28px;border-radius:50%;background:var(--slot);border:2px solid var(--sb);display:flex;align-items:center;justify-content:center;}
 .stnode.on{background:var(--cb);border-color:var(--ca);}
@@ -639,11 +660,12 @@ const G={
 };
 function lsGet(k){try{return localStorage.getItem(k)||''}catch{return ''}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch{}}
+function escHtml(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 /* ─── DEFS ─── */
 const D={
   'inventory-grid':{l:'Inventory Grid',i:'fa-grip',cat:'Storage',col:'#4ade80',d:'N×M item slots',w:320,h:256,p:{cols:5,rows:4,slotSize:52,gap:3,label:'Inventory'}},
-  'equipment-slots':{l:'Equipment',i:'fa-shirt',cat:'Storage',col:'#4ade80',d:'Gear slots',w:200,h:280,p:{label:'Equipment'}},
+  'equipment-slots':{l:'Equipment',i:'fa-shirt',cat:'Storage',col:'#4ade80',d:'Character plate · 5 slots each side',w:420,h:480,p:{label:'Equipment',leftLabel:'CHARACTER',rightLabel:'EQUIPMENT',slotSize:48,showSilhouette:true}},
   'hotbar':{l:'Hotbar',i:'fa-bars',cat:'Action',col:'#f59e0b',d:'Quick-use bar',w:480,h:64,p:{slots:8,slotSize:54,label:''}},
   'healthbar':{l:'Health Bar',i:'fa-heart',cat:'HUD',col:'#f43f5e',d:'HP bar',w:240,h:28,p:{value:80,max:100,label:'HP',color:'#e11d48'}},
   'manabar':{l:'Mana Bar',i:'fa-droplet',cat:'HUD',col:'#3b82f6',d:'MP bar',w:200,h:22,p:{value:60,max:100,label:'MP',color:'#3b82f6'}},
@@ -742,8 +764,54 @@ function compInner(c){
         <div class="sgrid" style="grid-template-columns:repeat(${cols},${ss}px);gap:${p.gap||3}px">${Array.from({length:cols*rows},(_,i)=>`<div class="gslot" style="width:${ss}px;height:${ss}px"></div>`).join('')}</div>`;
     }
     case 'equipment-slots':{
-      const sl=[{i:'fa-hat-wizard',n:'Head'},{i:'fa-shield',n:'Off'},{i:'fa-ring',n:'Neck'},{i:'fa-vest',n:'Chest'},{i:'fa-hand-fist',n:'Main'},{i:'fa-gem',n:'Ring'},{i:'fa-person',n:'Legs'},{i:'fa-shoe-prints',n:'Feet'},{i:'fa-tag',n:'Trinket'}];
-      return `${p.label?`<div class="gtitle">${p.label}</div>`:''}<div class="eqgrid">${sl.map(s=>`<div class="eqsl"><i class="fa ${s.i}"></i><span class="eqn">${s.n}</span></div>`).join('')}</div>`;
+      // Functional plate matching assets/equipment/equipment-panel.png — 5 left + silhouette + 5 right
+      const left=[
+        {id:'helmet',i:'fa-hat-wizard',n:'Helm'},
+        {id:'shoulders',i:'fa-shield-halved',n:'Pads'},
+        {id:'chest',i:'fa-vest',n:'Chest'},
+        {id:'gloves',i:'fa-hand',n:'Hands'},
+        {id:'legs',i:'fa-person',n:'Legs'},
+      ];
+      const right=[
+        {id:'weapon',i:'fa-hand-fist',n:'Main'},
+        {id:'offhand',i:'fa-shield',n:'Off'},
+        {id:'amulet',i:'fa-gem',n:'Neck'},
+        {id:'ring',i:'fa-ring',n:'Ring'},
+        {id:'cloak',i:'fa-shirt',n:'Back'},
+      ];
+      const items=p.items||{};
+      const L=p.leftLabel||'CHARACTER';
+      const R=p.rightLabel||'EQUIPMENT';
+      const useArt=p.showPlate!==false;
+      const slotBtn=(s,side)=>{
+        const it=items[s.id];
+        const filled=!!it;
+        const ico=it?.iconUrl?`<img class="eqsl-ico" src="${escHtml(it.iconUrl)}" alt=""/>`:`<i class="fa ${s.i}"></i>`;
+        return `<button type="button" class="eqsl ${filled?'filled':''}" data-eq-slot="${s.id}" data-eq-side="${side}" title="${escHtml(it?.name||s.n)}">${ico}<span class="eqn">${escHtml(it?.name?it.name.slice(0,8):s.n)}</span></button>`;
+      };
+      return `<div class="eqplate">
+        <div class="eqplate-bg ${useArt?'use-art':''}"></div>
+        <div class="eqplate-tabs">
+          <div class="eqplate-tab on">Character</div>
+          <div class="eqplate-tab">Equipment</div>
+          <div class="eqplate-tab">Inventory</div>
+          <div class="eqplate-tab">Skills</div>
+        </div>
+        <div class="eqplate-body">
+          <div class="eqplate-col">
+            <div class="eqplate-col-h">${escHtml(L)}</div>
+            <div class="eqplate-slots">${left.map(s=>slotBtn(s,'L')).join('')}</div>
+          </div>
+          <div class="eqplate-center">
+            <div class="eqplate-sil" aria-hidden="true"></div>
+            <div class="eqplate-ring"></div>
+          </div>
+          <div class="eqplate-col">
+            <div class="eqplate-col-h">${escHtml(R)}</div>
+            <div class="eqplate-slots">${right.map(s=>slotBtn(s,'R')).join('')}</div>
+          </div>
+        </div>
+      </div>`;
     }
     case 'hotbar':{
       const n=p.slots||8,ss=Math.min(p.slotSize||54,Math.floor((c.w-14)/n)-4);
@@ -1215,6 +1283,9 @@ function renderCompProps(){
   const si=(k,os)=>`<select class="psel" onchange="upP('${c.id}','${k}',this.value)">${os.map(o=>`<option value="${o.v}" ${p[k]===o.v?'selected':''}>${o.l}</option>`).join('')}</select>`;
   let rows='';
   if(p.label!==undefined) rows+=ri('Label',ii('label','text'));
+  if(p.leftLabel!==undefined) rows+=ri('Left lbl',ii('leftLabel','text'));
+  if(p.rightLabel!==undefined) rows+=ri('Right lbl',ii('rightLabel','text'));
+  if(p.showPlate!==undefined) rows+=ri('Plate art',`<select class="psel" onchange="upP('${c.id}','showPlate',this.value==='true')"><option value="true" ${p.showPlate!==false?'selected':''}>On</option><option value="false" ${p.showPlate===false?'selected':''}>Off</option></select>`);
   if(p.cols!==undefined)  rows+=ri('Columns',ii('cols','number','min="1" max="20"'));
   if(p.rows!==undefined)  rows+=ri('Rows',ii('rows','number','min="1" max="20"'));
   if(p.slots!==undefined) rows+=ri('Slots',ii('slots','number','min="1" max="20"'));
@@ -1282,8 +1353,8 @@ function tpl(n){
     mk('portrait',16,16,96,112,{name:'Grudge',level:12}),
     mk('healthbar',120,24,230,26,{value:80,max:100,label:'HP',color:'#e11d48'}),
     mk('manabar',120,56,190,20,{value:55,max:100,label:'MP',color:'#3b82f6'}),
-    mk('equipment-slots',16,148,190,270,{label:'Equipment'}),
-    mk('inventory-grid',220,16,370,400,{cols:6,rows:6,slotSize:52,gap:3,label:'Inventory'}),
+    mk('equipment-slots',16,80,420,480,{label:'Equipment',leftLabel:'CHARACTER',rightLabel:'EQUIPMENT',showPlate:true}),
+    mk('inventory-grid',450,80,370,400,{cols:6,rows:6,slotSize:52,gap:3,label:'Inventory'}),
     mk('currency-display',220,424,150,30,{amount:12500,label:'Gold'}),
     mk('shop-panel',606,16,270,340,{label:'Shop'}),
   ];}else if(n==='hud'){setMode('hud');setTheme('d');cs=[
@@ -1306,8 +1377,8 @@ function tpl(n){
     mk('healthbar',16,252,200,26,{value:80,max:100,label:'HP',color:'#e11d48'}),
     mk('manabar',16,284,180,22,{value:55,max:100,label:'MP',color:'#3b82f6'}),
     mk('currency-display',16,316,150,28,{amount:22578,label:'Gold'}),
-    mk('equipment-slots',230,16,380,300,{label:'Equipment'}),
-    mk('inventory-grid',230,330,380,300,{cols:5,rows:4,slotSize:52,gap:3,label:'Inventory'}),
+    mk('equipment-slots',16,16,420,480,{label:'Equipment',leftLabel:'CHARACTER',rightLabel:'EQUIPMENT',showPlate:true}),
+    mk('inventory-grid',450,16,380,300,{cols:5,rows:4,slotSize:52,gap:3,label:'Inventory'}),
     mk('skill-tree',626,16,280,280,{label:'Skills'}),
     mk('shop-panel',626,310,280,220,{label:'Shop'}),
     mk('hotbar',Math.floor(W/2)-240,H-74,480,64,{slots:7,slotSize:54}),
@@ -1482,7 +1553,7 @@ function buildHandoffJSON(){
     ai_instructions:'This is a game UI layout exported from HYDRA Game UI Studio. To modify it with AI: import the scene_json below into the studio via Load, then use the AI tab to describe changes. Component types and positions are listed above. All coordinates use a top-left origin at 0,0.',
     schema_reference:{
       'inventory-grid':'props{cols,rows,slotSize,gap,label}',
-      'equipment-slots':'props{label}',
+      'equipment-slots':'props{label,leftLabel,rightLabel,showPlate,items}',
       'hotbar':'props{slots,slotSize,label}',
       'hotbar-2row':'props{slots,slotSize}',
       'healthbar/manabar/xp-bar':'props{value,max,label,color}',

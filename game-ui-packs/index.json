@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "generated": "2026-07-24T17:07:04.518Z",
   "description": "Saved game-ready HYDRA UI packs for Grudge Studio fleet games. Load in Studio or via game-ui-runtime.js.",
   "studioUrl": "https://ui.grudge-studio.com/studio",
@@ -132,33 +132,33 @@
     {
       "id": "player-grass",
       "gameId": "player-grass",
-      "name": "Player & Grass — Stance HUD",
+      "name": "Player & Grass — Danger Room TightBar",
       "file": "./player-grass.json",
       "url": "/game-ui-packs/player-grass.json",
       "playUrl": "https://threejs-player-and-grass.vercel.app/play?char=human&lobby=1",
       "theme": "f",
       "genre": "open-world-action",
       "features": [
+        "tightbar",
         "combat",
         "harvest",
-        "mount",
         "inventory",
-        "weapon-swap",
-        "radial"
+        "minimap"
       ],
       "usageStates": [
         "combat",
         "harvest",
         "mount",
-        "inventory",
-        "radial"
+        "inventory"
       ],
       "tags": [
         "grass",
         "si-scale",
-        "grudge6"
+        "grudge6",
+        "danger-room",
+        "tightbar"
       ],
-      "componentCount": 12
+      "componentCount": 7
     },
     {
       "id": "survival",
@@ -469,5 +469,15 @@
       ],
       "componentCount": 7
     }
-  ]
+  ],
+  "updated": "2026-08-06",
+  "uiAssets": "https://ui.grudge-studio.com/ui-assets-ssot.js",
+  "fontsCss": "https://ui.grudge-studio.com/grudge-fonts.css",
+  "assetRoots": {
+    "craftpix": "/assets/craftpix/",
+    "craftpixRpgCss": "https://assets.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css",
+    "iconsCdn": "https://assets.grudge-studio.com/game-assets/icons/",
+    "professions": "https://assets.grudge-studio.com/game-assets/icons/professions/",
+    "professionBackgrounds": "https://grudgewarlords.com/assets/professions/"
+  }
 }

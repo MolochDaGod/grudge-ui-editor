@@ -1,16 +1,57 @@
 {
-  "version": "1.0.0",
-  "updated": "2026-07-28",
+  "version": "1.1.0",
+  "updated": "2026-08-06",
   "host": "https://ui.grudge-studio.com",
   "doc": "/docs/CANONICAL_GAME_UI_SYSTEMS.md",
   "runtime": "/game-ui-runtime.js",
   "packsIndex": "/game-ui-packs/index.json",
+  "uiAssets": "/ui-assets-ssot.js",
+  "fontsCss": "/grudge-fonts.css",
   "assetRoots": {
     "craftpix": "/assets/craftpix/",
     "craftpixRpgCss": "https://assets.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css",
     "cyberpunk": "/assets/cyberpunk/",
     "rpg": "/assets/rpg/",
-    "fantasy": "/assets/fantasy/"
+    "fantasy": "/assets/fantasy/",
+    "equipment": "/assets/equipment/",
+    "iconsCdn": "https://assets.grudge-studio.com/game-assets/icons/",
+    "iconRegistry": "https://assets.grudge-studio.com/game-assets/api/v1/icon-registry.json",
+    "iconPathIndex": "https://assets.grudge-studio.com/game-assets/api/v1/icon-path-index.json",
+    "objectStore": "https://objectstore.grudge-studio.com/api/v1/",
+    "professionBackgrounds": "https://grudgewarlords.com/assets/professions/",
+    "fonts": "/grudge-fonts.css"
+  },
+  "packages2d": {
+    "craftpix": {
+      "id": "craftpix-ui4",
+      "path": "/assets/craftpix/",
+      "role": "Warlords / grudge6 fantasy HUD chrome",
+      "cdnCss": "https://assets.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css"
+    },
+    "cyberpunk": { "id": "cyberpunk-ui", "path": "/assets/cyberpunk/", "role": "Mech / neon" },
+    "rpg": { "id": "craftpix-rpg-parts", "path": "/assets/rpg/", "role": "RPG part slices" },
+    "fantasy": { "id": "fantasy-frames", "path": "/assets/fantasy/", "role": "Frame kits" },
+    "kenneyPixel": { "id": "kenney-pixel-ui", "role": "VoxGrudge only — not Warlords main-panel" }
+  },
+  "fonts": {
+    "warlords": { "display": "Cinzel", "body": "Crimson Text", "css": "/grudge-fonts.css", "source": "fontsource@jsdelivr" },
+    "tools": { "display": "Space Grotesk", "body": "Inter", "mono": "JetBrains Mono", "css": "/grudge-fonts.css" }
+  },
+  "icons": {
+    "ssot": "assets.grudge-studio.com game-assets + icon-registry",
+    "professions": {
+      "miner": "https://assets.grudge-studio.com/game-assets/icons/professions/miner_profession_game_icon.png",
+      "forester": "https://assets.grudge-studio.com/game-assets/icons/professions/forester_profession_game_icon.png",
+      "engineer": "https://assets.grudge-studio.com/game-assets/icons/professions/engineer_profession_game_icon.png",
+      "mystic": "https://assets.grudge-studio.com/game-assets/icons/professions/mystic_profession_game_icon.png",
+      "chef": "https://assets.grudge-studio.com/game-assets/icons/professions/chef_profession_game_icon.png"
+    },
+    "notSsot": [
+      "emoji as production item/skill art",
+      "molochdagod.github.io/ObjectStore icon pages",
+      "info.grudge-studio.com/api/v1/master-items (404)",
+      "Res_* chips as profession headers (use profession_game_icon)"
+    ]
   },
   "surfaces": {
     "mainPanel": {
@@ -50,6 +91,13 @@
       "url": "/main-panel.html?era=warlords"
     },
     {
+      "id": "professions",
+      "label": "WCS Professions",
+      "icons": "icons/professions/*_profession_game_icon.png",
+      "backgrounds": "grudgewarlords.com/assets/professions/",
+      "data": "data/wcs-professions.json + ObjectStore master-professions"
+    },
+    {
       "id": "hotbar-macros",
       "label": "Hotbar + Skill Macros",
       "slots": { "weapon": "1-5", "consumable": "6-8", "class": "Shift+1-5" },
@@ -84,7 +132,9 @@
     "ui.grudge-studio.com is SSOT — do not host third main-panel/spellbook on random domains",
     "Warlords/grudge6 chrome = craftpix fantasy; VoxGrudge can use Kenney pixel",
     "Interactive input in game client; packs are chrome + layout + bindData",
-    "Prefer ObjectStore skill icons; craftpix Icons 128 as fallback",
+    "Prefer ObjectStore + assets CDN skill icons; craftpix Icons 128 as chrome fallback only",
+    "Profession headers = profession_game_icon; backgrounds = grudgewarlords.com/assets/professions",
+    "Fonts via /grudge-fonts.css (fontsource) — not fonts.googleapis.com",
     "Embed with ?embed=1 to hide studio nav",
     "postMessage: GRUDGE_MAIN_PANEL, GRUDGE_SPELLBOOK, GRUDGE_MESH_EQUIP"
   ]

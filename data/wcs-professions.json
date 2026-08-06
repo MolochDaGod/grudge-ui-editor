@@ -4,7 +4,7 @@
     "name": "Miner",
     "role": "Weaponsmith & Armorsmith",
     "color": "text-amber-500",
-    "icon": "/icons/resources/Res_80.png",
+    "icon": "/icons/professions/miner_profession_game_icon.png",
     "bgImage": "/assets/professions/miner_skill_tree_background_illustrated_style.png",
     "treeData": [
       {
@@ -1387,7 +1387,7 @@
     "name": "Forester",
     "role": "Forester Specialization System",
     "color": "text-green-500",
-    "icon": "🌲",
+    "icon": "/icons/professions/forester_profession_game_icon.png",
     "bgImage": "/assets/professions/forester_skill_tree_background_illustrated_style.png",
     "treeData": [
       {
@@ -2397,7 +2397,7 @@
     "name": "Engineer",
     "role": "Mechanist & Siege Master",
     "color": "text-orange-500",
-    "icon": "🔧",
+    "icon": "/icons/professions/engineer_profession_game_icon.png",
     "bgImage": "/assets/professions/engineer_skill_tree_background_illustrated_style.png",
     "treeData": [
       {
@@ -3650,7 +3650,7 @@
     "name": "Mystic",
     "role": "Arcane Crafter & Enchanter",
     "color": "text-purple-400",
-    "icon": "🔮",
+    "icon": "/icons/professions/mystic_profession_game_icon.png",
     "bgImage": "/assets/professions/mystic_flames_chemistry_background.png",
     "treeData": [
       {
@@ -5244,7 +5244,7 @@
     "name": "Chef",
     "role": "Culinary Master & Alchemist",
     "color": "text-orange-500",
-    "icon": "🍲",
+    "icon": "/icons/professions/chef_profession_game_icon.png",
     "bgImage": "/assets/professions/chef_tricolor_cauldron.png",
     "treeData": [
       {
