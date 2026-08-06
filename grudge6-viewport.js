@@ -1,13 +1,9 @@
 /**
- * grudge6-viewport.js — live Toon RTS race kit in main-panel paperdoll.
+ * grudge6-viewport.js — main-panel Toon RTS GOLDEN kit (lab SSOT).
  *
- * SSOT:
- *   GLB  https://assets.grudge-studio.com/models/grudge6/races/{PREFIX}_Characters.glb
- *   Atlas https://assets.grudge-studio.com/textures/grudge6/{folder}/…
- *   Equip = mesh_ids visibility only (never body GLB swap)
- *   Scale = bone structural box → 1.8 m (NOT unskinned SkinnedMesh AABB)
- *   Face  = +π/2 art-forward once
- *   Ground = feet min.y (not pelvis)
+ * Kit: asset-packs/toon-rts-characters/glb/characters/{raceId}.glb
+ * (same default as info.grudge-studio.com/GRUDGE6_Characters.html)
+ * Equip: mesh_ids visibility · bone SI 1.8 m · no forceAtlas
  */
 (function (global) {
   "use strict";
@@ -19,7 +15,7 @@
   var SkeletonUtils = null;
 
   var RACES = {
-    human: { prefix: "WK", folder: "western-kingdoms", tex: "WK_Standard_Units.webp" },
+    human: { prefix: "WK", folder: "western-kingdoms", tex: "WK_Standard_Units.webp", toonId: "human" },
     barbarian: { prefix: "BRB", folder: "barbarians", tex: "BRB_StandardUnits_texture.webp" },
     elf: { prefix: "ELF", folder: "elves", tex: "ELF_HighElves_Texture.webp" },
     dwarf: { prefix: "DWF", folder: "dwarves", tex: "DWF_Standard_Units.webp" },
@@ -59,7 +55,7 @@
       if (r?.kitGlb && !global.WarlordsCharacter.isBlockedUrl?.(r.kitGlb)) return r.kitGlb;
     }
     var def = RACES[raceKey] || RACES.human;
-    return CDN + "/models/grudge6/races/" + def.prefix + "_Characters.glb";
+    return CDN + "/asset-packs/toon-rts-characters/glb/characters/" + raceKey + ".glb";
   }
 
   function atlasUrl(raceKey) {

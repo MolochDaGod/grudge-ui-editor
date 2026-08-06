@@ -10,7 +10,7 @@ inside the race kit, toggled like uMMORPG paperdoll slots.
 
 | Step | What |
 |------|------|
-| 1. Kit | `https://assets.grudge-studio.com/models/grudge6/races/{WK\|BRB\|ELF\|DWF\|ORC\|UD}_Characters.glb` |
+| 1. Kit | **GOLDEN** `asset-packs/toon-rts-characters/glb/characters/{raceId}.glb` (lab default). Compare-only: `models/grudge6/races/{PREFIX}_Characters.glb` |
 | 2. Equip | `mesh_ids` visibility only — class lists + full catalog |
 | 3. Fit | Bone structural box → **1.8 m** · feet ground · **+π/2** yaw once |
 | 4. Atlas | Only if bake missing: `textures/grudge6/{folder}/*.webp` |
@@ -54,3 +54,9 @@ Complete prefab = **one race kit GLB** + **one mesh_id per exclusive group**.
 
 `warrior` · `mage` · `ranger` · `unarmed`  
 Aliases: worge/knight → warrior · archer → ranger · wizard → mage
+
+
+## Lab
+
+- https://info.grudge-studio.com/GRUDGE6_Characters.html (authoritative UI)
+- https://ui.grudge-studio.com/GRUDGE6_Characters (copy)

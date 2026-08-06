@@ -1,72 +1,85 @@
 /**
- * warlords-character-ssot.js — ONE accurate load path for Warlords-era grudge6 heroes.
+ * warlords-character-ssot.js — Warlords grudge6 heroes (matches GRUDGE6_Characters lab).
  *
- * PURGE / never use:
- *   - models/characters/grudge6/* (stubs)
- *   - models/grudge6/metaverse/*
- *   - *_Characters_customizable.FBX as production browser load
- *   - models/grudge6/atlases/* (404)
- *   - Whole-body GLB swap for equip
- *   - Showing all Body_A–E at once
- *   - Unskinned SkinnedMesh AABB for SI scale (use bones)
- *   - groundYHip / pelvis-as-feet
+ * GOLDEN kit (info.grudge-studio.com/GRUDGE6_Characters.html default):
+ *   asset-packs/toon-rts-characters/glb/characters/{raceId}.glb
+ *   → keep embedded textures (never force-atlas rebind)
  *
- * ONLY:
- *   1. GLB kit:  assets…/models/grudge6/races/{PREFIX}_Characters.glb
- *   2. Atlas:    assets…/textures/grudge6/{folder}/{file}.webp  (if rebind needed)
- *   3. Equip:    mesh_ids visibility (lists below = real node names in those GLBs)
- *   4. Fit:      bone structural → 1.8 m · feet ground · +π/2 art-forward once
+ * Compare bake only (not visual SSOT until it matches Toon):
+ *   models/grudge6/races/{PREFIX}_Characters.glb
+ *
+ * PURGE:
+ *   - models/grudge6/metaverse/* as play default
+ *   - models/characters/grudge6/*
+ *   - FBX as browser play default
+ *   - forceAtlas on good Toon/prod GLBs
+ *   - whole-body GLB swap for equip
  */
 (function (global) {
   "use strict";
 
   var CDN = "https://assets.grudge-studio.com";
   var HUMAN_HEIGHT_M = 1.8;
-  var VERSION = "2026-08-06.warlords-simple";
+  var VERSION = "2026-08-06.toon-rts-golden";
+  var LAB = "https://info.grudge-studio.com/GRUDGE6_Characters.html";
+  var TOON_RTS_CHAR = CDN + "/asset-packs/toon-rts-characters/glb/characters";
 
-  /** Short race id → kit + atlas (stone CDN only). */
+  /** Short race id → GOLDEN Toon RTS kit + stone atlas (fallback only). */
   var RACES = {
     human: {
       id: "human",
       prefix: "WK_",
       label: "Western Kingdoms",
-      kitGlb: CDN + "/models/grudge6/races/WK_Characters.glb",
+      /** GOLDEN — same as Characters lab activeSource=toonRts */
+      kitGlb: TOON_RTS_CHAR + "/human.glb",
+      kitProdCompare: CDN + "/models/grudge6/races/WK_Characters.glb",
       atlasUrl: CDN + "/textures/grudge6/western-kingdoms/WK_Standard_Units.webp",
+      source: "toonRts",
     },
     barbarian: {
       id: "barbarian",
       prefix: "BRB_",
       label: "Barbarians",
-      kitGlb: CDN + "/models/grudge6/races/BRB_Characters.glb",
+      kitGlb: TOON_RTS_CHAR + "/barbarian.glb",
+      kitProdCompare: CDN + "/models/grudge6/races/BRB_Characters.glb",
       atlasUrl: CDN + "/textures/grudge6/barbarians/BRB_StandardUnits_texture.webp",
+      source: "toonRts",
     },
     elf: {
       id: "elf",
       prefix: "ELF_",
       label: "High Elves",
-      kitGlb: CDN + "/models/grudge6/races/ELF_Characters.glb",
+      kitGlb: TOON_RTS_CHAR + "/elf.glb",
+      kitProdCompare: CDN + "/models/grudge6/races/ELF_Characters.glb",
       atlasUrl: CDN + "/textures/grudge6/elves/ELF_HighElves_Texture.webp",
+      source: "toonRts",
     },
     dwarf: {
       id: "dwarf",
       prefix: "DWF_",
       label: "Dwarves",
-      kitGlb: CDN + "/models/grudge6/races/DWF_Characters.glb",
+      kitGlb: TOON_RTS_CHAR + "/dwarf.glb",
+      kitProdCompare: CDN + "/models/grudge6/races/DWF_Characters.glb",
       atlasUrl: CDN + "/textures/grudge6/dwarves/DWF_Standard_Units.webp",
+      source: "toonRts",
     },
     orc: {
       id: "orc",
       prefix: "ORC_",
       label: "Orcs",
-      kitGlb: CDN + "/models/grudge6/races/ORC_Characters.glb",
+      kitGlb: TOON_RTS_CHAR + "/orc.glb",
+      kitProdCompare: CDN + "/models/grudge6/races/ORC_Characters.glb",
       atlasUrl: CDN + "/textures/grudge6/orcs/ORC_StandardUnits.webp",
+      source: "toonRts",
     },
     undead: {
       id: "undead",
       prefix: "UD_",
       label: "Undead",
-      kitGlb: CDN + "/models/grudge6/races/UD_Characters.glb",
+      kitGlb: TOON_RTS_CHAR + "/undead.glb",
+      kitProdCompare: CDN + "/models/grudge6/races/UD_Characters.glb",
       atlasUrl: CDN + "/textures/grudge6/undead/UD_Standard_Units.webp",
+      source: "toonRts",
     },
   };
 
@@ -545,7 +558,11 @@
   global.WarlordsCharacter = {
     VERSION: VERSION,
     CDN: CDN,
+    LAB: LAB,
+    TOON_RTS_CHAR: TOON_RTS_CHAR,
     HUMAN_HEIGHT_M: HUMAN_HEIGHT_M,
+    /** Always prefer Toon RTS pack for fleet play / panel. */
+    GOLDEN_SOURCE: "toonRts",
     RACES: RACES,
     LOADOUTS: LOADOUTS,
     normalizeRace: normalizeRace,

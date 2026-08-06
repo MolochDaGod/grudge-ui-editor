@@ -1,12 +1,12 @@
 {
-  "version": "1.0.0",
-  "generated": "2026-08-06T05:52:32.230Z",
-  "source": "production GLB node tables",
+  "version": "1.1.0",
+  "generated": "2026-08-06T06:28:15.564Z",
+  "golden": "asset-packs/toon-rts-characters/glb/characters/{id}.glb",
+  "lab": "https://info.grudge-studio.com/GRUDGE6_Characters.html",
   "races": {
     "human": {
-      "prefix": "WK_",
-      "kitGlb": "https://assets.grudge-studio.com/models/grudge6/races/WK_Characters.glb",
-      "meshCount": 45,
+      "kitGlb": "https://assets.grudge-studio.com/asset-packs/toon-rts-characters/glb/characters/human.glb",
+      "meshCount": 43,
       "catalog": {
         "body": [
           "WK_Units_Body_A",
@@ -115,9 +115,8 @@
       ]
     },
     "barbarian": {
-      "prefix": "BRB_",
-      "kitGlb": "https://assets.grudge-studio.com/models/grudge6/races/BRB_Characters.glb",
-      "meshCount": 41,
+      "kitGlb": "https://assets.grudge-studio.com/asset-packs/toon-rts-characters/glb/characters/barbarian.glb",
+      "meshCount": 48,
       "catalog": {
         "body": [
           "BRB_body_A",
@@ -236,9 +235,8 @@
       ]
     },
     "elf": {
-      "prefix": "ELF_",
-      "kitGlb": "https://assets.grudge-studio.com/models/grudge6/races/ELF_Characters.glb",
-      "meshCount": 50,
+      "kitGlb": "https://assets.grudge-studio.com/asset-packs/toon-rts-characters/glb/characters/elf.glb",
+      "meshCount": 48,
       "catalog": {
         "body": [
           "ELF_Units_Body_A",
@@ -357,9 +355,8 @@
       ]
     },
     "dwarf": {
-      "prefix": "DWF_",
-      "kitGlb": "https://assets.grudge-studio.com/models/grudge6/races/DWF_Characters.glb",
-      "meshCount": 51,
+      "kitGlb": "https://assets.grudge-studio.com/asset-packs/toon-rts-characters/glb/characters/dwarf.glb",
+      "meshCount": 49,
       "catalog": {
         "body": [
           "DWF_Units_Body_A",
@@ -480,9 +477,8 @@
       ]
     },
     "orc": {
-      "prefix": "ORC_",
-      "kitGlb": "https://assets.grudge-studio.com/models/grudge6/races/ORC_Characters.glb",
-      "meshCount": 51,
+      "kitGlb": "https://assets.grudge-studio.com/asset-packs/toon-rts-characters/glb/characters/orc.glb",
+      "meshCount": 49,
       "catalog": {
         "body": [
           "ORC_Units_Body_A",
@@ -603,9 +599,8 @@
       ]
     },
     "undead": {
-      "prefix": "UD_",
-      "kitGlb": "https://assets.grudge-studio.com/models/grudge6/races/UD_Characters.glb",
-      "meshCount": 53,
+      "kitGlb": "https://assets.grudge-studio.com/asset-packs/toon-rts-characters/glb/characters/undead.glb",
+      "meshCount": 51,
       "catalog": {
         "body": [
           "UD_Units_body_A",
