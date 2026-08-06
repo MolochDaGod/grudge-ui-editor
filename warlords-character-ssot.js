@@ -490,6 +490,58 @@
     return false;
   }
 
+  /** Full equip part lists from production GLBs (optional). */
+  var _meshCatalog = null;
+  function loadMeshCatalog() {
+    if (_meshCatalog) return Promise.resolve(_meshCatalog);
+    return fetch("./data/warlords-mesh-catalog.json", { cache: "force-cache" })
+      .then(function (r) {
+        return r.ok ? r.json() : null;
+      })
+      .then(function (j) {
+        _meshCatalog = j;
+        return j;
+      })
+      .catch(function () {
+        return null;
+      });
+  }
+
+  /**
+   * uMMORPG-style paperdoll → mesh_ids.
+   * slots: { head, body, arms, legs, shoulders, weapon, offhand }
+   * Values are full mesh node names (e.g. WK_Units_Body_C).
+   */
+  function paperdollToMeshIds(race, slots) {
+    var raceN = normalizeRace(race);
+    var def = RACES[raceN] || RACES.human;
+    var base = getLoadout(raceN, "unarmed", true).meshIds.slice();
+    var ids = base.slice();
+    function replaceGroup(pred, nextId) {
+      ids = ids.filter(function (id) {
+        return !pred(id);
+      });
+      if (nextId) ids.push(nextId);
+    }
+    slots = slots || {};
+    if (slots.head) replaceGroup(function (id) { return /head|Head/i.test(id); }, slots.head);
+    if (slots.body) replaceGroup(function (id) { return /Body|body/i.test(id); }, slots.body);
+    if (slots.arms) replaceGroup(function (id) { return /Arms|arms/i.test(id); }, slots.arms);
+    if (slots.legs) replaceGroup(function (id) { return /Legs|legs/i.test(id); }, slots.legs);
+    if (slots.shoulders)
+      replaceGroup(function (id) { return /shoulder|Shoulder/i.test(id); }, slots.shoulders);
+    if (slots.weapon) replaceGroup(function (id) { return /weapon/i.test(id); }, slots.weapon);
+    if (slots.offhand || slots.shield)
+      replaceGroup(function (id) { return /shield|Shield/i.test(id); }, slots.offhand || slots.shield);
+    return {
+      raceId: raceN,
+      prefix: def.prefix,
+      kitGlb: def.kitGlb,
+      atlasUrl: def.atlasUrl,
+      meshIds: ids,
+    };
+  }
+
   global.WarlordsCharacter = {
     VERSION: VERSION,
     CDN: CDN,
@@ -506,6 +558,11 @@
     applyMeshIds: applyMeshIds,
     isBlockedUrl: isBlockedUrl,
     BLOCKED: BLOCKED,
+    loadMeshCatalog: loadMeshCatalog,
+    paperdollToMeshIds: paperdollToMeshIds,
+    get meshCatalog() {
+      return _meshCatalog;
+    },
   };
 
   // Bridge: keep MainPanelContent.meshIdsFor accurate if content loaded first/later
