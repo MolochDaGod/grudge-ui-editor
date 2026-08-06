@@ -18,6 +18,7 @@
   <script src="./fleet-game-systems.js"></script>
   <script src="./wcs-professions-ssot.js"></script>
   <script src="./main-panel-mesh.js"></script>
+  <script src="./grudge6-viewport.js"></script>
   <script src="./equipment-paperdoll.js"></script>
   <script src="./grudge-engine.js"></script>
   <script src="./grudge-shell.js"></script>
@@ -366,6 +367,16 @@
         ent.portrait ||
         window.grudgeHeroImage?.(ent) ||
         window.grudgePortraitForRace?.(ent.race);
+
+      // Live grudge6 kit (GLB + mesh_ids) in paperdoll
+      if (window.Grudge6Viewport?.mount) {
+        Grudge6Viewport.mount(host, {
+          race: ent.race || "human",
+          classId: ent.classId || "warrior",
+          meshIds: lastMeshIds,
+          unarmed: state.unarmed,
+        }).catch((e) => console.warn("[main-panel] grudge6 viewport", e));
+      }
 
       paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
         title: "GRUDGE WARLORD",
