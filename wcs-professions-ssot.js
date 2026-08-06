@@ -11,9 +11,11 @@
 (function (global) {
   "use strict";
 
-  const OS_RES = "https://molochdagod.github.io/ObjectStore/icons/resources";
-  const OS_ICONS = "https://molochdagod.github.io/ObjectStore/icons";
-  /** Craftpix skill-book slots (local on ui host). */
+  /** Icons SSOT: assets CDN (not github.io ObjectStore pages). */
+  const CDN = "https://assets.grudge-studio.com";
+  const OS_RES = CDN + "/game-assets/icons/resources";
+  const OS_ICONS = CDN + "/game-assets/icons";
+  /** Craftpix skill-book slots (local on ui host) — chrome only, not game data. */
   const PIX = "./assets/craftpix/Spell Book/Slots";
 
   /** Canonical 5 WCS professions (order = hub display). */
@@ -103,22 +105,37 @@
 
   function resolveIconPath(raw, professionId) {
     if (!raw) return PROFESSION_ICONS[professionId] || PROFESSION_ICONS.miner;
-    if (String(raw).startsWith("http")) return raw;
-    if (/^[\u{1F300}-\u{1FAFF}]/u.test(String(raw)) || String(raw).length <= 3) {
-      return null; // emoji — render as text
+    if (global.InfoCatalog?.resolveIconPath) {
+      const via = global.InfoCatalog.resolveIconPath(raw);
+      if (via) return via;
     }
-    // /icons/resources/Res_80.png → ObjectStore
-    if (String(raw).includes("/icons/resources/") || /Res_\d+\.png/i.test(raw)) {
-      const name = String(raw).split("/").pop();
+    let s = String(raw);
+    if (/^https?:\/\//i.test(s)) {
+      s = s
+        .replace(/https?:\/\/molochdagod\.github\.io\/ObjectStore/gi, CDN)
+        .replace(/https?:\/\/info\.grudge-studio\.com\/icons\//gi, CDN + "/icons/")
+        .replace(/https?:\/\/objectstore\.grudge-studio\.com/gi, CDN);
+      // resources + skill packs live under game-assets/
+      s = s.replace(
+        /^(https?:\/\/assets\.grudge-studio\.com)\/icons\/(resources|skill_nobg|pack)\//i,
+        "$1/game-assets/icons/$2/",
+      );
+      return s;
+    }
+    if (/^[\u{1F300}-\u{1FAFF}]/u.test(s) || s.length <= 3) {
+      return null; // emoji — render as text only
+    }
+    if (s.includes("/icons/resources/") || /Res_\d+\.png/i.test(s)) {
+      const name = s.split("/").pop();
       return `${OS_RES}/${name}`;
     }
-    if (String(raw).startsWith("/icons/")) {
-      return `${OS_ICONS}${String(raw).replace(/^\/icons/, "")}`;
+    if (s.startsWith("/icons/")) {
+      return `${CDN}/game-assets${s}`;
     }
-    if (String(raw).startsWith("./") || String(raw).startsWith("assets/")) {
-      return raw.startsWith("./") ? raw : `./${raw}`;
+    if (s.startsWith("./") || s.startsWith("assets/")) {
+      return s.startsWith("./") ? s : `./${s}`;
     }
-    return raw;
+    return s;
   }
 
   function titleFor(professionId, level) {

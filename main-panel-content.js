@@ -1,6 +1,10 @@
 /**
- * Main Panel content SSOT — skills, crafts, professions, grudge6 mesh kits.
- * Used by ui.grudge-studio.com/main-panel (Warlords era).
+ * Main Panel content — mesh kits + guest craft stubs.
+ * Canonical game systems load at runtime from ObjectStore:
+ *   fleet-game-systems.js → master-skillTrees + master-weaponSkills
+ *   wcs-professions-ssot.js → WCS profession trees
+ *   info-catalog.js → master-items + materials + CDN icons
+ * CLASS_SKILL_TREES / WEAPON_SKILL_BARS below are offline stubs only.
  */
 (function (global) {
   "use strict";
@@ -17,7 +21,10 @@
     undead: "UD_",
   };
 
-  /** Class skill trees (informational + bindable weapon-class skills). */
+  /**
+   * Offline stubs — replaced by FleetGameSystems.loadCatalog()
+   * from objectstore master-skillTrees.json (emoji is not production art).
+   */
   const CLASS_SKILL_TREES = {
     warrior: {
       name: "Warrior",

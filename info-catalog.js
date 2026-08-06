@@ -1,29 +1,54 @@
-﻿/**
- * Info hub catalog ΓÇö master-items SSOT for icons, equip slots, tooltips.
- * Source: https://info.grudge-studio.com/api/v1/master-items.json
+/**
+ * InfoCatalog — fleet item + icon SSOT for main-panel / paperdoll / bag.
+ *
+ * Canonical sources (in order):
+ *   1. https://objectstore.grudge-studio.com/api/v1/master-items.json
+ *   2. https://molochdagod.github.io/ObjectStore/api/v1/master-items.json (mirror)
+ * Icons:
+ *   assets.grudge-studio.com (+ game-assets prefix) via path rewrite / path-index
+ * Never invent AI icons; never use emoji as production item art.
  */
 (function (global) {
   "use strict";
 
-  var INFO_API = "https://info.grudge-studio.com/api/v1";
   var CDN = "https://assets.grudge-studio.com";
+  var OBJECTSTORE = "https://objectstore.grudge-studio.com/api/v1";
+  var OBJECTSTORE_MIRROR = "https://molochdagod.github.io/ObjectStore/api/v1";
+  var ICON_PATH_INDEX_URL =
+    "https://assets.grudge-studio.com/game-assets/api/v1/icon-path-index.json";
+
+  /** Prefer ObjectStore; info.* /api/v1/master-items is dead (404 / SPA HTML). */
+  var MASTER_ITEM_URLS = [
+    OBJECTSTORE + "/master-items.json",
+    OBJECTSTORE_MIRROR + "/master-items.json",
+  ];
+  var MASTER_MATERIALS_URLS = [
+    OBJECTSTORE + "/master-materials.json",
+    OBJECTSTORE_MIRROR + "/master-materials.json",
+  ];
+
   var ready = null;
   var byId = Object.create(null);
   var byName = Object.create(null);
   var byUuid = Object.create(null);
   var all = [];
+  var pathIndex = null; // /icons/... → { cdnUrl, grudgeUuid }
+  var sourceLabel = "unloaded";
 
-  /** Distinct pack fallbacks (never reuse chest for helm/boots). */
+  /**
+   * Category pack fallbacks (CDN-relative). Prefer game-assets for skill packs;
+   * bare /icons for swords/materials that only exist there.
+   */
   var PACK = {
-    sword: "/game-assets/icons/pack/weapons/Sword_01.png",
-    axe: "/game-assets/icons/pack/weapons/Axe_01.png",
-    dagger: "/game-assets/icons/pack/weapons/Dagger_01.png",
-    hammer: "/game-assets/icons/pack/weapons/Hammer_01.png",
-    spear: "/game-assets/icons/pack/weapons/Spear_01.png",
-    bow: "/game-assets/icons/pack/weapons/Bow_01.png",
-    crossbow: "/game-assets/icons/pack/weapons/Crossbow_01.png",
-    staff: "/game-assets/icons/pack/weapons/Staff_01.png",
-    shield: "/game-assets/icons/pack/weapons/Shield_01.png",
+    sword: "/icons/pack/weapons/Sword_01.png",
+    axe: "/icons/pack/weapons/Axe_01.png",
+    dagger: "/icons/pack/weapons/Dagger_01.png",
+    hammer: "/icons/pack/weapons/Hammer_01.png",
+    spear: "/icons/pack/weapons/Spear_01.png",
+    bow: "/icons/pack/weapons/Bow_01.png",
+    crossbow: "/icons/pack/weapons/Crossbow_01.png",
+    staff: "/icons/pack/weapons/Staff_01.png",
+    shield: "/icons/pack/weapons/Shield_01.png",
     helm: "/icons/armor_full/Helm_01.png",
     chest: "/icons/armor_full/Chest_01.png",
     gloves: "/icons/armor_full/Gloves_01.png",
@@ -34,30 +59,89 @@
     amulet: "/icons/pack/misc/Electro.png",
     potion: "/icons/consumables/health_potion.png",
     food: "/icons/food/54_hotdog.png",
-    ore: "/icons/pack/misc/Burns.png",
+    ore: "/icons/materials/scrap-ore.png",
     wood: "/icons/pack/misc/Burns.png",
     hide: "/icons/pack/misc/Effect.png",
     material: "/icons/pack/misc/Effect.png",
     default: "/icons/pack/misc/Effect.png",
   };
 
-  function abs(path) {
-    if (!path) return CDN + PACK.default;
-    var u = String(path).trim();
-    if (/^(data:|blob:)/i.test(u)) return u;
-    if (/^https?:/i.test(u)) return rewriteIconUrl(u);
-    return CDN + (u.charAt(0) === "/" ? u : "/" + u);
+  function absPack(path) {
+    if (!path) return resolveIconPath(PACK.default);
+    return resolveIconPath(path);
   }
 
-  /** info.* icon paths often serve HTML ΓÇö rewrite to assets CDN binaries. */
+  /**
+   * Normalize any icon ref → CDN URL.
+   * Uses path-index when loaded; otherwise dual-prefix heuristics.
+   */
+  function resolveIconPath(raw) {
+    if (!raw) return CDN + "/icons/pack/misc/Effect.png";
+    var u = String(raw).trim();
+    if (!u) return CDN + "/icons/pack/misc/Effect.png";
+    if (/^(data:|blob:)/i.test(u)) return u;
+
+    // Absolute → strip known bad hosts to path
+    if (/^https?:\/\//i.test(u)) {
+      u = rewriteIconUrl(u);
+      if (/^https?:\/\/assets\.grudge-studio\.com/i.test(u)) return u;
+    }
+
+    // ICON-UUID via path index not available as uuid map here — treat as path
+    var path = u;
+    if (/^ICON-/i.test(u)) {
+      // cannot resolve without full registry entries; leave for path fallbacks
+      return CDN + "/icons/pack/misc/Effect.png";
+    }
+
+    path = path.replace(/^\/+/, "");
+    if (path.indexOf("game-assets/") === 0) return CDN + "/" + path;
+    if (path.indexOf("icons/") !== 0) path = "icons/" + path.replace(/^\/+/, "");
+
+    var norm = "/" + path; // /icons/...
+    if (pathIndex && pathIndex[norm] && pathIndex[norm].cdnUrl) {
+      return pathIndex[norm].cdnUrl;
+    }
+    if (pathIndex && pathIndex.index && pathIndex.index[norm] && pathIndex.index[norm].cdnUrl) {
+      return pathIndex.index[norm].cdnUrl;
+    }
+
+    // skill_nobg / 496 packs live under game-assets only
+    if (/^icons\/(skill_nobg|496_rpg|ability|spell|class)\//i.test(path)) {
+      return CDN + "/game-assets/" + path;
+    }
+    // pack weapons/armor exist under both; prefer game-assets (registry SSOT)
+    if (/^icons\/pack\//i.test(path)) {
+      return CDN + "/game-assets/" + path;
+    }
+    // swords, materials, armor_full, food often on bare /icons/
+    return CDN + "/" + path;
+  }
+
+  /** info.* often HTML-shells icons; github.io ObjectStore → assets CDN. */
   function rewriteIconUrl(url) {
     var u = String(url || "").trim();
-    if (!u) return CDN + PACK.default;
-    return u
+    if (!u) return CDN + "/icons/pack/misc/Effect.png";
+    u = u
       .replace(/https?:\/\/molochdagod\.github\.io\/ObjectStore/gi, CDN)
-      .replace(/https?:\/\/info\.grudge-studio\.com\/icons\//gi, CDN + "/icons/")
+      .replace(/https?:\/\/objectstore\.grudge-studio\.com/gi, CDN)
       .replace(/https?:\/\/info\.grudge-studio\.com\/api\/v1\/icons\//gi, CDN + "/icons/")
-      .replace(/https?:\/\/objectstore\.grudge-studio\.com/gi, CDN);
+      .replace(/https?:\/\/info\.grudge-studio\.com\/icons\//gi, CDN + "/icons/")
+      .replace(/https?:\/\/info\.grudge-studio\.com\/gamedata\/gi, OBJECTSTORE)
+      .replace(/^https?:\/\/assets\.grudge-studio\.com\/api\/assets/i, CDN)
+      .replace(/\/api\/assets\//gi, "/");
+
+    // already assets CDN
+    if (/^https?:\/\/assets\.grudge-studio\.com\//i.test(u)) {
+      // promote paths that only exist under game-assets/
+      u = u.replace(
+        /^(https?:\/\/assets\.grudge-studio\.com)\/icons\/(skill_nobg|496_rpg|resources|pack)\//i,
+        "$1/game-assets/icons/$2/",
+      );
+      return u;
+    }
+    // relative leftover
+    return resolveIconPath(u);
   }
 
   function normKey(s) {
@@ -91,13 +175,9 @@
     if (/wood|plank|log|lumber/.test(s)) return "wood";
     if (/hide|leather|pelt/.test(s)) return "hide";
     if (/mat|fiber|thread|water|stone|crystal/.test(s)) return "material";
-    if (/weapon|sword|axe|bow|staff/.test(s)) return "sword";
     return "default";
   }
 
-  /**
-   * Map catalog / fleet keys ΓåÆ paperdoll slot id.
-   */
   function paperdollSlot(def) {
     if (!def) return null;
     var st = String(def.slotType || def.slot || def.equipSlot || "").toLowerCase();
@@ -119,7 +199,14 @@
     if (st === "mainhand" || st === "main_hand" || st === "weapon") return "weapon";
 
     if (wt === "SHIELD" || cat === "shields" || /shield|bulwark/.test(name.toLowerCase())) return "offhand";
-    if (type === "weapon" || cat.indexOf("sword") >= 0 || cat.indexOf("axe") >= 0 || cat.indexOf("bow") >= 0 || cat.indexOf("staff") >= 0 || cat.indexOf("dagger") >= 0)
+    if (
+      type === "weapon" ||
+      cat.indexOf("sword") >= 0 ||
+      cat.indexOf("axe") >= 0 ||
+      cat.indexOf("bow") >= 0 ||
+      cat.indexOf("staff") >= 0 ||
+      cat.indexOf("dagger") >= 0
+    )
       return "weapon";
     if (type === "armor") {
       var g = categoryGuess(def.id, name, cat, type);
@@ -130,10 +217,9 @@
       if (g === "shoulders") return "cloak";
       return "chest";
     }
-    return null; // material / consumable ΓÇö not equippable
+    return null;
   }
 
-  /** Fleet/panel bag keys used by older SSOT. */
   function fleetSlot(paperSlot) {
     var map = {
       helmet: "Head",
@@ -153,6 +239,9 @@
 
   function indexItem(it) {
     if (!it) return;
+    // rewrite icon at index time so bag always has CDN URL
+    if (it.iconUrl) it.iconUrl = resolveIconPath(it.iconUrl);
+    if (it.icon && !it.iconUrl) it.iconUrl = resolveIconPath(it.icon);
     all.push(it);
     if (it.id) byId[String(it.id).toLowerCase()] = it;
     if (it.uuid) byUuid[String(it.uuid).toLowerCase()] = it;
@@ -163,24 +252,83 @@
     if (bk && !byName[bk]) byName[bk] = it;
   }
 
-  function load() {
-    if (ready) return ready;
-    ready = fetch(INFO_API + "/master-items.json", { mode: "cors", credentials: "omit" })
+  function fetchJsonFirst(urls) {
+    var i = 0;
+    function next() {
+      if (i >= urls.length) return Promise.reject(new Error("all sources failed"));
+      var url = urls[i++];
+      return fetch(url, { mode: "cors", credentials: "omit", cache: "force-cache" }).then(function (r) {
+        if (!r.ok) return next();
+        var ct = (r.headers.get("content-type") || "").toLowerCase();
+        if (ct.indexOf("html") >= 0) return next(); // SPA shell, not JSON
+        return r.json().then(function (j) {
+          if (!j || (typeof j === "object" && j.error)) return next();
+          return { data: j, url: url };
+        });
+      }).catch(function () {
+        return next();
+      });
+    }
+    return next();
+  }
+
+  function loadPathIndex() {
+    return fetch(ICON_PATH_INDEX_URL, { mode: "cors", credentials: "omit", cache: "force-cache" })
       .then(function (r) {
-        if (!r.ok) throw new Error("master-items " + r.status);
+        if (!r.ok) return null;
         return r.json();
       })
-      .then(function (raw) {
+      .then(function (j) {
+        if (!j) return;
+        // support both { index: { path: meta } } and flat path map
+        pathIndex = j.index || j;
+      })
+      .catch(function () {
+        pathIndex = null;
+      });
+  }
+
+  function load() {
+    if (ready) return ready;
+    ready = Promise.all([loadPathIndex(), fetchJsonFirst(MASTER_ITEM_URLS)])
+      .then(function (pair) {
+        var pack = pair[1];
+        var raw = pack.data;
+        sourceLabel = pack.url;
         var items = Array.isArray(raw) ? raw : raw.items || [];
         byId = Object.create(null);
         byName = Object.create(null);
         byUuid = Object.create(null);
         all = [];
         for (var i = 0; i < items.length; i++) indexItem(items[i]);
-        return { count: all.length };
+
+        // optional materials enrich name lookup
+        return fetchJsonFirst(MASTER_MATERIALS_URLS)
+          .then(function (m) {
+            var mats = m.data.materials || m.data.items || [];
+            for (var k = 0; k < mats.length; k++) {
+              var mat = mats[k];
+              if (!mat) continue;
+              indexItem({
+                id: mat.id,
+                uuid: mat.uuid,
+                name: mat.name,
+                type: "material",
+                category: mat.category || "material",
+                tier: mat.tier,
+                iconUrl: mat.iconUrl || mat.icon,
+                description: mat.description || (mat.gatheredBy ? "Gathered by " + mat.gatheredBy : ""),
+              });
+            }
+            return { count: all.length, source: sourceLabel };
+          })
+          .catch(function () {
+            return { count: all.length, source: sourceLabel };
+          });
       })
       .catch(function (err) {
         console.warn("[InfoCatalog] load failed", err);
+        sourceLabel = "error";
         return { count: 0, error: String(err && err.message) };
       });
     return ready;
@@ -196,7 +344,6 @@
     if (id && byUuid[String(id).toLowerCase()]) return byUuid[String(id).toLowerCase()];
     var nk = normKey(name);
     if (nk && byName[nk]) return byName[nk];
-    // fuzzy: strip T2/T3 suffix
     var base = nk.replace(/\s+t\d+$/, "").replace(/\s+tier\s*\d+$/, "");
     if (base && byName[base]) return byName[base];
     return null;
@@ -205,9 +352,9 @@
   function resolveIcon(opts) {
     opts = opts || {};
     var def = lookup(opts);
-    var explicit = opts.iconUrl || opts.icon || (def && def.iconUrl);
+    var explicit = opts.iconUrl || opts.icon || (def && (def.iconUrl || def.icon));
     if (explicit && String(explicit).trim()) {
-      return abs(String(explicit).trim());
+      return resolveIconPath(String(explicit).trim());
     }
     var cat = categoryGuess(
       opts.itemId || opts.id || (def && def.id),
@@ -227,21 +374,25 @@
       else if (st === "necklace" || st === "relic") cat = "amulet";
       else if (st === "offhand") cat = "shield";
     }
-    return CDN + (PACK[cat] || PACK.default);
+    return absPack(PACK[cat] || PACK.default);
   }
 
   function imgTag(url, alt, size) {
     size = size || 28;
+    var fb = absPack(PACK.default);
+    var safe = String(url || fb).replace(/"/g, "");
     return (
       '<img class="item-icon" src="' +
-      esc(url) +
+      safe +
       '" alt="' +
       esc(alt || "") +
       '" width="' +
       size +
       '" height="' +
       size +
-      '" loading="lazy" decoding="async" referrerpolicy="no-referrer" draggable="false" onerror="this.style.opacity=.25" />'
+      '" loading="lazy" decoding="async" referrerpolicy="no-referrer" draggable="false" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'' +
+      fb +
+      "'}\" />"
     );
   }
 
@@ -276,10 +427,9 @@
       .map(function (k) {
         return k + ": " + stats[k];
       })
-      .join(" ┬╖ ");
+      .join(" · ");
   }
 
-  /** Rich HTML tooltip body (same fields as info hub cards). */
   function tooltipHtml(opts) {
     opts = opts || {};
     var def = lookup(opts) || {};
@@ -299,7 +449,7 @@
     lines.push('<div class="itt-name r-' + rarity + '">' + esc(name) + "</div>");
     lines.push(
       '<div class="itt-sub">' +
-        esc([type, tier, slot ? "slot: " + slot : ""].filter(Boolean).join(" ┬╖ ")) +
+        esc([type, tier, slot ? "slot: " + slot : ""].filter(Boolean).join(" · ")) +
         "</div>",
     );
     lines.push("</div></div>");
@@ -310,10 +460,8 @@
     if (def.setBonus) lines.push('<div class="itt-extra">Set: ' + esc(def.setBonus) + "</div>");
     if (def.buff) lines.push('<div class="itt-extra">Buff: ' + esc(String(def.buff)) + "</div>");
     if (craft) lines.push('<div class="itt-meta">' + esc(craft) + "</div>");
-    if (opts.qty > 1) lines.push('<div class="itt-meta">Quantity ├ù' + esc(opts.qty) + "</div>");
-    lines.push(
-      '<div class="itt-foot">info.grudge-studio.com ┬╖ master-items</div>',
-    );
+    if (opts.qty > 1) lines.push('<div class="itt-meta">Quantity ×' + esc(opts.qty) + "</div>");
+    lines.push('<div class="itt-foot">ObjectStore master-items · assets CDN</div>');
     return lines.join("");
   }
 
@@ -326,7 +474,7 @@
     if (def.description) parts.push(def.description);
     var st = formatStats(def.stats);
     if (st) parts.push(st);
-    return parts.join(" ΓÇö ");
+    return parts.join(" — ");
   }
 
   function enrichBagItem(row) {
@@ -353,15 +501,16 @@
     return out;
   }
 
-  /** Demo / starter rows mapped to real catalog items where possible. */
+  /** Guest bag: real catalog items + materials (icons from CDN SSOT). */
   function starterBagFromCatalog() {
     var picks = [
       { name: "Minor Health Potion", qty: 5 },
-      { name: "Burnt Skewer", qty: 4 },
       { name: "Training Sword", qty: 1 },
       { name: "Hand Axe", qty: 1 },
       { name: "Bloodfeud Helm", qty: 1 },
       { name: "Grudge Bulwark", qty: 1 },
+      { name: "Scrap Ore", qty: 12 },
+      { name: "Burnt Skewer", qty: 4 },
     ];
     var bag = [];
     for (var i = 0; i < picks.length; i++) {
@@ -377,15 +526,19 @@
         );
       }
     }
-    // materials (may not be in master-items ΓÇö keep fallbacks)
+    // materials by id when name miss
     var mats = [
-      { id: "ore_iron", name: "Iron Ore", qty: 12, category: "ore" },
+      { id: "scrap-ore", name: "Scrap Ore", qty: 12, category: "ore" },
       { id: "plank", name: "Oak Plank", qty: 16, category: "wood" },
       { id: "herb_green", name: "Green Herb", qty: 8, category: "food" },
       { id: "leather", name: "Leather", qty: 10, category: "hide" },
       { id: "stone", name: "Stone", qty: 20, category: "material" },
     ];
     for (var j = 0; j < mats.length; j++) {
+      if (bag.some(function (b) {
+        return normKey(b.name) === normKey(mats[j].name);
+      }))
+        continue;
       bag.push(
         enrichBagItem({
           id: mats[j].id,
@@ -405,6 +558,7 @@
     lookup: lookup,
     resolve: resolveIcon,
     resolveIcon: resolveIcon,
+    resolveIconPath: resolveIconPath,
     imgTag: imgTag,
     paperdollSlot: paperdollSlot,
     fleetSlot: fleetSlot,
@@ -415,7 +569,10 @@
     rarityFromTier: rarityFromTier,
     rewriteIconUrl: rewriteIconUrl,
     CDN: CDN,
-    INFO_API: INFO_API,
+    OBJECTSTORE: OBJECTSTORE,
+    get source() {
+      return sourceLabel;
+    },
     get ready() {
       return ready;
     },
@@ -424,11 +581,13 @@
     },
   };
 
-  // Browser-compatible item icon API used by paperdoll / legacy pages
   global.GrudgeItemIcons = {
     CDN: CDN,
     resolve: function (opts) {
       return resolveIcon(opts);
+    },
+    fallback: function () {
+      return absPack(PACK.default);
     },
     imgTag: imgTag,
     categoryFromId: function (id, name) {
@@ -436,6 +595,5 @@
     },
   };
 
-  // Auto-load
   load();
 })(typeof window !== "undefined" ? window : globalThis);

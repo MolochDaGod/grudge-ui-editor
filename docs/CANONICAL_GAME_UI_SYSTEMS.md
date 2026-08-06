@@ -111,6 +111,17 @@ ui.bindData({ pf1: { name: 'Korgath', hp: 900, hpMax: 1000 } });
 4. Spell Book tab glyphs: Flame / Shield / Sword under `assets/craftpix/Spell Book/Tabs/`.
 5. Rarity slots: Dialog_Rewards_ItemSlot_{White,Green,Blue,Purple,Orange}.
 
+### Main panel data SSOT (2026-08)
+
+| Concern | Canonical source | Not SSOT |
+|---------|------------------|----------|
+| Items + bag icons | `objectstore…/master-items.json` + `master-materials.json` via `info-catalog.js` | `info…/api/v1/master-items` (404), emoji |
+| Icon binaries | `assets.grudge-studio.com` (+ `game-assets/` for skill packs) | `molochdagod.github.io/ObjectStore` pages |
+| Class skills | `objectstore…/master-skillTrees.json` via `fleet-game-systems.js` | Hard-coded emoji trees in content stubs |
+| Weapon skills | `objectstore…/master-weaponSkills.json` via `fleet-game-systems.js` | Local WEAPON_SKILL_BARS stubs |
+| Professions | WCS extract `data/wcs-professions.json` + CDN `icons/resources` | github.io icon hosts |
+| Account bag | Railway via `GrudgeEngine.getInventory` | Demo starter bag (guest only) |
+
 ---
 
 ## Hotkey SSOT (Warlords / grudge6)
