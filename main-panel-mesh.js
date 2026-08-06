@@ -237,10 +237,18 @@
       }
     }
     const built = MPC ? MPC.meshIdsFor(race, classId, !Object.keys(weaponSlots).length) : null;
+    const raceDef = global.WarlordsCharacter?.getRace?.(race);
+    const kitGlb =
+      built?.kitGlb ||
+      raceDef?.kitGlb ||
+      `https://assets.grudge-studio.com/models/grudge6/races/${String(prefix).replace(/_$/, "")}_Characters.glb`;
     return {
-      baseModelId: `${prefix}Characters_customizable`,
+      baseModelId: kitGlb,
+      kitGlb,
+      atlasUrl: built?.atlasUrl || raceDef?.atlasUrl || null,
       grudge6: true,
       renderPipeline: "grudge6",
+      era: "warlords",
       equippedMeshes,
       weaponSlots,
       meshIds: built?.meshIds || [],

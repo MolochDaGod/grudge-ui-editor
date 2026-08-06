@@ -319,47 +319,24 @@
   ];
 
   /**
-   * grudge6 starting mesh kits per race×class (Unity visibility names).
-   * Maps to EquipmentManager mesh_ids / paperdoll mesh layer.
+   * mesh_ids — Warlords SSOT only (warlords-character-ssot.js).
+   * No invented letter kits; exact GLB node names per race×class.
    */
-  const CLASS_MESH_KITS = {
-    warrior: {
-      body: "C", arms: "B", legs: "B", head: "D", shoulders: "A",
-      weapon: "sword", weaponVar: "B", offhand: "shield", offhandVar: "B",
-      weaponType: "sword",
-    },
-    mage: {
-      body: "A", arms: "A", legs: "A", head: "A", shoulders: null,
-      weapon: "staff", weaponVar: "C", offhand: null, offhandVar: null,
-      weaponType: "staff",
-    },
-    ranger: {
-      body: "B", arms: "B", legs: "B", head: "C", shoulders: "A",
-      weapon: "bow", weaponVar: "_default", offhand: null, offhandVar: null,
-      weaponType: "bow",
-    },
-    worge: {
-      body: "B", arms: "B", legs: "B", head: "C", shoulders: null,
-      weapon: "sword", weaponVar: "A", offhand: "staff", offhandVar: "B",
-      weaponType: "sword",
-    },
-  };
-  CLASS_MESH_KITS.worg = CLASS_MESH_KITS.worge;
-
-  const UNARMED_MESH = {
-    body: "B", arms: "A", legs: "A", head: "A", shoulders: null,
-    weapon: null, weaponVar: null, offhand: null, offhandVar: null,
-    weaponType: "unarmed",
-  };
-
   function normalizeClass(cls) {
+    if (global.WarlordsCharacter?.normalizeClass) {
+      return global.WarlordsCharacter.normalizeClass(cls);
+    }
     const c = String(cls || "warrior").toLowerCase();
-    if (c === "worg" || c === "worge") return "worge";
-    if (CLASS_MESH_KITS[c]) return c;
-    return "warrior";
+    if (c === "worg" || c === "worge" || c === "knight") return "warrior";
+    if (c === "archer") return "ranger";
+    if (c === "wizard") return "mage";
+    return c === "mage" || c === "ranger" || c === "unarmed" ? c : "warrior";
   }
 
   function normalizeRace(race) {
+    if (global.WarlordsCharacter?.normalizeRace) {
+      return global.WarlordsCharacter.normalizeRace(race);
+    }
     const r = String(race || "human").toLowerCase().replace(/[^a-z]/g, "");
     if (r.includes("barb")) return "barbarian";
     if (r.includes("dwarf")) return "dwarf";
@@ -369,69 +346,26 @@
     return "human";
   }
 
-  /** Build mesh_ids list for race + class (Unity child mesh names). */
   function meshIdsFor(race, classId, unarmed) {
-    const raceN = normalizeRace(race);
-    const prefix = RACE_PREFIX[raceN] || "WK_";
-    const kit = unarmed ? UNARMED_MESH : CLASS_MESH_KITS[normalizeClass(classId)] || UNARMED_MESH;
-    const ids = [];
-    const bodyStyle = raceN === "barbarian" ? "short" : "units";
-
-    function pushArmor(slot, letter) {
-      if (!letter) return;
-      if (bodyStyle === "short") {
-        // BRB_head_A style
-        const map = { head: "head", body: "body", arms: "arms", legs: "legs", shoulders: "shoulderpads" };
-        ids.push(`${prefix}${map[slot] || slot}_${letter}`);
-      } else if (raceN === "undead") {
-        const map = { head: "Units_head", body: "Units_body", arms: "Units_arms", legs: "Units_legs", shoulders: "Units_shoulderpads" };
-        ids.push(`${prefix}${map[slot]}_${letter}`);
-      } else {
-        const map = {
-          head: "Units_head",
-          body: "Units_Body",
-          arms: "Units_Arms",
-          legs: "Units_Legs",
-          shoulders: "Units_shoulderpads",
-        };
-        // Dwarf uses Title case Head/Body
-        if (raceN === "dwarf") {
-          const dmap = {
-            head: "Units_Head",
-            body: "Units_Body",
-            arms: "Units_Arms",
-            legs: "Units_Legs",
-            shoulders: "Units_Shoulderpads",
-          };
-          ids.push(`${prefix}${dmap[slot]}_${letter}`);
-        } else {
-          ids.push(`${prefix}${map[slot]}_${letter}`);
-        }
-      }
+    if (global.WarlordsCharacter?.meshIdsFor) {
+      return global.WarlordsCharacter.meshIdsFor(race, classId, unarmed);
     }
-
-    pushArmor("head", kit.head);
-    pushArmor("body", kit.body);
-    pushArmor("arms", kit.arms);
-    pushArmor("legs", kit.legs);
-    pushArmor("shoulders", kit.shoulders);
-
-    if (kit.weapon) {
-      if (kit.weapon === "bow") ids.push(`${prefix}weapon_Bow`, `${prefix}Xtra_quiver`);
-      else if (kit.weaponVar && kit.weaponVar !== "_default") {
-        ids.push(`${prefix}weapon_${kit.weapon}_${kit.weaponVar}`);
-      } else {
-        ids.push(`${prefix}weapon_${kit.weapon}`);
-      }
-    }
-    if (kit.offhand === "shield" && kit.offhandVar) {
-      ids.push(`${prefix}Shield_${kit.offhandVar}`);
-    }
-    if (kit.offhand === "staff" && kit.offhandVar) {
-      ids.push(`${prefix}weapon_staff_${kit.offhandVar}`);
-    }
-
-    return { prefix, kit, meshIds: ids, weaponType: kit.weaponType };
+    // Minimal WK warrior fallback if SSOT script missing
+    return {
+      prefix: "WK_",
+      kit: { weaponType: "sword" },
+      meshIds: [
+        "WK_Units_head_D",
+        "WK_Units_Body_C",
+        "WK_Units_Arms_B",
+        "WK_Units_Legs_B",
+        "WK_Units_shoulderpads_A",
+        "WK_weapon_sword_B",
+        "WK_Shield_B",
+      ],
+      weaponType: "sword",
+      kitGlb: "https://assets.grudge-studio.com/models/grudge6/races/WK_Characters.glb",
+    };
   }
 
   /** Convert model3d equippedMeshes+weaponSlots → paperdoll equipment bag. */
@@ -491,8 +425,6 @@
     PROFESSION_TREES,
     CRAFT_RECIPES,
     STARTER_BAG,
-    CLASS_MESH_KITS,
-    UNARMED_MESH,
     normalizeClass,
     normalizeRace,
     meshIdsFor,

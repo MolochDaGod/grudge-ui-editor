@@ -43,6 +43,7 @@
   };
 
   function normRace(race) {
+    if (global.WarlordsCharacter?.normalizeRace) return global.WarlordsCharacter.normalizeRace(race);
     var r = String(race || "human").toLowerCase().replace(/[^a-z]/g, "");
     if (r.includes("barb")) return "barbarian";
     if (r.includes("dwarf")) return "dwarf";
@@ -53,6 +54,10 @@
   }
 
   function kitUrl(raceKey) {
+    if (global.WarlordsCharacter?.getRace) {
+      var r = global.WarlordsCharacter.getRace(raceKey);
+      if (r?.kitGlb && !global.WarlordsCharacter.isBlockedUrl?.(r.kitGlb)) return r.kitGlb;
+    }
     var def = RACES[raceKey] || RACES.human;
     return CDN + "/models/grudge6/races/" + def.prefix + "_Characters.glb";
   }
@@ -178,42 +183,26 @@
   }
 
   function applyMeshIds(root, meshIds) {
+    if (global.WarlordsCharacter?.applyMeshIds) {
+      return global.WarlordsCharacter.applyMeshIds(root, meshIds);
+    }
     var wanted = (meshIds || []).map(String).filter(Boolean);
     var all = [];
     root.traverse(function (o) {
       if (o.isMesh || o.isSkinnedMesh) all.push(o);
     });
     for (var i = 0; i < all.length; i++) all[i].visible = false;
-
     var matched = [];
-    var missing = [];
     for (var w = 0; w < wanted.length; w++) {
-      var id = wanted[w];
-      var hit = null;
       for (var m = 0; m < all.length; m++) {
-        if (meshMatchesId(all[m].name, id)) {
-          hit = all[m];
+        if (meshMatchesId(all[m].name, wanted[w])) {
+          all[m].visible = true;
+          matched.push(all[m].name);
           break;
         }
       }
-      if (hit) {
-        hit.visible = true;
-        matched.push(hit.name);
-      } else missing.push(id);
     }
-
-    // Fallback: one body variant if nothing matched
-    if (!matched.length) {
-      console.warn("[grudge6-viewport] mesh_ids miss", wanted);
-      for (var j = 0; j < all.length; j++) {
-        var n = all[j].name || "";
-        if (/Body_A|body_A|Units_Body_A/i.test(n)) all[j].visible = true;
-        if (/Arms_A|arms_A/i.test(n)) all[j].visible = true;
-        if (/Legs_A|legs_A/i.test(n)) all[j].visible = true;
-        if (/head_A|Head_A|Units_head_A/i.test(n)) all[j].visible = true;
-      }
-    }
-    return { matched: matched, missing: missing };
+    return { matched: matched, missing: [] };
   }
 
   function normalizeMaps(root) {
@@ -396,13 +385,13 @@
 
       var raceKey = normRace(opts.race);
       var meshIds = opts.meshIds || [];
-      if (!meshIds.length && global.MainPanelContent) {
-        var built = global.MainPanelContent.meshIdsFor(
-          raceKey,
-          opts.classId || "warrior",
-          !!opts.unarmed,
-        );
-        meshIds = built.meshIds || [];
+      if (!meshIds.length) {
+        var built =
+          (global.WarlordsCharacter &&
+            global.WarlordsCharacter.meshIdsFor(raceKey, opts.classId || "warrior", !!opts.unarmed)) ||
+          (global.MainPanelContent &&
+            global.MainPanelContent.meshIdsFor(raceKey, opts.classId || "warrior", !!opts.unarmed));
+        meshIds = (built && built.meshIds) || [];
       }
 
       // Avoid reload same race if only mesh ids change
