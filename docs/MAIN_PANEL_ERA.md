@@ -53,17 +53,19 @@ Routes:
 [ ] Island3D C/I hotkey optional open MainPanelHost
 ```
 
-## Crafting tab (native — not iframe)
+## Crafting tab (wired to grudgewarlords.com/craft)
 
 | Concern | Rule |
 |---------|------|
-| **In-panel craft** | Native recipe grid + materials rail in `#tab-craft` |
-| **Full suite** | Pop-out only → `https://grudgewarlords.com/craft/` (+ SSO query) |
-| **Why no iframe** | Warlords craft sends `X-Frame-Options: SAMEORIGIN` — empty/blocked frame |
-| **Bag scope** | **Account** bag (Railway `/api/account/*`) shared across characters |
-| **XP scope** | **Active character** profession progress only |
-| **Icons** | `InfoCatalog` → ObjectStore items + `assets.grudge-studio.com` icons |
-| **Recipes** | Quick stubs in `main-panel-content.js` + WCS via `wcs-professions-ssot.js` |
+| **Full suite (SSOT)** | **Embed** `/craft/?embed=1&from=ui-main-panel` + SSO postMessage |
+| **Quick rail** | Optional native recipes (`Quick` button) — not a second bag |
+| **Pop-out** | Always available |
+| **WCS brand hub** | `wcs.grudge-studio.com` — routes only |
+| **Frame policy** | Suite CSP `frame-ancestors` allows ui/info (no XFO on `/craft`) |
+| **Bag scope** | Railway account bag — suite authority; `GRUDGE_BAG` syncs panel |
+| **XP scope** | Active character only |
+| **Code** | GrudgeBuilder `craftSsot.ts` · `docs/CRAFT_INVENTORY_SSOT.md` |
+| **info mirror** | Same suite URL; prefer **ui host** for paperdoll SSOT |
 
 ## Paperdoll hero facing
 
@@ -93,5 +95,6 @@ Do **not** continuous-spin the paperdoll (backs half the time). Gentle idle sway
 - Host a third main-panel on a random Replit URL  
 - Invent a second equipment slot schema outside Railway character.equipment  
 - Replace paperdoll with a plain bag-only tab for Warlords  
-- Embed `grudgewarlords.com/craft` in an iframe (blocked — always pop out)  
+- Point craft at Puter legacy host (`grudge-crafting.puter.site`) as SSOT  
+- Invent a second Railway bag only for main-panel  
 - Face paperdoll with continuous Y spin or FBX π/2 author yaw 

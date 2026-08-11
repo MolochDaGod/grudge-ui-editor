@@ -150,32 +150,50 @@
                   <span id="craft-auth-status" class="craft-auth-pill">Connecting…</span>
                 </div>
                 <div class="craft-toolbar-right">
-                  <button type="button" class="mp-btn ghost" id="btn-craft-reload" title="Reload recipes &amp; bag">↻</button>
+                  <button type="button" class="mp-btn ghost" id="btn-craft-reload" title="Reload suite + recipes">↻</button>
+                  <button type="button" class="mp-btn" id="btn-craft-quick" title="Toggle quick recipes">Quick</button>
                   <button type="button" class="mp-btn ghost" id="btn-craft-popout" title="Open full suite (new tab)">↗ Full suite</button>
                   <button type="button" class="mp-btn primary" id="btn-craft-login" title="Sign in with Grudge ID">Sign in</button>
                 </div>
               </div>
               <p class="craft-sub">
-                Native panel recipes · shared <strong>account bag</strong> · profession XP on active character ·
-                full suite opens in a new tab (Warlords blocks iframe embed)
+                Production suite: <strong>grudgewarlords.com/craft</strong> · shared Railway <strong>account bag</strong> ·
+                XP on active character · same JWT as this panel
               </p>
-              <div class="craft-layout">
-                <div class="craft-main">
-                  <div class="craft-filter" id="craft-filter"></div>
-                  <div id="craft-host" class="qc-grid craft-grid"></div>
-                  <p id="craft-log" class="craft-log"></p>
+              <div class="craft-frame-wrap">
+                <iframe
+                  id="craft-suite-frame"
+                  title="Warlords Crafting Suite"
+                  src="about:blank"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  allow="clipboard-read; clipboard-write"
+                ></iframe>
+                <div id="craft-frame-overlay" class="craft-frame-overlay" hidden>
+                  <p id="craft-frame-msg">Loading craft suite…</p>
+                  <button type="button" class="mp-btn primary" id="btn-craft-open-fallback">Open suite in new tab</button>
                 </div>
-                <aside class="craft-side" aria-label="Craft materials">
-                  <div class="craft-side-head">
-                    <h4>Materials</h4>
-                    <span id="craft-bag-meta" class="craft-bag-meta">—</span>
+              </div>
+              <div id="craft-quick-panel" class="craft-quick-panel" hidden>
+                <div class="craft-layout">
+                  <div class="craft-main">
+                    <div class="craft-filter" id="craft-filter"></div>
+                    <div id="craft-host" class="qc-grid craft-grid"></div>
+                    <p id="craft-log" class="craft-log"></p>
                   </div>
-                  <div id="craft-mat-host" class="craft-mat-grid"></div>
-                  <div class="craft-side-foot">
-                    <p id="craft-account-hint" class="craft-hint">Guest bag is local demo · sign in for Railway account inventory</p>
-                    <a class="craft-suite-link" id="craft-suite-link" href="https://grudgewarlords.com/craft/" target="_blank" rel="noopener">Open stations · benches · full WCS ↗</a>
-                  </div>
-                </aside>
+                  <aside class="craft-side" aria-label="Craft materials">
+                    <div class="craft-side-head">
+                      <h4>Materials</h4>
+                      <span id="craft-bag-meta" class="craft-bag-meta">—</span>
+                    </div>
+                    <div id="craft-mat-host" class="craft-mat-grid"></div>
+                    <div class="craft-side-foot">
+                      <p id="craft-account-hint" class="craft-hint">Guest bag is local demo · sign in for Railway account inventory</p>
+                      <a class="craft-suite-link" id="craft-suite-link" href="https://grudgewarlords.com/craft/" target="_blank" rel="noopener">Open stations · benches · full WCS ↗</a>
+                      <a class="craft-suite-link" href="https://wcs.grudge-studio.com/" target="_blank" rel="noopener" style="display:block;margin-top:4px">WCS brand hub ↗</a>
+                    </div>
+                  </aside>
+                </div>
               </div>
             </div>
           </div>
@@ -945,34 +963,98 @@
     }
 
     /**
-     * Full suite lives on grudgewarlords.com/craft — X-Frame-Options: SAMEORIGIN
-     * so it cannot iframe into main-panel. Pop out with SSO query params.
+     * Full suite SSOT: grudgewarlords.com/craft
+     * Embed allowed via CSP frame-ancestors (fleet deploy). SSO via query + postMessage.
      */
     const CRAFT_SUITE_ORIGIN = "https://grudgewarlords.com";
     const CRAFT_SUITE_PATH = "/craft/";
+    let craftFrameMounted = false;
+    let craftQuickOpen = false;
 
-    function craftSuiteBaseUrl() {
+    function craftSuiteBaseUrl(embed) {
+      if (window.GrudgeFleet?.buildCraftSsotUrl) {
+        return new URL(
+          window.GrudgeFleet.buildCraftSsotUrl({
+            embed: !!embed,
+            from: "ui-main-panel",
+            era: ERA || "warlords",
+            characterId: playerEnt()?.characterId || FORCE_ID,
+            station: params.get("station"),
+            returnTo: location.href,
+            tokenMode: "query",
+            target: "none",
+          }),
+        );
+      }
       const u = new URL(CRAFT_SUITE_PATH, CRAFT_SUITE_ORIGIN);
       u.searchParams.set("era", ERA || "warlords");
-      u.searchParams.set("from", "main-panel");
+      u.searchParams.set("from", "ui-main-panel");
+      if (embed) u.searchParams.set("embed", "1");
       const station = params.get("station");
       if (station) u.searchParams.set("station", station);
       return u;
     }
 
-    function craftSuiteAuthedUrl() {
-      const u = craftSuiteBaseUrl();
-      const token =
-        window.GrudgeCloud?.getToken?.() ||
-        window.GrudgeEngine?.getToken?.() ||
-        null;
-      if (token) {
-        u.searchParams.set("sso_token", token);
-        u.searchParams.set("grudge_token", token);
+    function craftSuiteAuthedUrl(embed) {
+      const u = craftSuiteBaseUrl(embed !== false);
+      // If fleet already put tokens, keep them
+      if (!u.searchParams.get("sso_token") && !u.searchParams.get("grudge_token")) {
+        const token =
+          window.GrudgeCloud?.getToken?.() ||
+          window.GrudgeEngine?.getToken?.() ||
+          null;
+        if (token) {
+          u.searchParams.set("sso_token", token);
+          u.searchParams.set("grudge_token", token);
+        }
       }
       const charId = playerEnt()?.characterId || FORCE_ID;
       if (charId) u.searchParams.set("characterId", charId);
       return u.toString();
+    }
+
+    function postCraftAuth(frame) {
+      try {
+        const token = window.GrudgeCloud?.getToken?.() || window.GrudgeEngine?.getToken?.();
+        if (!token || !frame?.contentWindow) return;
+        frame.contentWindow.postMessage(
+          {
+            type: "GRUDGE_AUTH",
+            sso_token: token,
+            grudge_token: token,
+            token,
+            characterId: playerEnt()?.characterId || FORCE_ID || null,
+            source: "ui-main-panel",
+          },
+          CRAFT_SUITE_ORIGIN,
+        );
+      } catch (_) {
+        /* cross-origin fine */
+      }
+    }
+
+    function mountCraftFrame(force) {
+      const frame = document.getElementById("craft-suite-frame");
+      const overlay = document.getElementById("craft-frame-overlay");
+      if (!frame) return;
+      updateCraftAuthPill();
+      const next = craftSuiteAuthedUrl(true);
+      if (force || !craftFrameMounted || frame.dataset.srcKey !== next) {
+        frame.dataset.srcKey = next;
+        frame.src = next;
+        craftFrameMounted = true;
+        if (overlay) {
+          overlay.hidden = false;
+          const msg = document.getElementById("craft-frame-msg");
+          if (msg) msg.textContent = "Connecting craft suite…";
+        }
+      }
+      frame.onload = () => {
+        if (overlay) overlay.hidden = true;
+        postCraftAuth(frame);
+        // Retry SSO after fleet boot inside suite
+        setTimeout(() => postCraftAuth(frame), 800);
+      };
     }
 
     function updateCraftAuthPill() {
@@ -985,19 +1067,20 @@
         window.GrudgeCloud?.getDisplayName?.() ||
         window.GrudgeCloud?.getUser?.()?.username;
       if (logged) {
-        el.textContent = name ? `Signed in · ${name}` : "Signed in · account bag";
+        el.textContent = name ? `Signed in · ${name}` : "Signed in · suite SSO";
         el.className = "craft-auth-pill ok";
       } else {
-        el.textContent = "Guest · local bag";
+        el.textContent = "Guest · suite browse";
         el.className = "craft-auth-pill warn";
       }
       const link = document.getElementById("craft-suite-link");
-      if (link) link.href = craftSuiteAuthedUrl();
+      if (link) link.href = craftSuiteAuthedUrl(false);
     }
 
     function refreshCraftTab() {
       updateCraftAuthPill();
-      renderCraft();
+      mountCraftFrame(true);
+      if (craftQuickOpen) renderCraft();
     }
 
     function wireCraftChrome() {
@@ -1005,10 +1088,19 @@
         .getElementById("btn-craft-reload")
         ?.addEventListener("click", () => {
           refreshCraftTab();
-          toast("Craft recipes refreshed");
+          toast("Craft suite reloaded");
         });
       document.getElementById("btn-craft-popout")?.addEventListener("click", () => {
-        window.open(craftSuiteAuthedUrl(), "_blank", "noopener");
+        window.open(craftSuiteAuthedUrl(false), "_blank", "noopener");
+      });
+      document.getElementById("btn-craft-open-fallback")?.addEventListener("click", () => {
+        window.open(craftSuiteAuthedUrl(false), "_blank", "noopener");
+      });
+      document.getElementById("btn-craft-quick")?.addEventListener("click", () => {
+        craftQuickOpen = !craftQuickOpen;
+        const panel = document.getElementById("craft-quick-panel");
+        if (panel) panel.hidden = !craftQuickOpen;
+        if (craftQuickOpen) renderCraft();
       });
       document.getElementById("btn-craft-login")?.addEventListener("click", () => {
         const ret = location.href.includes("tab=")
@@ -1023,6 +1115,19 @@
               encodeURIComponent(ret),
             "_blank",
           );
+      });
+      // Suite → panel bag sync
+      window.addEventListener("message", (e) => {
+        if (!e.origin || e.origin.indexOf("grudgewarlords.com") === -1) return;
+        const t = e.data?.type;
+        if (t === "GRUDGE_READY") postCraftAuth(document.getElementById("craft-suite-frame"));
+        if (t === "GRUDGE_BAG" && e.data?.bag && Array.isArray(e.data.bag)) {
+          try {
+            bag = e.data.bag;
+            renderInv();
+            if (craftQuickOpen) renderCraftMaterials();
+          } catch (_) {}
+        }
       });
     }
 
@@ -1159,7 +1264,11 @@
       if (tab === "class-skills") renderClassSkills();
       if (tab === "weapon-skills") renderWeaponSkills();
       if (tab === "professions") renderProfessions();
-      if (tab === "craft") refreshCraftTab();
+      if (tab === "craft") {
+        mountCraftFrame(false);
+        if (craftQuickOpen) renderCraft();
+        else updateCraftAuthPill();
+      }
     }
 
     function mergeFleetCharacter(char) {
