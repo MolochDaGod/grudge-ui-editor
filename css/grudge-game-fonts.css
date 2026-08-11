@@ -1,0 +1,71 @@
+/**
+ * Grudge Warlords — production game fonts (no Google Fonts runtime).
+ *
+ * Brand stack (SSOT with info.grudge-studio.com / ObjectStore ui fonts):
+ *   Display / titles  → Cinzel (serif)
+ *   Body / labels     → Crimson Text (serif)
+ *   Mono / stats      → JetBrains Mono
+ *
+ * Loaded from fontsource on jsDelivr (woff2, font-display: swap).
+ * Override with local / self-host under assets/fonts/ if offline deploy required.
+ */
+
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/cinzel@5.2.5/500.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/cinzel@5.2.5/700.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/crimson-text@5.2.5/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/crimson-text@5.2.5/600.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/600.css");
+
+:root,
+.mp-root,
+.gs-root,
+.gk-root {
+  --font-display: "Cinzel", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  --font-body: "Crimson Text", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "Consolas", ui-monospace, monospace;
+  --font-ui: var(--font-body);
+  --font-scale: 1;
+}
+
+/* Never fall through to emoji / symbol color fonts for chrome labels */
+.mp-root,
+.eq-paperdoll,
+.eq-slot,
+.eq-slot-ph,
+.eq-slot-label,
+.tab-btn,
+.stat-section h3,
+.logo h1 {
+  font-variant-emoji: text;
+  font-feature-settings: "liga" 0;
+}
+
+.mp-root {
+  font-family: var(--font-body);
+  font-size: calc(15px * var(--font-scale, 1));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.mp-root h1,
+.mp-root h2,
+.mp-root h3,
+.mp-root .logo h1,
+.mp-root .tab-btn,
+.mp-root .stat-section h3,
+.mp-root .entity-chip .name,
+.mp-root .qc-card h4,
+.eq-title-strip h2,
+.eq-race-pill h3,
+.mp-era-bar .era-pill {
+  font-family: var(--font-display);
+}
+
+.mp-root .stat-row .v,
+.mp-root .ab-slot .key,
+.mp-root .inv-slot .inv-qty,
+.mp-root code,
+.mp-mono {
+  font-family: var(--font-mono);
+}

@@ -1,5 +1,5 @@
-﻿/**
- * Grudge Equipment Paperdoll ΓÇö Tactical Infinity layout (portrait + 12 slots).
+/**
+ * Grudge Equipment Paperdoll — Tactical Infinity layout (portrait + slots).
  *
  * Canonical Warlords-era equipment UI for:
  *   - ui.grudge-studio.com/main-panel (equipment tab)
@@ -7,30 +7,53 @@
  *   - Embeds in client.grudge-studio.com and other era games
  *
  * Modes:
- *   self   ΓÇö player equip (click slots emit grudge:equip:slot)
- *   inspect ΓÇö read-only view of another unit/player
+ *   self   - player equip (click slots emit grudge:equip:slot)
+ *   inspect - read-only view of another unit/player
  *
- * SSOT portraits: race-portraits.js ΓåÆ client.grudge-studio.com
+ * UI rules:
+ *   - English labels only (no emoji / alchemy / hieroglyph placeholders)
+ *   - Empty slots use short Latin abbr + optional CDN icon (info / assets)
+ *   - Fonts: css/grudge-game-fonts.css (Cinzel + Crimson Text + JetBrains Mono)
+ *
+ * SSOT portraits: race-portraits.js -> client.grudge-studio.com
+ * Icons: item-icons.js -> assets.grudge-studio.com (info catalog resolve)
  */
 (function (global) {
   "use strict";
 
+  /** Empty-slot icon paths under assets.grudge-studio.com (496 RPG set). */
+  var I496 = "https://assets.grudge-studio.com/icons/496_rpg_icons";
+
   const SLOTS_LEFT = [
-    { id: "helmet", gear: "head", label: "Helmet", emoji: "Γ¢æ" },
-    { id: "chest", gear: "chest", label: "Chest", emoji: "≡ƒÑï" },
-    { id: "gloves", gear: "hands", label: "Gloves", emoji: "≡ƒºñ" },
-    { id: "legs", gear: "legs", label: "Legs", emoji: "≡ƒæû" },
-    { id: "boots", gear: "feet", label: "Boots", emoji: "≡ƒÑ╛" },
+    { id: "helmet", gear: "Head", label: "Helmet", abbr: "HEL", icon: I496 + "/A_Armour04.png" },
+    { id: "chest", gear: "Chest", label: "Chest", abbr: "CHS", icon: I496 + "/A_Armour01.png" },
+    { id: "gloves", gear: "Hands", label: "Gloves", abbr: "GLV", icon: I496 + "/A_Armour02.png" },
+    { id: "legs", gear: "Legs", label: "Legs", abbr: "LEG", icon: I496 + "/A_Armour03.png" },
+    { id: "boots", gear: "Feet", label: "Boots", abbr: "BOT", icon: I496 + "/A_Shoes01.png" },
   ];
   const SLOTS_RIGHT = [
-    { id: "weapon", gear: "weapon", label: "Main Hand", emoji: "ΓÜö" },
-    { id: "offhand", gear: "offhand", label: "Off Hand", emoji: "≡ƒ¢í" },
-    { id: "amulet", gear: "accessory", label: "Amulet", emoji: "≡ƒô┐" },
-    { id: "belt", gear: "belt", label: "Belt", emoji: "≡ƒöù" },
-    { id: "cloak", gear: "cape", label: "Cloak", emoji: "≡ƒºÑ" },
+    { id: "weapon", gear: "MainHand", label: "Weapon 1", abbr: "W1", icon: I496 + "/W_Sword001.png" },
+    { id: "offhand", gear: "OffHand", label: "Off 1", abbr: "O1", icon: I496 + "/E_Wood01.png" },
+    { id: "relic", gear: "Accessory2", label: "Relic", abbr: "RLC", icon: I496 + "/I_Gem01.png" },
+    { id: "back", gear: "Back", label: "Back", abbr: "BCK", icon: I496 + "/I_Bag.png" },
+    { id: "mount", gear: "Mount", label: "Mount", abbr: "MNT", icon: I496 + "/S_Buff01.png" },
   ];
-  const SLOT_RING = { id: "ring", gear: "ring", label: "Ring", emoji: "≡ƒÆì" };
-  const SLOT_ADD = { id: "add", gear: null, label: "Add", emoji: "∩╝ï" };
+  /** Non-drop Q-swap reserve - not a corpse drop slot */
+  const SLOT_SECONDARY = {
+    id: "secondary",
+    gear: "SecondaryWeapon",
+    label: "Weapon 2",
+    abbr: "W2",
+    icon: I496 + "/W_Sword001.png",
+  };
+  const SLOT_OFF2 = {
+    id: "offhand2",
+    gear: "OffHand2",
+    label: "Off 2",
+    abbr: "O2",
+    icon: I496 + "/E_Wood01.png",
+  };
+  const SLOT_ADD = { id: "add", gear: null, label: "Bag", abbr: "BAG", icon: I496 + "/I_Bag.png" };
 
   const RARITY_CLASS = {
     common: "eq-r-common",
@@ -40,98 +63,85 @@
     legendary: "eq-r-legendary",
   };
 
-  /** Map fleet/model3d equipment bag ΓåÆ paperdoll slot items. */
+  /** Map fleet/model3d equipment bag → paperdoll slot items (+ resolve icons). */
   function normalizeEquipped(raw) {
     if (!raw || typeof raw !== "object") return {};
     const out = {};
     const alias = {
       head: "helmet",
+      Head: "helmet",
       helmet: "helmet",
-      helm: "helmet",
       chest: "chest",
+      Chest: "chest",
       body: "chest",
       armor: "chest",
-      torso: "chest",
       hands: "gloves",
-      hand: "gloves",
+      Hands: "gloves",
       gloves: "gloves",
       legs: "legs",
+      Legs: "legs",
       pants: "legs",
       feet: "boots",
-      boot: "boots",
+      Feet: "boots",
       boots: "boots",
       weapon: "weapon",
+      MainHand: "weapon",
       mainhand: "weapon",
-      main_hand: "weapon",
-      primary: "weapon",
-      secondaryweapon: "weapon", // reserve still paints main if only one hand shown
-      secondary: "weapon",
+      mainHand: "weapon",
       offhand: "offhand",
-      off_hand: "offhand",
+      OffHand: "offhand",
+      offHand: "offhand",
       shield: "offhand",
-      accessory: "amulet",
-      accessory1: "ring",
-      accessory2: "amulet",
-      amulet: "amulet",
-      neck: "amulet",
-      necklace: "amulet",
-      relic: "belt",
-      belt: "belt",
-      waist: "belt",
-      cape: "cloak",
-      cloak: "cloak",
-      back: "cloak",
-      shoulders: "cloak",
-      shoulder: "cloak",
-      ring: "ring",
-      ring1: "ring",
+      SecondaryWeapon: "secondary",
+      secondaryweapon: "secondary",
+      secondary: "secondary",
+      weapon2: "secondary",
+      accessory: "relic",
+      Accessory2: "relic",
+      amulet: "relic",
+      relic: "relic",
+      neck: "relic",
+      necklace: "relic",
+      belt: "back",
+      waist: "back",
+      cape: "back",
+      cloak: "back",
+      back: "back",
+      Back: "back",
+      shoulders: "back",
+      Shoulder: "back",
+      mount: "mount",
+      Mount: "mount",
+      ring: "offhand2",
+      Accessory1: "offhand2",
+      ring1: "offhand2",
+      offhand2: "offhand2",
+      OffHand2: "offhand2",
+      weapon2: "secondary",
     };
-    const cat = global.InfoCatalog;
+    const resolveIcon = global.GrudgeItemIcons?.resolve;
     for (const [k, v] of Object.entries(raw)) {
       if (v == null || v === "") continue;
-      let slot = alias[k] || alias[String(k).toLowerCase()];
-      // Resolve from catalog when key is unknown but item has slotType
-      if (!slot && typeof v === "object" && cat?.paperdollSlot) {
-        slot = cat.paperdollSlot(v);
-      }
+      const slot = alias[k] || alias[String(k).toLowerCase()];
       if (!slot) continue;
       if (typeof v === "string") {
-        const looked = cat?.lookup?.({ id: v, name: v });
-        out[slot] = {
-          id: v,
-          name: looked?.name || v,
-          iconUrl: cat?.resolveIcon?.({ itemId: v, name: looked?.name || v }) || null,
-          rarity: cat?.rarityFromTier?.(looked?.tier, looked?.tierLabel) || "common",
-          description: looked?.description || "",
-          stats: looked?.stats || null,
-          type: looked?.type || "",
-          tierLabel: looked?.tierLabel || "",
-        };
+        const iconUrl = resolveIcon
+          ? resolveIcon({ itemId: v, name: v })
+          : null;
+        out[slot] = { id: v, name: v, iconUrl };
       } else if (typeof v === "object") {
         const id = v.id || v.itemId || v.meshId || "";
         const name = v.name || v.label || id || "Item";
-        const looked = cat?.lookup?.({ id, name, uuid: v.uuid }) || null;
         const iconUrl =
           v.iconUrl ||
           v.icon ||
           v.image ||
-          cat?.resolveIcon?.({ itemId: id, name, iconUrl: v.iconUrl, category: v.category, type: v.type }) ||
-          null;
+          (resolveIcon ? resolveIcon({ itemId: id, name }) : null);
         out[slot] = {
           id,
-          name: looked?.name || name,
+          name,
           iconUrl,
-          rarity:
-            (typeof v.rarity === "string" && RARITY_CLASS[v.rarity] ? v.rarity : null) ||
-            cat?.rarityFromTier?.(looked?.tier ?? v.tier, looked?.tierLabel || v.tierLabel) ||
-            "common",
-          description: v.description || looked?.description || "",
-          stats: v.stats || looked?.stats || null,
-          type: v.type || looked?.type || "",
-          tierLabel: v.tierLabel || looked?.tierLabel || "",
-          meshSlot: v.meshSlot,
-          meshVar: v.meshVar,
-          weaponType: v.weaponType || looked?.weaponType,
+          rarity: v.rarity || v.tier || "common",
         };
       }
     }
@@ -140,42 +150,25 @@
 
   function slotHtml(def, item, opts) {
     const equipped = !!item;
-    const rarKey = item?.rarity && RARITY_CLASS[item.rarity] ? item.rarity : "common";
-    const rar = equipped ? RARITY_CLASS[rarKey] || "" : "";
+    const rar = item?.rarity ? RARITY_CLASS[item.rarity] || "" : "";
     const title = item?.name || def.label;
-    let iconUrl = item?.iconUrl || null;
-    if (item && !iconUrl && global.InfoCatalog?.resolveIcon) {
-      iconUrl = global.InfoCatalog.resolveIcon({
-        itemId: item.id,
-        name: item.name,
-        type: item.type,
-      });
-    }
-    const icon = iconUrl
-      ? `<img class="eq-slot-icon" src="${esc(iconUrl)}" alt="" draggable="false" referrerpolicy="no-referrer" onerror="this.style.opacity=.2" />`
-      : `<span class="eq-slot-ph">${def.emoji}</span>`;
-    const ro = opts.readOnly ? ' data-readonly="1"' : "";
-    const tipPlain = item
-      ? global.InfoCatalog?.plainTooltip?.({
-          itemId: item.id,
-          name: item.name,
-          description: item.description,
-          stats: item.stats,
-        }) || title
-      : def.label;
-    const tipHtml = item
-      ? global.InfoCatalog?.tooltipHtml?.({
-          itemId: item.id,
-          name: item.name,
-          iconUrl,
-          description: item.description,
-          stats: item.stats,
-          type: item.type,
-          tier: item.tier,
-          tierLabel: item.tierLabel,
-        }) || ""
-      : "";
-    return `<button type="button" class="eq-slot ${equipped ? "equipped" : ""} ${rar}" data-slot="${def.id}" data-gear="${def.gear || ""}" title="${esc(tipPlain)}" data-tip="${esc(tipHtml)}"${ro}>
+    const fb = global.GrudgeItemIcons?.fallback?.() || def.icon || "";
+    const emptyIcon = def.icon || fb;
+    // Prefer CDN item icon; empty slot = slot chrome icon + Latin abbr (no emoji)
+    const icon = item?.iconUrl
+      ? `<img class="eq-slot-icon" src="${esc(item.iconUrl)}" alt="" draggable="false" onerror="if(!this.dataset.fb&&'${esc(fb)}'){this.dataset.fb=1;this.src='${esc(fb)}'}" />`
+      : emptyIcon
+        ? `<img class="eq-slot-icon eq-slot-icon--empty" src="${esc(emptyIcon)}" alt="" draggable="false" /><span class="eq-slot-ph" aria-hidden="true">${esc(def.abbr || def.label.slice(0, 3))}</span>`
+        : `<span class="eq-slot-ph">${esc(def.abbr || def.label.slice(0, 3))}</span>`;
+    const ro = opts.readOnly ? " data-readonly=\"1\"" : "";
+    const nonDrop = def.id === "secondary" || def.id === "offhand2" ? " data-nondrop=\"1\"" : "";
+    const setCls =
+      def.id === "secondary" || def.id === "offhand2" || def.id === "weapon" || def.id === "offhand"
+        ? def.id === "secondary" || def.id === "offhand2"
+          ? " eq-secondary"
+          : " eq-primary-set"
+        : "";
+    return `<button type="button" class="eq-slot ${equipped ? "equipped" : ""}${rar ? " " + rar : ""}${setCls}" data-slot="${def.id}" data-gear="${def.gear || ""}" title="${esc(title)}"${ro}${nonDrop}>
       ${icon}
       <span class="eq-slot-label">${esc(def.label)}</span>
     </button>`;
@@ -196,7 +189,7 @@
    * @param {string} [opts.portraitUrl]
    * @param {string} [opts.title]
    * @param {string} [opts.subtitle]
-   * @param {object} [opts.equipped] ΓÇö slot bag or EquippedMap
+   * @param {object} [opts.equipped] — slot bag or EquippedMap
    * @param {'self'|'inspect'} [opts.mode]
    * @param {(slotId:string, gearKey:string|null)=>void} [opts.onSlotClick]
    * @param {number} [opts.width]
@@ -229,32 +222,21 @@
         <div class="eq-body">
           <div class="eq-col left">${left}</div>
           <div class="eq-portrait-wrap">
-            <img class="eq-portrait" src="${esc(portrait)}" alt="Portrait" draggable="false"
-              onerror="this.onerror=null;this.src='https://client.grudge-studio.com/images/portraits/human.png'" />
+            <img class="eq-portrait" src="${esc(portrait)}" alt="Portrait" draggable="false" />
           </div>
           <div class="eq-col right">${right}</div>
           <div class="eq-bottom">
-            ${slotHtml(SLOT_RING, equipped.ring, { readOnly })}
+            ${slotHtml(SLOT_SECONDARY, equipped.secondary, { readOnly })}
+            <div class="eq-bottom-rule"></div>
+            ${slotHtml(SLOT_OFF2, equipped.offhand2, { readOnly })}
             <div class="eq-bottom-rule"></div>
             ${slotHtml(SLOT_ADD, null, { readOnly })}
           </div>
         </div>
+        <p class="eq-secondary-hint">Weapon 2 / Off 2 are combat Q-swap loadout (not looted from corpse).</p>
         ${mode === "inspect" ? `<div class="eq-inspect-badge">Inspecting</div>` : ""}
-        ${opts.showMeshHint !== false ? `<p class="eq-mesh-hint">Click armor/weapon slots to cycle grudge6 mesh variants ┬╖ texture atlas by race</p>` : ""}
       </div>
     `;
-
-    // Mesh-level overlay (Unity kit visibility state)
-    const wrap = el.querySelector(".eq-portrait-wrap");
-    if (wrap && global.MainPanelMesh?.renderMeshOverlay) {
-      global.MainPanelMesh.renderMeshOverlay(wrap, {
-        race: opts.race || "human",
-        classId: opts.classId || "warrior",
-        equipment: equipped,
-        meshIds: opts.meshIds,
-        unarmed: opts.unarmed,
-      });
-    }
 
     el.onclick = (e) => {
       const btn = e.target.closest(".eq-slot");
@@ -264,14 +246,7 @@
       opts.onSlotClick?.(slotId, gear);
       global.dispatchEvent(
         new CustomEvent("grudge:equip:slot", {
-          detail: {
-            slotId,
-            gearKey: gear,
-            mode,
-            entityId: opts.entityId || null,
-            race: opts.race,
-            classId: opts.classId,
-          },
+          detail: { slotId, gearKey: gear, mode, entityId: opts.entityId || null },
         }),
       );
     };
@@ -286,9 +261,6 @@
       },
       setMode(m) {
         render(el, { ...opts, mode: m });
-      },
-      setMesh(meshOpts) {
-        render(el, { ...opts, ...meshOpts });
       },
       getEquipped() {
         return { ...equipped };
