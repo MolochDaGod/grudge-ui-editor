@@ -552,12 +552,16 @@ const ACTIONS = [
   { id:'aim',       cat:'combat',   label:'Aim / Zoom',      icon:'fa-crosshairs',             def:'MB3'    },
   { id:'melee',     cat:'combat',   label:'Melee Strike',    icon:'fa-burst',                  def:'V'      },
   { id:'ultimate',  cat:'combat',   label:'Ultimate',        icon:'fa-star',                   def:'F'      },
-  { id:'skill_1',   cat:'skills',   label:'Skill Slot 1',    icon:'fa-1',                      def:'1'      },
-  { id:'skill_2',   cat:'skills',   label:'Skill Slot 2',    icon:'fa-2',                      def:'2'      },
-  { id:'skill_3',   cat:'skills',   label:'Skill Slot 3',    icon:'fa-3',                      def:'3'      },
-  { id:'skill_4',   cat:'skills',   label:'Skill Slot 4',    icon:'fa-4',                      def:'4'      },
-  { id:'skill_5',   cat:'skills',   label:'Skill Slot 5',    icon:'fa-5',                      def:'5'      },
-  { id:'skill_6',   cat:'skills',   label:'Skill Slot 6',    icon:'fa-6',                      def:'6'      },
+  { id:'skill_1',   cat:'skills',   label:'Weapon Skill 1',  icon:'fa-1',                      def:'1'      },
+  { id:'skill_2',   cat:'skills',   label:'Weapon Skill 2',  icon:'fa-2',                      def:'2'      },
+  { id:'skill_3',   cat:'skills',   label:'Weapon Skill 3',  icon:'fa-3',                      def:'3'      },
+  { id:'skill_4',   cat:'skills',   label:'Weapon Skill 4',  icon:'fa-4',                      def:'4'      },
+  { id:'skill_5',   cat:'skills',   label:'Weapon Skill 5',  icon:'fa-5',                      def:'5'      },
+  { id:'skill_6',   cat:'skills',   label:'Weapon Skill 6',  icon:'fa-6',                      def:'6'      },
+  { id:'skill_7',   cat:'skills',   label:'Weapon Skill 7',  icon:'fa-7',                      def:'7'      },
+  { id:'skill_8',   cat:'skills',   label:'Weapon Skill 8',  icon:'fa-8',                      def:'8'      },
+  { id:'skill_9',   cat:'skills',   label:'Weapon Skill 9',  icon:'fa-9',                      def:'9'      },
+  { id:'skill_10',  cat:'skills',   label:'Weapon Skill 10', icon:'fa-0',                      def:'0'      },
   { id:'emote',     cat:'skills',   label:'Emote',           icon:'fa-face-smile',             def:'G'      },
   { id:'mount',     cat:'skills',   label:'Mount / Dismount',icon:'fa-horse',                  def:'H'      },
   { id:'inventory', cat:'ui',       label:'Inventory',       icon:'fa-bag-shopping',           def:'I'      },
@@ -568,6 +572,8 @@ const ACTIONS = [
   { id:'settings',  cat:'ui',       label:'Pause / Settings',icon:'fa-gear',                   def:'ESC'    },
   { id:'chat',      cat:'ui',       label:'Chat',            icon:'fa-message',                def:'T'      },
   { id:'minimap',   cat:'ui',       label:'Toggle Minimap',  icon:'fa-map-location-dot',       def:'N'      },
+  { id:'hud_settings', cat:'ui',    label:'HUD Settings',    icon:'fa-sliders',                def:'O'      },
+  { id:'toggle_move_ui', cat:'ui',  label:'Move Anything UI',icon:'fa-up-down-left-right',    def:'U'      },
 ];
 
 const MODS = ['none','shift','ctrl','alt','ctrl+shift'];
@@ -590,9 +596,11 @@ async function persistInputConfig(){
   const data={version:'1.0',tool:'HYDRA Input Configurator',studio:'Grudge Studio',exported:new Date().toISOString(),bindings,hotbar};
   if(window.GrudgeCloud?.saveInputConfig){
     await GrudgeCloud.saveInputConfig(data);
-    return;
   }
   try{ localStorage.setItem('grudge_hydra_input_v1', JSON.stringify(data)); }catch{}
+  // Bridge to HUD Settings / bindWeaponSkills skill hotkeys
+  try{ localStorage.setItem('grudge.hud.hotkeys.v1', JSON.stringify(bindings)); }catch{}
+  try{ window.dispatchEvent(new CustomEvent('grudge:hotkeys-changed',{detail:bindings})); }catch{}
 }
 
 async function restoreInputConfig(){

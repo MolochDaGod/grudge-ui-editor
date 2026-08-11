@@ -47,11 +47,85 @@
         "level": 40,
         "hp": 620,
         "hpMax": 900,
-        "hostile": true
+        "hostile": true,
+        "frameSkin": "enemy-frames/enemy_frame_001.png"
       },
       "groups": [
         "hud",
         "combat"
+      ]
+    },
+    {
+      "id": "boss1",
+      "type": "boss-frame",
+      "x": 660,
+      "y": 16,
+      "w": 600,
+      "h": 88,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "World Boss",
+        "level": 50,
+        "hp": 98000,
+        "hpMax": 120000,
+        "boss": true,
+        "elite": true,
+        "frameSkin": "boss-frames/boss_frame_002.png",
+        "frameSkinAlt": "boss-frames/boss_frame_004.png"
+      },
+      "groups": [
+        "hud",
+        "combat",
+        "boss"
+      ]
+    },
+    {
+      "id": "tot1",
+      "type": "target-of-target",
+      "x": 1080,
+      "y": 100,
+      "w": 200,
+      "h": 56,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "name": "ToT",
+        "level": 38,
+        "hp": 400,
+        "hpMax": 800,
+        "frameSkin": "ally-frames/ally_frame_001.png"
+      },
+      "groups": [
+        "hud",
+        "combat"
+      ]
+    },
+    {
+      "id": "cast1",
+      "type": "cast-bar",
+      "x": 700,
+      "y": 860,
+      "w": 520,
+      "h": 48,
+      "rot": 0,
+      "op": 1,
+      "br": 6,
+      "shd": true,
+      "props": {
+        "label": "Weapon skill",
+        "spell": "Casting…",
+        "progress": 0.45,
+        "iconUrl": ""
+      },
+      "groups": [
+        "hud",
+        "combat",
+        "cast"
       ]
     },
     {
@@ -403,10 +477,19 @@
     "playUrl": "https://client.grudge-studio.com",
     "genre": "fantasy-mmo",
     "engine": "Three.js + Colyseus",
-    "description": "Full Warlords play HUD: vitals, target, hotbar, bag, tactical paperdoll equipment, craft/trade, quests. Main panel host: ui.grudge-studio.com/main-panel?era=warlords.",
+    "description": "Full Warlords play HUD: player/target/boss frames (bars-hud 002/004), target-of-target, cast bar, hotbar weapon skills, bag, paperdoll, craft. HUD Settings: move anything, skins, size, advanced hotkeys.",
     "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords",
     "mainPanelEmbed": "https://ui.grudge-studio.com/main-panel.html?era=warlords&embed=1",
     "equipmentLayout": "paperdoll-tactical",
+    "barsHud": {
+      "bossPrimary": "boss-frames/boss_frame_002.png",
+      "bossAlternate": "boss-frames/boss_frame_004.png",
+      "base": "/assets/bars-hud/"
+    },
+    "hudSettings": {
+      "moveAnything": true,
+      "modules": ["bars-hud-ssot.js", "hud-settings.js", "game-ui-runtime.js"]
+    },
     "features": [
       "inventory",
       "equipment",
@@ -416,7 +499,14 @@
       "quests",
       "combat",
       "chat",
-      "currency"
+      "currency",
+      "boss-frame",
+      "target-of-target",
+      "cast-bar",
+      "weapon-skills",
+      "hud-settings",
+      "move-anything",
+      "advanced-hotkeys"
     ],
     "usageStates": [
       "explore",
@@ -530,5 +620,5 @@
     }
   },
   "id": "warlords",
-  "version": "1.1.0"
+  "version": "1.2.0"
 }

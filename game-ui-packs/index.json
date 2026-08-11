@@ -57,7 +57,14 @@
         "quests",
         "combat",
         "chat",
-        "currency"
+        "currency",
+        "boss-frame",
+        "target-of-target",
+        "cast-bar",
+        "weapon-skills",
+        "hud-settings",
+        "move-anything",
+        "advanced-hotkeys"
       ],
       "usageStates": [
         "explore",
@@ -71,9 +78,17 @@
       "tags": [
         "flagship",
         "mmo",
-        "wcs"
+        "wcs",
+        "bars-hud"
       ],
-      "componentCount": 19
+      "componentCount": 22,
+      "runtime": {
+        "scripts": [
+          "./bars-hud-ssot.js",
+          "./hud-settings.js",
+          "./game-ui-runtime.js"
+        ]
+      }
     },
     {
       "id": "open",

@@ -180,6 +180,8 @@
   <script src="./grudge-cloud-save.js"></script>
   <script src="./grudge-ai.js"></script>
   <script src="./grudge-shell.js"></script>
+  <script src="./bars-hud-ssot.js"></script>
+  <script src="./hud-settings.js"></script>
   <script src="./game-ui-runtime.js"></script>
 
   <div class="wrap">
@@ -216,17 +218,24 @@
         <strong id="prev-title">Preview</strong>
         <select id="state-sel" title="Usage state"></select>
         <button type="button" id="btn-remount">Remount</button>
+        <button type="button" id="btn-hud-settings" title="Move anything, frames, cast bar, hotkeys">HUD Settings</button>
+        <button type="button" id="btn-demo-skills" title="Bind demo weapon skills + boss">Demo skills</button>
         <a id="btn-studio" class="primary" href="/studio" style="margin-left:auto;font-size:.72rem;padding:5px 10px;border-radius:6px;border:1px solid rgba(201,149,10,.5);color:var(--gold);text-decoration:none;background:rgba(201,149,10,.12)">Edit in Studio</a>
       </div>
       <div id="preview"><div class="err">Select a pack to preview</div></div>
     </div>
 
-    <pre class="code" id="snippet">// In your game:
-import 'https://ui.grudge-studio.com/game-ui-runtime.js';
+    <pre class="code" id="snippet">// In your game (deployable HUD + weapon skills + hotkeys):
+// &lt;script src="https://ui.grudge-studio.com/bars-hud-ssot.js"&gt;&lt;/script&gt;
+// &lt;script src="https://ui.grudge-studio.com/hud-settings.js"&gt;&lt;/script&gt;
+// &lt;script src="https://ui.grudge-studio.com/game-ui-runtime.js"&gt;&lt;/script&gt;
 const ui = await GrudgeGameUI.load('warlords');
 ui.mount(document.getElementById('hud'));
 ui.setState('combat');
-ui.bindData({ pf1: { name: 'Korgath', hp: 900, hpMax: 1000 } });</pre>
+ui.bindWeaponSkills([{ id:'slash', name:'Slash', iconUrl:'…' }]);
+ui.setTarget({ name:'Boss', hp:9e4, hpMax:1.2e5, boss:true }, { name:'ToT', hp:400, hpMax:800 });
+ui.setCastBar({ label:'Slash', progress:0.4, iconUrl:'…' });
+HudSettings.open(); // Move Anything · boss 002/004 · advanced hotkeys</pre>
   </div>
 
   <script>
@@ -298,14 +307,52 @@ ui.bindData({ pf1: { name: 'Korgath', hp: 900, hpMax: 1000 } });</pre>
         mountEl.innerHTML = '';
         instance.mount(mountEl);
         if (states[0]) instance.setState(states[0]);
+        if (window.HudSettings) HudSettings.attach(instance);
         document.getElementById('btn-studio').href = '/studio?pack=' + encodeURIComponent(id);
         document.getElementById('snippet').textContent =
-          `// ${current.name}\nconst ui = await GrudgeGameUI.load('${id}');\nui.mount(document.getElementById('hud'));\nui.setState('${states[0] || 'hud'}');\n// features: ${(current.meta?.features || []).join(', ')}`;
+          `// ${current.name}\n// bars-hud-ssot + hud-settings + game-ui-runtime\nconst ui = await GrudgeGameUI.load('${id}');\nui.mount(document.getElementById('hud'));\nui.setState('${states[0] || 'hud'}');\nui.bindWeaponSkills([/* weapon pack skills */]);\nHudSettings.attach(ui); HudSettings.open();\n// features: ${(current.meta?.features || []).join(', ')}`;
       } catch (e) {
         document.getElementById('preview').innerHTML =
           '<div class="err">' + e.message + '</div>';
       }
     }
+
+    document.getElementById('btn-hud-settings').addEventListener('click', () => {
+      if (window.HudSettings) {
+        if (instance) HudSettings.attach(instance);
+        HudSettings.open();
+      }
+    });
+    document.getElementById('btn-demo-skills').addEventListener('click', () => {
+      if (!instance) return;
+      if (window.HudSettings) HudSettings.attach(instance);
+      instance.bindWeaponSkills([
+        { id: 'slash', name: 'Slash', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Sword_128.png' },
+        { id: 'shield', name: 'Shield', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Shield_128.png' },
+        { id: 'fireball', name: 'Fireball', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Fireball_128.png' },
+        { id: 'deathkiss', name: 'Deathkiss', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Deathkiss_128.png' },
+        { id: 'arrows', name: 'Volley', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Arrows_128.png' },
+        { id: 'leafs', name: 'Nature', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Leafs_128.png' },
+        { id: 'ult', name: 'Ultimate', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Sword_128.png' },
+        { id: 'heal', name: 'Heal', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Leafs_128.png' },
+        { id: 'bomb', name: 'Bomb', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Fireball_128.png' },
+        { id: 'roll', name: 'Roll', iconUrl: '/assets/craftpix/Icons 128x128/Icon_Shield_128.png' },
+      ]);
+      if (instance.setCastBar) {
+        instance.setCastBar({
+          label: 'Weapon skill',
+          progress: 0.55,
+          iconUrl: '/assets/craftpix/Icons 128x128/Icon_Sword_128.png',
+        });
+      }
+      if (instance.setTarget) {
+        instance.setTarget(
+          { name: 'World Boss', level: 50, hp: 98000, hpMax: 120000, boss: true },
+          { name: 'Minion', level: 38, hp: 400, hpMax: 800 },
+        );
+      }
+      instance.setState('combat');
+    });
 
     document.getElementById('grid').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-act="preview"]');
