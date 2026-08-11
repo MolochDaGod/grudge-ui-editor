@@ -243,7 +243,16 @@
 .mp-root .inv-slot.equippable{border-color:rgba(110,201,110,.4)}
 .mp-root .inv-slot .inv-emoji{font-size:16px;line-height:1}
 .mp-root .inv-slot .inv-icon{width:70%;height:70%;object-fit:contain;image-rendering:pixelated;pointer-events:none}
-.mp-root .inv-slot .inv-qty{position:absolute;bottom:2px;right:4px;font-size:9px;font-family:ui-monospace,monospace;color:var(--gold)}
+.mp-root .inv-slot .inv-qty{
+  position:absolute;bottom:2px;right:3px;z-index:3;
+  min-width:1.15em;padding:1px 4px;border-radius:3px;
+  font-family:var(--font-mono,"JetBrains Mono",ui-monospace,Consolas,monospace);
+  font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;
+  color:#fff;text-align:center;line-height:1.2;
+  background:rgba(0,0,0,.72);border:1px solid rgba(212,168,67,.35);
+  text-shadow:0 1px 2px #000;pointer-events:none;
+}
+.mp-root .inv-slot .inv-qty.is-full{color:#ffd66b;border-color:rgba(255,214,107,.65)}
 .mp-root .inv-slot .inv-slot-tag{position:absolute;top:2px;left:2px;font-size:7px;text-transform:uppercase;letter-spacing:.04em;color:rgba(212,164,0,.85);background:rgba(0,0,0,.45);padding:0 3px;border-radius:3px;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* Info-hub style floating tooltip */
 .item-tooltip{

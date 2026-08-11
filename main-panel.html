@@ -499,7 +499,9 @@
               : `<span class="inv-abbr">${esc(abbr)}</span>`;
             s.innerHTML =
               iconHtml +
-              (it.qty > 1 ? `<span class="inv-qty">${it.qty}</span>` : "") +
+              (it.qty >= 1 && (isStackableBagRow(it) || it.qty > 1)
+                ? `<span class="inv-qty${(it.qty || 0) >= STACK_MAX ? " is-full" : ""}" title="x${it.qty}">${it.qty}</span>`
+                : "") +
               (it.equipSlot ? `<span class="inv-slot-tag">${esc(it.equipSlot)}</span>` : "");
             const tip =
               cat?.tooltipHtml?.({
@@ -811,10 +813,37 @@
       bag = bag.filter((b) => (b.qty || 0) > 0);
     }
 
+    /** Harvest / craft mats stack max 100; gear stays 1 */
+    const STACK_MAX = 100;
+    function isStackableBagRow(row) {
+      if (!row) return true;
+      if (row.equipSlot || row.meshSlot) return false;
+      const t = String(row.category || row.type || row.kind || row.slot || "").toLowerCase();
+      const id = String(row.id || row.name || "").toLowerCase();
+      if (/weapon|armor|helm|shield|equip|ring|relic|cloak|sword|axe|bow|staff|gun|tool/.test(t + id)) {
+        return /mat|ore|wood|herb|food|potion|scrap|ingot|stone|hide|leather|fiber|harvest/.test(t + id);
+      }
+      return true;
+    }
     function bagAdd(item) {
-      const hit = bag.find((b) => b.id === item.id);
-      if (hit) hit.qty = (hit.qty || 0) + (item.qty || 1);
-      else bag.push({ ...item });
+      const qty = Math.max(1, Math.floor(Number(item.qty) || 1));
+      const max = isStackableBagRow(item) ? STACK_MAX : 1;
+      let left = qty;
+      const hit = bag.find((b) => b.id === item.id && isStackableBagRow(b));
+      if (hit && max > 1) {
+        const room = max - (hit.qty || 1);
+        if (room > 0) {
+          const add = Math.min(room, left);
+          hit.qty = (hit.qty || 1) + add;
+          left -= add;
+        }
+      }
+      while (left > 0) {
+        const put = Math.min(max, left);
+        bag.push({ ...item, qty: put });
+        left -= put;
+        if (max <= 1) break;
+      }
     }
 
     function renderCraftMaterials() {
