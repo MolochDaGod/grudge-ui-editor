@@ -12,7 +12,7 @@ inside the race kit, toggled like uMMORPG paperdoll slots.
 |------|------|
 | 1. Kit | **GOLDEN** `asset-packs/toon-rts-characters/glb/characters/{raceId}.glb` (lab default). Compare-only: `models/grudge6/races/{PREFIX}_Characters.glb` |
 | 2. Equip | `mesh_ids` visibility only — class lists + full catalog |
-| 3. Fit | Bone structural box → **1.8 m** · feet ground · **+π/2** yaw once |
+| 3. Fit | Bone structural box → **1.8 m** · feet ground · **face user** yaw `π` in main-panel preview (camera on +Z); play Toon yaw **0** |
 | 4. Atlas | Only if bake missing: `textures/grudge6/{folder}/*.webp` |
 
 ## Code

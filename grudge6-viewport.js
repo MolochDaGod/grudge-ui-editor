@@ -157,8 +157,12 @@
       box = measureBoneBox(model) || new THREE.Box3().setFromObject(model, true);
     }
 
-    // Art-forward +Z once
-    model.rotation.y = Math.PI / 2;
+    // Face the user/camera (camera sits on +Z looking at origin).
+    // Toon play default yaw is 0 (+Z); main-panel preview uses π so the kit
+    // faces the portrait lens (matches GRUDGE6_Characters lab). Do not use
+    // π/2 here — that is FBX +X authoring only and shows a side/back view.
+    model.rotation.y = Math.PI;
+    model.userData.faceUserYaw = Math.PI;
     model.userData.artForwardSet = true;
     model.updateMatrixWorld(true);
     box = measureBoneBox(model) || new THREE.Box3().setFromObject(model, true);
@@ -295,7 +299,14 @@
 
   function loop() {
     state.animId = requestAnimationFrame(loop);
-    if (state.model) state.model.rotation.y += 0.004;
+    // Keep hero facing the user — no continuous spin (that turned backs to camera).
+    // Optional gentle idle sway around face-user yaw.
+    if (state.model) {
+      var base = state.model.userData.faceUserYaw;
+      if (typeof base !== "number") base = Math.PI;
+      var t = performance.now() * 0.001;
+      state.model.rotation.y = base + Math.sin(t * 0.55) * 0.06;
+    }
     if (state.renderer && state.scene && state.camera) {
       state.renderer.render(state.scene, state.camera);
     }

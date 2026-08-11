@@ -53,8 +53,45 @@ Routes:
 [ ] Island3D C/I hotkey optional open MainPanelHost
 ```
 
+## Crafting tab (native — not iframe)
+
+| Concern | Rule |
+|---------|------|
+| **In-panel craft** | Native recipe grid + materials rail in `#tab-craft` |
+| **Full suite** | Pop-out only → `https://grudgewarlords.com/craft/` (+ SSO query) |
+| **Why no iframe** | Warlords craft sends `X-Frame-Options: SAMEORIGIN` — empty/blocked frame |
+| **Bag scope** | **Account** bag (Railway `/api/account/*`) shared across characters |
+| **XP scope** | **Active character** profession progress only |
+| **Icons** | `InfoCatalog` → ObjectStore items + `assets.grudge-studio.com` icons |
+| **Recipes** | Quick stubs in `main-panel-content.js` + WCS via `wcs-professions-ssot.js` |
+
+## Paperdoll hero facing
+
+| Surface | Default yaw |
+|---------|-------------|
+| Main-panel `grudge6-viewport.js` | **`Math.PI`** — face user (camera at +Z) |
+| Toon play world | **0** (+Z forward) |
+| FBX author +X kits | **π/2** only in author tools — not main-panel |
+
+Do **not** continuous-spin the paperdoll (backs half the time). Gentle idle sway around face-user yaw is OK.
+
+## Scale · containers · icons (production UI)
+
+| Token | Value / rule |
+|-------|----------------|
+| Design space | HYDRA **1920×1080** (embed scales with host) |
+| Panel root | `.mp-root` flex column; tab body fills remaining height |
+| Craft layout | CSS grid `1fr · 160–220px` materials rail; stack &lt;900px |
+| Craft cards | `minmax(168px, 1fr)` auto-fill; min-height ~96px |
+| Slot / icon | Craft icon **22px**; bag materials **28px**; inventory ~70% of slot |
+| Containers | Gold-border panels (`rgba(201,149,10,.28–.35)`), 8–12px radius |
+| Image render | `image-rendering: pixelated` on UI icons |
+| Account wire | `GrudgeCloud` JWT → Railway; guest = local demo bag only |
+
 ## Do not
 
 - Host a third main-panel on a random Replit URL  
 - Invent a second equipment slot schema outside Railway character.equipment  
 - Replace paperdoll with a plain bag-only tab for Warlords  
+- Embed `grudgewarlords.com/craft` in an iframe (blocked — always pop out)  
+- Face paperdoll with continuous Y spin or FBX π/2 author yaw 
