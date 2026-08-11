@@ -88,7 +88,8 @@ Do **not** continuous-spin the paperdoll (backs half the time). Gentle idle sway
 | Slot / icon | Craft icon **22px**; bag materials **28px**; inventory ~70% of slot |
 | Containers | Gold-border panels (`rgba(201,149,10,.28–.35)`), 8–12px radius |
 | Image render | `image-rendering: pixelated` on UI icons |
-| Account wire | `GrudgeCloud` JWT → Railway; guest = local demo bag only |
+| Account wire | `GrudgeCloud` JWT → Railway bag (suite authority); guest = local demo only |
+| SPA harvest | GrudgeBuilder `depositHarvestType` → `/api/account/resources/batch` |
 
 ## Do not
 
