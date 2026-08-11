@@ -1,77 +1,85 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grudge Main Panel - Warlords</title>
-  <meta name="description" content="Warlords-era main panel + tactical equipment paperdoll. Hosted by ui.grudge-studio.com (SSOT)." />
-  <!-- Brand fonts: Cinzel / Crimson Text / JetBrains Mono — no Google Fonts, no emoji chrome -->
-  <link rel="stylesheet" href="./css/grudge-game-fonts.css" />
+  <title>Grudge Main Panel ΓÇö Warlords</title>
+  <meta name="description" content="Warlords main panel: equipment mesh swap, class/weapon skills, professions, craft, inventory, characters. SSOT ui.grudge-studio.com" />
+  <link rel="stylesheet" href="./grudge-fonts.css" />
   <link rel="stylesheet" href="./grudge-shell.css" />
   <link rel="stylesheet" href="./main-panel.css" />
   <script src="https://js.puter.com/v2/" async></script>
   <script src="./grudge-cloud-save.js"></script>
   <script src="./race-portraits.js"></script>
+  <script src="./ui-assets-ssot.js"></script>
+  <script src="./info-catalog.js"></script>
   <script src="./item-icons.js"></script>
+  <script src="./warlords-character-ssot.js"></script>
+  <script src="./main-panel-content.js"></script>
+  <script src="./fleet-game-systems.js"></script>
+  <script src="./wcs-professions-ssot.js"></script>
+  <script src="./main-panel-mesh.js"></script>
+  <script src="./grudge6-viewport.js"></script>
   <script src="./equipment-paperdoll.js"></script>
   <script src="./grudge-engine.js"></script>
   <script src="./grudge-shell.js"></script>
 </head>
 <body class="mp-root gs-has-nav">
+  <div id="item-tooltip" class="item-tooltip" hidden></div>
   <div class="app">
     <header class="top-bar">
       <div class="logo">
         <h1>Grudge Warlords</h1>
-        <span class="sub">Main Panel · Era host</span>
+        <span class="sub">Main Panel ┬╖ mesh ┬╖ skills ┬╖ craft ┬╖ bag</span>
       </div>
       <div class="player-info">
         <div class="resource-bars" style="display:flex;gap:6px">
-          <div class="res-bar"><div class="fill hp" id="bar-hp" style="width:78%"></div><span class="lbl" id="lbl-hp">HP 780/1000</span></div>
-          <div class="res-bar"><div class="fill mp" id="bar-mp" style="width:62%"></div><span class="lbl" id="lbl-mp">MP 310/500</span></div>
-          <div class="res-bar"><div class="fill sp" id="bar-sp" style="width:91%"></div><span class="lbl" id="lbl-sp">SP 91/100</span></div>
+          <div class="res-bar"><div class="fill hp" id="bar-hp" style="width:78%"></div><span class="lbl" id="lbl-hp">HP ΓÇö</span></div>
+          <div class="res-bar"><div class="fill mp" id="bar-mp" style="width:62%"></div><span class="lbl" id="lbl-mp">MP ΓÇö</span></div>
+          <div class="res-bar"><div class="fill sp" id="bar-sp" style="width:91%"></div><span class="lbl" id="lbl-sp">SP ΓÇö</span></div>
         </div>
-        <span class="mp-entity-name" id="entity-name">Korgath the Sworn</span>
-        <span class="mp-entity-meta" id="entity-meta">Lv.42 Barbarian Warrior</span>
+        <img id="hero-thumb" class="hero-thumb" alt="" width="36" height="36" />
+        <span style="color:var(--gold);font-family:'Cinzel',serif;font-weight:700" id="entity-name">Hero</span>
+        <span style="color:var(--muted);font-size:10px" id="entity-meta">Sign in for fleet roster</span>
       </div>
     </header>
 
     <div class="mp-era-bar" id="era-bar">
       <span style="color:var(--muted)">Era</span>
       <button type="button" class="era-pill active" data-era="warlords">Warlords</button>
+      <a href="https://character.grudge-studio.com/foundry?era=warlords" target="_blank" rel="noopener">Foundry create</a>
+      <a href="https://character.grudge-studio.com/prefab" target="_blank" rel="noopener">Prefab Lab</a>
       <a href="https://ui.grudge-studio.com/games" target="_blank" rel="noopener">Game UI packs</a>
       <a href="https://ui.grudge-studio.com/studio" target="_blank" rel="noopener">Studio</a>
-      <a href="./eras/index.json" target="_blank" rel="noopener">eras/index.json</a>
+      <span id="auth-pill" class="auth-pill">Guest</span>
     </div>
 
     <div class="main-body">
       <aside class="left-col">
         <div class="stat-section">
-          <h3>Entities</h3>
-          <div class="entity-chip active" data-id="player" data-mode="self">
-            <div>
-              <div class="name" id="chip-player-name">You</div>
-              <div class="meta" id="chip-player-meta">Fleet character</div>
-            </div>
-          </div>
-          <div class="entity-chip" data-id="shadowfang" data-mode="inspect">
-            <div>
-              <div class="name">Shadowfang</div>
-              <div class="meta">Lv.38 · Ranger · Inspect</div>
-            </div>
-          </div>
+          <h3>Characters</h3>
+          <div id="char-list" class="char-list"></div>
+          <button type="button" class="mp-btn ghost" id="btn-refresh-chars">Γå╗ Refresh roster</button>
         </div>
         <div class="stat-section">
           <h3>Combat Power</h3>
-          <div class="stat-row"><span class="k">Rating</span><span class="v" style="color:var(--gold)">A+</span></div>
+          <div class="stat-row"><span class="k">Rating</span><span class="v" id="cp-rating" style="color:var(--gold)">ΓÇö</span></div>
           <div class="stat-row"><span class="k">Equipped</span><span class="v" id="eq-count">0/11</span></div>
+          <div class="stat-row"><span class="k">Mesh IDs</span><span class="v" id="mesh-count">0</span></div>
           <div class="stat-row"><span class="k">Mode</span><span class="v" id="eq-mode">self</span></div>
+          <div class="stat-row"><span class="k">Weapon</span><span class="v" id="weapon-type">unarmed</span></div>
         </div>
         <div class="stat-section">
           <h3>Attributes</h3>
-          <div class="stat-row"><span class="k">Strength</span><span class="v" id="attr-str">-</span></div>
-          <div class="stat-row"><span class="k">Vitality</span><span class="v" id="attr-vit">-</span></div>
-          <div class="stat-row"><span class="k">Dexterity</span><span class="v" id="attr-dex">-</span></div>
-          <div class="stat-row"><span class="k">Tactics</span><span class="v" id="attr-tac">-</span></div>
+          <div class="stat-row"><span class="k">Strength</span><span class="v" id="attr-str">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">Vitality</span><span class="v" id="attr-vit">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">Dexterity</span><span class="v" id="attr-dex">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">Intelligence</span><span class="v" id="attr-int">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">Tactics</span><span class="v" id="attr-tac">ΓÇö</span></div>
+        </div>
+        <div class="stat-section">
+          <h3>Professions</h3>
+          <div id="prof-mini" class="prof-mini"></div>
         </div>
       </aside>
 
@@ -79,357 +87,1169 @@
         <div class="tab-strip" id="tabs">
           <button class="tab-btn active" data-tab="equipment">Equipment</button>
           <button class="tab-btn" data-tab="inventory">Inventory</button>
-          <button class="tab-btn" data-tab="skills">Skills</button>
-          <button class="tab-btn" data-tab="craft">Quick Craft</button>
+          <button class="tab-btn" data-tab="class-skills">Class skills</button>
+          <button class="tab-btn" data-tab="weapon-skills">Weapon skills</button>
+          <button class="tab-btn" data-tab="professions">Professions</button>
+          <button class="tab-btn" data-tab="craft">Crafting</button>
           <button class="tab-btn" data-tab="quests">Quests</button>
         </div>
         <div class="content-area">
           <div class="tab-panel active" id="tab-equipment">
-            <!-- Tactical paperdoll replaces old emoji-only equipment tab -->
             <div id="paperdoll-host"></div>
-            <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:10px">
-              Layout: tactical-infinity equipment · Host: ui.grudge-studio.com · Era: <span id="era-label">warlords</span>
+            <div class="mesh-toolbar">
+              <button type="button" class="mp-btn" id="btn-unarmed">Unarmed kit</button>
+              <button type="button" class="mp-btn" id="btn-class-kit">Class starting kit</button>
+              <button type="button" class="mp-btn primary" id="btn-save-mesh">Save mesh ΓåÆ character</button>
+              <span class="mesh-toolbar-hint">Click slots to cycle mesh variants ┬╖ race atlas texture</span>
+            </div>
+            <p class="center-hint">
+              Layout: tactical paperdoll ┬╖ Host: ui.grudge-studio.com ┬╖ Era: <span id="era-label">warlords</span>
+              ┬╖ grudge6 mesh visibility (Unity parity)
             </p>
           </div>
+
           <div class="tab-panel" id="tab-inventory">
-            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Shared account bag · Railway SSOT</p>
-            <div class="inv-grid" id="inv-grid"></div>
-          </div>
-          <div class="tab-panel" id="tab-skills">
-            <div class="qc-grid">
-              <div class="qc-card"><h4>Power Strike</h4><p>150% overhead · Slot 1</p></div>
-              <div class="qc-card"><h4>Shield Bash</h4><p>Stun 1.5s · Slot 2</p></div>
-              <div class="qc-card"><h4>War Cry</h4><p>AoE taunt · Slot 3</p></div>
-              <div class="qc-card"><h4>Cleave</h4><p>Wide arc · Slot 4</p></div>
+            <div class="inv-header">
+              <p>Shared account bag · Railway / ObjectStore SSOT ┬╖ <span id="inv-source">loading catalog…</span></p>
+              <button type="button" class="mp-btn ghost" id="btn-refresh-inv">Γå╗ Bag</button>
             </div>
+            <div class="inv-grid dense" id="inv-grid"></div>
           </div>
+
+          <div class="tab-panel" id="tab-class-skills">
+            <div class="skills-head">
+              <h3 id="class-tree-title">Class skill tree</h3>
+              <p id="class-tree-sub">Reference + hotbar bind ┬╖ unlock in play</p>
+            </div>
+            <div id="class-tree-host" class="skill-tree"></div>
+          </div>
+
+          <div class="tab-panel" id="tab-weapon-skills">
+            <div class="skills-head">
+              <h3 id="weapon-bar-title">Weapon skills</h3>
+              <p id="weapon-bar-sub">Driven by main-hand mesh / weapon type</p>
+            </div>
+            <div id="weapon-skills-host" class="qc-grid"></div>
+          </div>
+
+          <div class="tab-panel" id="tab-professions">
+            <div class="skills-head">
+              <h3>WCS Professional skill trees</h3>
+              <p id="prof-ssot-sub">Canonical SSOT from Warlord Crafting Suite ┬╖ Miner ┬╖ Forester ┬╖ Engineer ┬╖ Mystic ┬╖ Chef</p>
+            </div>
+            <div class="prof-tabs" id="prof-tabs"></div>
+            <div id="prof-detail" class="prof-detail"></div>
+            <div id="prof-trees-host" class="prof-trees"></div>
+          </div>
+
           <div class="tab-panel" id="tab-craft">
-            <p style="font-size:11px;color:var(--muted);margin-bottom:8px">
-              Quick Craft · full suite on
-              <a href="https://grudge-crafting.puter.site/" target="_blank" rel="noopener" style="color:var(--gold)">grudge-crafting.puter.site</a>
-              · definitions from info.grudge-studio.com
-            </p>
-            <div class="qc-grid" id="qc-stations">
-              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=smithing" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
-                <h4>Smithing</h4><p>Miner · anvil / forge / grind</p>
-              </a>
-              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=cooking" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
-                <h4>Cooking</h4><p>Chef · campfire / kitchen</p>
-              </a>
-              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=lumber" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
-                <h4>Lumber</h4><p>Forester · planks / leather</p>
-              </a>
-              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=loom" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
-                <h4>Loom</h4><p>Mystic · cloth / essence</p>
-              </a>
-              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=tinker" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
-                <h4>Tinker</h4><p>Engineer · workshop</p>
-              </a>
-              <a class="qc-card" href="https://grudge-crafting.puter.site/?station=camp" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
-                <h4>Camp Bench</h4><p>T0 universal · starter camp</p>
-              </a>
+            <div class="craft-shell">
+              <div class="craft-toolbar">
+                <div class="craft-toolbar-left">
+                  <h3>Warlords Craft</h3>
+                  <span id="craft-auth-status" class="craft-auth-pill">Connecting…</span>
+                </div>
+                <div class="craft-toolbar-right">
+                  <button type="button" class="mp-btn ghost" id="btn-craft-reload" title="Reload suite + recipes">↻</button>
+                  <button type="button" class="mp-btn" id="btn-craft-quick" title="Toggle quick recipes">Quick</button>
+                  <button type="button" class="mp-btn ghost" id="btn-craft-popout" title="Open full suite (new tab)">↗ Full suite</button>
+                  <button type="button" class="mp-btn primary" id="btn-craft-login" title="Sign in with Grudge ID">Sign in</button>
+                </div>
+              </div>
+              <p class="craft-sub">
+                Production suite: <strong>grudgewarlords.com/craft</strong> · shared Railway <strong>account bag</strong> ·
+                XP on active character · same JWT as this panel
+              </p>
+              <div class="craft-frame-wrap">
+                <iframe
+                  id="craft-suite-frame"
+                  title="Warlords Crafting Suite"
+                  src="about:blank"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  allow="clipboard-read; clipboard-write"
+                ></iframe>
+                <div id="craft-frame-overlay" class="craft-frame-overlay" hidden>
+                  <p id="craft-frame-msg">Loading craft suite…</p>
+                  <button type="button" class="mp-btn primary" id="btn-craft-open-fallback">Open suite in new tab</button>
+                </div>
+              </div>
+              <div id="craft-quick-panel" class="craft-quick-panel" hidden>
+                <div class="craft-layout">
+                  <div class="craft-main">
+                    <div class="craft-filter" id="craft-filter"></div>
+                    <div id="craft-host" class="qc-grid craft-grid"></div>
+                    <p id="craft-log" class="craft-log"></p>
+                  </div>
+                  <aside class="craft-side" aria-label="Craft materials">
+                    <div class="craft-side-head">
+                      <h4>Materials</h4>
+                      <span id="craft-bag-meta" class="craft-bag-meta">—</span>
+                    </div>
+                    <div id="craft-mat-host" class="craft-mat-grid"></div>
+                    <div class="craft-side-foot">
+                      <p id="craft-account-hint" class="craft-hint">Guest bag is local demo · sign in for Railway account inventory</p>
+                      <a class="craft-suite-link" id="craft-suite-link" href="https://grudgewarlords.com/craft/" target="_blank" rel="noopener">Open stations · benches · full WCS ↗</a>
+                      <a class="craft-suite-link" href="https://wcs.grudge-studio.com/" target="_blank" rel="noopener" style="display:block;margin-top:4px">WCS brand hub ↗</a>
+                    </div>
+                  </aside>
+                </div>
+              </div>
             </div>
-            <div class="qc-grid" style="margin-top:10px">
-              <div class="qc-card"><h4>Iron Ingot</h4><p>Miner · 3 ore to 1 ingot</p></div>
-              <div class="qc-card"><h4>Healing Tonic</h4><p>Chef · herbs + water</p></div>
-              <div class="qc-card"><h4>Wooden Shield</h4><p>Forester · 8 planks</p></div>
-              <div class="qc-card"><h4>Mana Dust</h4><p>Mystic · crystal shard</p></div>
-            </div>
-            <p style="margin-top:12px;text-align:center">
-              <a href="https://grudge-crafting.puter.site/" target="_blank" rel="noopener"
-                 style="display:inline-block;padding:10px 16px;border-radius:8px;border:1px solid rgba(212,168,67,0.45);background:rgba(212,168,67,0.12);color:var(--gold);font-weight:700;text-decoration:none;font-size:12px">
-                Open full Crafting Suite
-              </a>
-            </p>
-            <iframe
-              id="craft-suite-frame"
-              title="Grudge Crafting Suite"
-              src="https://grudge-crafting.puter.site/?embed=1"
-              style="width:100%;height:min(420px,50vh);margin-top:12px;border:1px solid rgba(212,168,67,0.2);border-radius:10px;background:#0a0a10"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
           </div>
+
           <div class="tab-panel" id="tab-quests">
-            <div class="qc-card" style="margin-bottom:8px"><h4>The Storm Awakens</h4><p>Main · Step 3/3</p></div>
-            <div class="qc-card"><h4>Iron for the Forge</h4><p>Side · 4/10 iron ingots</p></div>
+            <div class="qc-card" style="margin-bottom:8px"><h4>The Storm Awakens</h4><p>Main ┬╖ Board The Grudge ┬╖ step 3/3</p></div>
+            <div class="qc-card" style="margin-bottom:8px"><h4>Iron for the Forge</h4><p id="quest-iron">Side ┬╖ craft iron ingots</p></div>
+            <div class="qc-card"><h4>Kit of the Warlord</h4><p>Side ┬╖ equip class starting mesh kit</p></div>
           </div>
         </div>
         <div class="action-bar-wrap">
-          <div class="action-bar">
-            <div class="ab-slot">⚔<span class="key">1</span></div>
-            <div class="ab-slot">🛡<span class="key">2</span></div>
-            <div class="ab-slot">📯<span class="key">3</span></div>
-            <div class="ab-slot">💥<span class="key">4</span></div>
-            <div class="ab-slot">🔥<span class="key">5</span></div>
-            <div class="ab-slot">💀<span class="key">6</span></div>
-          </div>
+          <div class="action-bar" id="action-bar"></div>
         </div>
       </section>
 
       <aside class="right-col">
         <div class="stat-section" style="padding:8px">
-          <h3 id="rcol-title">Bag</h3>
+          <h3 id="rcol-title">Quick bag</h3>
           <div class="inv-grid" id="rcol-inv"></div>
+        </div>
+        <div class="stat-section" style="padding:8px">
+          <h3>Resources</h3>
+          <div id="res-list" class="res-list"></div>
+        </div>
+        <div class="stat-section" style="padding:8px">
+          <h3>Mesh IDs</h3>
+          <div id="mesh-id-list" class="mesh-id-list font-mono"></div>
         </div>
       </aside>
     </div>
   </div>
+
   <script>
     const params = new URLSearchParams(location.search);
     const ERA = params.get("era") || "warlords";
     const EMBED = params.get("embed") === "1" || params.get("embed") === "true";
     const TAB = params.get("tab") || "equipment";
-    const INSPECT = params.get("inspect") || params.get("characterId") || null;
+    const FORCE_ID = params.get("characterId") || params.get("inspect") || null;
+    const MPC = window.MainPanelContent;
+    const MPM = window.MainPanelMesh;
 
     if (EMBED) document.body.classList.add("embed-mode");
     document.getElementById("era-label").textContent = ERA;
 
-    /** Panel-slot equipment (MainHand / OffHand / SecondaryWeapon + armor). */
-    const DEMO_EQUIP = {
-      player: {
-        Head: { id: "helm_iron", name: "Iron Helm", rarity: "uncommon" },
-        Chest: { id: "chest_iron", name: "Iron Cuirass", rarity: "rare" },
-        MainHand: { id: "w_sword", name: "Cutlass", rarity: "uncommon" },
-        SecondaryWeapon: { id: "w_axe", name: "Boarding Axe", rarity: "common" },
-        OffHand: { id: "shield_wood", name: "Oak Shield", rarity: "common" },
-        Feet: { id: "boots_leather", name: "March Boots", rarity: "common" },
-        Back: { id: "bag_leather", name: "Field Pack", rarity: "common" },
-      },
-      shadowfang: {
-        MainHand: { id: "bow_yew", name: "Yew Longbow", rarity: "rare" },
-        SecondaryWeapon: { id: "w_dagger", name: "Hunting Knife", rarity: "uncommon" },
-        Chest: { id: "leather_vest", name: "Ranger Vest", rarity: "uncommon" },
-        Back: { id: "cape_leaf", name: "Leaf Cloak", rarity: "epic" },
-      },
+    /** Guest shell only — replaced by fleet character when signed in. */
+    const DEMO_PLAYER = {
+      name: "Guest Warrior",
+      meta: "Sign in for Railway roster · ObjectStore skills",
+      race: "barbarian",
+      classId: "warrior",
+      level: 1,
+      portrait: window.grudgePortraitForRace?.("barbarian"),
+      equipment: {},
+      mode: "self",
+      attributes: { strength: 10, vitality: 10, dexterity: 10, intelligence: 10, tactics: 10 },
+      professionLevels: { miner: 1, forester: 1, engineer: 1, mystic: 1, chef: 1 },
     };
 
-    /** Shared account bag (demo) — equipable items + mats with icons */
-    const DEMO_BAG = [
-      { itemId: "iron_ore", name: "Iron Ore", quantity: 12, category: "ore" },
-      { itemId: "oak_plank", name: "Oak Plank", quantity: 8, category: "wood" },
-      { itemId: "w_hammer", name: "War Hammer", quantity: 1, category: "hammer" },
-      { itemId: "potion_health", name: "Health Potion", quantity: 5, category: "potion" },
-      { itemId: "w_staff", name: "Ash Staff", quantity: 1, category: "staff" },
-      { itemId: "hide_thick", name: "Thick Hide", quantity: 4, category: "hide" },
-      { itemId: "chest_leather", name: "Leather Vest", quantity: 1, category: "armor" },
-      { itemId: "w_bow", name: "Short Bow", quantity: 1, category: "bow" },
-    ];
+    let bag = [];
+    let bagSource = "loading ObjectStore catalog…";
+    let paperdollApi = null;
+    let lastMeshIds = [];
+    let selectedBagIndex = -1;
+    let tipEl = null;
 
-    const DEFAULT_ENTITIES = {
-      player: {
-        name: "Korgath the Sworn",
-        meta: "Lv.42 Barbarian Warrior",
-        race: "barbarian",
-        portrait: window.grudgePortraitForRace?.("barbarian"),
-        equipment: DEMO_EQUIP.player,
-        mode: "self",
-      },
-      shadowfang: {
-        name: "Shadowfang",
-        meta: "Lv.38 Elf Ranger · Ally",
-        race: "elf",
-        portrait: window.grudgePortraitForRace?.("elf"),
-        equipment: DEMO_EQUIP.shadowfang,
-        mode: "inspect",
-      },
-    };
+    function bindTooltipLayer() {
+      tipEl = document.getElementById("item-tooltip");
+      if (!tipEl) return;
+      document.addEventListener(
+        "pointerover",
+        (e) => {
+          const host = e.target.closest("[data-tip]");
+          if (!host || !host.dataset.tip) return;
+          tipEl.innerHTML = host.dataset.tip;
+          tipEl.hidden = false;
+          positionTip(e);
+        },
+        true,
+      );
+      document.addEventListener(
+        "pointermove",
+        (e) => {
+          if (tipEl && !tipEl.hidden) positionTip(e);
+        },
+        true,
+      );
+      document.addEventListener(
+        "pointerout",
+        (e) => {
+          const host = e.target.closest("[data-tip]");
+          if (!host || !tipEl) return;
+          const to = e.relatedTarget;
+          if (to && host.contains(to)) return;
+          tipEl.hidden = true;
+        },
+        true,
+      );
+    }
+    function positionTip(e) {
+      if (!tipEl) return;
+      const pad = 14;
+      let x = e.clientX + pad;
+      let y = e.clientY + pad;
+      const r = tipEl.getBoundingClientRect();
+      if (x + r.width > window.innerWidth - 8) x = e.clientX - r.width - pad;
+      if (y + r.height > window.innerHeight - 8) y = e.clientY - r.height - pad;
+      tipEl.style.left = Math.max(8, x) + "px";
+      tipEl.style.top = Math.max(8, y) + "px";
+    }
 
     let state = {
       era: ERA,
       activeTab: TAB,
-      activeEntity: INSPECT ? "shadowfang" : "player",
-      entities: structuredClone(DEFAULT_ENTITIES),
-      bars: { hp: 78, mp: 62, sp: 91 },
+      activeEntity: "player",
+      entities: { player: structuredClone(DEMO_PLAYER) },
+      bars: { hp: 78, mp: 62, sp: 91, hpMax: 1000, mpMax: 500, spMax: 100 },
       equipMode: "self",
+      unarmed: false,
     };
 
-    let paperdollApi = null;
-    /** Account bag state — shared across characters; SecondaryWeapon is equip reserve */
-    let bagItems = DEMO_BAG.map((r) => ({ ...r }));
-    let selectedBagIndex = -1;
-
-    function equipCount(eq) {
-      return Object.keys(eq || {}).filter((k) => eq[k] && k !== "SecondaryWeapon").length;
+    function esc(s) {
+      return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     }
 
-    function renderBagGrids() {
-      const icons = window.GrudgeItemIcons;
-      ["inv-grid", "rcol-inv"].forEach((id) => {
+    function equipCount(eq) {
+      return Object.keys(eq || {}).filter((k) => eq[k]).length;
+    }
+
+    function playerEnt() {
+      return state.entities.player || DEMO_PLAYER;
+    }
+
+    function weaponTypeOf(ent) {
+      const w = ent.equipment?.weapon;
+      if (w?.weaponType) return w.weaponType;
+      if (w?.meshSlot) return w.meshSlot === "bow" ? "bow" : w.meshSlot === "staff" ? "staff" : w.meshSlot;
+      if (state.unarmed) return "unarmed";
+      const kit = MPC?.meshIdsFor(ent.race, ent.classId, false);
+      return kit?.weaponType || "sword";
+    }
+
+    function applyClassKit(ent, unarmed) {
+      if (!MPC) return ent;
+      const built = MPC.meshIdsFor(ent.race, ent.classId, unarmed);
+      const eq = {};
+      const k = built.kit;
+      if (k.head) eq.helmet = { id: `head_${k.head}`, name: `Head ${k.head}`, rarity: "common", meshSlot: "head", meshVar: k.head };
+      if (k.body) eq.chest = { id: `body_${k.body}`, name: `Body ${k.body}`, rarity: "common", meshSlot: "body", meshVar: k.body };
+      if (k.arms) eq.gloves = { id: `arms_${k.arms}`, name: `Arms ${k.arms}`, rarity: "common", meshSlot: "arms", meshVar: k.arms };
+      if (k.legs) eq.legs = { id: `legs_${k.legs}`, name: `Legs ${k.legs}`, rarity: "common", meshSlot: "legs", meshVar: k.legs };
+      if (k.shoulders) eq.cloak = { id: `sh_${k.shoulders}`, name: `Pads ${k.shoulders}`, rarity: "uncommon", meshSlot: "shoulders", meshVar: k.shoulders };
+      if (k.weapon) {
+        eq.weapon = {
+          id: `${k.weapon}_${k.weaponVar}`,
+          name: `${k.weapon} ${k.weaponVar || ""}`.trim(),
+          rarity: "uncommon",
+          meshSlot: k.weapon,
+          meshVar: k.weaponVar || "_default",
+          weaponType: k.weaponType,
+        };
+      }
+      if (k.offhand === "shield") {
+        eq.offhand = { id: `shield_${k.offhandVar}`, name: `Shield ${k.offhandVar}`, rarity: "uncommon", meshSlot: "shield", meshVar: k.offhandVar };
+      }
+      ent.equipment = eq;
+      lastMeshIds = built.meshIds;
+      return ent;
+    }
+
+    function renderPaperdoll() {
+      const host = document.getElementById("paperdoll-host");
+      if (!host || !window.GrudgeEquipmentPaperdoll) return;
+      const ent = state.entities[state.activeEntity] || playerEnt();
+      const mode = ent.mode === "inspect" || state.activeEntity !== "player" ? "inspect" : "self";
+      state.equipMode = mode;
+      document.getElementById("eq-mode").textContent = mode;
+      document.getElementById("eq-count").textContent = equipCount(ent.equipment) + "/11";
+      document.getElementById("weapon-type").textContent = weaponTypeOf(ent);
+
+      const built = MPC?.meshIdsFor(ent.race, ent.classId, state.unarmed && mode === "self");
+      lastMeshIds = MPM?.meshIdsFromEquipment?.(ent.equipment, ent.race) || built?.meshIds || [];
+      if (!lastMeshIds.length && built) lastMeshIds = built.meshIds;
+      document.getElementById("mesh-count").textContent = String(lastMeshIds.length);
+      document.getElementById("mesh-id-list").innerHTML = lastMeshIds
+        .map((id) => `<div>${esc(id)}</div>`)
+        .join("") || "<div class='muted'>ΓÇö</div>";
+
+      const portrait =
+        ent.portrait ||
+        window.grudgeHeroImage?.(ent) ||
+        window.grudgePortraitForRace?.(ent.race);
+
+      // Live grudge6 kit (GLB + mesh_ids) in paperdoll
+      if (window.Grudge6Viewport?.mount) {
+        Grudge6Viewport.mount(host, {
+          race: ent.race || "human",
+          classId: ent.classId || "warrior",
+          meshIds: lastMeshIds,
+          unarmed: state.unarmed,
+        }).catch((e) => console.warn("[main-panel] grudge6 viewport", e));
+      }
+
+      paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
+        title: "GRUDGE WARLORD",
+        subtitle:
+          (ent.race || "hero").toUpperCase() +
+          " ┬╖ " +
+          (ent.classId || "warrior").toUpperCase() +
+          (mode === "inspect" ? " ┬╖ INSPECT" : " ┬╖ LOADOUT"),
+        race: ent.race || "human",
+        classId: ent.classId || "warrior",
+        portraitUrl: portrait,
+        equipped: ent.equipment || {},
+        meshIds: lastMeshIds,
+        unarmed: state.unarmed,
+        mode,
+        entityId: state.activeEntity,
+        width: 440,
+        onSlotClick: (slotId, gearKey) => {
+          if (mode === "inspect") return;
+          const p = playerEnt();
+          p.equipment = MPM.cycleMeshVariant(p.equipment, slotId, gearKey);
+          state.unarmed = false;
+          renderPaperdoll();
+          renderWeaponSkills();
+          renderHotbar();
+          scheduleSave();
+          toast(`Mesh swap: ${slotId}`);
+        },
+      });
+    }
+
+    function renderCharList(chars) {
+      const host = document.getElementById("char-list");
+      if (!host) return;
+      if (!chars?.length) {
+        host.innerHTML = `
+          <div class="entity-chip active" data-id="player">
+            <img src="${esc(playerEnt().portrait || "")}" alt="" class="chip-av" />
+            <div>
+              <div class="name">${esc(playerEnt().name)}</div>
+              <div class="meta">${esc(playerEnt().meta)}</div>
+            </div>
+          </div>
+          <p class="muted tiny">Sign in to load Railway roster (4 free / era)</p>`;
+        return;
+      }
+      host.innerHTML = chars
+        .slice(0, 8)
+        .map((c) => {
+          const race = c.raceId || c.race || "human";
+          const img = window.grudgeHeroImage?.(c) || window.grudgePortraitForRace?.(race);
+          const active = c.id === window.GrudgeEngine?.getActiveCharacter?.()?.id;
+          return `<button type="button" class="entity-chip ${active ? "active" : ""}" data-cid="${esc(c.id)}">
+            <img src="${esc(img)}" alt="" class="chip-av" />
+            <div>
+              <div class="name">${esc(c.name || "Hero")}</div>
+              <div class="meta">Lv.${c.level || 20} ┬╖ ${esc(race)} ┬╖ ${esc(c.classId || c.class || "")}</div>
+            </div>
+          </button>`;
+        })
+        .join("");
+      host.querySelectorAll("[data-cid]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          window.GrudgeEngine?.selectCharacter?.(btn.dataset.cid);
+          const c = window.GrudgeEngine?.getActiveCharacter?.();
+          if (c) mergeFleetCharacter(c);
+        });
+      });
+    }
+
+    function renderInv() {
+      const cat = window.InfoCatalog;
+      const fill = (id) => {
         const g = document.getElementById(id);
         if (!g) return;
         g.innerHTML = "";
-        const slots = 24;
+        const slots = Math.max(24, bag.length + 4);
         for (let i = 0; i < slots; i++) {
-          const row = bagItems[i];
+          const raw = bag[i];
+          const it = raw && cat?.enrichBagItem ? cat.enrichBagItem(raw) : raw;
+          if (it && bag[i]) bag[i] = it; // keep enriched
           const s = document.createElement("button");
           s.type = "button";
-          s.className = "inv-slot" + (row ? " has-item" : "") + (selectedBagIndex === i ? " selected" : "");
+          s.className =
+            "inv-slot" +
+            (it ? " has-item" : "") +
+            (selectedBagIndex === i ? " selected" : "") +
+            (it?.equipSlot ? " equippable" : "");
           s.dataset.index = String(i);
-          if (row) {
-            const url = icons
-              ? icons.resolve({ itemId: row.itemId, name: row.name, category: row.category, iconUrl: row.iconUrl })
-              : "";
+          if (it) {
+            const iconUrl =
+              cat?.resolveIcon?.(it) ||
+              window.GrudgeItemIcons?.resolve?.(it) ||
+              it.iconUrl ||
+              "";
+            const iconHtml = iconUrl
+              ? `<img class="inv-icon" src="${esc(iconUrl)}" alt="" referrerpolicy="no-referrer" draggable="false" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'inv-emoji',textContent:'${esc(it.emoji || "≡ƒôª")}' }))" />`
+              : `<span class="inv-emoji">${esc(it.emoji || "≡ƒôª")}</span>`;
             s.innerHTML =
-              (icons ? icons.imgTag(url, row.name, 28) : "") +
-              (row.quantity > 1
-                ? `<span class="inv-qty">${row.quantity}</span>`
-                : "") +
-              `<span class="inv-tip">${row.name}</span>`;
-            s.title = row.name + (row.quantity > 1 ? " ×" + row.quantity : "");
-            s.onclick = () => onBagSlotClick(i);
+              iconHtml +
+              (it.qty > 1 ? `<span class="inv-qty">${it.qty}</span>` : "") +
+              (it.equipSlot ? `<span class="inv-slot-tag">${esc(it.equipSlot)}</span>` : "");
+            const tip =
+              cat?.tooltipHtml?.({
+                itemId: it.id,
+                name: it.name,
+                qty: it.qty,
+                iconUrl,
+                type: it.type,
+                category: it.category,
+                description: it.description,
+                stats: it.stats,
+                tier: it.tier,
+                tierLabel: it.tierLabel,
+                slot: it.equipSlot || it.slot,
+              }) || "";
+            s.title = cat?.plainTooltip?.(it) || `${it.name || it.id} ├ù${it.qty || 1}`;
+            if (tip) s.dataset.tip = tip;
+            s.onclick = () => onBagClick(i);
           } else {
             s.title = "Empty bag slot";
           }
           g.appendChild(s);
         }
-      });
+      };
+      fill("inv-grid");
+      fill("rcol-inv");
+      document.getElementById("inv-source").textContent = bagSource;
     }
 
-    function onBagSlotClick(index) {
+    function onBagClick(index) {
       if (state.equipMode === "inspect") return;
       selectedBagIndex = index;
-      renderBagGrids();
-      const row = bagItems[index];
+      renderInv();
+      const row = bag[index];
       if (!row) return;
-      // Quick equip weapons / armor into correct panel slot
-      const id = row.itemId;
-      const lower = (id + " " + (row.name || "")).toLowerCase();
-      let slot = null;
-      if (/shield/.test(lower)) slot = "OffHand";
-      else if (/sword|axe|hammer|bow|staff|dagger|spear|gun|weapon/.test(lower)) {
-        // If MainHand filled, offer SecondaryWeapon (non-drop reserve)
-        const eq = state.entities.player.equipment || {};
-        slot = eq.MainHand || eq.weapon ? "SecondaryWeapon" : "MainHand";
-      } else if (/helm|hood|head/.test(lower)) slot = "Head";
-      else if (/chest|vest|cuirass|robe|armor/.test(lower)) slot = "Chest";
-      else if (/boot|feet/.test(lower)) slot = "Feet";
-      else if (/glove|hand/.test(lower)) slot = "Hands";
-      else if (/bag|pack|cape|cloak|back/.test(lower)) slot = "Back";
-      if (!slot) {
-        console.info("[main-panel] bag item (material — not equippable):", row.name);
+      const cat = window.InfoCatalog;
+      const enriched = cat?.enrichBagItem?.(row) || row;
+      const paperSlot =
+        enriched.equipSlot ||
+        cat?.paperdollSlot?.(enriched) ||
+        null;
+      if (!paperSlot) {
+        toast(`${enriched.name || enriched.id} ┬╖ material (not equippable)`);
         return;
       }
-      equipFromBag(index, slot);
+      equipBagToSlot(index, paperSlot);
     }
 
-    function equipFromBag(bagIndex, panelSlot) {
-      const row = bagItems[bagIndex];
+    function equipBagToSlot(bagIndex, paperSlot) {
+      const row = bag[bagIndex];
       if (!row) return;
-      const ent = state.entities.player;
+      const ent = playerEnt();
       if (!ent || ent.mode === "inspect") return;
+      const cat = window.InfoCatalog;
+      const enriched = cat?.enrichBagItem?.(row) || row;
       const eq = { ...(ent.equipment || {}) };
-      const prev = eq[panelSlot];
-      eq[panelSlot] = {
-        id: row.itemId,
-        name: row.name,
-        rarity: row.rarity || "common",
-        iconUrl: window.GrudgeItemIcons?.resolve({ itemId: row.itemId, name: row.name, category: row.category }),
+      const prev = eq[paperSlot];
+      eq[paperSlot] = {
+        id: enriched.id,
+        name: enriched.name,
+        rarity: enriched.rarity || cat?.rarityFromTier?.(enriched.tier, enriched.tierLabel) || "common",
+        iconUrl: cat?.resolveIcon?.(enriched) || enriched.iconUrl,
+        description: enriched.description,
+        stats: enriched.stats,
+        type: enriched.type,
+        tierLabel: enriched.tierLabel,
+        weaponType: enriched.weaponType,
+        slotType: enriched.slotType,
       };
-      // Return previous gear to bag
       if (prev) {
-        const pid = typeof prev === "string" ? prev : prev.id;
-        const pname = typeof prev === "string" ? prev : prev.name || pid;
-        bagItems.push({ itemId: pid, name: pname, quantity: 1 });
+        bagAdd({
+          id: prev.id || prev.itemId,
+          name: prev.name || prev.id,
+          qty: 1,
+          iconUrl: prev.iconUrl,
+          type: prev.type,
+          rarity: prev.rarity,
+        });
       }
-      // Consume one from bag
-      if (row.quantity > 1) row.quantity -= 1;
-      else bagItems.splice(bagIndex, 1);
+      if ((row.qty || 1) > 1) row.qty -= 1;
+      else bag.splice(bagIndex, 1);
       ent.equipment = eq;
       selectedBagIndex = -1;
+      state.unarmed = false;
       renderPaperdoll();
-      renderBagGrids();
+      renderInv();
+      renderWeaponSkills();
       scheduleSave();
-      // Notify parent game to re-apply mesh equipment
+      toast(`Equipped ${enriched.name} ΓåÆ ${paperSlot}`);
       if (window.parent !== window) {
         window.parent.postMessage(
-          {
-            type: "GRUDGE_EQUIP_CHANGE",
-            equipment: eq,
-            characterId: ent.characterId || null,
-          },
+          { type: "GRUDGE_EQUIP_CHANGE", equipment: eq, characterId: ent.characterId || null },
           "*",
         );
       }
     }
 
-    renderBagGrids();
+    function skillIconHtml(s, size) {
+      const px = size || 36;
+      if (s?.iconUrl) {
+        return `<img class="sk-icon" src="${esc(s.iconUrl)}" alt="" width="${px}" height="${px}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=.2" />`;
+      }
+      return `<span class="sk-emoji">${esc(s?.emoji || "✦")}</span>`;
+    }
 
-    function renderPaperdoll() {
-      const host = document.getElementById("paperdoll-host");
-      if (!host || !window.GrudgeEquipmentPaperdoll) return;
-      const ent = state.entities[state.activeEntity] || DEFAULT_ENTITIES.player;
-      const mode = ent.mode === "inspect" || state.activeEntity !== "player" ? "inspect" : "self";
-      state.equipMode = mode;
-      document.getElementById("eq-mode").textContent = mode;
-      document.getElementById("eq-count").textContent = equipCount(ent.equipment) + "/11";
-      paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
-        title: "GRUDGE WARLORD",
-        subtitle: (ent.race || "hero").toUpperCase() + (mode === "inspect" ? " · INSPECT" : " · LOADOUT"),
-        race: ent.race || "human",
-        portraitUrl: ent.portrait,
-        equipped: ent.equipment || {},
-        mode,
-        entityId: state.activeEntity,
-        width: 420,
-        onSlotClick: (slotId, gearKey) => {
-          if (mode === "inspect") return;
-          // Unequip to bag on click when slot filled
-          const eq = ent.equipment || {};
-          const panelKey =
-            gearKey ||
-            ({
-              helmet: "Head",
-              chest: "Chest",
-              gloves: "Hands",
-              legs: "Legs",
-              boots: "Feet",
-              weapon: "MainHand",
-              offhand: "OffHand",
-              secondary: "SecondaryWeapon",
-              amulet: "Accessory2",
-              cloak: "Back",
-              ring: "Accessory1",
-            }[slotId] || slotId);
-          const item = eq[panelKey] || eq[slotId];
-          if (!item) {
-            // Empty slot — if bag selection, equip into it
-            if (selectedBagIndex >= 0) equipFromBag(selectedBagIndex, panelKey);
+    function renderClassSkills() {
+      const ent = playerEnt();
+      const tree = MPC?.classTree(ent.classId);
+      if (!tree) return;
+      const src = tree.source || "local stub";
+      document.getElementById("class-tree-title").textContent = tree.name + " skill tree";
+      document.getElementById("class-tree-sub").textContent =
+        `ObjectStore master-skillTrees · ${src} · hotbar unlocks in play`;
+      const host = document.getElementById("class-tree-host");
+      host.innerHTML = tree.tiers
+        .map(
+          (tier) => `
+        <div class="skill-tier">
+          <div class="skill-tier-h"><span>Lv ${tier.lvl}</span> ${esc(tier.label)}</div>
+          <div class="skill-tier-grid">
+            ${tier.skills
+              .map(
+                (s) => `
+              <div class="skill-card" style="--sc:${tree.color}">
+                ${skillIconHtml(s, 40)}
+                <div>
+                  <div class="sk-n">${esc(s.n)}</div>
+                  <div class="sk-d">${esc(s.d)}</div>
+                  ${s.slot != null ? `<div class="sk-slot">Hotbar ${s.slot}</div>` : ""}
+                  ${s.passive ? `<div class="sk-slot">Passive</div>` : ""}
+                </div>
+              </div>`,
+              )
+              .join("")}
+          </div>
+        </div>`,
+        )
+        .join("");
+    }
+
+    function renderWeaponSkills() {
+      const ent = playerEnt();
+      const wt = weaponTypeOf(ent);
+      const bar = MPC?.weaponBar(wt) || [];
+      const meta = window.FleetGameSystems?.meta?.weaponSkills;
+      document.getElementById("weapon-bar-title").textContent = `Weapon skills · ${wt}`;
+      document.getElementById("weapon-bar-sub").textContent = meta
+        ? `ObjectStore master-weaponSkills v${meta.version || "?"} · main-hand mesh type`
+        : "Bound to main-hand mesh type (sword / bow / staff / axe / unarmed)";
+      document.getElementById("weapon-skills-host").innerHTML = bar
+        .map(
+          (s) => `
+        <div class="qc-card skill-card skill-card-row">
+          ${skillIconHtml(s, 32)}
+          <div>
+            <h4>${esc(s.n)}</h4>
+            <p>${esc(s.d)}${s.slot != null ? ` · Slot ${s.slot}` : ""}${s.damage != null ? ` · dmg ${s.damage}` : ""}</p>
+          </div>
+        </div>`,
+        )
+        .join("") || `<p class="craft-log">No weapon skills for ${esc(wt)} in catalog.</p>`;
+    }
+
+    let activeProfId = "miner";
+    let craftProfFilter = "all";
+
+    function renderProfessions() {
+      const levels = playerEnt().professionLevels || {};
+      const order = window.WcsProfessions?.PROFESSION_ORDER || Object.keys(MPC?.PROFESSION_TREES || {});
+      const trees = MPC?.PROFESSION_TREES || window.WcsProfessions?.getAll?.() || {};
+      const mini = document.getElementById("prof-mini");
+      const tabs = document.getElementById("prof-tabs");
+      const detail = document.getElementById("prof-detail");
+      const host = document.getElementById("prof-trees-host");
+
+      // Left rail mini levels
+      mini.innerHTML = order
+        .map((id) => {
+          const t = trees[id] || window.WcsProfessions?.get?.(id);
+          if (!t) return "";
+          const lv = levels[id] || levels[t.name] || 1;
+          const icon = t.iconUrl
+            ? `<img class="prof-mini-icon" src="${esc(t.iconUrl)}" alt="" />`
+            : `<span>${t.emoji || "ΓÜÆ"}</span>`;
+          return `<div class="stat-row prof-mini-row" data-prof="${esc(id)}">
+            <span class="k">${icon} ${esc(t.name)}</span>
+            <span class="v">Lv ${lv}</span>
+          </div>`;
+        })
+        .join("");
+      mini.querySelectorAll("[data-prof]").forEach((el) => {
+        el.addEventListener("click", () => {
+          activeProfId = el.dataset.prof;
+          renderProfessions();
+          applyTab("professions");
+        });
+      });
+
+      // Profession tab strip
+      tabs.innerHTML = order
+        .map((id) => {
+          const t = trees[id] || window.WcsProfessions?.get?.(id);
+          if (!t) return "";
+          const on = id === activeProfId;
+          const icon = t.iconUrl
+            ? `<img src="${esc(t.iconUrl)}" alt="" />`
+            : t.emoji || "";
+          return `<button type="button" class="prof-tab ${on ? "active" : ""}" data-prof="${esc(id)}" style="--pc:${t.color || "#d4a400"}">
+            ${icon}<span>${esc(t.name)}</span>
+          </button>`;
+        })
+        .join("");
+      tabs.querySelectorAll("[data-prof]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          activeProfId = btn.dataset.prof;
+          renderProfessions();
+        });
+      });
+
+      const p = trees[activeProfId] || window.WcsProfessions?.get?.(activeProfId);
+      if (!p) {
+        host.innerHTML = `<p class="muted">Loading WCS profession SSOTΓÇª</p>`;
+        return;
+      }
+      const lv = levels[activeProfId] || levels[p.name] || 1;
+      const title =
+        window.WcsProfessions?.titleFor?.(activeProfId, lv) ||
+        MPC?.getProfessionTitle?.(activeProfId, lv) ||
+        "Novice";
+
+      detail.innerHTML = `
+        <div class="prof-hero" style="--pc:${p.color || "#d4a400"};${p.bgImage ? `--prof-bg:url('${esc(p.bgImage)}')` : ''}">
+          ${p.iconUrl ? `<img class="prof-hero-icon" src="${esc(p.iconUrl)}" alt="" />` : `<span class="prof-hero-emoji">${p.emoji || "ΓÜÆ"}</span>`}
+          <div>
+            <div class="prof-hero-name">${esc(p.name)}</div>
+            <div class="prof-hero-role">${esc(p.role || "")}</div>
+            <div class="prof-hero-meta">Lv ${lv} ┬╖ <strong>${esc(title)}</strong> ┬╖ ${ (p.nodes || p.treeData || []).length} nodes ┬╖ WCS SSOT</div>
+          </div>
+        </div>`;
+
+      // Prefer tier bands from WCS normalize
+      const tiers = p.tiers || null;
+      if (tiers?.length) {
+        host.innerHTML = tiers
+          .map(
+            (tier) => `
+          <div class="prof-tree-card" style="--pc:${p.color}">
+            <div class="prof-tree-h">${esc(tier.label)} ┬╖ req ${tier.minLvl}ΓÇô${tier.maxLvl}</div>
+            <div class="prof-nodes">
+              ${tier.nodes
+                .map(
+                  (n) => `
+                <div class="prof-node ${lv >= n.lvl ? "unlocked" : "locked"}" title="${esc(n.d)}">
+                  ${n.iconUrl ? `<img class="pn-icon" src="${esc(n.iconUrl)}" alt="" />` : `<span class="pn-emoji">${n.emoji || "Γùê"}</span>`}
+                  <div>
+                    <div class="pn-n">${esc(n.n)}</div>
+                    <div class="pn-d">${esc(n.d)}</div>
+                    <div class="pn-meta"><span class="pn-lvl">L${n.lvl}</span>${n.branch ? ` ┬╖ ${esc(n.branch)}` : ""} ┬╖ ${esc(n.nodeType || "stat")}</div>
+                  </div>
+                </div>`,
+                )
+                .join("")}
+            </div>
+          </div>`,
+          )
+          .join("");
+      } else {
+        const nodes = p.nodes || [];
+        host.innerHTML = `
+          <div class="prof-tree-card" style="--pc:${p.color}">
+            <div class="prof-tree-h">${esc(p.name)} tree</div>
+            <div class="prof-nodes">
+              ${nodes
+                .map(
+                  (n) => `
+                <div class="prof-node ${lv >= (n.lvl || 0) ? "unlocked" : "locked"}">
+                  <span class="pn-lvl">L${n.lvl || 0}</span>
+                  <div><div class="pn-n">${esc(n.n)}</div><div class="pn-d">${esc(n.d || "")}</div></div>
+                </div>`,
+                )
+                .join("")}
+            </div>
+          </div>`;
+      }
+
+      document.getElementById("prof-ssot-sub").textContent =
+        `WCS SSOT ┬╖ ${p.name} ┬╖ ${title} ┬╖ ${p.recipes?.length || 0} recipes wired`;
+    }
+
+    function bagQty(itemId) {
+      return bag.filter((b) => b.id === itemId).reduce((s, b) => s + (b.qty || 0), 0);
+    }
+
+    function bagConsume(itemId, qty) {
+      let need = qty;
+      for (const b of bag) {
+        if (b.id !== itemId || need <= 0) continue;
+        const take = Math.min(b.qty || 0, need);
+        b.qty -= take;
+        need -= take;
+      }
+      bag = bag.filter((b) => (b.qty || 0) > 0);
+    }
+
+    function bagAdd(item) {
+      const hit = bag.find((b) => b.id === item.id);
+      if (hit) hit.qty = (hit.qty || 0) + (item.qty || 1);
+      else bag.push({ ...item });
+    }
+
+    function renderCraftMaterials() {
+      const host = document.getElementById("craft-mat-host");
+      const meta = document.getElementById("craft-bag-meta");
+      const hint = document.getElementById("craft-account-hint");
+      if (!host) return;
+      const mats = (bag || []).filter((b) => (b.qty || 0) > 0).slice(0, 24);
+      if (meta) meta.textContent = `${mats.length} stack${mats.length === 1 ? "" : "s"}`;
+      const logged = !!window.GrudgeCloud?.getToken?.() || !!window.GrudgeCloud?.isLoggedIn?.();
+      if (hint) {
+        hint.textContent = logged
+          ? "Account bag (Railway) · craft spends shared mats · XP on active character"
+          : "Guest bag is local demo · sign in for Railway account inventory";
+      }
+      if (!mats.length) {
+        host.innerHTML = `<div class="craft-mat" style="grid-column:1/-1"><span class="mat-name">No materials</span></div>`;
+        return;
+      }
+      host.innerHTML = mats
+        .map((b) => {
+          const iconUrl =
+            b.iconUrl ||
+            window.InfoCatalog?.resolveIcon?.({
+              itemId: b.id,
+              name: b.name,
+              iconUrl: b.icon,
+            });
+          const icon = iconUrl
+            ? `<img src="${esc(iconUrl)}" alt="" referrerpolicy="no-referrer" />`
+            : `<span class="mat-emoji">${esc(b.emoji || "·")}</span>`;
+          return `<div class="craft-mat" title="${esc(b.name || b.id)}">${icon}<span class="mat-name">${esc(b.name || b.id)}</span><span class="mat-qty">×${b.qty || 0}</span></div>`;
+        })
+        .join("");
+    }
+
+    function renderCraft() {
+      const host = document.getElementById("craft-host");
+      const filterEl = document.getElementById("craft-filter");
+      if (!host || !filterEl) return;
+      updateCraftAuthPill();
+      renderCraftMaterials();
+
+      const quick = MPC?.CRAFT_RECIPES || [];
+      const wcs = (window.WcsProfessions?.allRecipes?.() || []).map((r) => ({
+        id: `wcs_${r.profession}_${r.id}`,
+        name: r.name,
+        profession: r.profession,
+        emoji: r.emoji || "⚙",
+        iconUrl: r.iconUrl,
+        lvl: r.lvl || 1,
+        inputs: Object.entries(r.mats || {}).map(([name, qty]) => ({
+          id: name.toLowerCase().replace(/\s+/g, "_"),
+          name,
+          qty,
+        })),
+        output: { id: String(r.id), name: r.name, qty: 1 },
+        timeSec: 5 + (r.lvl || 1),
+        wcs: true,
+        type: r.type,
+        desc: r.desc,
+      }));
+
+      const order = [
+        "all",
+        "quick",
+        ...(window.WcsProfessions?.PROFESSION_ORDER || [
+          "miner",
+          "forester",
+          "engineer",
+          "mystic",
+          "chef",
+        ]),
+      ];
+      filterEl.innerHTML = order
+        .map((id) => {
+          const label = id === "all" ? "All" : id === "quick" ? "Quick" : id;
+          return `<button type="button" class="craft-filter-btn ${craftProfFilter === id ? "active" : ""}" data-cf="${id}">${esc(label)}</button>`;
+        })
+        .join("");
+      filterEl.querySelectorAll("[data-cf]").forEach((b) => {
+        b.addEventListener("click", () => {
+          craftProfFilter = b.dataset.cf;
+          renderCraft();
+        });
+      });
+
+      let recipes = [...quick.map((r) => ({ ...r, quick: true })), ...wcs];
+      if (craftProfFilter === "quick") recipes = recipes.filter((r) => r.quick);
+      else if (craftProfFilter !== "all")
+        recipes = recipes.filter((r) => r.profession === craftProfFilter);
+
+      host.innerHTML =
+        recipes
+          .slice(0, 72)
+          .map((r) => {
+            const inputs = r.inputs || [];
+            const ok =
+              !inputs.length ||
+              inputs.every(
+                (i) =>
+                  bagQty(i.id) >= i.qty ||
+                  bagQty(i.name?.toLowerCase?.()) >= i.qty,
+              );
+            const outDef = window.InfoCatalog?.lookup?.({
+              id: r.output?.id,
+              name: r.output?.name || r.name,
+            });
+            const iconUrl =
+              r.iconUrl ||
+              window.InfoCatalog?.resolveIcon?.({
+                itemId: r.output?.id || r.id,
+                name: r.output?.name || r.name,
+                iconUrl: outDef?.iconUrl,
+              });
+            const icon = iconUrl
+              ? `<img class="craft-icon" src="${esc(iconUrl)}" alt="" referrerpolicy="no-referrer" />`
+              : r.emoji || "⚙";
+            const tip = window.InfoCatalog?.tooltipHtml?.({
+              itemId: r.output?.id || r.id,
+              name: r.output?.name || r.name,
+              iconUrl,
+              description: r.desc || outDef?.description,
+              stats: outDef?.stats,
+              type: r.type || outDef?.type || "recipe",
+              tier: outDef?.tier,
+              tierLabel: outDef?.tierLabel,
+            });
+            const matsLine = inputs.length
+              ? inputs
+                  .map((i) => {
+                    const have = bagQty(i.id) || bagQty(i.name?.toLowerCase?.()) || 0;
+                    return `${esc(i.name)} ${have}/${i.qty}`;
+                  })
+                  .join(" · ")
+              : esc(r.desc || r.type || "");
+            return `
+          <button type="button" class="qc-card craft-card ${ok ? "can-craft" : "no-craft"}" data-recipe="${esc(r.id)}" data-wcs="${r.wcs ? "1" : "0"}" title="${esc(r.name)}" ${tip ? `data-tip="${esc(tip)}"` : ""}>
+            <h4>${icon} ${esc(r.name)}</h4>
+            <p class="prof-tag">${esc(r.profession || "quick")}${r.lvl ? ` · Lv ${r.lvl}` : ""}${r.timeSec ? ` · ${r.timeSec}s` : ""}</p>
+            <p>${matsLine}</p>
+            ${r.output ? `<p class="out">→ ${esc(r.output.name)} ×${r.output.qty || 1}</p>` : ""}
+          </button>`;
+          })
+          .join("") ||
+        `<p class="craft-log">No recipes for this filter. Open Full suite for stations.</p>`;
+
+      host.querySelectorAll("[data-recipe]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.dataset.wcs === "1") {
+            toast("WCS recipe — open Full suite for station craft, or match bag material ids");
             return;
           }
-          const id = typeof item === "string" ? item : item.id;
-          const name = typeof item === "string" ? item : item.name || id;
-          bagItems.push({ itemId: id, name, quantity: 1 });
-          delete eq[panelKey];
-          delete eq[slotId];
-          ent.equipment = eq;
-          renderPaperdoll();
-          renderBagGrids();
-          scheduleSave();
-          if (window.parent !== window) {
-            window.parent.postMessage(
-              { type: "GRUDGE_EQUIP_CHANGE", equipment: eq, characterId: ent.characterId || null },
-              "*",
-            );
-          }
-        },
+          craftRecipe(btn.dataset.recipe);
+        });
       });
     }
 
+    /**
+     * Full suite SSOT: grudgewarlords.com/craft
+     * Embed allowed via CSP frame-ancestors (fleet deploy). SSO via query + postMessage.
+     */
+    const CRAFT_SUITE_ORIGIN = "https://grudgewarlords.com";
+    const CRAFT_SUITE_PATH = "/craft/";
+    let craftFrameMounted = false;
+    let craftQuickOpen = false;
+
+    function craftSuiteBaseUrl(embed) {
+      if (window.GrudgeFleet?.buildCraftSsotUrl) {
+        return new URL(
+          window.GrudgeFleet.buildCraftSsotUrl({
+            embed: !!embed,
+            from: "ui-main-panel",
+            era: ERA || "warlords",
+            characterId: playerEnt()?.characterId || FORCE_ID,
+            station: params.get("station"),
+            returnTo: location.href,
+            tokenMode: "query",
+            target: "none",
+          }),
+        );
+      }
+      const u = new URL(CRAFT_SUITE_PATH, CRAFT_SUITE_ORIGIN);
+      u.searchParams.set("era", ERA || "warlords");
+      u.searchParams.set("from", "ui-main-panel");
+      if (embed) u.searchParams.set("embed", "1");
+      const station = params.get("station");
+      if (station) u.searchParams.set("station", station);
+      return u;
+    }
+
+    function craftSuiteAuthedUrl(embed) {
+      const u = craftSuiteBaseUrl(embed !== false);
+      // If fleet already put tokens, keep them
+      if (!u.searchParams.get("sso_token") && !u.searchParams.get("grudge_token")) {
+        const token =
+          window.GrudgeCloud?.getToken?.() ||
+          window.GrudgeEngine?.getToken?.() ||
+          null;
+        if (token) {
+          u.searchParams.set("sso_token", token);
+          u.searchParams.set("grudge_token", token);
+        }
+      }
+      const charId = playerEnt()?.characterId || FORCE_ID;
+      if (charId) u.searchParams.set("characterId", charId);
+      return u.toString();
+    }
+
+    function postCraftAuth(frame) {
+      try {
+        const token = window.GrudgeCloud?.getToken?.() || window.GrudgeEngine?.getToken?.();
+        if (!token || !frame?.contentWindow) return;
+        frame.contentWindow.postMessage(
+          {
+            type: "GRUDGE_AUTH",
+            sso_token: token,
+            grudge_token: token,
+            token,
+            characterId: playerEnt()?.characterId || FORCE_ID || null,
+            source: "ui-main-panel",
+          },
+          CRAFT_SUITE_ORIGIN,
+        );
+      } catch (_) {
+        /* cross-origin fine */
+      }
+    }
+
+    function mountCraftFrame(force) {
+      const frame = document.getElementById("craft-suite-frame");
+      const overlay = document.getElementById("craft-frame-overlay");
+      if (!frame) return;
+      updateCraftAuthPill();
+      const next = craftSuiteAuthedUrl(true);
+      if (force || !craftFrameMounted || frame.dataset.srcKey !== next) {
+        frame.dataset.srcKey = next;
+        frame.src = next;
+        craftFrameMounted = true;
+        if (overlay) {
+          overlay.hidden = false;
+          const msg = document.getElementById("craft-frame-msg");
+          if (msg) msg.textContent = "Connecting craft suite…";
+        }
+      }
+      frame.onload = () => {
+        if (overlay) overlay.hidden = true;
+        postCraftAuth(frame);
+        // Retry SSO after fleet boot inside suite
+        setTimeout(() => postCraftAuth(frame), 800);
+      };
+    }
+
+    function updateCraftAuthPill() {
+      const el = document.getElementById("craft-auth-status");
+      if (!el) return;
+      const logged =
+        !!window.GrudgeCloud?.isLoggedIn?.() ||
+        !!window.GrudgeCloud?.getToken?.();
+      const name =
+        window.GrudgeCloud?.getDisplayName?.() ||
+        window.GrudgeCloud?.getUser?.()?.username;
+      if (logged) {
+        el.textContent = name ? `Signed in · ${name}` : "Signed in · suite SSO";
+        el.className = "craft-auth-pill ok";
+      } else {
+        el.textContent = "Guest · suite browse";
+        el.className = "craft-auth-pill warn";
+      }
+      const link = document.getElementById("craft-suite-link");
+      if (link) link.href = craftSuiteAuthedUrl(false);
+    }
+
+    function refreshCraftTab() {
+      updateCraftAuthPill();
+      mountCraftFrame(true);
+      if (craftQuickOpen) renderCraft();
+    }
+
+    function wireCraftChrome() {
+      document
+        .getElementById("btn-craft-reload")
+        ?.addEventListener("click", () => {
+          refreshCraftTab();
+          toast("Craft suite reloaded");
+        });
+      document.getElementById("btn-craft-popout")?.addEventListener("click", () => {
+        window.open(craftSuiteAuthedUrl(false), "_blank", "noopener");
+      });
+      document.getElementById("btn-craft-open-fallback")?.addEventListener("click", () => {
+        window.open(craftSuiteAuthedUrl(false), "_blank", "noopener");
+      });
+      document.getElementById("btn-craft-quick")?.addEventListener("click", () => {
+        craftQuickOpen = !craftQuickOpen;
+        const panel = document.getElementById("craft-quick-panel");
+        if (panel) panel.hidden = !craftQuickOpen;
+        if (craftQuickOpen) renderCraft();
+      });
+      document.getElementById("btn-craft-login")?.addEventListener("click", () => {
+        const ret = location.href.includes("tab=")
+          ? location.href
+          : location.href.split("#")[0] +
+            (location.search ? "&" : "?") +
+            "tab=craft";
+        if (window.GrudgeCloud?.login) window.GrudgeCloud.login(ret, { popup: true });
+        else
+          window.open(
+            "https://id.grudge-studio.com/login?redirect_uri=" +
+              encodeURIComponent(ret),
+            "_blank",
+          );
+      });
+      // Suite → panel bag sync
+      window.addEventListener("message", (e) => {
+        if (!e.origin || e.origin.indexOf("grudgewarlords.com") === -1) return;
+        const t = e.data?.type;
+        if (t === "GRUDGE_READY") postCraftAuth(document.getElementById("craft-suite-frame"));
+        if (t === "GRUDGE_BAG" && e.data?.bag && Array.isArray(e.data.bag)) {
+          try {
+            bag = e.data.bag;
+            renderInv();
+            if (craftQuickOpen) renderCraftMaterials();
+          } catch (_) {}
+        }
+      });
+    }
+
+    function craftRecipe(id) {
+      const r = (MPC?.CRAFT_RECIPES || []).find((x) => x.id === id);
+      if (!r) return;
+      if (!r.inputs.every((i) => bagQty(i.id) >= i.qty)) {
+        toast("Missing materials");
+        return;
+      }
+      r.inputs.forEach((i) => bagConsume(i.id, i.qty));
+      bagAdd({
+        id: r.output.id,
+        name: r.output.name,
+        qty: r.output.qty,
+        emoji: r.emoji || "≡ƒôª",
+        tier: 1,
+        slot: "material",
+      });
+      if (r.equipSlot && r.mesh) {
+        const p = playerEnt();
+        p.equipment = p.equipment || {};
+        if (r.equipSlot === "weapon") {
+          p.equipment.weapon = {
+            id: r.output.id,
+            name: r.output.name,
+            rarity: "uncommon",
+            meshSlot: r.mesh.slot,
+            meshVar: r.mesh.variant,
+            weaponType: r.mesh.slot === "bow" ? "bow" : r.mesh.slot === "staff" ? "staff" : "sword",
+          };
+        } else if (r.equipSlot === "chest") {
+          p.equipment.chest = {
+            id: r.output.id,
+            name: r.output.name,
+            rarity: "uncommon",
+            meshSlot: r.mesh.slot,
+            meshVar: r.mesh.variant,
+          };
+        }
+        state.unarmed = false;
+        renderPaperdoll();
+      }
+      const log = document.getElementById("craft-log");
+      if (log) log.textContent = `Crafted ${r.output.name} ×${r.output.qty}`;
+      renderCraft();
+      renderInv();
+      renderInv();
+      renderCraft();
+      scheduleSave();
+      toast(`Crafted ${r.name}`);
+    }
+
+    function renderHotbar() {
+      const ent = playerEnt();
+      const skills = MPC?.hotbarFromClass(ent.classId) || [];
+      const bar = document.getElementById("action-bar");
+      bar.innerHTML = [1, 2, 3, 4, 5, 6]
+        .map((n) => {
+          const s = skills.find((x) => x.slot === n);
+          const body = s?.iconUrl
+            ? `<img src="${esc(s.iconUrl)}" alt="" width="28" height="28" loading="lazy" referrerpolicy="no-referrer" />`
+            : esc(s?.emoji || "·");
+          return `<div class="ab-slot" title="${esc(s?.n || "Empty")}">${body}<span class="key">${n}</span></div>`;
+        })
+        .join("");
+    }
+
+    function renderResources(res) {
+      const el = document.getElementById("res-list");
+      const entries = Object.entries(res || {}).filter(([, v]) => typeof v === "number" || typeof v === "string");
+      if (!entries.length) {
+        el.innerHTML = `<div class="stat-row"><span class="k">wood</span><span class="v">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">stone</span><span class="v">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">food</span><span class="v">ΓÇö</span></div>`;
+        return;
+      }
+      el.innerHTML = entries
+        .slice(0, 8)
+        .map(([k, v]) => `<div class="stat-row"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`)
+        .join("");
+    }
+
+    function setAttr(id, v) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = v != null && v !== "" ? String(v) : "ΓÇö";
+    }
+
+    function applyBars() {
+      const b = state.bars || {};
+      const hp = b.hp ?? 78;
+      document.getElementById("bar-hp").style.width = hp + "%";
+      document.getElementById("bar-mp").style.width = (b.mp ?? 62) + "%";
+      document.getElementById("bar-sp").style.width = (b.sp ?? 91) + "%";
+      document.getElementById("lbl-hp").textContent = `HP ${Math.round((hp / 100) * (b.hpMax || 1000))}/${b.hpMax || 1000}`;
+      document.getElementById("lbl-mp").textContent = `MP ${Math.round(((b.mp || 62) / 100) * (b.mpMax || 500))}/${b.mpMax || 500}`;
+      document.getElementById("lbl-sp").textContent = `SP ${b.sp ?? 91}/${b.spMax || 100}`;
+    }
+
     function applyEntity(id) {
-      const ent = state.entities[id] || DEFAULT_ENTITIES[id];
-      if (!ent) return;
+      const ent = state.entities[id] || playerEnt();
       state.activeEntity = id;
       document.getElementById("entity-name").textContent = ent.name;
       document.getElementById("entity-meta").textContent = ent.meta;
-      document.getElementById("chip-player-name").textContent =
-        state.entities.player?.name || "You";
-      document.getElementById("chip-player-meta").textContent =
-        state.entities.player?.meta || "Fleet character";
-      document.querySelectorAll(".entity-chip").forEach((c) => {
-        c.classList.toggle("active", c.dataset.id === id);
-      });
+      const thumb = document.getElementById("hero-thumb");
+      thumb.src = ent.portrait || window.grudgePortraitForRace?.(ent.race) || "";
+      thumb.onerror = () => {
+        thumb.src = window.grudgeEmblemForRace?.(ent.race) || "";
+      };
+      const a = ent.attributes || {};
+      setAttr("attr-str", a.strength ?? a.str);
+      setAttr("attr-vit", a.vitality ?? a.vit);
+      setAttr("attr-dex", a.dexterity ?? a.dex);
+      setAttr("attr-int", a.intelligence ?? a.int);
+      setAttr("attr-tac", a.tactics ?? a.tac);
+      const rating = equipCount(ent.equipment) >= 6 ? "A+" : equipCount(ent.equipment) >= 3 ? "B" : "C";
+      document.getElementById("cp-rating").textContent = rating;
       renderPaperdoll();
+      renderClassSkills();
+      renderWeaponSkills();
+      renderProfessions();
+      renderHotbar();
     }
 
     function applyTab(tab) {
@@ -440,40 +1260,77 @@
       document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
       document.getElementById("tab-" + tab)?.classList.add("active");
       if (tab === "equipment") renderPaperdoll();
-    }
-
-    function applyBars() {
-      const b = state.bars || {};
-      document.getElementById("bar-hp").style.width = (b.hp || 78) + "%";
-      document.getElementById("bar-mp").style.width = (b.mp || 62) + "%";
-      document.getElementById("bar-sp").style.width = (b.sp || 91) + "%";
-    }
-
-    function setAttr(id, v) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = v != null ? String(v) : "—";
+      if (tab === "inventory") renderInv();
+      if (tab === "class-skills") renderClassSkills();
+      if (tab === "weapon-skills") renderWeaponSkills();
+      if (tab === "professions") renderProfessions();
+      if (tab === "craft") {
+        mountCraftFrame(false);
+        if (craftQuickOpen) renderCraft();
+        else updateCraftAuthPill();
+      }
     }
 
     function mergeFleetCharacter(char) {
       if (!char) return;
-      const race = char.raceId || char.race || "human";
-      const equipment = char.equipment || char.model3d?.equipment || char.gear || DEMO_EQUIP.player;
+      const race = window.grudgeNormalizeRace?.(char.raceId || char.race) || char.raceId || "human";
+      const classId = MPC?.normalizeClass(char.classId || char.class || "warrior") || "warrior";
+      let equipment =
+        char.equipment ||
+        (char.model3d ? MPC?.model3dToEquipment(char.model3d) : null) ||
+        {};
+      if (!Object.keys(equipment).length) {
+        const temp = { race, classId, equipment: {} };
+        applyClassKit(temp, false);
+        equipment = temp.equipment;
+      }
       const attrs = char.attributes || char.stats || {};
       state.entities.player = {
         name: char.name || char.displayName || "Hero",
-        meta: `Lv.${char.level || 1} ${race} ${char.classId || char.class || ""}`.trim(),
+        meta: `Lv.${char.level || 20} ${race} ${classId}`,
         race,
-        portrait: window.grudgePortraitForRace?.(race) || state.entities.player.portrait,
+        classId,
+        level: char.level || 20,
+        portrait: window.grudgeHeroImage?.(char) || window.grudgePortraitForRace?.(race),
         equipment,
         mode: "self",
         characterId: char.id,
+        attributes: {
+          strength: attrs.strength ?? attrs.str,
+          vitality: attrs.vitality ?? attrs.vit,
+          dexterity: attrs.dexterity ?? attrs.dex,
+          intelligence: attrs.intelligence ?? attrs.int,
+          tactics: attrs.tactics ?? attrs.tac,
+        },
+        professionLevels: char.professionLevels || DEMO_PLAYER.professionLevels,
       };
-      setAttr("attr-str", attrs.strength ?? attrs.str);
-      setAttr("attr-vit", attrs.vitality ?? attrs.vit);
-      setAttr("attr-dex", attrs.dexterity ?? attrs.dex);
-      setAttr("attr-tac", attrs.tactics ?? attrs.tac);
+      state.unarmed = false;
+      if (char.model3d?.meshIds) lastMeshIds = char.model3d.meshIds;
       if (state.activeEntity === "player") applyEntity("player");
       scheduleSave();
+    }
+
+    function mergeInventory(items) {
+      if (!items?.length) return;
+      const cat = window.InfoCatalog;
+      bag = items.map((it) => {
+        const row = {
+          id: it.itemId || it.id,
+          name: it.name || it.itemId || it.id,
+          qty: it.quantity ?? it.qty ?? 1,
+          emoji: it.emoji || "≡ƒôª",
+          tier: it.tier || 1,
+          slot: it.slot || "material",
+          iconUrl: it.iconUrl || it.icon,
+          type: it.type,
+          category: it.category,
+          uuid: it.uuid,
+        };
+        return cat?.enrichBagItem?.(row) || row;
+      });
+      bagSource = "Railway account bag · ObjectStore icons";
+      renderInv();
+      renderCraft();
     }
 
     function collectState() {
@@ -483,6 +1340,8 @@
         activeEntity: state.activeEntity,
         entities: state.entities,
         bars: state.bars,
+        bag,
+        unarmed: state.unarmed,
       };
     }
 
@@ -491,9 +1350,18 @@
       clearTimeout(saveTimer);
       saveTimer = setTimeout(async () => {
         if (window.GrudgeCloud?.saveMainPanel) await GrudgeCloud.saveMainPanel(collectState());
-      }, 1200);
+      }, 1000);
     }
 
+    function toast(msg) {
+      const t = document.createElement("div");
+      t.className = "mp-toast";
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2200);
+    }
+
+    // ΓöÇΓöÇ UI wires ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     document.getElementById("tabs").addEventListener("click", (e) => {
       const btn = e.target.closest(".tab-btn");
       if (!btn) return;
@@ -501,20 +1369,72 @@
       scheduleSave();
     });
 
-    document.querySelectorAll(".entity-chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        applyEntity(chip.dataset.id);
-        scheduleSave();
-      });
+    document.getElementById("btn-unarmed")?.addEventListener("click", () => {
+      state.unarmed = true;
+      applyClassKit(playerEnt(), true);
+      renderPaperdoll();
+      renderWeaponSkills();
+      renderHotbar();
+      scheduleSave();
+      toast("Unarmed kit");
     });
 
-    window.addEventListener("grudge:engine:character", (e) => mergeFleetCharacter(e.detail));
-    window.addEventListener("grudge:engine:characters", () => {
+    document.getElementById("btn-class-kit")?.addEventListener("click", () => {
+      state.unarmed = false;
+      applyClassKit(playerEnt(), false);
+      renderPaperdoll();
+      renderWeaponSkills();
+      renderHotbar();
+      scheduleSave();
+      toast("Class starting kit");
+    });
+
+    document.getElementById("btn-save-mesh")?.addEventListener("click", async () => {
+      const p = playerEnt();
+      if (!p.characterId) {
+        toast("No fleet character ΓÇö sign in / select hero");
+        return;
+      }
+      const model3d = MPM.equipmentToModel3dPatch(p.equipment, p.race, p.classId);
+      model3d.meshIds = lastMeshIds;
+      const ok = await window.GrudgeEngine?.patchCharacterModel3d?.(p.characterId, model3d);
+      toast(ok ? "Mesh saved to character" : "Save attempted (check auth)");
+      if (window.parent !== window) {
+        window.parent.postMessage(
+          { type: "GRUDGE_MESH_EQUIP", characterId: p.characterId, model3d, equipment: p.equipment },
+          "*",
+        );
+      }
+      scheduleSave();
+    });
+
+    document.getElementById("btn-refresh-chars")?.addEventListener("click", async () => {
+      await window.GrudgeEngine?.fetchCharacters?.(ERA);
+      renderCharList(window.GrudgeEngine?.getCharacters?.() || []);
       const c = window.GrudgeEngine?.getActiveCharacter?.();
       if (c) mergeFleetCharacter(c);
     });
 
-    // Parent game can push inspect target: postMessage { type: 'GRUDGE_MAIN_PANEL', entity, equipment, mode }
+    document.getElementById("btn-refresh-inv")?.addEventListener("click", async () => {
+      await window.GrudgeEngine?.fetchInventory?.();
+      const inv = window.GrudgeEngine?.getInventory?.() || [];
+      if (inv.length) mergeInventory(inv);
+      else toast("No account bag ΓÇö using local craft bag");
+    });
+
+    window.addEventListener("grudge:engine:character", (e) => mergeFleetCharacter(e.detail));
+    window.addEventListener("grudge:engine:characters", () => {
+      renderCharList(window.GrudgeEngine?.getCharacters?.() || []);
+      const c = window.GrudgeEngine?.getActiveCharacter?.();
+      if (c) mergeFleetCharacter(c);
+    });
+    window.addEventListener("grudge:engine:inventory", (e) => mergeInventory(e.detail));
+    window.addEventListener("grudge:engine:resources", (e) => renderResources(e.detail));
+    window.addEventListener("grudge:auth:ready", () => {
+      document.getElementById("auth-pill").textContent =
+        window.GrudgeCloud?.getDisplayName?.() || "Signed in";
+    });
+
     window.addEventListener("message", (e) => {
       const d = e.data;
       if (!d || d.type !== "GRUDGE_MAIN_PANEL") return;
@@ -525,6 +1445,7 @@
           name: d.entity.name || "Unit",
           meta: d.entity.meta || "Inspect",
           race: d.entity.race || "human",
+          classId: d.entity.classId || "warrior",
           portrait: d.entity.portrait || window.grudgePortraitForRace?.(d.entity.race),
           equipment: d.equipment || d.entity.equipment || {},
           mode: d.mode === "self" ? "self" : "inspect",
@@ -532,28 +1453,101 @@
         applyEntity(id);
       }
       if (d.equipment && state.activeEntity === "player") {
-        state.entities.player.equipment = d.equipment;
+        playerEnt().equipment = d.equipment;
+        renderPaperdoll();
+      }
+      if (d.model3d && state.activeEntity === "player") {
+        playerEnt().equipment = {
+          ...playerEnt().equipment,
+          ...MPC.model3dToEquipment(d.model3d),
+        };
+        if (d.model3d.meshIds) lastMeshIds = d.model3d.meshIds;
         renderPaperdoll();
       }
     });
 
     (async function boot() {
+      bindTooltipLayer();
+      wireCraftChrome();
+      applyClassKit(playerEnt(), false);
+
+      // ObjectStore master-items + materials (icons → assets CDN)
+      if (window.InfoCatalog?.load) {
+        const meta = await InfoCatalog.load();
+        console.info("[main-panel] InfoCatalog items:", meta?.count ?? 0, meta?.source || InfoCatalog.source);
+        if (!bag.length || /loading|demo|catalog/i.test(bagSource)) {
+          const seeded = InfoCatalog.starterBagFromCatalog?.() || [];
+          if (seeded.length) {
+            bag = seeded;
+            bagSource = "ObjectStore master-items · assets CDN";
+          } else {
+            bag = (MPC?.STARTER_BAG || []).map((x) => InfoCatalog.enrichBagItem?.(x) || x);
+            bagSource = "local STARTER_BAG · enriched";
+          }
+        }
+      }
+
+      // Class + weapon skills from ObjectStore (not emoji stubs)
+      if (window.FleetGameSystems?.loadCatalog) {
+        await FleetGameSystems.loadCatalog();
+      }
+      window.addEventListener("grudge:fleet:systems", () => {
+        renderClassSkills();
+        renderWeaponSkills();
+        renderHotbar();
+      });
+
       if (window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
-      if (window.GrudgeEngine?.init) await GrudgeEngine.init();
+      if (window.GrudgeEngine?.init) await GrudgeEngine.init({ era: ERA });
+
       const saved = window.GrudgeCloud?.loadMainPanel ? await GrudgeCloud.loadMainPanel() : null;
       if (saved) {
         state = {
           ...state,
           ...saved,
           era: ERA,
-          entities: { ...DEFAULT_ENTITIES, ...(saved.entities || {}) },
+          entities: { player: { ...DEMO_PLAYER, ...(saved.entities?.player || {}) } },
         };
+        if (saved.bag?.length) {
+          bag = saved.bag.map((x) => window.InfoCatalog?.enrichBagItem?.(x) || x);
+          bagSource = "cloud save · ObjectStore icons";
+        }
       }
-      applyTab(state.activeTab || "equipment");
-      applyEntity(state.activeEntity || "player");
-      applyBars();
+
+      if (window.GrudgeCloud?.isLoggedIn?.()) {
+        document.getElementById("auth-pill").textContent =
+          window.GrudgeCloud.getDisplayName?.() || "Signed in";
+      }
+
+      const chars = window.GrudgeEngine?.getCharacters?.() || [];
+      renderCharList(chars);
+      if (FORCE_ID && chars.some((c) => c.id === FORCE_ID)) {
+        window.GrudgeEngine.selectCharacter(FORCE_ID);
+      }
       const c = window.GrudgeEngine?.getActiveCharacter?.();
       if (c) mergeFleetCharacter(c);
+
+      const inv = window.GrudgeEngine?.getInventory?.() || [];
+      if (inv.length) mergeInventory(inv);
+
+      // WCS profession SSOT (trees + CDN icons)
+      if (window.WcsProfessions?.loadCatalog) {
+        await WcsProfessions.loadCatalog();
+      }
+      window.addEventListener("grudge:wcs:professions", () => {
+        renderProfessions();
+        renderCraft();
+      });
+
+      renderResources(window.GrudgeEngine?.getResources?.() || {});
+      applyTab(state.activeTab || "equipment");
+      applyEntity("player");
+      applyBars();
+      renderInv();
+      renderProfessions();
+      updateCraftAuthPill();
+      if ((state.activeTab || TAB) === "craft") refreshCraftTab();
+
       if (window.parent !== window) {
         window.parent.postMessage({ type: "GRUDGE_MAIN_PANEL_READY", era: ERA }, "*");
       }
@@ -561,3 +1555,4 @@
   </script>
 </body>
 </html>
+

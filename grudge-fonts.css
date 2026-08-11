@@ -2,7 +2,24 @@
  * Grudge UI fonts — fontsource via jsDelivr (no fonts.googleapis.com).
  * Warlords / main-panel: Cinzel + Crimson Text
  * Tools (studio, assets): Inter + Space Grotesk + JetBrains Mono
+ *
+ * English UI only: do not rely on emoji / color fonts for chrome.
+ * Paperdoll empty slots use Latin abbr + PNG icons (equipment-paperdoll.js).
  */
+
+:root,
+.mp-root {
+  --font-display: "Cinzel", "Palatino Linotype", Palatino, serif;
+  --font-body: "Crimson Text", Georgia, serif;
+  --font-mono: "JetBrains Mono", Consolas, ui-monospace, monospace;
+}
+
+.mp-root .eq-slot-ph,
+.mp-root .eq-slot-label,
+.mp-root .tab-btn,
+.mp-root .logo h1 {
+  font-variant-emoji: text;
+}
 
 /* Cinzel — display / headers */
 @font-face {

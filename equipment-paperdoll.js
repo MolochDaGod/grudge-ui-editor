@@ -119,29 +119,54 @@
       OffHand2: "offhand2",
       weapon2: "secondary",
     };
-    const resolveIcon = global.GrudgeItemIcons?.resolve;
+    const cat = global.InfoCatalog;
+    const resolveIcon =
+      (cat && cat.resolveIcon && cat.resolveIcon.bind(cat)) ||
+      global.GrudgeItemIcons?.resolve;
     for (const [k, v] of Object.entries(raw)) {
       if (v == null || v === "") continue;
       const slot = alias[k] || alias[String(k).toLowerCase()];
       if (!slot) continue;
       if (typeof v === "string") {
+        const looked = cat?.lookup?.({ id: v, name: v }) || null;
         const iconUrl = resolveIcon
-          ? resolveIcon({ itemId: v, name: v })
+          ? resolveIcon({ itemId: v, name: looked?.name || v })
           : null;
-        out[slot] = { id: v, name: v, iconUrl };
+        out[slot] = {
+          id: v,
+          name: looked?.name || v,
+          iconUrl,
+          rarity: cat?.rarityFromTier?.(looked?.tier, looked?.tierLabel) || "common",
+        };
       } else if (typeof v === "object") {
         const id = v.id || v.itemId || v.meshId || "";
         const name = v.name || v.label || id || "Item";
+        const looked = cat?.lookup?.({ id, name, uuid: v.uuid }) || null;
         const iconUrl =
           v.iconUrl ||
           v.icon ||
           v.image ||
-          (resolveIcon ? resolveIcon({ itemId: id, name }) : null);
+          (resolveIcon
+            ? resolveIcon({
+                itemId: id,
+                name: looked?.name || name,
+                category: v.category,
+                type: v.type,
+              })
+            : null);
         out[slot] = {
           id,
-          name,
+          name: looked?.name || name,
           iconUrl,
-          rarity: v.rarity || v.tier || "common",
+          rarity:
+            (typeof v.rarity === "string" && RARITY_CLASS[v.rarity] ? v.rarity : null) ||
+            cat?.rarityFromTier?.(looked?.tier ?? v.tier, looked?.tierLabel || v.tierLabel) ||
+            "common",
+          description: v.description || looked?.description || "",
+          stats: v.stats || looked?.stats || null,
+          meshSlot: v.meshSlot,
+          meshVar: v.meshVar,
+          weaponType: v.weaponType || looked?.weaponType,
         };
       }
     }
@@ -235,8 +260,21 @@
         </div>
         <p class="eq-secondary-hint">Weapon 2 / Off 2 are combat Q-swap loadout (not looted from corpse).</p>
         ${mode === "inspect" ? `<div class="eq-inspect-badge">Inspecting</div>` : ""}
+        ${opts.showMeshHint !== false ? `<p class="eq-mesh-hint">Click armor/weapon slots to cycle grudge6 mesh variants · texture atlas by race</p>` : ""}
       </div>
     `;
+
+    // Mesh-level overlay when main-panel-mesh.js is present
+    const wrap = el.querySelector(".eq-portrait-wrap");
+    if (wrap && global.MainPanelMesh?.renderMeshOverlay) {
+      global.MainPanelMesh.renderMeshOverlay(wrap, {
+        race: opts.race || "human",
+        classId: opts.classId || "warrior",
+        equipment: equipped,
+        meshIds: opts.meshIds,
+        unarmed: opts.unarmed,
+      });
+    }
 
     el.onclick = (e) => {
       const btn = e.target.closest(".eq-slot");
@@ -261,6 +299,9 @@
       },
       setMode(m) {
         render(el, { ...opts, mode: m });
+      },
+      setMesh(meshOpts) {
+        render(el, { ...opts, ...meshOpts });
       },
       getEquipped() {
         return { ...equipped };
