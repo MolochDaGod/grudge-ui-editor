@@ -213,8 +213,38 @@
           "value": "public, max-age=60"
         },
         {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
           "key": "Content-Security-Policy",
           "value": "frame-ancestors 'self' https://*.grudge-studio.com https://*.vercel.app https://grudgewarlords.com https://*.replit.app"
+        }
+      ]
+    },
+    {
+      "source": "/grudge-fonts.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/css; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/css/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/css; charset=utf-8"
         }
       ]
     },

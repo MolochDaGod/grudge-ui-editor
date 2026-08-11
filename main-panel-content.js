@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Main Panel content — mesh kits + guest craft stubs.
  * Canonical game systems load at runtime from ObjectStore:
  *   fleet-game-systems.js → master-skillTrees + master-weaponSkills
@@ -34,26 +34,26 @@
           lvl: 1,
           label: "Core",
           skills: [
-            { id: "warrior.power_strike", n: "Power Strike", d: "150% overhead slash", slot: 1, emoji: "⚔" },
-            { id: "warrior.shield_bash", n: "Shield Bash", d: "Stun 1.5s", slot: 2, emoji: "🛡" },
-            { id: "warrior.war_cry", n: "War Cry", d: "AoE taunt", slot: 3, emoji: "📯" },
+            { id: "warrior.power_strike", n: "Power Strike", d: "150% overhead slash", slot: 1, abbr: "SK" },
+            { id: "warrior.shield_bash", n: "Shield Bash", d: "Stun 1.5s", slot: 2, abbr: "SK" },
+            { id: "warrior.war_cry", n: "War Cry", d: "AoE taunt", slot: 3, abbr: "SK" },
           ],
         },
         {
           lvl: 10,
           label: "Line",
           skills: [
-            { id: "warrior.cleave", n: "Cleave", d: "Wide arc hit", slot: 4, emoji: "💥" },
-            { id: "warrior.charge", n: "Charge", d: "Gap closer", slot: 5, emoji: "➡" },
-            { id: "warrior.fortify", n: "Fortify", d: "+DEF 8s", slot: 6, emoji: "🧱" },
+            { id: "warrior.cleave", n: "Cleave", d: "Wide arc hit", slot: 4, abbr: "SK" },
+            { id: "warrior.charge", n: "Charge", d: "Gap closer", slot: 5, abbr: "SK" },
+            { id: "warrior.fortify", n: "Fortify", d: "+DEF 8s", slot: 6, abbr: "SK" },
           ],
         },
         {
           lvl: 20,
           label: "Mastery",
           skills: [
-            { id: "warrior.execute", n: "Execute", d: "Finisher under 30% HP", slot: null, emoji: "☠" },
-            { id: "warrior.bulwark", n: "Bulwark", d: "Party shield wall", slot: null, emoji: "🔰" },
+            { id: "warrior.execute", n: "Execute", d: "Finisher under 30% HP", slot: null, abbr: "SK" },
+            { id: "warrior.bulwark", n: "Bulwark", d: "Party shield wall", slot: null, abbr: "SK" },
           ],
         },
       ],
@@ -66,26 +66,26 @@
           lvl: 1,
           label: "Core",
           skills: [
-            { id: "mage.fireball", n: "Fireball", d: "Ranged fire bolt", slot: 1, emoji: "🔥" },
-            { id: "mage.frost", n: "Frost Bolt", d: "Slow + chip", slot: 2, emoji: "❄" },
-            { id: "mage.arcane_shield", n: "Arcane Shield", d: "Absorb barrier", slot: 3, emoji: "🔮" },
+            { id: "mage.fireball", n: "Fireball", d: "Ranged fire bolt", slot: 1, abbr: "SK" },
+            { id: "mage.frost", n: "Frost Bolt", d: "Slow + chip", slot: 2, abbr: "SK" },
+            { id: "mage.arcane_shield", n: "Arcane Shield", d: "Absorb barrier", slot: 3, abbr: "SK" },
           ],
         },
         {
           lvl: 10,
           label: "Confluence",
           skills: [
-            { id: "mage.chain", n: "Chain Lightning", d: "Jump 3 targets", slot: 4, emoji: "⚡" },
-            { id: "mage.blink", n: "Blink", d: "Short teleport", slot: 5, emoji: "✨" },
-            { id: "mage.meteor", n: "Meteor", d: "AoE delay strike", slot: 6, emoji: "☄" },
+            { id: "mage.chain", n: "Chain Lightning", d: "Jump 3 targets", slot: 4, abbr: "SK" },
+            { id: "mage.blink", n: "Blink", d: "Short teleport", slot: 5, abbr: "SK" },
+            { id: "mage.meteor", n: "Meteor", d: "AoE delay strike", slot: 6, abbr: "SK" },
           ],
         },
         {
           lvl: 20,
           label: "Arch",
           skills: [
-            { id: "mage.time_warp", n: "Time Warp", d: "Haste self 6s", slot: null, emoji: "⏳" },
-            { id: "mage.nova", n: "Mana Nova", d: "Burst + restore", slot: null, emoji: "💠" },
+            { id: "mage.time_warp", n: "Time Warp", d: "Haste self 6s", slot: null, abbr: "SK" },
+            { id: "mage.nova", n: "Mana Nova", d: "Burst + restore", slot: null, abbr: "SK" },
           ],
         },
       ],
@@ -98,26 +98,26 @@
           lvl: 1,
           label: "Core",
           skills: [
-            { id: "ranger.precise", n: "Precise Shot", d: "High accuracy shot", slot: 1, emoji: "🏹" },
-            { id: "ranger.trap", n: "Spike Trap", d: "Root 2s", slot: 2, emoji: "🪤" },
-            { id: "ranger.volley", n: "Volley", d: "3-arrow spray", slot: 3, emoji: "🎯" },
+            { id: "ranger.precise", n: "Precise Shot", d: "High accuracy shot", slot: 1, abbr: "SK" },
+            { id: "ranger.trap", n: "Spike Trap", d: "Root 2s", slot: 2, abbr: "SK" },
+            { id: "ranger.volley", n: "Volley", d: "3-arrow spray", slot: 3, abbr: "SK" },
           ],
         },
         {
           lvl: 10,
           label: "Hunt",
           skills: [
-            { id: "ranger.mark", n: "Hunter's Mark", d: "+dmg target", slot: 4, emoji: "👁" },
-            { id: "ranger.dash", n: "Sidestep", d: "I-frames dodge", slot: 5, emoji: "💨" },
-            { id: "ranger.poison", n: "Poison Arrow", d: "DoT 6s", slot: 6, emoji: "☠" },
+            { id: "ranger.mark", n: "Hunter's Mark", d: "+dmg target", slot: 4, abbr: "SK" },
+            { id: "ranger.dash", n: "Sidestep", d: "I-frames dodge", slot: 5, abbr: "SK" },
+            { id: "ranger.poison", n: "Poison Arrow", d: "DoT 6s", slot: 6, abbr: "SK" },
           ],
         },
         {
           lvl: 20,
           label: "Master",
           skills: [
-            { id: "ranger.rain", n: "Arrow Rain", d: "Ground AoE", slot: null, emoji: "🌧" },
-            { id: "ranger.camo", n: "Camouflage", d: "Stealth 4s", slot: null, emoji: "🍃" },
+            { id: "ranger.rain", n: "Arrow Rain", d: "Ground AoE", slot: null, abbr: "SK" },
+            { id: "ranger.camo", n: "Camouflage", d: "Stealth 4s", slot: null, abbr: "SK" },
           ],
         },
       ],
@@ -130,26 +130,26 @@
           lvl: 1,
           label: "Core",
           skills: [
-            { id: "worge.rend", n: "Rend", d: "Bleed slash", slot: 1, emoji: "🩸" },
-            { id: "worge.howl", n: "Howl", d: "Fear pulse", slot: 2, emoji: "🐺" },
-            { id: "worge.pounce", n: "Pounce", d: "Leap attack", slot: 3, emoji: "🐾" },
+            { id: "worge.rend", n: "Rend", d: "Bleed slash", slot: 1, abbr: "SK" },
+            { id: "worge.howl", n: "Howl", d: "Fear pulse", slot: 2, abbr: "SK" },
+            { id: "worge.pounce", n: "Pounce", d: "Leap attack", slot: 3, abbr: "SK" },
           ],
         },
         {
           lvl: 10,
           label: "Primal",
           skills: [
-            { id: "worge.form", n: "Beast Form", d: "Hybrid morph", slot: 4, emoji: "🌙" },
-            { id: "worge.thrash", n: "Thrash", d: "Multi-hit", slot: 5, emoji: "💢" },
-            { id: "worge.pack", n: "Pack Bond", d: "Ally haste", slot: 6, emoji: "🔗" },
+            { id: "worge.form", n: "Beast Form", d: "Hybrid morph", slot: 4, abbr: "SK" },
+            { id: "worge.thrash", n: "Thrash", d: "Multi-hit", slot: 5, abbr: "SK" },
+            { id: "worge.pack", n: "Pack Bond", d: "Ally haste", slot: 6, abbr: "SK" },
           ],
         },
         {
           lvl: 20,
           label: "Alpha",
           skills: [
-            { id: "worge.ravage", n: "Ravage", d: "Execute leap", slot: null, emoji: "💀" },
-            { id: "worge.totem", n: "Spirit Totem", d: "Heal aura", slot: null, emoji: "🪵" },
+            { id: "worge.ravage", n: "Ravage", d: "Execute leap", slot: null, abbr: "SK" },
+            { id: "worge.totem", n: "Spirit Totem", d: "Heal aura", slot: null, abbr: "SK" },
           ],
         },
       ],
@@ -160,40 +160,40 @@
   /** Weapon skill bars by equipped weapon type. */
   const WEAPON_SKILL_BARS = {
     sword: [
-      { id: "ws.slash", n: "Slash", d: "Light chain", emoji: "⚔", slot: 1 },
-      { id: "ws.riposte", n: "Riposte", d: "Parry counter", emoji: "↩", slot: 2 },
-      { id: "ws.overhead", n: "Overhead", d: "Heavy", emoji: "⬇", slot: 3 },
-      { id: "ws.thrust", n: "Thrust", d: "Pierce", emoji: "➡", slot: 4 },
+      { id: "ws.slash", n: "Slash", d: "Light chain", abbr: "SK", slot: 1 },
+      { id: "ws.riposte", n: "Riposte", d: "Parry counter", abbr: "SK", slot: 2 },
+      { id: "ws.overhead", n: "Overhead", d: "Heavy", abbr: "SK", slot: 3 },
+      { id: "ws.thrust", n: "Thrust", d: "Pierce", abbr: "SK", slot: 4 },
     ],
     shield: [
-      { id: "ws.block", n: "Block", d: "Hold guard", emoji: "🛡", slot: 1 },
-      { id: "ws.bash", n: "Bash", d: "Stun", emoji: "🔨", slot: 2 },
+      { id: "ws.block", n: "Block", d: "Hold guard", abbr: "SK", slot: 1 },
+      { id: "ws.bash", n: "Bash", d: "Stun", abbr: "SK", slot: 2 },
     ],
     bow: [
-      { id: "ws.shot", n: "Shot", d: "Standard", emoji: "🏹", slot: 1 },
-      { id: "ws.aimed", n: "Aimed", d: "Charge", emoji: "🎯", slot: 2 },
-      { id: "ws.scatter", n: "Scatter", d: "Cone", emoji: "✴", slot: 3 },
-      { id: "ws.retreat", n: "Retreat Shot", d: "Backstep", emoji: "↩", slot: 4 },
+      { id: "ws.shot", n: "Shot", d: "Standard", abbr: "SK", slot: 1 },
+      { id: "ws.aimed", n: "Aimed", d: "Charge", abbr: "SK", slot: 2 },
+      { id: "ws.scatter", n: "Scatter", d: "Cone", abbr: "SK", slot: 3 },
+      { id: "ws.retreat", n: "Retreat Shot", d: "Backstep", abbr: "SK", slot: 4 },
     ],
     staff: [
-      { id: "ws.bolt", n: "Bolt", d: "School bolt", emoji: "✦", slot: 1 },
-      { id: "ws.channel", n: "Channel", d: "Beam", emoji: "〰", slot: 2 },
-      { id: "ws.burst", n: "Burst", d: "AoE", emoji: "💥", slot: 3 },
-      { id: "ws.ward", n: "Ward", d: "Shield", emoji: "⬡", slot: 4 },
+      { id: "ws.bolt", n: "Bolt", d: "School bolt", abbr: "SK", slot: 1 },
+      { id: "ws.channel", n: "Channel", d: "Beam", abbr: "SK", slot: 2 },
+      { id: "ws.burst", n: "Burst", d: "AoE", abbr: "SK", slot: 3 },
+      { id: "ws.ward", n: "Ward", d: "Shield", abbr: "SK", slot: 4 },
     ],
     axe: [
-      { id: "ws.hack", n: "Hack", d: "Heavy chop", emoji: "🪓", slot: 1 },
-      { id: "ws.whirl", n: "Whirl", d: "Spin", emoji: "🌀", slot: 2 },
-      { id: "ws.cleave", n: "Cleave", d: "Arc", emoji: "〰", slot: 3 },
+      { id: "ws.hack", n: "Hack", d: "Heavy chop", abbr: "SK", slot: 1 },
+      { id: "ws.whirl", n: "Whirl", d: "Spin", abbr: "SK", slot: 2 },
+      { id: "ws.cleave", n: "Cleave", d: "Arc", abbr: "SK", slot: 3 },
     ],
     hammer: [
-      { id: "ws.smash", n: "Smash", d: "Ground pound", emoji: "⚒", slot: 1 },
-      { id: "ws.quake", n: "Quake", d: "Shockwave", emoji: "〰", slot: 2 },
+      { id: "ws.smash", n: "Smash", d: "Ground pound", abbr: "SK", slot: 1 },
+      { id: "ws.quake", n: "Quake", d: "Shockwave", abbr: "SK", slot: 2 },
     ],
     unarmed: [
-      { id: "ws.jab", n: "Jab", d: "Quick hit", emoji: "✊", slot: 1 },
-      { id: "ws.hook", n: "Hook", d: "Heavy", emoji: "👊", slot: 2 },
-      { id: "ws.kick", n: "Kick", d: "Stagger", emoji: "🦵", slot: 3 },
+      { id: "ws.jab", n: "Jab", d: "Quick hit", abbr: "SK", slot: 1 },
+      { id: "ws.hook", n: "Hook", d: "Heavy", abbr: "SK", slot: 2 },
+      { id: "ws.kick", n: "Kick", d: "Stagger", abbr: "SK", slot: 3 },
     ],
   };
 
@@ -203,11 +203,11 @@
    * Runtime: wcs-professions-ssot.js + data/wcs-professions.json
    */
   let PROFESSION_TREES = {
-    miner: { name: "Miner", emoji: "⛏", color: "#f59e0b", nodes: [] },
-    forester: { name: "Forester", emoji: "🌲", color: "#22c55e", nodes: [] },
-    engineer: { name: "Engineer", emoji: "🔧", color: "#fb923c", nodes: [] },
-    mystic: { name: "Mystic", emoji: "🔮", color: "#a78bfa", nodes: [] },
-    chef: { name: "Chef", emoji: "🍲", color: "#f97316", nodes: [] },
+    miner: { name: "Miner", abbr: "SK", color: "#f59e0b", nodes: [] },
+    forester: { name: "Forester", abbr: "SK", color: "#22c55e", nodes: [] },
+    engineer: { name: "Engineer", abbr: "SK", color: "#fb923c", nodes: [] },
+    mystic: { name: "Mystic", abbr: "SK", color: "#a78bfa", nodes: [] },
+    chef: { name: "Chef", abbr: "SK", color: "#f97316", nodes: [] },
   };
 
   /** Quick craft recipes (ObjectStore-shaped). */
@@ -216,7 +216,7 @@
       id: "iron_ingot",
       name: "Iron Ingot",
       profession: "smith",
-      emoji: "⛓",
+      abbr: "SK",
       inputs: [{ id: "ore_iron", name: "Iron Ore", qty: 3 }],
       output: { id: "ingot_iron", name: "Iron Ingot", qty: 1 },
       timeSec: 4,
@@ -225,7 +225,7 @@
       id: "healing_tonic",
       name: "Healing Tonic",
       profession: "chef",
-      emoji: "🧪",
+      abbr: "SK",
       inputs: [
         { id: "herb_green", name: "Green Herb", qty: 2 },
         { id: "water", name: "Water", qty: 1 },
@@ -237,7 +237,7 @@
       id: "wooden_shield",
       name: "Wooden Shield",
       profession: "forester",
-      emoji: "🛡",
+      abbr: "SK",
       inputs: [{ id: "plank", name: "Plank", qty: 8 }],
       output: { id: "shield_wood", name: "Wooden Shield", qty: 1 },
       timeSec: 8,
@@ -246,7 +246,7 @@
       id: "mana_dust",
       name: "Mana Dust",
       profession: "mystic",
-      emoji: "✨",
+      abbr: "SK",
       inputs: [{ id: "crystal_shard", name: "Crystal Shard", qty: 1 }],
       output: { id: "dust_mana", name: "Mana Dust", qty: 2 },
       timeSec: 2,
@@ -255,7 +255,7 @@
       id: "iron_sword",
       name: "Iron Cutlass",
       profession: "smith",
-      emoji: "⚔",
+      abbr: "SK",
       inputs: [
         { id: "ingot_iron", name: "Iron Ingot", qty: 4 },
         { id: "plank", name: "Plank", qty: 1 },
@@ -269,7 +269,7 @@
       id: "leather_vest",
       name: "Leather Vest",
       profession: "tailor",
-      emoji: "🥋",
+      abbr: "SK",
       inputs: [{ id: "leather", name: "Leather", qty: 6 }],
       output: { id: "chest_leather", name: "Leather Vest", qty: 1 },
       timeSec: 10,
@@ -280,7 +280,7 @@
       id: "yew_bow",
       name: "Yew Longbow",
       profession: "forester",
-      emoji: "🏹",
+      abbr: "SK",
       inputs: [
         { id: "plank", name: "Plank", qty: 4 },
         { id: "string", name: "Bowstring", qty: 1 },
@@ -294,7 +294,7 @@
       id: "stone_pick",
       name: "Stone Pick",
       profession: "miner",
-      emoji: "⛏",
+      abbr: "SK",
       inputs: [
         { id: "stone", name: "Stone", qty: 5 },
         { id: "plank", name: "Plank", qty: 2 },
@@ -306,16 +306,16 @@
 
   /** Demo bag when account inventory empty. */
   const STARTER_BAG = [
-    { id: "ore_iron", name: "Iron Ore", qty: 12, emoji: "🪨", tier: 1, slot: "material" },
-    { id: "plank", name: "Plank", qty: 16, emoji: "🪵", tier: 1, slot: "material" },
-    { id: "herb_green", name: "Green Herb", qty: 8, emoji: "🌿", tier: 1, slot: "material" },
-    { id: "water", name: "Water", qty: 6, emoji: "💧", tier: 1, slot: "material" },
-    { id: "crystal_shard", name: "Crystal Shard", qty: 3, emoji: "💎", tier: 2, slot: "material" },
-    { id: "leather", name: "Leather", qty: 10, emoji: "🟧", tier: 1, slot: "material" },
-    { id: "string", name: "Bowstring", qty: 4, emoji: "🧵", tier: 1, slot: "material" },
-    { id: "stone", name: "Stone", qty: 20, emoji: "🪨", tier: 1, slot: "material" },
-    { id: "food_bread", name: "Bread", qty: 5, emoji: "🍞", tier: 1, slot: "consumable" },
-    { id: "tool_stone_axe", name: "Stone Axe", qty: 1, emoji: "🪓", tier: 1, slot: "tool" },
+    { id: "ore_iron", name: "Iron Ore", qty: 12, abbr: "SK", tier: 1, slot: "material" },
+    { id: "plank", name: "Plank", qty: 16, abbr: "SK", tier: 1, slot: "material" },
+    { id: "herb_green", name: "Green Herb", qty: 8, abbr: "SK", tier: 1, slot: "material" },
+    { id: "water", name: "Water", qty: 6, abbr: "SK", tier: 1, slot: "material" },
+    { id: "crystal_shard", name: "Crystal Shard", qty: 3, abbr: "SK", tier: 2, slot: "material" },
+    { id: "leather", name: "Leather", qty: 10, abbr: "SK", tier: 1, slot: "material" },
+    { id: "string", name: "Bowstring", qty: 4, abbr: "SK", tier: 1, slot: "material" },
+    { id: "stone", name: "Stone", qty: 20, abbr: "SK", tier: 1, slot: "material" },
+    { id: "food_bread", name: "Bread", qty: 5, abbr: "SK", tier: 1, slot: "consumable" },
+    { id: "tool_stone_axe", name: "Stone Axe", qty: 1, abbr: "SK", tier: 1, slot: "tool" },
   ];
 
   /**
@@ -434,3 +434,4 @@
     hotbarFromClass,
   };
 })(typeof window !== "undefined" ? window : globalThis);
+

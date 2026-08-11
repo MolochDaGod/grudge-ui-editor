@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grudge Main Panel ΓÇö Warlords</title>
+  <title>Grudge Main Panel - Warlords</title>
   <meta name="description" content="Warlords main panel: equipment mesh swap, class/weapon skills, professions, craft, inventory, characters. SSOT ui.grudge-studio.com" />
   <link rel="stylesheet" href="./grudge-fonts.css" />
   <link rel="stylesheet" href="./grudge-shell.css" />
@@ -30,13 +30,13 @@
     <header class="top-bar">
       <div class="logo">
         <h1>Grudge Warlords</h1>
-        <span class="sub">Main Panel ┬╖ mesh ┬╖ skills ┬╖ craft ┬╖ bag</span>
+        <span class="sub">Main Panel  ·  mesh  ·  skills  ·  craft  ·  bag</span>
       </div>
       <div class="player-info">
         <div class="resource-bars" style="display:flex;gap:6px">
-          <div class="res-bar"><div class="fill hp" id="bar-hp" style="width:78%"></div><span class="lbl" id="lbl-hp">HP ΓÇö</span></div>
-          <div class="res-bar"><div class="fill mp" id="bar-mp" style="width:62%"></div><span class="lbl" id="lbl-mp">MP ΓÇö</span></div>
-          <div class="res-bar"><div class="fill sp" id="bar-sp" style="width:91%"></div><span class="lbl" id="lbl-sp">SP ΓÇö</span></div>
+          <div class="res-bar"><div class="fill hp" id="bar-hp" style="width:78%"></div><span class="lbl" id="lbl-hp">HP -</span></div>
+          <div class="res-bar"><div class="fill mp" id="bar-mp" style="width:62%"></div><span class="lbl" id="lbl-mp">MP -</span></div>
+          <div class="res-bar"><div class="fill sp" id="bar-sp" style="width:91%"></div><span class="lbl" id="lbl-sp">SP -</span></div>
         </div>
         <img id="hero-thumb" class="hero-thumb" alt="" width="36" height="36" />
         <span style="color:var(--gold);font-family:'Cinzel',serif;font-weight:700" id="entity-name">Hero</span>
@@ -59,11 +59,11 @@
         <div class="stat-section">
           <h3>Characters</h3>
           <div id="char-list" class="char-list"></div>
-          <button type="button" class="mp-btn ghost" id="btn-refresh-chars">Γå╗ Refresh roster</button>
+          <button type="button" class="mp-btn ghost" id="btn-refresh-chars">> Refresh roster</button>
         </div>
         <div class="stat-section">
           <h3>Combat Power</h3>
-          <div class="stat-row"><span class="k">Rating</span><span class="v" id="cp-rating" style="color:var(--gold)">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">Rating</span><span class="v" id="cp-rating" style="color:var(--gold)">-</span></div>
           <div class="stat-row"><span class="k">Equipped</span><span class="v" id="eq-count">0/11</span></div>
           <div class="stat-row"><span class="k">Mesh IDs</span><span class="v" id="mesh-count">0</span></div>
           <div class="stat-row"><span class="k">Mode</span><span class="v" id="eq-mode">self</span></div>
@@ -71,11 +71,11 @@
         </div>
         <div class="stat-section">
           <h3>Attributes</h3>
-          <div class="stat-row"><span class="k">Strength</span><span class="v" id="attr-str">ΓÇö</span></div>
-          <div class="stat-row"><span class="k">Vitality</span><span class="v" id="attr-vit">ΓÇö</span></div>
-          <div class="stat-row"><span class="k">Dexterity</span><span class="v" id="attr-dex">ΓÇö</span></div>
-          <div class="stat-row"><span class="k">Intelligence</span><span class="v" id="attr-int">ΓÇö</span></div>
-          <div class="stat-row"><span class="k">Tactics</span><span class="v" id="attr-tac">ΓÇö</span></div>
+          <div class="stat-row"><span class="k">Strength</span><span class="v" id="attr-str">-</span></div>
+          <div class="stat-row"><span class="k">Vitality</span><span class="v" id="attr-vit">-</span></div>
+          <div class="stat-row"><span class="k">Dexterity</span><span class="v" id="attr-dex">-</span></div>
+          <div class="stat-row"><span class="k">Intelligence</span><span class="v" id="attr-int">-</span></div>
+          <div class="stat-row"><span class="k">Tactics</span><span class="v" id="attr-tac">-</span></div>
         </div>
         <div class="stat-section">
           <h3>Professions</h3>
@@ -99,19 +99,19 @@
             <div class="mesh-toolbar">
               <button type="button" class="mp-btn" id="btn-unarmed">Unarmed kit</button>
               <button type="button" class="mp-btn" id="btn-class-kit">Class starting kit</button>
-              <button type="button" class="mp-btn primary" id="btn-save-mesh">Save mesh ΓåÆ character</button>
-              <span class="mesh-toolbar-hint">Click slots to cycle mesh variants ┬╖ race atlas texture</span>
+              <button type="button" class="mp-btn primary" id="btn-save-mesh">Save mesh -> character</button>
+              <span class="mesh-toolbar-hint">Click slots to cycle mesh variants  ·  race atlas texture</span>
             </div>
             <p class="center-hint">
-              Layout: tactical paperdoll ┬╖ Host: ui.grudge-studio.com ┬╖ Era: <span id="era-label">warlords</span>
-              ┬╖ grudge6 mesh visibility (Unity parity)
+              Layout: tactical paperdoll  ·  Host: ui.grudge-studio.com  ·  Era: <span id="era-label">warlords</span>
+               ·  grudge6 mesh visibility (Unity parity)
             </p>
           </div>
 
           <div class="tab-panel" id="tab-inventory">
             <div class="inv-header">
-              <p>Shared account bag · Railway / ObjectStore SSOT ┬╖ <span id="inv-source">loading catalog…</span></p>
-              <button type="button" class="mp-btn ghost" id="btn-refresh-inv">Γå╗ Bag</button>
+              <p>Shared account bag · Railway / ObjectStore SSOT  ·  <span id="inv-source">loading catalog…</span></p>
+              <button type="button" class="mp-btn ghost" id="btn-refresh-inv">> Bag</button>
             </div>
             <div class="inv-grid dense" id="inv-grid"></div>
           </div>
@@ -119,7 +119,7 @@
           <div class="tab-panel" id="tab-class-skills">
             <div class="skills-head">
               <h3 id="class-tree-title">Class skill tree</h3>
-              <p id="class-tree-sub">Reference + hotbar bind ┬╖ unlock in play</p>
+              <p id="class-tree-sub">Reference + hotbar bind  ·  unlock in play</p>
             </div>
             <div id="class-tree-host" class="skill-tree"></div>
           </div>
@@ -135,7 +135,7 @@
           <div class="tab-panel" id="tab-professions">
             <div class="skills-head">
               <h3>WCS Professional skill trees</h3>
-              <p id="prof-ssot-sub">Canonical SSOT from Warlord Crafting Suite ┬╖ Miner ┬╖ Forester ┬╖ Engineer ┬╖ Mystic ┬╖ Chef</p>
+              <p id="prof-ssot-sub">Canonical SSOT from Warlord Crafting Suite  ·  Miner  ·  Forester  ·  Engineer  ·  Mystic  ·  Chef</p>
             </div>
             <div class="prof-tabs" id="prof-tabs"></div>
             <div id="prof-detail" class="prof-detail"></div>
@@ -199,9 +199,9 @@
           </div>
 
           <div class="tab-panel" id="tab-quests">
-            <div class="qc-card" style="margin-bottom:8px"><h4>The Storm Awakens</h4><p>Main ┬╖ Board The Grudge ┬╖ step 3/3</p></div>
-            <div class="qc-card" style="margin-bottom:8px"><h4>Iron for the Forge</h4><p id="quest-iron">Side ┬╖ craft iron ingots</p></div>
-            <div class="qc-card"><h4>Kit of the Warlord</h4><p>Side ┬╖ equip class starting mesh kit</p></div>
+            <div class="qc-card" style="margin-bottom:8px"><h4>The Storm Awakens</h4><p>Main  ·  Board The Grudge  ·  step 3/3</p></div>
+            <div class="qc-card" style="margin-bottom:8px"><h4>Iron for the Forge</h4><p id="quest-iron">Side  ·  craft iron ingots</p></div>
+            <div class="qc-card"><h4>Kit of the Warlord</h4><p>Side  ·  equip class starting mesh kit</p></div>
           </div>
         </div>
         <div class="action-bar-wrap">
@@ -379,7 +379,7 @@
       document.getElementById("mesh-count").textContent = String(lastMeshIds.length);
       document.getElementById("mesh-id-list").innerHTML = lastMeshIds
         .map((id) => `<div>${esc(id)}</div>`)
-        .join("") || "<div class='muted'>ΓÇö</div>";
+        .join("") || "<div class='muted'>-</div>";
 
       const portrait =
         ent.portrait ||
@@ -400,9 +400,9 @@
         title: "GRUDGE WARLORD",
         subtitle:
           (ent.race || "hero").toUpperCase() +
-          " ┬╖ " +
+          "  ·  " +
           (ent.classId || "warrior").toUpperCase() +
-          (mode === "inspect" ? " ┬╖ INSPECT" : " ┬╖ LOADOUT"),
+          (mode === "inspect" ? "  ·  INSPECT" : "  ·  LOADOUT"),
         race: ent.race || "human",
         classId: ent.classId || "warrior",
         portraitUrl: portrait,
@@ -451,7 +451,7 @@
             <img src="${esc(img)}" alt="" class="chip-av" />
             <div>
               <div class="name">${esc(c.name || "Hero")}</div>
-              <div class="meta">Lv.${c.level || 20} ┬╖ ${esc(race)} ┬╖ ${esc(c.classId || c.class || "")}</div>
+              <div class="meta">Lv.${c.level || 20}  ·  ${esc(race)}  ·  ${esc(c.classId || c.class || "")}</div>
             </div>
           </button>`;
         })
@@ -490,9 +490,13 @@
               window.GrudgeItemIcons?.resolve?.(it) ||
               it.iconUrl ||
               "";
+            const abbr = String(it.name || it.id || "ITM")
+              .replace(/[^A-Za-z0-9]/g, "")
+              .slice(0, 3)
+              .toUpperCase() || "ITM";
             const iconHtml = iconUrl
-              ? `<img class="inv-icon" src="${esc(iconUrl)}" alt="" referrerpolicy="no-referrer" draggable="false" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'inv-emoji',textContent:'${esc(it.emoji || "≡ƒôª")}' }))" />`
-              : `<span class="inv-emoji">${esc(it.emoji || "≡ƒôª")}</span>`;
+              ? `<img class="inv-icon" src="${esc(iconUrl)}" alt="" referrerpolicy="no-referrer" draggable="false" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'inv-abbr',textContent:'${esc(abbr)}'}))" />`
+              : `<span class="inv-abbr">${esc(abbr)}</span>`;
             s.innerHTML =
               iconHtml +
               (it.qty > 1 ? `<span class="inv-qty">${it.qty}</span>` : "") +
@@ -511,7 +515,7 @@
                 tierLabel: it.tierLabel,
                 slot: it.equipSlot || it.slot,
               }) || "";
-            s.title = cat?.plainTooltip?.(it) || `${it.name || it.id} ├ù${it.qty || 1}`;
+            s.title = cat?.plainTooltip?.(it) || `${it.name || it.id} x${it.qty || 1}`;
             if (tip) s.dataset.tip = tip;
             s.onclick = () => onBagClick(i);
           } else {
@@ -538,7 +542,7 @@
         cat?.paperdollSlot?.(enriched) ||
         null;
       if (!paperSlot) {
-        toast(`${enriched.name || enriched.id} ┬╖ material (not equippable)`);
+        toast(`${enriched.name || enriched.id}  ·  material (not equippable)`);
         return;
       }
       equipBagToSlot(index, paperSlot);
@@ -584,7 +588,7 @@
       renderInv();
       renderWeaponSkills();
       scheduleSave();
-      toast(`Equipped ${enriched.name} ΓåÆ ${paperSlot}`);
+      toast(`Equipped ${enriched.name} -> ${paperSlot}`);
       if (window.parent !== window) {
         window.parent.postMessage(
           { type: "GRUDGE_EQUIP_CHANGE", equipment: eq, characterId: ent.characterId || null },
@@ -598,7 +602,11 @@
       if (s?.iconUrl) {
         return `<img class="sk-icon" src="${esc(s.iconUrl)}" alt="" width="${px}" height="${px}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=.2" />`;
       }
-      return `<span class="sk-emoji">${esc(s?.emoji || "✦")}</span>`;
+      const code = String(s?.abbr || s?.code || s?.n || s?.id || "SK")
+        .replace(/[^A-Za-z0-9]/g, "")
+        .slice(0, 3)
+        .toUpperCase() || "SK";
+      return `<span class="sk-abbr" style="width:${px}px;height:${px}px">${esc(code)}</span>`;
     }
 
     function renderClassSkills() {
@@ -677,9 +685,10 @@
           const t = trees[id] || window.WcsProfessions?.get?.(id);
           if (!t) return "";
           const lv = levels[id] || levels[t.name] || 1;
+          const abbr = String(t.name || id).replace(/[^A-Za-z0-9]/g, "").slice(0, 3).toUpperCase() || "PRF";
           const icon = t.iconUrl
             ? `<img class="prof-mini-icon" src="${esc(t.iconUrl)}" alt="" />`
-            : `<span>${t.emoji || "ΓÜÆ"}</span>`;
+            : `<span class="sk-abbr sk-abbr--sm">${esc(abbr)}</span>`;
           return `<div class="stat-row prof-mini-row" data-prof="${esc(id)}">
             <span class="k">${icon} ${esc(t.name)}</span>
             <span class="v">Lv ${lv}</span>
@@ -700,9 +709,10 @@
           const t = trees[id] || window.WcsProfessions?.get?.(id);
           if (!t) return "";
           const on = id === activeProfId;
+          const abbr = String(t.name || id).replace(/[^A-Za-z0-9]/g, "").slice(0, 3).toUpperCase() || "PRF";
           const icon = t.iconUrl
             ? `<img src="${esc(t.iconUrl)}" alt="" />`
-            : t.emoji || "";
+            : `<span class="sk-abbr sk-abbr--sm">${esc(abbr)}</span>`;
           return `<button type="button" class="prof-tab ${on ? "active" : ""}" data-prof="${esc(id)}" style="--pc:${t.color || "#d4a400"}">
             ${icon}<span>${esc(t.name)}</span>
           </button>`;
@@ -717,7 +727,7 @@
 
       const p = trees[activeProfId] || window.WcsProfessions?.get?.(activeProfId);
       if (!p) {
-        host.innerHTML = `<p class="muted">Loading WCS profession SSOTΓÇª</p>`;
+        host.innerHTML = `<p class="muted">Loading WCS profession SSOT...</p>`;
         return;
       }
       const lv = levels[activeProfId] || levels[p.name] || 1;
@@ -725,14 +735,15 @@
         window.WcsProfessions?.titleFor?.(activeProfId, lv) ||
         MPC?.getProfessionTitle?.(activeProfId, lv) ||
         "Novice";
+      const pAbbr = String(p.name || activeProfId).replace(/[^A-Za-z0-9]/g, "").slice(0, 3).toUpperCase() || "PRF";
 
       detail.innerHTML = `
         <div class="prof-hero" style="--pc:${p.color || "#d4a400"};${p.bgImage ? `--prof-bg:url('${esc(p.bgImage)}')` : ''}">
-          ${p.iconUrl ? `<img class="prof-hero-icon" src="${esc(p.iconUrl)}" alt="" />` : `<span class="prof-hero-emoji">${p.emoji || "ΓÜÆ"}</span>`}
+          ${p.iconUrl ? `<img class="prof-hero-icon" src="${esc(p.iconUrl)}" alt="" />` : `<span class="sk-abbr">${esc(pAbbr)}</span>`}
           <div>
             <div class="prof-hero-name">${esc(p.name)}</div>
             <div class="prof-hero-role">${esc(p.role || "")}</div>
-            <div class="prof-hero-meta">Lv ${lv} ┬╖ <strong>${esc(title)}</strong> ┬╖ ${ (p.nodes || p.treeData || []).length} nodes ┬╖ WCS SSOT</div>
+            <div class="prof-hero-meta">Lv ${lv} · <strong>${esc(title)}</strong> · ${ (p.nodes || p.treeData || []).length} nodes · WCS SSOT</div>
           </div>
         </div>`;
 
@@ -743,17 +754,17 @@
           .map(
             (tier) => `
           <div class="prof-tree-card" style="--pc:${p.color}">
-            <div class="prof-tree-h">${esc(tier.label)} ┬╖ req ${tier.minLvl}ΓÇô${tier.maxLvl}</div>
+            <div class="prof-tree-h">${esc(tier.label)}  ·  req ${tier.minLvl}-${tier.maxLvl}</div>
             <div class="prof-nodes">
               ${tier.nodes
                 .map(
                   (n) => `
                 <div class="prof-node ${lv >= n.lvl ? "unlocked" : "locked"}" title="${esc(n.d)}">
-                  ${n.iconUrl ? `<img class="pn-icon" src="${esc(n.iconUrl)}" alt="" />` : `<span class="pn-emoji">${n.emoji || "Γùê"}</span>`}
+                  ${n.iconUrl ? `<img class="pn-icon" src="${esc(n.iconUrl)}" alt="" />` : `<span class="sk-abbr sk-abbr--sm">${esc(String(n.n||n.id||"ND").replace(/[^A-Za-z0-9]/g,"").slice(0,2).toUpperCase()||"ND")}</span>`}
                   <div>
                     <div class="pn-n">${esc(n.n)}</div>
                     <div class="pn-d">${esc(n.d)}</div>
-                    <div class="pn-meta"><span class="pn-lvl">L${n.lvl}</span>${n.branch ? ` ┬╖ ${esc(n.branch)}` : ""} ┬╖ ${esc(n.nodeType || "stat")}</div>
+                    <div class="pn-meta"><span class="pn-lvl">L${n.lvl}</span>${n.branch ? `  ·  ${esc(n.branch)}` : ""}  ·  ${esc(n.nodeType || "stat")}</div>
                   </div>
                 </div>`,
                 )
@@ -782,7 +793,7 @@
       }
 
       document.getElementById("prof-ssot-sub").textContent =
-        `WCS SSOT ┬╖ ${p.name} ┬╖ ${title} ┬╖ ${p.recipes?.length || 0} recipes wired`;
+        `WCS SSOT  ·  ${p.name}  ·  ${title}  ·  ${p.recipes?.length || 0} recipes wired`;
     }
 
     function bagQty(itemId) {
@@ -834,7 +845,7 @@
             });
           const icon = iconUrl
             ? `<img src="${esc(iconUrl)}" alt="" referrerpolicy="no-referrer" />`
-            : `<span class="mat-emoji">${esc(b.emoji || "·")}</span>`;
+            : `<span class="inv-abbr">${esc((b.name||b.id||"MAT").toString().replace(/[^A-Za-z0-9]/g,"").slice(0,3).toUpperCase()||"MAT")}</span>`;
           return `<div class="craft-mat" title="${esc(b.name || b.id)}">${icon}<span class="mat-name">${esc(b.name || b.id)}</span><span class="mat-qty">×${b.qty || 0}</span></div>`;
         })
         .join("");
@@ -852,7 +863,7 @@
         id: `wcs_${r.profession}_${r.id}`,
         name: r.name,
         profession: r.profession,
-        emoji: r.emoji || "⚙",
+        emoji: "",
         iconUrl: r.iconUrl,
         lvl: r.lvl || 1,
         inputs: Object.entries(r.mats || {}).map(([name, qty]) => ({
@@ -921,7 +932,7 @@
               });
             const icon = iconUrl
               ? `<img class="craft-icon" src="${esc(iconUrl)}" alt="" referrerpolicy="no-referrer" />`
-              : r.emoji || "⚙";
+              : ((r.name||r.id||"ITM").toString().replace(/[^A-Za-z0-9]/g,"").slice(0,3).toUpperCase()||"ITM");
             const tip = window.InfoCatalog?.tooltipHtml?.({
               itemId: r.output?.id || r.id,
               name: r.output?.name || r.name,
@@ -1143,7 +1154,7 @@
         id: r.output.id,
         name: r.output.name,
         qty: r.output.qty,
-        emoji: r.emoji || "≡ƒôª",
+        emoji: "",
         tier: 1,
         slot: "material",
       });
@@ -1188,9 +1199,13 @@
       bar.innerHTML = [1, 2, 3, 4, 5, 6]
         .map((n) => {
           const s = skills.find((x) => x.slot === n);
+          const code = String(s?.abbr || s?.n || s?.id || "")
+            .replace(/[^A-Za-z0-9]/g, "")
+            .slice(0, 2)
+            .toUpperCase();
           const body = s?.iconUrl
             ? `<img src="${esc(s.iconUrl)}" alt="" width="28" height="28" loading="lazy" referrerpolicy="no-referrer" />`
-            : esc(s?.emoji || "·");
+            : `<span class="sk-abbr sk-abbr--sm">${esc(code || String(n))}</span>`;
           return `<div class="ab-slot" title="${esc(s?.n || "Empty")}">${body}<span class="key">${n}</span></div>`;
         })
         .join("");
@@ -1200,9 +1215,9 @@
       const el = document.getElementById("res-list");
       const entries = Object.entries(res || {}).filter(([, v]) => typeof v === "number" || typeof v === "string");
       if (!entries.length) {
-        el.innerHTML = `<div class="stat-row"><span class="k">wood</span><span class="v">ΓÇö</span></div>
-          <div class="stat-row"><span class="k">stone</span><span class="v">ΓÇö</span></div>
-          <div class="stat-row"><span class="k">food</span><span class="v">ΓÇö</span></div>`;
+        el.innerHTML = `<div class="stat-row"><span class="k">wood</span><span class="v">-</span></div>
+          <div class="stat-row"><span class="k">stone</span><span class="v">-</span></div>
+          <div class="stat-row"><span class="k">food</span><span class="v">-</span></div>`;
         return;
       }
       el.innerHTML = entries
@@ -1213,7 +1228,7 @@
 
     function setAttr(id, v) {
       const el = document.getElementById(id);
-      if (el) el.textContent = v != null && v !== "" ? String(v) : "ΓÇö";
+      if (el) el.textContent = v != null && v !== "" ? String(v) : "-";
     }
 
     function applyBars() {
@@ -1318,7 +1333,7 @@
           id: it.itemId || it.id,
           name: it.name || it.itemId || it.id,
           qty: it.quantity ?? it.qty ?? 1,
-          emoji: it.emoji || "≡ƒôª",
+          emoji: it.emoji || "",
           tier: it.tier || 1,
           slot: it.slot || "material",
           iconUrl: it.iconUrl || it.icon,
@@ -1361,7 +1376,7 @@
       setTimeout(() => t.remove(), 2200);
     }
 
-    // ΓöÇΓöÇ UI wires ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    // -- UI wires ----------------------------------------------
     document.getElementById("tabs").addEventListener("click", (e) => {
       const btn = e.target.closest(".tab-btn");
       if (!btn) return;
@@ -1392,7 +1407,7 @@
     document.getElementById("btn-save-mesh")?.addEventListener("click", async () => {
       const p = playerEnt();
       if (!p.characterId) {
-        toast("No fleet character ΓÇö sign in / select hero");
+        toast("No fleet character - sign in / select hero");
         return;
       }
       const model3d = MPM.equipmentToModel3dPatch(p.equipment, p.race, p.classId);
@@ -1419,7 +1434,7 @@
       await window.GrudgeEngine?.fetchInventory?.();
       const inv = window.GrudgeEngine?.getInventory?.() || [];
       if (inv.length) mergeInventory(inv);
-      else toast("No account bag ΓÇö using local craft bag");
+      else toast("No account bag - using local craft bag");
     });
 
     window.addEventListener("grudge:engine:character", (e) => mergeFleetCharacter(e.detail));
