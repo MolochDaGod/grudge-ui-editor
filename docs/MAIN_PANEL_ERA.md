@@ -5,7 +5,7 @@
 | Surface | Role |
 |---------|------|
 | **ui.grudge-studio.com** | **SSOT host** — edit, host, era versions, packs |
-| `main-panel.html?era=warlords` | Full main panel (equipment / bag / skills / craft / quests) |
+| `main-panel.html?era=warlords` | Full main panel (equipment / bag / skills / **weapon mastery** / craft / quests) |
 | `equipment-paperdoll.js` | Tactical paperdoll (portrait + 12 slots) |
 | `game-ui-packs/warlords.json` | HYDRA pack with `paperdoll-equipment` |
 | `eras/index.json` | Era registry |
@@ -39,6 +39,8 @@ Routes:
 
 - `https://client.grudge-studio.com/main-panel`
 - `https://client.grudge-studio.com/equipment`
+- `https://ui.grudge-studio.com/main-panel.html?era=warlords&tab=mastery&characterId=`
+- Standalone `grudgewarlords.com/weaponmastery.html` **redirects** here (`?embed=1` stays for the iframe)
 
 ## Fleet adoption checklist
 

@@ -89,6 +89,7 @@
           <button class="tab-btn" data-tab="inventory">Inventory</button>
           <button class="tab-btn" data-tab="class-skills">Class skills</button>
           <button class="tab-btn" data-tab="weapon-skills">Weapon skills</button>
+          <button class="tab-btn" data-tab="mastery">Weapon mastery</button>
           <button class="tab-btn" data-tab="professions">Professions</button>
           <button class="tab-btn" data-tab="craft">Crafting</button>
           <button class="tab-btn" data-tab="quests">Quests</button>
@@ -130,6 +131,23 @@
               <p id="weapon-bar-sub">Driven by main-hand mesh / weapon type</p>
             </div>
             <div id="weapon-skills-host" class="qc-grid"></div>
+          </div>
+
+          <div class="tab-panel" id="tab-mastery">
+            <div class="skills-head">
+              <h3>Weapon mastery</h3>
+              <p>Shared 100-point pool · trees use pack icons · bonuses show the stat they raise</p>
+            </div>
+            <div class="craft-frame-wrap mastery-frame-wrap">
+              <iframe
+                id="mastery-suite-frame"
+                title="Warlords Weapon Mastery"
+                src="about:blank"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                allow="clipboard-read; clipboard-write"
+              ></iframe>
+            </div>
           </div>
 
           <div class="tab-panel" id="tab-professions">
@@ -230,7 +248,11 @@
     const params = new URLSearchParams(location.search);
     const ERA = params.get("era") || "warlords";
     const EMBED = params.get("embed") === "1" || params.get("embed") === "true";
-    const TAB = params.get("tab") || "equipment";
+    const TAB_RAW = params.get("tab") || "equipment";
+    const TAB =
+      TAB_RAW === "weapon-mastery" || TAB_RAW === "weaponmastery"
+        ? "mastery"
+        : TAB_RAW;
     const FORCE_ID = params.get("characterId") || params.get("inspect") || null;
     const MPC = window.MainPanelContent;
     const MPM = window.MainPanelMesh;
@@ -1296,7 +1318,22 @@
       renderHotbar();
     }
 
+    function mountMasteryFrame(force) {
+      const frame = document.getElementById("mastery-suite-frame");
+      if (!frame) return;
+      const u = new URL("https://grudgewarlords.com/weaponmastery.html");
+      u.searchParams.set("embed", "1");
+      const charId = playerEnt()?.characterId || FORCE_ID;
+      if (charId) u.searchParams.set("characterId", charId);
+      const next = u.toString();
+      if (force || frame.dataset.srcKey !== next) {
+        frame.dataset.srcKey = next;
+        frame.src = next;
+      }
+    }
+
     function applyTab(tab) {
+      if (tab === "weapon-mastery" || tab === "weaponmastery") tab = "mastery";
       state.activeTab = tab;
       document.querySelectorAll("#tabs .tab-btn").forEach((b) => {
         b.classList.toggle("active", b.dataset.tab === tab);
@@ -1307,6 +1344,7 @@
       if (tab === "inventory") renderInv();
       if (tab === "class-skills") renderClassSkills();
       if (tab === "weapon-skills") renderWeaponSkills();
+      if (tab === "mastery") mountMasteryFrame(false);
       if (tab === "professions") renderProfessions();
       if (tab === "craft") {
         mountCraftFrame(false);

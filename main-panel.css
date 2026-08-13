@@ -235,6 +235,10 @@
 .mp-root .craft-card .out{color:var(--green);margin-top:auto}
 .mp-root .craft-log{margin-top:4px;font-size:11px;color:var(--green);min-height:1.2em}
 .mp-root.embed-mode .craft-frame-wrap iframe{height:min(70vh,640px)}
+.mp-root .mastery-frame-wrap{min-height:560px}
+.mp-root .mastery-frame-wrap iframe{height:min(78vh,820px);min-height:560px}
+.mp-root #tab-mastery.tab-panel.active{display:flex;flex-direction:column;min-height:0}
+.mp-root #tab-mastery .skills-head{margin-bottom:10px}
 .mp-root.embed-mode .craft-shell{min-height:min(78vh,720px)}
 .mp-root .inv-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px;color:var(--muted)}
 .mp-root .inv-grid.dense{grid-template-columns:repeat(6,1fr)}
