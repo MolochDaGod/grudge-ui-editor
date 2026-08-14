@@ -92,6 +92,62 @@
       "destination": "https://assets.grudge-studio.com/:path*"
     },
     {
+      "source": "/api/systems",
+      "destination": "/systems.json"
+    },
+    {
+      "source": "/api/systems.json",
+      "destination": "/systems.json"
+    },
+    {
+      "source": "/api/ui-packs",
+      "destination": "/game-ui-packs/index.json"
+    },
+    {
+      "source": "/api/ui-packs/",
+      "destination": "/game-ui-packs/index.json"
+    },
+    {
+      "source": "/api/ui-packs/:path*",
+      "destination": "/game-ui-packs/:path*"
+    },
+    {
+      "source": "/api/craftpix/usage",
+      "destination": "/data/craftpix-usage.json"
+    },
+    {
+      "source": "/api/craftpix/manifest",
+      "destination": "/craftpix-manifest.json"
+    },
+    {
+      "source": "/api/craftpix",
+      "destination": "/data/craftpix-usage.json"
+    },
+    {
+      "source": "/api/health",
+      "destination": "/data/ui-health.json"
+    },
+    {
+      "source": "/api/eras",
+      "destination": "/eras/index.json"
+    },
+    {
+      "source": "/api/eras/",
+      "destination": "/eras/index.json"
+    },
+    {
+      "source": "/api/main-panel",
+      "destination": "/data/main-panel-contract.json"
+    },
+    {
+      "source": "/api/main-panel/",
+      "destination": "/data/main-panel-contract.json"
+    },
+    {
+      "source": "/api/main-panel/:era",
+      "destination": "/eras/:era.json"
+    },
+    {
       "source": "/login",
       "destination": "https://id.grudge-studio.com/login"
     },
@@ -140,6 +196,14 @@
       "destination": "/spellbook.html"
     },
     {
+      "source": "/craftpix",
+      "destination": "/craftpix.html"
+    },
+    {
+      "source": "/craftpix/",
+      "destination": "/craftpix.html"
+    },
+    {
       "source": "/equipment",
       "destination": "/main-panel.html?tab=equipment&era=warlords"
     },
@@ -148,7 +212,7 @@
       "destination": "/eras/index.json"
     },
     {
-      "source": "/((?!hotkeys|studio|games|assets|main-panel|spellbook|equipment|eras|favicon|grudge-shell|prim-packs|game-ui|equipment-paperdoll|systems\\.json|docs|api|auth).*)",
+      "source": "/((?!hotkeys|studio|games|assets|craftpix|main-panel|spellbook|equipment|eras|favicon|grudge-shell|prim-packs|game-ui|equipment-paperdoll|craftpix-|systems\\.json|ui-assets|data/|docs|api|auth).*)",
       "destination": "/index.html"
     }
   ],
@@ -172,6 +236,40 @@
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/main-panel-api.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=120"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/data/main-panel-contract.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=120"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
         }
       ]
     },
@@ -275,6 +373,53 @@
         {
           "key": "Content-Type",
           "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/data/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=120"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/craftpix-manifest.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/craftpix-swaps.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
         }
       ]
     },

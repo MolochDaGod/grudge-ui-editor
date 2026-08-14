@@ -1,8 +1,9 @@
-# UI fonts + icons SSOT (Main Panel / Warlords)
+# UI fonts + icons SSOT (Main Panel / eras)
 
 **Host:** https://ui.grudge-studio.com/main-panel.html?era=warlords  
 **Repo:** grudge-ui-editor  
-**Production:** Vercel `grudgenexus/grudge-ui-editor` · alias `ui.grudge-studio.com`
+**Production:** Vercel `grudgenexus/grudge-ui-editor` · alias `ui.grudge-studio.com`  
+**API:** `/api/eras` · `/api/main-panel/:era` · `/main-panel-api.js`
 
 ## Goals
 

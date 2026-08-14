@@ -1,0 +1,56 @@
+{
+  "id": "warlords",
+  "name": "Warlords",
+  "label": "Grudge Warlords",
+  "status": "canonical",
+  "pipeline": "grudge6",
+  "ledFace": "none",
+  "rosterMax": 4,
+  "createUrl": "https://character.grudge-studio.com/foundry?era=warlords",
+  "playUrl": "https://client.grudge-studio.com",
+  "mainPanel": "/main-panel.html?era=warlords",
+  "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords",
+  "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords&embed=1",
+  "packId": "warlords",
+  "packUrl": "/game-ui-packs/warlords.json",
+  "equipmentLayout": "paperdoll-dual-loadout",
+  "heading": "Grudge Warlords",
+  "sub": "Main Panel · mesh · skills · craft · bag",
+  "tabs": [
+    "equipment",
+    "inventory",
+    "class-skills",
+    "weapon-skills",
+    "mastery",
+    "professions",
+    "craft",
+    "quests"
+  ],
+  "dataBindings": {
+    "characters": "/api/characters?era=warlords",
+    "equipment": "/api/characters/:id",
+    "accountBag": "/api/account/resources"
+  },
+  "iconBase": "https://assets.grudge-studio.com/icons/496_rpg_icons",
+  "slots": {
+    "left": [
+      { "id": "helmet", "gear": "Head", "label": "Helmet", "abbr": "HEL", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/A_Armour04.png" },
+      { "id": "chest", "gear": "Chest", "label": "Chest", "abbr": "CHS", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/A_Armour01.png" },
+      { "id": "gloves", "gear": "Hands", "label": "Gloves", "abbr": "GLV", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/A_Armour02.png" },
+      { "id": "legs", "gear": "Legs", "label": "Legs", "abbr": "LEG", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/A_Armour03.png" },
+      { "id": "boots", "gear": "Feet", "label": "Boots", "abbr": "BOT", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/A_Shoes01.png" }
+    ],
+    "right": [
+      { "id": "weapon", "gear": "MainHand", "label": "Weapon 1", "abbr": "W1", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/W_Sword001.png" },
+      { "id": "offhand", "gear": "OffHand", "label": "Off 1", "abbr": "O1", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/E_Wood01.png" },
+      { "id": "relic", "gear": "Accessory2", "label": "Relic", "abbr": "RLC", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/I_Gem01.png" },
+      { "id": "back", "gear": "Back", "label": "Back", "abbr": "BCK", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/I_Bag.png" },
+      { "id": "mount", "gear": "Mount", "label": "Mount", "abbr": "MNT", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/S_Buff01.png" }
+    ],
+    "bottom": [
+      { "id": "secondary", "gear": "SecondaryWeapon", "label": "Weapon 2", "abbr": "W2", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/W_Sword001.png" },
+      { "id": "offhand2", "gear": "OffHand2", "label": "Off 2", "abbr": "O2", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/E_Wood01.png" },
+      { "id": "add", "gear": null, "label": "Bag", "abbr": "BAG", "icon": "https://assets.grudge-studio.com/icons/496_rpg_icons/I_Bag.png" }
+    ]
+  }
+}

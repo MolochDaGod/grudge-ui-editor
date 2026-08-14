@@ -9,6 +9,9 @@
 | `equipment-paperdoll.js` | Tactical paperdoll (portrait + 12 slots) |
 | `game-ui-packs/warlords.json` | HYDRA pack with `paperdoll-equipment` |
 | `eras/index.json` | Era registry |
+| `eras/{warlords,nexus,voxel,armada}.json` | Per-era slots · tabs · icons |
+| `GET /api/eras` · `/api/main-panel/:era` | Static API for fleet games |
+| `main-panel-api.js` | `GrudgeMainPanelApi.loadEra(id)` |
 | info.grudge-studio.com/main-panel.html | **Legacy** — migrate consumers to UI host |
 | tactical-infinity `/equipment` | **Layout reference** (not production host) |
 

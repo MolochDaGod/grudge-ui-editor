@@ -1,0 +1,39 @@
+{
+  "id": "voxel",
+  "name": "Voxel",
+  "label": "Voxel Era",
+  "status": "canonical",
+  "pipeline": "voxel",
+  "ledFace": "default",
+  "rosterMax": 4,
+  "createUrl": "https://character.grudge-studio.com/?era=voxel",
+  "playUrl": "https://mine-loader.vercel.app/#/play",
+  "mainPanel": "/main-panel.html?era=voxel",
+  "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=voxel",
+  "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=voxel&embed=1",
+  "packId": "grudox",
+  "packUrl": "/game-ui-packs/grudox.json",
+  "equipmentLayout": "paperdoll-explorer",
+  "heading": "Voxel",
+  "sub": "Main Panel · explorer · tools · bag",
+  "tabs": ["equipment", "inventory", "weapon-skills", "quests"],
+  "dataBindings": {
+    "characters": "/api/characters?era=voxel",
+    "equipment": "/api/characters/:id",
+    "accountBag": "/api/account/resources"
+  },
+  "slots": {
+    "left": [
+      { "id": "helmet", "gear": "head", "label": "Head", "abbr": "LED", "icon": "/icons/armor_full/Helm_01.png" },
+      { "id": "chest", "gear": "chest", "label": "Body", "abbr": "BDY", "icon": "/icons/armor_full/Chest_01.png" },
+      { "id": "boots", "gear": "feet", "label": "Boots", "abbr": "BOT", "icon": "/icons/armor_full/Boots_01.png" }
+    ],
+    "right": [
+      { "id": "weapon", "gear": "weapon", "label": "Tool", "abbr": "TOL", "icon": "/icons/pack/weapons/Axe_01.png" },
+      { "id": "offhand", "gear": "offhand", "label": "Off Hand", "abbr": "OFF", "icon": "/icons/pack/weapons/Shield_01.png" }
+    ],
+    "bottom": [
+      { "id": "add", "gear": "bag", "label": "Pack", "abbr": "BAG", "icon": "/icons/pack/misc/Effect.png" }
+    ]
+  }
+}

@@ -20,6 +20,7 @@
   <script src="./wcs-professions-ssot.js"></script>
   <script src="./main-panel-mesh.js"></script>
   <script src="./grudge6-viewport.js"></script>
+  <script src="./main-panel-api.js"></script>
   <script src="./equipment-paperdoll.js"></script>
   <script src="./grudge-engine.js"></script>
   <script src="./grudge-shell.js"></script>
@@ -29,8 +30,8 @@
   <div class="app">
     <header class="top-bar">
       <div class="logo">
-        <h1>Grudge Warlords</h1>
-        <span class="sub">Main Panel  ·  mesh  ·  skills  ·  craft  ·  bag</span>
+        <h1 id="mp-heading">Grudge Warlords</h1>
+        <span class="sub" id="mp-sub">Main Panel · mesh · skills · craft · bag</span>
       </div>
       <div class="player-info">
         <div class="resource-bars" style="display:flex;gap:6px">
@@ -46,8 +47,8 @@
 
     <div class="mp-era-bar" id="era-bar">
       <span style="color:var(--muted)">Era</span>
-      <button type="button" class="era-pill active" data-era="warlords">Warlords</button>
-      <a href="https://character.grudge-studio.com/foundry?era=warlords" target="_blank" rel="noopener">Foundry create</a>
+      <span id="era-pills"></span>
+      <a id="era-create-link" href="https://character.grudge-studio.com/foundry?era=warlords" target="_blank" rel="noopener">Foundry create</a>
       <a href="https://character.grudge-studio.com/prefab" target="_blank" rel="noopener">Prefab Lab</a>
       <a href="https://ui.grudge-studio.com/games" target="_blank" rel="noopener">Game UI packs</a>
       <a href="https://ui.grudge-studio.com/studio" target="_blank" rel="noopener">Studio</a>
@@ -258,7 +259,47 @@
     const MPM = window.MainPanelMesh;
 
     if (EMBED) document.body.classList.add("embed-mode");
-    document.getElementById("era-label").textContent = ERA;
+    if (document.getElementById("era-label")) document.getElementById("era-label").textContent = ERA;
+
+    let eraContract = null;
+    (async function bootEraChrome() {
+      const api = window.GrudgeMainPanelApi;
+      if (!api) return;
+      try {
+        const idx = await api.loadIndex();
+        eraContract = await api.loadEra(ERA);
+        const heading = document.getElementById("mp-heading");
+        const sub = document.getElementById("mp-sub");
+        if (heading && eraContract.heading) heading.textContent = eraContract.heading;
+        if (sub && eraContract.sub) sub.textContent = eraContract.sub;
+        document.title = "Grudge Main Panel — " + (eraContract.name || ERA);
+        const create = document.getElementById("era-create-link");
+        if (create && eraContract.createUrl) {
+          create.href = eraContract.createUrl;
+          create.textContent = ERA === "armada" ? "Mech hangar" : "Foundry create";
+        }
+        const pillHost = document.getElementById("era-pills");
+        if (pillHost && idx?.eras) {
+          const keep = new URLSearchParams(location.search);
+          pillHost.innerHTML = idx.eras
+            .map((e) => {
+              keep.set("era", e.id);
+              const on = e.id === ERA ? " active" : "";
+              return `<a class="era-pill${on}" href="./main-panel.html?${keep.toString()}">${e.name}</a>`;
+            })
+            .join("");
+        }
+        const allow = new Set(eraContract.tabs || []);
+        if (allow.size) {
+          document.querySelectorAll("#tabs .tab-btn").forEach((btn) => {
+            btn.hidden = !allow.has(btn.getAttribute("data-tab"));
+          });
+        }
+        if (typeof renderPaperdoll === "function") renderPaperdoll();
+      } catch (err) {
+        console.warn("[main-panel] era contract", err);
+      }
+    })();
 
     /** Guest shell only — replaced by fleet character when signed in. */
     const DEMO_PLAYER = {
@@ -419,7 +460,8 @@
       }
 
       paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
-        title: "GRUDGE WARLORD",
+        title: (eraContract?.heading || "GRUDGE WARLORD").toUpperCase(),
+        slots: eraContract?.slots || null,
         subtitle:
           (ent.race || "hero").toUpperCase() +
           "  ·  " +

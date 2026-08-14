@@ -1,0 +1,46 @@
+{
+  "id": "nexus",
+  "name": "Nexus",
+  "label": "Nexus Era (Toon)",
+  "status": "shipping",
+  "pipeline": "toon",
+  "interimPipeline": "voxel",
+  "ledFace": "default",
+  "rosterMax": 12,
+  "createUrl": "https://character.grudge-studio.com/foundry?era=nexus",
+  "playUrl": "https://grudox.grudge-studio.com",
+  "mainPanel": "/main-panel.html?era=nexus",
+  "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus",
+  "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus&embed=1",
+  "packId": "grudox",
+  "packUrl": "/game-ui-packs/grudox.json",
+  "equipmentLayout": "paperdoll-tactical",
+  "heading": "Nexus",
+  "sub": "Main Panel · roster · equipment · skills",
+  "tabs": ["equipment", "inventory", "class-skills", "weapon-skills", "quests"],
+  "dataBindings": {
+    "characters": "/api/characters?era=nexus",
+    "equipment": "/api/characters/:id",
+    "accountBag": "/api/account/resources"
+  },
+  "slots": {
+    "left": [
+      { "id": "helmet", "gear": "head", "label": "Helmet", "abbr": "HEL", "icon": "/icons/armor_full/Helm_01.png" },
+      { "id": "chest", "gear": "chest", "label": "Chest", "abbr": "CHS", "icon": "/icons/armor_full/Chest_01.png" },
+      { "id": "gloves", "gear": "hands", "label": "Gloves", "abbr": "GLV", "icon": "/icons/armor_full/Gloves_01.png" },
+      { "id": "legs", "gear": "legs", "label": "Legs", "abbr": "LEG", "icon": "/icons/armor_full/Pants_01.png" },
+      { "id": "boots", "gear": "feet", "label": "Boots", "abbr": "BOT", "icon": "/icons/armor_full/Boots_01.png" }
+    ],
+    "right": [
+      { "id": "weapon", "gear": "weapon", "label": "Main Hand", "abbr": "WPN", "icon": "/icons/pack/weapons/Sword_01.png" },
+      { "id": "offhand", "gear": "offhand", "label": "Off Hand", "abbr": "OFF", "icon": "/icons/pack/weapons/Shield_01.png" },
+      { "id": "amulet", "gear": "accessory", "label": "Amulet", "abbr": "AML", "icon": "/icons/pack/misc/Electro.png" },
+      { "id": "belt", "gear": "belt", "label": "Belt", "abbr": "BLT", "icon": "/icons/armor_full/Shoulder_01.png" },
+      { "id": "cloak", "gear": "cape", "label": "Cloak", "abbr": "CLK", "icon": "/icons/armor_full/Shoulder_01.png" }
+    ],
+    "bottom": [
+      { "id": "ring", "gear": "ring", "label": "Ring", "abbr": "RNG", "icon": "/icons/pack/misc/Electro.png" },
+      { "id": "add", "gear": null, "label": "Add", "abbr": "ADD", "icon": "/icons/pack/misc/Effect.png" }
+    ]
+  }
+}

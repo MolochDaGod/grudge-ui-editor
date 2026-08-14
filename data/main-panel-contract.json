@@ -1,0 +1,21 @@
+{
+  "version": "1.1.0",
+  "updated": "2026-08-14",
+  "host": "https://ui.grudge-studio.com",
+  "description": "Main-panel era contract — slots, tabs, icons, chrome. Consumed by main-panel.html and fleet games.",
+  "cdn": "https://assets.grudge-studio.com",
+  "chrome": {
+    "separator": " · ",
+    "empty": "—",
+    "encoding": "utf-8",
+    "noEmojiSlots": true,
+    "noAlchemyGlyphs": true
+  },
+  "iconRules": {
+    "prefer": ["objectstore.master-items.iconUrl", "info-catalog.resolveIcon", "slot.icon"],
+    "emptySlot": "latin-abbr + faint CDN icon",
+    "never": ["emoji", "AI-generated icons", "color-font glyphs"]
+  },
+  "defaultEra": "warlords",
+  "eras": ["warlords", "nexus", "voxel", "armada"]
+}

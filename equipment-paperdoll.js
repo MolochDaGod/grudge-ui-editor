@@ -237,8 +237,15 @@
     el.dataset.mode = mode;
     el.style.setProperty("--eq-width", width + "px");
 
-    const left = SLOTS_LEFT.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
-    const right = SLOTS_RIGHT.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
+    const cols = opts.slots || null;
+    const leftSlots = cols?.left || SLOTS_LEFT;
+    const rightSlots = cols?.right || SLOTS_RIGHT;
+    const bottomSlots = cols?.bottom || [SLOT_SECONDARY, SLOT_OFF2, SLOT_ADD];
+    const left = leftSlots.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
+    const right = rightSlots.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
+    const bottom = bottomSlots
+      .map((s, i) => (i ? `<div class="eq-bottom-rule"></div>` : "") + slotHtml(s, equipped[s.id], { readOnly }))
+      .join("");
 
     el.innerHTML = `
       <div class="eq-paperdoll-inner" style="width:${width}px">
@@ -250,13 +257,7 @@
             <img class="eq-portrait" src="${esc(portrait)}" alt="Portrait" draggable="false" />
           </div>
           <div class="eq-col right">${right}</div>
-          <div class="eq-bottom">
-            ${slotHtml(SLOT_SECONDARY, equipped.secondary, { readOnly })}
-            <div class="eq-bottom-rule"></div>
-            ${slotHtml(SLOT_OFF2, equipped.offhand2, { readOnly })}
-            <div class="eq-bottom-rule"></div>
-            ${slotHtml(SLOT_ADD, null, { readOnly })}
-          </div>
+          <div class="eq-bottom">${bottom}</div>
         </div>
         <p class="eq-secondary-hint">Weapon 2 / Off 2 are combat Q-swap loadout (not looted from corpse).</p>
         ${mode === "inspect" ? `<div class="eq-inspect-badge">Inspecting</div>` : ""}
@@ -322,5 +323,8 @@
     normalizeEquipped,
     SLOTS_LEFT,
     SLOTS_RIGHT,
+    SLOT_SECONDARY,
+    SLOT_OFF2,
+    SLOT_ADD,
   };
 })(typeof window !== "undefined" ? window : globalThis);

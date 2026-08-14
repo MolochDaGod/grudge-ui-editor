@@ -1,0 +1,40 @@
+{
+  "id": "armada",
+  "name": "Armada",
+  "label": "Armada (Mech)",
+  "status": "canonical",
+  "pipeline": "mech",
+  "ledFace": "backup",
+  "rosterMax": 4,
+  "createUrl": "https://grudge-studio.com/mech-armada",
+  "playUrl": "https://mech-playground.vercel.app",
+  "mainPanel": "/main-panel.html?era=armada",
+  "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=armada",
+  "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=armada&embed=1",
+  "packId": "mech",
+  "packUrl": "/game-ui-packs/mech.json",
+  "equipmentLayout": "hardpoints",
+  "heading": "Armada",
+  "sub": "Main Panel · hardpoints · garage · heat",
+  "tabs": ["equipment", "inventory", "quests"],
+  "dataBindings": {
+    "characters": "/api/characters?era=armada",
+    "equipment": "/api/characters/:id",
+    "accountBag": "/api/account/resources"
+  },
+  "slots": {
+    "left": [
+      { "id": "helmet", "gear": "head", "label": "Cockpit", "abbr": "CKP", "icon": "/icons/armor_full/Helm_01.png" },
+      { "id": "chest", "gear": "chest", "label": "Chassis", "abbr": "CHS", "icon": "/icons/armor_full/Chest_01.png" },
+      { "id": "legs", "gear": "legs", "label": "Legs", "abbr": "LEG", "icon": "/icons/armor_full/Pants_01.png" }
+    ],
+    "right": [
+      { "id": "weapon", "gear": "weapon", "label": "Hardpoint L", "abbr": "HPL", "icon": "/icons/pack/weapons/Spear_01.png" },
+      { "id": "offhand", "gear": "offhand", "label": "Hardpoint R", "abbr": "HPR", "icon": "/icons/pack/weapons/Axe_01.png" },
+      { "id": "cloak", "gear": "cape", "label": "Core", "abbr": "COR", "icon": "/icons/pack/misc/Electro.png" }
+    ],
+    "bottom": [
+      { "id": "add", "gear": null, "label": "Utility", "abbr": "UTL", "icon": "/icons/pack/misc/Effect.png" }
+    ]
+  }
+}

@@ -17,12 +17,58 @@ Browser (ui.grudge-studio.com)
   │
   ├─ same-origin /api/auth/*     → Railway grudge-api-production (JWT / Puter / guest)
   ├─ same-origin /api/characters → Railway game-data SSOT
+  ├─ same-origin /api/account/*  → Railway bag / wallet
   ├─ same-origin /api/ai/*       → ai.grudge-studio.com/v1/*  (Workers AI + Gemini BYOK)
   ├─ same-origin /api/objectstore/* → objectstore.grudge-studio.com/api/v1
   ├─ same-origin /api/assets/*   → assets.grudge-studio.com (R2 CDN)
   │
-  ├─ Puter SDK (js.puter.com)    → user-pays KV packs: grudge:{grudgeId}:ui-*
-  └─ id.grudge-studio.com        → login popup / redirect (?grudge_token=)
+  ├─ static JSON APIs (Vercel rewrites, no Node):
+  │     /api/systems          → /systems.json
+  │     /api/ui-packs         → /game-ui-packs/index.json
+  │     /api/craftpix/usage   → /data/craftpix-usage.json
+  │     /api/craftpix/manifest→ /craftpix-manifest.json
+  │     /api/health           → /data/ui-health.json
+  │     /api/eras             → /eras/index.json
+  │     /api/main-panel       → /data/main-panel-contract.json
+  │     /api/main-panel/:era  → /eras/:era.json
+  │
+  ├─ CraftPix browser          /craftpix  (+ craftpix-swaps.js)
+  ├─ Puter SDK (js.puter.com)  → user-pays KV packs: grudge:{grudgeId}:ui-*
+  └─ id.grudge-studio.com      → login popup / redirect (?grudge_token=)
+```
+
+### CraftPix usage API
+
+| Endpoint | Body |
+|----------|------|
+| `GET /api/craftpix/usage` | HYDRA types → layer stacks + **swaps** + usage options |
+| `GET /api/craftpix/manifest` | Full 323-file catalog (`path` / `url`) |
+| Browser | https://ui.grudge-studio.com/craftpix |
+| Runtime helper | `/craftpix-swaps.js` → `CraftpixSwaps.renderSlot` / `applySwaps` |
+
+**Render law:** `image-rendering: pixelated`; slot stack **bg → icon → overlay → cooldown → press**.
+
+### Main-panel era API
+
+| Endpoint | Body |
+|----------|------|
+| `GET /api/eras` | Era registry (ids, roster max, panel URLs, pack ids) |
+| `GET /api/main-panel` | Shared chrome + encoding law |
+| `GET /api/main-panel/warlords` | Full Warlords contract: slots, tabs, icons, bindings |
+| `GET /api/main-panel/nexus` | Nexus (Toon / voxel interim) |
+| `GET /api/main-panel/voxel` | Voxel explorer slots |
+| `GET /api/main-panel/armada` | Mech hardpoints |
+| Client | `/main-panel-api.js` → `GrudgeMainPanelApi.loadEra(id)` |
+
+**Slot law:** empty cell = Latin **abbr** (HEL, WPN, …) + faint CDN icon. Never emoji or alchemy glyphs.
+
+```html
+<script src="https://ui.grudge-studio.com/main-panel-api.js"></script>
+<script>
+  const era = await GrudgeMainPanelApi.loadEra("warlords");
+  const slots = GrudgeMainPanelApi.listSlots(era);
+  const icon = GrudgeMainPanelApi.iconUrl(slots[0]);
+</script>
 ```
 
 ## Auth (do not reinvent)

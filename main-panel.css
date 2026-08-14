@@ -104,7 +104,7 @@
 .mp-root.embed-mode .left-col,.mp-root.embed-mode .right-col{display:none}
 .mp-root.embed-mode .top-bar .sub{display:none}
 .mp-era-bar{display:flex;gap:6px;align-items:center;padding:4px 12px;background:#100c08;border-bottom:1px solid var(--border-dim);font-size:10px}
-.mp-era-bar .era-pill{padding:3px 8px;border-radius:4px;border:1px solid var(--border-dim);color:var(--muted);cursor:pointer;font-family:Cinzel,serif;letter-spacing:.08em;text-transform:uppercase}
+.mp-era-bar .era-pill{padding:3px 8px;border-radius:4px;border:1px solid var(--border-dim);color:var(--muted);cursor:pointer;font-family:Cinzel,serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;display:inline-block}
 .mp-era-bar .era-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(212,164,0,.1)}
 .mp-era-bar a{color:var(--muted);margin-left:auto}
 .mp-era-bar .auth-pill{margin-left:8px;padding:2px 8px;border-radius:999px;border:1px solid rgba(212,164,0,.35);color:var(--gold);font-size:9px;letter-spacing:.06em;text-transform:uppercase}

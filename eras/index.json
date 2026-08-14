@@ -1,26 +1,40 @@
 {
-  "version": "1.0.0",
-  "description": "Era main-panel + UI host registry. ui.grudge-studio.com is SSOT for edit/host; info.grudge-studio.com/main-panel.html migrates here.",
+  "version": "1.1.0",
+  "updated": "2026-08-14",
+  "description": "Era main-panel + UI host registry. ui.grudge-studio.com is SSOT for edit/host.",
   "host": "https://ui.grudge-studio.com",
   "legacyInfoPanel": "https://info.grudge-studio.com/main-panel.html",
+  "api": {
+    "eras": "/api/eras",
+    "contract": "/api/main-panel",
+    "era": "/api/main-panel/{era}",
+    "client": "/main-panel-api.js"
+  },
+  "chrome": {
+    "separator": " · ",
+    "empty": "—",
+    "encoding": "utf-8"
+  },
+  "defaultEra": "warlords",
   "eras": [
     {
       "id": "warlords",
       "name": "Warlords",
       "status": "canonical",
+      "rosterMax": 4,
       "mainPanel": "/main-panel.html?era=warlords",
       "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords",
       "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords&embed=1",
       "equipmentUrl": "https://ui.grudge-studio.com/main-panel.html?era=warlords&tab=equipment",
+      "contractUrl": "/eras/warlords.json",
       "packId": "warlords",
       "packUrl": "/game-ui-packs/warlords.json",
       "playUrls": [
         "https://client.grudge-studio.com",
-        "https://grudgewarlords.com",
-        "https://tactical-infinity.replit.app"
+        "https://grudgewarlords.com"
       ],
       "equipmentLayout": "paperdoll-tactical",
-      "slots": [
+      "slotIds": [
         "helmet",
         "chest",
         "gloves",
@@ -36,6 +50,63 @@
       ],
       "dataBindings": {
         "characters": "/api/characters?era=warlords",
+        "equipment": "/api/characters/:id",
+        "accountBag": "/api/account/resources"
+      }
+    },
+    {
+      "id": "nexus",
+      "name": "Nexus",
+      "status": "shipping",
+      "rosterMax": 12,
+      "mainPanel": "/main-panel.html?era=nexus",
+      "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus",
+      "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus&embed=1",
+      "contractUrl": "/eras/nexus.json",
+      "packId": "grudox",
+      "packUrl": "/game-ui-packs/grudox.json",
+      "playUrls": ["https://grudox.grudge-studio.com"],
+      "equipmentLayout": "paperdoll-tactical",
+      "dataBindings": {
+        "characters": "/api/characters?era=nexus",
+        "equipment": "/api/characters/:id",
+        "accountBag": "/api/account/resources"
+      }
+    },
+    {
+      "id": "voxel",
+      "name": "Voxel",
+      "status": "canonical",
+      "rosterMax": 4,
+      "mainPanel": "/main-panel.html?era=voxel",
+      "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=voxel",
+      "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=voxel&embed=1",
+      "contractUrl": "/eras/voxel.json",
+      "packId": "grudox",
+      "packUrl": "/game-ui-packs/grudox.json",
+      "playUrls": ["https://mine-loader.vercel.app/#/play"],
+      "equipmentLayout": "paperdoll-explorer",
+      "dataBindings": {
+        "characters": "/api/characters?era=voxel",
+        "equipment": "/api/characters/:id",
+        "accountBag": "/api/account/resources"
+      }
+    },
+    {
+      "id": "armada",
+      "name": "Armada",
+      "status": "canonical",
+      "rosterMax": 4,
+      "mainPanel": "/main-panel.html?era=armada",
+      "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=armada",
+      "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=armada&embed=1",
+      "contractUrl": "/eras/armada.json",
+      "packId": "mech",
+      "packUrl": "/game-ui-packs/mech.json",
+      "playUrls": ["https://mech-playground.vercel.app"],
+      "equipmentLayout": "hardpoints",
+      "dataBindings": {
+        "characters": "/api/characters?era=armada",
         "equipment": "/api/characters/:id",
         "accountBag": "/api/account/resources"
       }
