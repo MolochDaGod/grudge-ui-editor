@@ -73,33 +73,108 @@ const PREFIX = {
 };
 
 const CORE = new Set(["body", "arms", "legs", "head"]);
+const I496 = "https://assets.grudge-studio.com/icons/496_rpg_icons";
+const KIND_ICON = {
+  sword: I496 + "/W_Sword001.png",
+  axe: I496 + "/W_Axe001.png",
+  hammer: I496 + "/W_Mace001.png",
+  mace: I496 + "/W_Mace001.png",
+  dagger: I496 + "/W_Sword001.png",
+  spear: I496 + "/W_Spear001.png",
+  pick: I496 + "/W_Axe001.png",
+  bow: I496 + "/W_Bow01.png",
+  staff: "https://assets.grudge-studio.com/game-assets/icons/pack/weapons/Staff_01.png",
+  shield: I496 + "/E_Wood01.png",
+  bag: I496 + "/I_Bag.png",
+  wood: I496 + "/I_Coal.png",
+  quiver: I496 + "/I_Bag.png",
+  helm: I496 + "/C_Hat01.png",
+  chest: I496 + "/A_Armour01.png",
+  gloves: I496 + "/A_Armour02.png",
+  boots: I496 + "/A_Shoes01.png",
+  shoulders: I496 + "/A_Armour01.png",
+  ring: I496 + "/I_Gem01.png",
+};
+const GROUP_SLOT = {
+  head: "helmet",
+  body: "chest",
+  arms: "gloves",
+  legs: "boots",
+  shoulders: "shoulders",
+  weapons: "weapon",
+  shields: "offhand",
+  utility: "back",
+};
+
+function inferKind(meshId, group) {
+  const s = String(meshId);
+  if (group === "shields" || /shield/i.test(s)) return "shield";
+  if (group === "head") return "helm";
+  if (group === "body") return "chest";
+  if (group === "arms") return "gloves";
+  if (group === "legs") return "boots";
+  if (group === "shoulders") return "shoulders";
+  if (group === "utility") {
+    if (/quiver/i.test(s)) return "quiver";
+    if (/wood|log|plank/i.test(s)) return "wood";
+    return "bag";
+  }
+  if (/bow/i.test(s)) return "bow";
+  if (/axe/i.test(s)) return "axe";
+  if (/spear/i.test(s)) return "spear";
+  if (/staff|wand/i.test(s)) return "staff";
+  if (/hammer|mace/i.test(s)) return "hammer";
+  if (/dagger|knife/i.test(s)) return "dagger";
+  if (/pick/i.test(s)) return "pick";
+  return "sword";
+}
+
+let sockets = { races: {} };
+try {
+  sockets = JSON.parse(fs.readFileSync(path.join(root, "data/toon-rts-named-sockets.json"), "utf8"));
+} catch {
+  /* optional */
+}
+
 const out = {
-  version: "1.0.0",
+  version: "1.1.0",
   generated: new Date().toISOString(),
   kind: "definition",
   note: "defUuid = sha1(grudge-asset:{kitPath}#{meshId}) fleet D1/R2 mesh-level SSOT. Ledger grudge_uuid is minted only for owned instances.",
   algorithm: "sha1(grudge-asset:{r2Key}) RFC-4122 v5",
   r2KeyPattern: "{goldenKitPath}#{meshId}",
   golden: cat.golden,
+  iconCdn: "https://assets.grudge-studio.com/icons/496_rpg_icons",
   races: {},
   totals: { races: 0, items: 0 },
 };
 
 for (const [race, rec] of Object.entries(cat.races || {})) {
   const unarmed = new Set(UNARMED[race] || []);
+  const sockById = Object.fromEntries(
+    (sockets.races?.[race]?.items || []).map((it) => [it.id, it]),
+  );
   const items = [];
   for (const [group, meshIds] of Object.entries(rec.catalog || {})) {
     for (const meshId of meshIds) {
       if (/container/i.test(meshId)) continue;
       const uid = meshUuid(rec.kitGlb, meshId);
+      const sock = sockById[meshId] || {};
+      const kind = sock.kind || inferKind(meshId, group);
       items.push({
         meshId,
         group,
-        name: (labels[race] && labels[race][meshId]) || pretty(meshId),
+        slot: sock.slot || GROUP_SLOT[group] || group,
+        kind,
+        name: sock.name || (labels[race] && labels[race][meshId]) || pretty(meshId),
         defUuid: uid.defUuid,
         r2Key: uid.r2Key,
+        iconUrl: KIND_ICON[kind] || KIND_ICON.sword,
+        bone: sock.bone || null,
+        animPack: sock.animPack || null,
         core: CORE.has(group),
         unarmedBase: unarmed.has(meshId),
+        placeholder: !!sock.placeholder,
       });
     }
   }

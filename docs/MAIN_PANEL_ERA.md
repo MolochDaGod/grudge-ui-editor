@@ -29,7 +29,25 @@
 - **Identity:** Railway `characters.id` UUID · `grudge_code` · account `grudge_id` · `model3d.meshIds` bake  
 - **Owned gear only:** account bag + `/api/ledger` `grudge_uuid` — catalog defs are not ownership  
 - **Open:** `https://open.grudge-studio.com/equipment?era=&characterId=` embeds this panel + SSO `GRUDGE_AUTH`
-- **Trait Store host:** `https://traits.grudge.studio/` (edge proxy → this panel, tab=equipment). Mesh UUID catalog: `/mesh-showcase`  
+- **Trait Store host:** `https://traits.grudge.studio/` (edge proxy → this panel, tab=equipment). Mesh UUID catalog: `/mesh-showcase`
+
+### Trait Store APIs (games)
+
+| GET | Returns |
+|-----|---------|
+| `https://traits.grudge.studio/api/health` | `{ ok, layout, uuidAlgorithm }` |
+| `https://traits.grudge.studio/api/traits` | Contract: UUID layers, embed, icon rules |
+| `https://traits.grudge.studio/api/traits/meshes` | All race mesh defs + `defUuid` + `iconUrl` |
+| `https://traits.grudge.studio/api/traits/sockets` | Named Toon RTS sockets / bones |
+| `https://traits.grudge.studio/api/traits/lookup?q=` | Filter by meshId / name / defUuid |
+| `https://objectstore.grudge-studio.com/api/search?q=` | D1 asset index + catalogs + mesh index |
+
+```html
+<script src="https://traits.grudge.studio/trait-store-embed.js"></script>
+<iframe src="https://traits.grudge.studio/?embed=1&era=warlords&characterId=<uuid>"></iframe>
+```
+
+`defUuid` = `sha1("grudge-asset:"+r2Key)` (same as D1 `asset_registry`). Owned gear uses Railway ledger `grudge_uuid`. Do not mint client UUIDs.  
 
 ## Embed in games
 

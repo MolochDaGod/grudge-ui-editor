@@ -188,16 +188,26 @@
     <h1>Game-Ready UI Packs</h1>
     <div class="era-banner">
       <span style="color:var(--muted)">Era main panel (SSOT host)</span>
+      <a href="https://traits.grudge.studio/" target="_blank" rel="noopener">Trait Store</a>
       <a href="./main-panel.html?era=warlords">Warlords main panel</a>
       <a href="./main-panel.html?era=warlords&amp;tab=equipment">Equipment paperdoll</a>
       <a href="./mesh-showcase.html">Mesh equipment showcase</a>
+      <a href="./api/traits">/api/traits contract</a>
       <a href="./eras/index.json">eras/index.json</a>
       <a href="https://client.grudge-studio.com/main-panel" target="_blank" rel="noopener">client /main-panel</a>
     </div>
     <p class="lead">
       Saved HYDRA layouts for every fleet game — combat HUD, inventory, crafting, party, scoreboards, and usage states.
       Open in Studio to edit, export HTML, or mount in-game with <code>GrudgeGameUI</code>.
+      Live equipment paperdoll for games is <a href="https://traits.grudge.studio/" style="color:var(--gold)">traits.grudge.studio</a>
+      — mesh definition UUID, 496 pack icons, Railway roster. Embed with <code>trait-store-embed.js</code>.
     </p>
+    <pre class="code">&lt;script src="https://traits.grudge.studio/trait-store-embed.js"&gt;&lt;/script&gt;
+&lt;iframe src="https://traits.grudge.studio/?embed=1&amp;era=warlords&amp;characterId=UUID" title="Trait Store"&gt;&lt;/iframe&gt;
+GET https://traits.grudge.studio/api/health
+GET https://traits.grudge.studio/api/traits
+GET https://traits.grudge.studio/api/traits/lookup?q=WK_weapon_spear
+GET https://objectstore.grudge-studio.com/api/search?q=spear</pre>
 
     <div class="toolbar">
       <input id="q" type="search" placeholder="Filter games, features, states…" />

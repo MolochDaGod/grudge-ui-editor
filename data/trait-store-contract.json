@@ -1,0 +1,50 @@
+{
+  "version": "1.2.0",
+  "updated": "2026-08-21",
+  "product": "Grudge Trait Store",
+  "host": "https://traits.grudge.studio",
+  "origin": "https://ui.grudge-studio.com",
+  "layout": "unity-trait-store",
+  "description": "Canonical equipment paperdoll + mesh definition UUIDs for fleet games. Player bag/roster stays Railway. D1 indexes R2 binaries; this contract is the mesh-level definition SSOT games load.",
+  "uuid": {
+    "account": "grudge_id GRUDGE_… (Railway, not this API)",
+    "hero": "characters.id RFC UUID — handoff ?characterId=",
+    "heroStamp": "grudge_code GRDG-… display only",
+    "meshDefinition": "sha1(grudge-asset:{r2Key}) RFC-4122 v5 — this catalog defUuid",
+    "ownedInstance": "ledger grudge_uuid — Railway mint, never client"
+  },
+  "r2KeyPattern": "asset-packs/toon-rts-characters/glb/characters/{race}.glb#{meshId}",
+  "playBody": "Toon RTS GOLDEN {race}.glb via loadRaceKit — mesh_ids visibility, not GLB swap",
+  "unarmedBase": "locked floor — paperdoll starts from unarmed loadouts",
+  "icons": {
+    "cdn": "https://assets.grudge-studio.com",
+    "pack": "https://assets.grudge-studio.com/icons/496_rpg_icons",
+    "catalog": "https://assets.grudge-studio.com/game-assets/api/v1/icon-path-index.json",
+    "rule": "Every mesh item ships iconUrl. Prefer ObjectStore master-items then 496 pack. Never emoji or AI icons."
+  },
+  "apis": {
+    "health": "/api/health",
+    "contract": "/api/traits",
+    "meshes": "/api/traits/meshes",
+    "sockets": "/api/traits/sockets",
+    "lookup": "/api/traits/lookup?uuid= | meshId= | q=",
+    "eras": "/api/eras",
+    "mainPanel": "/api/main-panel",
+    "era": "/api/main-panel/{era}",
+    "d1Search": "https://objectstore.grudge-studio.com/api/search?q=",
+    "objectStoreMeshes": "https://objectstore.grudge-studio.com/api/v1/mesh-showcase-index.json"
+  },
+  "embed": {
+    "iframe": "https://traits.grudge.studio/?embed=1&era=warlords&tab=equipment&characterId=<uuid>",
+    "script": "https://traits.grudge.studio/trait-store-embed.js",
+    "api": "https://traits.grudge.studio/main-panel-api.js",
+    "auth": "postMessage { type: GRUDGE_AUTH, token, characterId, era }"
+  },
+  "games": [
+    "open.grudge-studio.com/account Characters tab",
+    "client.grudge-studio.com/main-panel",
+    "grudgewarlords.com",
+    "casting.grudge.studio",
+    "any fleet iframe with GRUDGE_AUTH"
+  ]
+}

@@ -156,6 +156,22 @@
       "destination": "/data/ui-health.json"
     },
     {
+      "source": "/api/traits",
+      "destination": "/data/trait-store-contract.json"
+    },
+    {
+      "source": "/api/traits/",
+      "destination": "/data/trait-store-contract.json"
+    },
+    {
+      "source": "/api/traits/meshes",
+      "destination": "/data/mesh-showcase-index.json"
+    },
+    {
+      "source": "/api/traits/sockets",
+      "destination": "/data/toon-rts-named-sockets.json"
+    },
+    {
       "source": "/api/eras",
       "destination": "/eras/index.json"
     },

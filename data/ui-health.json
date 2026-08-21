@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "service": "grudge-traits",
+  "host": "https://traits.grudge.studio",
+  "origin": "https://ui.grudge-studio.com",
+  "layout": "unity-trait-store",
+  "uuidAlgorithm": "sha1(grudge-asset:{r2Key}) RFC-4122 v5",
+  "checks": {
+    "paperdoll": "/main-panel.html?tab=equipment",
+    "meshes": "/api/traits/meshes",
+    "sockets": "/api/traits/sockets",
+    "contract": "/api/traits",
+    "icons": "https://assets.grudge-studio.com/icons/496_rpg_icons/W_Sword001.png"
+  }
+}

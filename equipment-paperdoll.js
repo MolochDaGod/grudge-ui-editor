@@ -25,7 +25,7 @@
   var I496 = "https://assets.grudge-studio.com/icons/496_rpg_icons";
 
   const SLOTS_LEFT = [
-    { id: "helmet", gear: "Head", label: "Helmet", abbr: "HEL", icon: I496 + "/A_Armour04.png" },
+    { id: "helmet", gear: "Head", label: "Helmet", abbr: "HEL", icon: I496 + "/C_Hat01.png" },
     { id: "chest", gear: "Chest", label: "Chest", abbr: "CHS", icon: I496 + "/A_Armour01.png" },
     { id: "gloves", gear: "Hands", label: "Gloves", abbr: "GLV", icon: I496 + "/A_Armour02.png" },
     { id: "legs", gear: "Legs", label: "Legs", abbr: "LEG", icon: I496 + "/A_Armour03.png" },
@@ -209,16 +209,16 @@
 
   /** Unity Trait Store paperdoll (uMMORPG Character Creation screenshots). */
   const UNITY_DOLL_LEFT = [
-    { id: "helmet", gear: "Head", label: "Head", abbr: "HD" },
-    { id: "gloves", gear: "Hands", label: "Hands", abbr: "HND" },
-    { id: "boots", gear: "Feet", label: "Boots", abbr: "BT" },
-    { id: "ring", gear: "Accessory1", label: "Ring", abbr: "RNG" },
+    { id: "helmet", gear: "Head", label: "Head", abbr: "HD", icon: I496 + "/C_Hat01.png" },
+    { id: "gloves", gear: "Hands", label: "Hands", abbr: "HND", icon: I496 + "/A_Armour02.png" },
+    { id: "boots", gear: "Feet", label: "Boots", abbr: "BT", icon: I496 + "/A_Shoes01.png" },
+    { id: "ring", gear: "Accessory1", label: "Ring", abbr: "RNG", icon: I496 + "/I_Gem01.png" },
   ];
   const UNITY_DOLL_RIGHT = [
-    { id: "shoulders", gear: "Shoulders", label: "Shoulders", abbr: "SHD" },
-    { id: "chest", gear: "Chest", label: "Body", abbr: "BDY" },
-    { id: "back", gear: "Back", label: "Back", abbr: "BCK" },
-    { id: "relic", gear: "Accessory2", label: "Relic", abbr: "RLC" },
+    { id: "shoulders", gear: "Shoulders", label: "Shoulders", abbr: "SHD", icon: I496 + "/A_Armour01.png" },
+    { id: "chest", gear: "Chest", label: "Body", abbr: "BDY", icon: I496 + "/A_Armour01.png" },
+    { id: "back", gear: "Back", label: "Back", abbr: "BCK", icon: I496 + "/I_Bag.png" },
+    { id: "relic", gear: "Accessory2", label: "Relic", abbr: "RLC", icon: I496 + "/I_Gem01.png" },
   ];
   const UNITY_CARDS = [
     { id: "faction", kind: "faction", title: "FACTION" },
@@ -247,11 +247,23 @@
     spear: I496 + "/W_Spear001.png",
     pick: I496 + "/W_Axe001.png",
     bow: I496 + "/W_Bow01.png",
-    staff: I496 + "/I_Staff01.png",
+    staff: "https://assets.grudge-studio.com/game-assets/icons/pack/weapons/Staff_01.png",
     shield: I496 + "/E_Wood01.png",
     bag: I496 + "/I_Bag.png",
     wood: I496 + "/I_Coal.png",
     quiver: I496 + "/I_Bag.png",
+    helm: I496 + "/C_Hat01.png",
+    head: I496 + "/C_Hat01.png",
+    chest: I496 + "/A_Armour01.png",
+    body: I496 + "/A_Armour01.png",
+    gloves: I496 + "/A_Armour02.png",
+    arms: I496 + "/A_Armour02.png",
+    boots: I496 + "/A_Shoes01.png",
+    legs: I496 + "/A_Armour03.png",
+    shoulders: I496 + "/A_Armour01.png",
+    ring: I496 + "/I_Gem01.png",
+    mount: I496 + "/S_Buff01.png",
+    boat: I496 + "/I_Water.png",
   };
   const INFO_BASE = "https://info.grudge-studio.com/api/v1";
   var SOCKETS_CACHE = null;
@@ -389,11 +401,19 @@
     return rec?.items?.find((it) => it.meshId === id)?.defUuid || "";
   }
 
-  function iconForItem(item, kind) {
+  function meshRecord(id, race) {
+    const rec = global.__grudgeMeshUuidIndex?.races?.[race || "human"];
+    return rec?.items?.find((it) => it.meshId === id) || null;
+  }
+
+  function iconForItem(item, kind, race) {
     if (item?.iconUrl) return item.iconUrl;
+    const mid = item?.meshId || item?.id;
+    const hit = mid ? meshRecord(mid, race) : null;
+    if (hit?.iconUrl) return hit.iconUrl;
     const cat = global.InfoCatalog;
     if (cat?.resolveIcon && item) {
-      const u = cat.resolveIcon({ itemId: item.id, name: item.name, type: item.kind || kind });
+      const u = cat.resolveIcon({ itemId: mid || item.id, name: item.name, type: item.kind || kind });
       if (u) return u;
     }
     return KIND_ICON[item?.kind || kind] || KIND_ICON.sword;
@@ -521,20 +541,24 @@
       return g === def.meshGroup;
     }) : "") || "";
     const chosen = choices.find((c) => c.id === val) || item;
-    const icon = iconForItem(chosen, item?.kind || def.meshGroup);
-    const lines = statsLines(item);
+    const rec = val ? meshRecord(val, race) : null;
+    const icon = iconForItem(chosen || rec, item?.kind || rec?.kind || def.meshGroup, race);
+    const uid = rec?.defUuid || meshDefUuid(val, race);
+    const lines = statsLines(item || rec);
     const req = lines.find((l) => /required Lv/i.test(l));
     const rest = lines.filter((l) => l !== req);
-    const locked = core && chosen?.baseUnarmed;
-    return `<article class="eq-card" data-slot="${esc(def.id)}" data-gear="${esc(def.gear || "")}">
+    const locked = core && (chosen?.baseUnarmed || rec?.unarmedBase);
+    return `<article class="eq-card" data-slot="${esc(def.id)}" data-gear="${esc(def.gear || "")}" data-uuid="${esc(uid)}">
       <header class="eq-card-h">${esc(def.title)}${core ? ` <span class="eq-core-tag">kit</span>` : ""}</header>
       ${cardSelect(choices, val, { allowNone: !core })}
       <div class="eq-card-body">
         <div class="eq-card-icon">${icon ? `<img src="${esc(icon)}" alt="" />` : `<span>CATEGORY</span>`}</div>
         <div class="eq-card-info">
-          ${val ? `<div class="eq-card-name">${esc(prettyMeshName(val))}</div>` : `<div class="eq-card-name muted">None</div>`}
+          ${val ? `<div class="eq-card-name">${esc(prettyMeshName(val, race))}</div>` : `<div class="eq-card-name muted">None</div>`}
+          ${rec?.kind ? `<div class="eq-stat">${esc(rec.kind)}${rec.slot ? " · " + rec.slot : ""}</div>` : ""}
+          ${uid ? `<div class="eq-uuid" title="mesh definition UUID">${esc(uid)}</div>` : ""}
           ${locked ? `<div class="eq-ph-flag">Unarmed base</div>` : ""}
-          ${item?.placeholder ? `<div class="eq-ph-flag">Placeholder</div>` : ""}
+          ${item?.placeholder || rec?.placeholder ? `<div class="eq-ph-flag">Placeholder</div>` : ""}
           ${rest.map((l) => `<div class="eq-stat">${esc(l)}</div>`).join("")}
           ${req ? `<div class="eq-req">${esc(req)}</div>` : ""}
         </div>
@@ -563,9 +587,11 @@
             const base = baseIds.has(id);
             const on = current === id || (!current && base && CORE_MESH_GROUPS[g]);
             const cls = ["eq-mesh-chip", on ? "on" : "", base ? "base" : ""].filter(Boolean).join(" ");
+            const rec = meshRecord(id, race);
             const title = prettyMeshName(id, race) + (base ? " (unarmed base)" : "");
-            const uid = meshDefUuid(id, race);
-            return `<button type="button" class="${cls}" data-mesh-pick="${esc(id)}" data-slot="${esc(slot)}" title="${esc(title + (uid ? " · " + uid : ""))}">${esc(prettyMeshName(id, race))}</button>`;
+            const uid = rec?.defUuid || meshDefUuid(id, race);
+            const ic = rec?.iconUrl || KIND_ICON[rec?.kind || g] || "";
+            return `<button type="button" class="${cls}" data-mesh-pick="${esc(id)}" data-slot="${esc(slot)}" data-uuid="${esc(uid)}" title="${esc(title + (uid ? " · " + uid : ""))}">${ic ? `<img src="${esc(ic)}" alt="" />` : ""}${esc(prettyMeshName(id, race))}</button>`;
           })
           .join("");
         const none =

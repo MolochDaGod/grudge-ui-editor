@@ -15,6 +15,15 @@
 
   var CDN = "https://assets.grudge-studio.com";
   var HOST = "https://ui.grudge-studio.com";
+  var TRAITS = "https://traits.grudge.studio";
+  if (typeof location !== "undefined" && location.hostname) {
+    if (/traits?\.grudge(-studio)?\.(studio|com)$/i.test(location.hostname)) {
+      HOST = location.origin;
+      TRAITS = location.origin;
+    } else if (/ui\.grudge-studio\.com$/i.test(location.hostname)) {
+      HOST = location.origin;
+    }
+  }
   var SEP = " · ";
   var EMPTY = "—";
 
@@ -24,7 +33,7 @@
   function urlsFor(path) {
     var rel = path.charAt(0) === "/" ? path : "/" + path;
     var out = [rel, HOST + rel];
-    if (typeof location !== "undefined" && location.origin && location.origin.indexOf("grudge-studio.com") !== -1) {
+    if (typeof location !== "undefined" && location.origin && /grudge(-studio)?\.(studio|com)/i.test(location.host || "")) {
       out.unshift(location.origin + rel);
     }
     return out;
@@ -94,9 +103,42 @@
     return parts.join(SEP);
   }
 
+  function embedUrl(opts) {
+    opts = opts || {};
+    var u = new URL(TRAITS + "/");
+    if (opts.embed !== false) u.searchParams.set("embed", "1");
+    u.searchParams.set("tab", opts.tab || "equipment");
+    u.searchParams.set("era", opts.era || "warlords");
+    if (opts.characterId) u.searchParams.set("characterId", String(opts.characterId));
+    return u.toString();
+  }
+
+  async function loadMeshes() {
+    return fetchFirst(urlsFor("/api/traits/meshes").concat(urlsFor("/data/mesh-showcase-index.json")));
+  }
+
+  async function loadSockets() {
+    return fetchFirst(urlsFor("/api/traits/sockets").concat(urlsFor("/data/toon-rts-named-sockets.json")));
+  }
+
+  async function lookupMesh(q) {
+    var idx = await loadMeshes();
+    var needle = String(q || "").toLowerCase();
+    var hits = [];
+    var races = (idx && idx.races) || {};
+    Object.keys(races).forEach(function (race) {
+      (races[race].items || []).forEach(function (it) {
+        var blob = ((it.defUuid || "") + " " + (it.meshId || "") + " " + (it.name || "")).toLowerCase();
+        if (!needle || blob.indexOf(needle) !== -1) hits.push(Object.assign({ race: race }, it));
+      });
+    });
+    return hits;
+  }
+
   global.GrudgeMainPanelApi = {
     CDN: CDN,
     HOST: HOST,
+    TRAITS: TRAITS,
     separator: function () {
       return SEP;
     },
@@ -109,5 +151,9 @@
     iconUrl: iconUrl,
     listSlots: listSlots,
     join: join,
+    embedUrl: embedUrl,
+    loadMeshes: loadMeshes,
+    loadSockets: loadSockets,
+    lookupMesh: lookupMesh,
   };
 })(typeof window !== "undefined" ? window : globalThis);

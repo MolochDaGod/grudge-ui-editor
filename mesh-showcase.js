@@ -92,7 +92,8 @@
         const on = selected?.meshId === it.meshId ? " on" : "";
         const base = it.unarmedBase ? " base" : "";
         return `<button type="button" class="ms-card${on}${base}" data-mesh="${esc(it.meshId)}" title="${esc(it.meshId)}">
-          <span class="ms-g">${esc(it.group)}</span>
+          ${it.iconUrl ? `<img class="ms-ic" src="${esc(it.iconUrl)}" alt="" />` : ""}
+          <span class="ms-g">${esc(it.group)}${it.kind ? " · " + esc(it.kind) : ""}</span>
           <span class="ms-n">${esc(it.name)}${it.unarmedBase ? " · BASE" : ""}</span>
           <code class="ms-mid">${esc(it.meshId)}</code>
           <code class="ms-uid">${esc(it.defUuid)}</code>
@@ -136,10 +137,14 @@
     const detail = document.getElementById("ms-detail");
     if (detail) {
       detail.innerHTML = item
-        ? `<h3>${esc(item.name)}</h3>
+        ? `<h3>${item.iconUrl ? `<img class="ms-ic" src="${esc(item.iconUrl)}" alt="" />` : ""}${esc(item.name)}</h3>
            <p><span class="k">mesh_id</span> <code>${esc(item.meshId)}</code></p>
            <p><span class="k">def UUID</span> <code>${esc(item.defUuid)}</code></p>
+           <p><span class="k">slot</span> ${esc(item.slot || item.group)} · ${esc(item.kind || "")}</p>
            <p><span class="k">group</span> ${esc(item.group)} ${item.unarmedBase ? "· unarmed base" : ""}</p>
+           ${item.bone ? `<p><span class="k">bone</span> <code>${esc(item.bone)}</code></p>` : ""}
+           ${item.animPack ? `<p><span class="k">anim</span> ${esc(item.animPack)}</p>` : ""}
+           <p><span class="k">r2Key</span> <code>${esc(item.r2Key || "")}</code></p>
            <p><span class="k">kit</span> ${esc(rec.kitGlb.split("/").pop())}</p>
            <p><span class="k">visible</span> ${meshIds.length} mesh_ids</p>
            <pre class="ms-ids">${meshIds.map(esc).join("\n")}</pre>`
