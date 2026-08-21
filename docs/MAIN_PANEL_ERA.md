@@ -17,10 +17,17 @@
 
 ## Equipment UI contract
 
-- **Layout:** left armor column · center portrait · right weapons/jewelry · bottom ring/add  
+- **Layout (default):** Unity Trait Store / Character Creation (`layout=unity`) — collection cNFT grid, 3D Toon kit with outlines, faction/class/mainhand/offhand cards, HEAD–RELIC containers with full stats + skill icons.  
+- **Layout (legacy):** `?layout=tactical` — left armor column · center portrait · right weapons/jewelry  
+- **Unity reference:** `FRESH GRUDGE/Assets/uMMORPG/!TRAIT STORE` + Character Creation paperdoll (Imgur `7ngwVhR`)  
+- **Named sockets:** `info.grudge-studio.com/api/v1/toon-rts-named-sockets.json` (113 named race weapons/shields/utility + placeholders; hand bones `R_hand_container` / `L_shield_container`)  
 - **Modes:** `self` (equip) · `inspect` (other unit/player, read-only)  
 - **Events:** `grudge:equip:slot` · postMessage `GRUDGE_MAIN_PANEL`  
 - **Portraits:** `race-portraits.js` → client.grudge-studio.com CDN  
+- **cNFT collection:** Railway `/api/characters?era=` — 4 slots per era; empty cells → Foundry create  
+- **Identity:** Railway `characters.id` UUID · `grudge_code` · account `grudge_id` · `model3d.meshIds` bake  
+- **Owned gear only:** account bag + `/api/ledger` `grudge_uuid` — catalog defs are not ownership  
+- **Open:** `https://open.grudge-studio.com/equipment?era=&characterId=` embeds this panel + SSO `GRUDGE_AUTH`  
 
 ## Embed in games
 

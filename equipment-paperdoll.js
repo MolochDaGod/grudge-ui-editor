@@ -207,19 +207,591 @@
       .replace(/"/g, "&quot;");
   }
 
+  /** Unity Trait Store paperdoll (uMMORPG Character Creation screenshots). */
+  const UNITY_DOLL_LEFT = [
+    { id: "helmet", gear: "Head", label: "Head", abbr: "HD" },
+    { id: "gloves", gear: "Hands", label: "Hands", abbr: "HND" },
+    { id: "boots", gear: "Feet", label: "Boots", abbr: "BT" },
+    { id: "ring", gear: "Accessory1", label: "Ring", abbr: "RNG" },
+  ];
+  const UNITY_DOLL_RIGHT = [
+    { id: "shoulders", gear: "Shoulders", label: "Shoulders", abbr: "SHD" },
+    { id: "chest", gear: "Chest", label: "Body", abbr: "BDY" },
+    { id: "back", gear: "Back", label: "Back", abbr: "BCK" },
+    { id: "relic", gear: "Accessory2", label: "Relic", abbr: "RLC" },
+  ];
+  const UNITY_CARDS = [
+    { id: "faction", kind: "faction", title: "FACTION" },
+    { id: "class", kind: "class", title: "CLASS" },
+    { id: "weapon", kind: "equip", title: "MAINHAND", gear: "MainHand", slotFilter: "mainhand" },
+    { id: "offhand", kind: "equip", title: "OFFHAND", gear: "OffHand", slotFilter: "offhand" },
+    { id: "helmet", kind: "equip", title: "HEAD", gear: "Head", meshGroup: "head" },
+    { id: "shoulders", kind: "equip", title: "SHOULDERS", gear: "Shoulders", meshGroup: "shoulders" },
+    { id: "chest", kind: "equip", title: "BODY", gear: "Chest", meshGroup: "body" },
+    { id: "back", kind: "equip", title: "BACK", gear: "Back", meshGroup: "utility" },
+    { id: "gloves", kind: "equip", title: "HANDS", gear: "Hands", meshGroup: "arms" },
+    { id: "ring", kind: "equip", title: "RING", gear: "Accessory1" },
+    { id: "boots", kind: "equip", title: "BOOTS", gear: "Feet", meshGroup: "legs" },
+    { id: "relic", kind: "equip", title: "RELIC", gear: "Accessory2" },
+    { id: "mount", kind: "equip", title: "MOUNT", gear: "Mount", slotFilter: "mount" },
+    { id: "boat", kind: "equip", title: "BOAT", gear: "Boat", slotFilter: "boat" },
+  ];
+  const RACES_UI = ["human", "barbarian", "elf", "dwarf", "orc", "undead"];
+  const CLASSES_UI = ["warrior", "ranger", "mage", "worge"];
+  const KIND_ICON = {
+    sword: I496 + "/W_Sword001.png",
+    axe: I496 + "/W_Axe001.png",
+    hammer: I496 + "/W_Mace001.png",
+    mace: I496 + "/W_Mace001.png",
+    dagger: I496 + "/W_Sword001.png",
+    spear: I496 + "/W_Spear001.png",
+    pick: I496 + "/W_Axe001.png",
+    bow: I496 + "/W_Bow01.png",
+    staff: I496 + "/I_Staff01.png",
+    shield: I496 + "/E_Wood01.png",
+    bag: I496 + "/I_Bag.png",
+    wood: I496 + "/I_Coal.png",
+    quiver: I496 + "/I_Bag.png",
+  };
+  const INFO_BASE = "https://info.grudge-studio.com/api/v1";
+  var SOCKETS_CACHE = null;
+  var CLASSES_CACHE = null;
+
+  function fetchJson(url) {
+    return fetch(url, { mode: "cors" }).then((r) => {
+      if (!r.ok) throw new Error(String(r.status));
+      return r.json();
+    });
+  }
+
+  function loadNamedSockets() {
+    if (SOCKETS_CACHE) return Promise.resolve(SOCKETS_CACHE);
+    if (global.__grudgeNamedSockets) {
+      SOCKETS_CACHE = global.__grudgeNamedSockets;
+      return Promise.resolve(SOCKETS_CACHE);
+    }
+    fetchJson("./data/warlords-mesh-catalog.json")
+      .then((j) => {
+        global.__grudgeMeshCatalog = j;
+      })
+      .catch(() => {});
+    fetchJson("./data/mesh-showcase-index.json")
+      .then((j) => {
+        global.__grudgeMeshUuidIndex = j;
+      })
+      .catch(() => {});
+    if (global.WarlordsCharacter?.loadMeshCatalog) {
+      global.WarlordsCharacter.loadMeshCatalog().then((j) => {
+        if (j) global.__grudgeMeshCatalog = j;
+      });
+    }
+    return fetchJson(INFO_BASE + "/toon-rts-named-sockets.json")
+      .catch(() => fetchJson("https://objectstore.grudge-studio.com/api/v1/toon-rts-named-sockets.json"))
+      .catch(() => fetchJson("https://ui.grudge-studio.com/data/toon-rts-named-sockets.json"))
+      .catch(() => fetchJson("./data/toon-rts-named-sockets.json"))
+      .then((j) => {
+        SOCKETS_CACHE = j;
+        global.__grudgeNamedSockets = j;
+        return j;
+      })
+      .catch(() => null);
+  }
+
+  function loadClassCatalog() {
+    if (CLASSES_CACHE) return Promise.resolve(CLASSES_CACHE);
+    return fetchJson(INFO_BASE + "/classes.json")
+      .catch(() => fetchJson("https://objectstore.grudge-studio.com/api/v1/classes.json"))
+      .then((j) => {
+        CLASSES_CACHE = j;
+        return j;
+      })
+      .catch(() => null);
+  }
+
+  function unityEquipped(raw) {
+    const base = normalizeEquipped(raw);
+    const out = { ...base };
+    if (raw && typeof raw === "object") {
+      if (raw.shoulders && !out.shoulders) {
+        out.shoulders = base.back && raw.shoulders.meshSlot === "shoulders" ? base.back : normalizeEquipped({ helmet: raw.shoulders }).helmet;
+        if (raw.shoulders && typeof raw.shoulders === "object") {
+          const looked = normalizeEquipped({ helmet: raw.shoulders }).helmet;
+          if (looked) out.shoulders = looked;
+        }
+      }
+      if (raw.ring && !out.ring) {
+        const looked = normalizeEquipped({ helmet: raw.ring }).helmet;
+        if (looked) out.ring = looked;
+      }
+      if (base.offhand2 && !out.ring) out.ring = base.offhand2;
+      if (base.back && raw.shoulders && !out.shoulders) out.shoulders = base.back;
+    }
+    return out;
+  }
+
+  function socketsFor(race, filter) {
+    const pack = SOCKETS_CACHE?.races?.[race] || SOCKETS_CACHE?.races?.human;
+    const items = pack?.items || [];
+    if (!filter) return items;
+    return items.filter((it) => {
+      if (filter === "mainhand") return it.slot === "mainhand";
+      if (filter === "offhand") return it.slot === "offhand" || it.kind === "shield";
+      if (filter === "utility") return it.slot === "back";
+      return it.kind === filter || it.slot === filter;
+    });
+  }
+
+  const CORE_MESH_GROUPS = { head: true, body: true, arms: true, legs: true };
+  const GROUP_TO_SLOT = {
+    head: "helmet",
+    body: "chest",
+    arms: "gloves",
+    legs: "boots",
+    shoulders: "shoulders",
+    weapons: "weapon",
+    shields: "offhand",
+    utility: "back",
+  };
+
+  function meshCatalogAll(race) {
+    const WC = global.WarlordsCharacter;
+    const fromWc = WC?.catalogFor?.(race);
+    if (fromWc) return fromWc;
+    const n = WC?.normalizeRace ? WC.normalizeRace(race) : race;
+    return global.__grudgeMeshCatalog?.races?.[n]?.catalog || global.__grudgeMeshCatalog?.races?.[race]?.catalog || null;
+  }
+
+  function meshCatalogGroup(race, group) {
+    const cat = meshCatalogAll(race);
+    const list = (cat && cat[group]) || [];
+    return list.filter((id) => !/container/i.test(id));
+  }
+
+  function unarmedSet(race) {
+    const ids = global.WarlordsCharacter?.unarmedMeshIds?.(race) || [];
+    return new Set(ids);
+  }
+
+  function prettyMeshName(id, race) {
+    const rec = global.__grudgeMeshUuidIndex?.races?.[race || "human"];
+    const hit = rec?.items?.find((it) => it.meshId === id);
+    if (hit?.name) return hit.name;
+    return String(id || "")
+      .replace(/^WK_|^BRB_|^ELF_|^DWF_|^ORC_|^UD_/i, "")
+      .replace(/^Units_/i, "")
+      .replace(/^Xtra_/i, "")
+      .replace(/_/g, " ")
+      .trim();
+  }
+
+  function meshDefUuid(id, race) {
+    const rec = global.__grudgeMeshUuidIndex?.races?.[race || "human"];
+    return rec?.items?.find((it) => it.meshId === id)?.defUuid || "";
+  }
+
+  function iconForItem(item, kind) {
+    if (item?.iconUrl) return item.iconUrl;
+    const cat = global.InfoCatalog;
+    if (cat?.resolveIcon && item) {
+      const u = cat.resolveIcon({ itemId: item.id, name: item.name, type: item.kind || kind });
+      if (u) return u;
+    }
+    return KIND_ICON[item?.kind || kind] || KIND_ICON.sword;
+  }
+
+  function statsLines(item) {
+    const st = item?.stats;
+    const lines = [];
+    if (st && typeof st === "object") {
+      for (const [k, v] of Object.entries(st)) {
+        if (v == null || v === "") continue;
+        const label = String(k).replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase());
+        const n = typeof v === "number" ? (v > 0 ? "+" + v : String(v)) : String(v);
+        lines.push(`${label} ${n}`);
+      }
+    }
+    if (item?.kind) lines.push(item.kind === "shield" ? "Offhand" : item.slot === "mainhand" ? "Mainhand Weapon" : item.kind);
+    if (item?.bone) lines.push("Bone " + item.bone);
+    if (item?.placeholder) lines.push("Placeholder — mesh not on kit");
+    if (item?.requiredLevel != null) lines.push("required Lv " + item.requiredLevel);
+    else if (item && !item.placeholder) lines.push("required Lv 1");
+    return lines;
+  }
+
+  function classPassives(cls) {
+    const attrs = cls?.startingAttributes || {};
+    const map = {
+      Strength: "INCREASED STRENGTH",
+      Vitality: "INCREASED VITALITY",
+      Endurance: "INCREASED ENDURANCE",
+      Dexterity: "INCREASED DEXTERITY",
+      Agility: "INCREASED AGILITY",
+      Intellect: "INCREASED INTELLECT",
+      Wisdom: "INCREASED WISDOM",
+      Tactics: "INCREASED TACTICS",
+    };
+    return Object.entries(attrs)
+      .filter(([, v]) => Number(v) >= 3)
+      .sort((a, b) => Number(b[1]) - Number(a[1]))
+      .slice(0, 3)
+      .map(([k]) => map[k] || k);
+  }
+
+  function classSkills(cls) {
+    const list = [];
+    (cls?.abilities || []).slice(0, 4).forEach((a) => list.push(a));
+    if (cls?.signatureAbility) list.push(cls.signatureAbility);
+    return list.slice(0, 4);
+  }
+
+  function cdnIcon(path) {
+    if (!path) return "";
+    if (/^https?:/i.test(path)) return path;
+    return "https://assets.grudge-studio.com" + (path.startsWith("/") ? path : "/" + path);
+  }
+
+  function skillTip(sk) {
+    if (!sk) return "";
+    const bits = [
+      `<strong>${esc(sk.name || sk.n || sk.id)}</strong>`,
+      sk.description || sk.d || sk.tooltip || "",
+      sk.cooldown != null ? `CD ${sk.cooldown}s` : "",
+      sk.manaCost ? `Mana ${sk.manaCost}` : "",
+      sk.staminaCost ? `Stamina ${sk.staminaCost}` : "",
+      sk.damage != null ? `Damage ${sk.damage}` : "",
+    ].filter(Boolean);
+    return bits.join("<br>");
+  }
+
+  function collectionHtml(list, activeId, era) {
+    const cells = [];
+    const src = Array.isArray(list) ? list.slice(0, 4) : [];
+    for (let i = 0; i < 8; i++) {
+      const c = src[i];
+      if (c) {
+        const img = c.portraitUrl || c.portrait || "";
+        const on = c.id && c.id === activeId ? " on" : "";
+        cells.push(`<button type="button" class="eq-cnft${on}" data-cid="${esc(c.id)}" title="${esc(c.name || "Hero")}">
+          ${img ? `<img src="${esc(img)}" alt="" />` : `<span>${esc((c.name || "?").slice(0, 1))}</span>`}
+        </button>`);
+      } else {
+        const foundry = `https://character.grudge-studio.com/foundry?era=${encodeURIComponent(era || "warlords")}`;
+        cells.push(`<a class="eq-cnft empty" href="${esc(foundry)}" target="_blank" rel="noopener" title="Create CNFT hero">+</a>`);
+      }
+    }
+    return cells.join("");
+  }
+
+  function cardSelect(options, value, flags) {
+    flags = flags || {};
+    const rows = [];
+    if (flags.allowNone !== false) rows.push(`<option value="">None</option>`);
+    options.forEach((o) => {
+      const id = o.id || o;
+      const name = o.name || o.label || id;
+      const ph = o.placeholder ? " (placeholder)" : "";
+      const base = o.baseUnarmed ? " · base" : "";
+      const sel = String(value || "") === String(id) ? " selected" : "";
+      rows.push(`<option value="${esc(id)}"${sel}>${esc(name + ph + base)}</option>`);
+    });
+    return `<select class="eq-card-select">${rows.join("")}</select>`;
+  }
+
+  function equipCardHtml(def, item, opts) {
+    const race = opts.race || "human";
+    const core = !!(def.meshGroup && CORE_MESH_GROUPS[def.meshGroup]);
+    const baseIds = unarmedSet(race);
+    let choices = [];
+    if (def.meshGroup) {
+      const names = meshCatalogGroup(race, def.meshGroup);
+      choices = names.map((id) => ({
+        id,
+        name: prettyMeshName(id),
+        kind: def.meshGroup,
+        bone: "skinned",
+        onAsset: true,
+        baseUnarmed: baseIds.has(id),
+      }));
+    }
+    if (!choices.length && def.slotFilter) {
+      choices = socketsFor(race, def.slotFilter).filter((it) => !it.placeholder || def.slotFilter !== "mainhand");
+    }
+    const val = item?.meshId || (item?.id && choices.some((c) => c.id === item.id) ? item.id : "") || (core ? [...baseIds].find((id) => {
+      const g = global.WarlordsCharacter?.groupOfMesh?.(id);
+      return g === def.meshGroup;
+    }) : "") || "";
+    const chosen = choices.find((c) => c.id === val) || item;
+    const icon = iconForItem(chosen, item?.kind || def.meshGroup);
+    const lines = statsLines(item);
+    const req = lines.find((l) => /required Lv/i.test(l));
+    const rest = lines.filter((l) => l !== req);
+    const locked = core && chosen?.baseUnarmed;
+    return `<article class="eq-card" data-slot="${esc(def.id)}" data-gear="${esc(def.gear || "")}">
+      <header class="eq-card-h">${esc(def.title)}${core ? ` <span class="eq-core-tag">kit</span>` : ""}</header>
+      ${cardSelect(choices, val, { allowNone: !core })}
+      <div class="eq-card-body">
+        <div class="eq-card-icon">${icon ? `<img src="${esc(icon)}" alt="" />` : `<span>CATEGORY</span>`}</div>
+        <div class="eq-card-info">
+          ${val ? `<div class="eq-card-name">${esc(prettyMeshName(val))}</div>` : `<div class="eq-card-name muted">None</div>`}
+          ${locked ? `<div class="eq-ph-flag">Unarmed base</div>` : ""}
+          ${item?.placeholder ? `<div class="eq-ph-flag">Placeholder</div>` : ""}
+          ${rest.map((l) => `<div class="eq-stat">${esc(l)}</div>`).join("")}
+          ${req ? `<div class="eq-req">${esc(req)}</div>` : ""}
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function meshKitHtml(opts) {
+    const race = opts.race || "human";
+    const cat = meshCatalogAll(race);
+    if (!cat) return `<section class="eq-mesh-kit"><p class="eq-loading">Loading race meshes…</p></section>`;
+    const baseIds = unarmedSet(race);
+    const equipped = unityEquipped(opts.equipped);
+    const groups = ["body", "arms", "legs", "head", "shoulders", "weapons", "shields", "utility"];
+    const blocks = groups
+      .map((g) => {
+        const ids = meshCatalogGroup(race, g);
+        if (!ids.length) return "";
+        const slot = GROUP_TO_SLOT[g];
+        const current =
+          equipped[slot]?.meshId ||
+          equipped[slot]?.id ||
+          "";
+        const chips = ids
+          .map((id) => {
+            const base = baseIds.has(id);
+            const on = current === id || (!current && base && CORE_MESH_GROUPS[g]);
+            const cls = ["eq-mesh-chip", on ? "on" : "", base ? "base" : ""].filter(Boolean).join(" ");
+            const title = prettyMeshName(id, race) + (base ? " (unarmed base)" : "");
+            const uid = meshDefUuid(id, race);
+            return `<button type="button" class="${cls}" data-mesh-pick="${esc(id)}" data-slot="${esc(slot)}" title="${esc(title + (uid ? " · " + uid : ""))}">${esc(prettyMeshName(id, race))}</button>`;
+          })
+          .join("");
+        const none =
+          CORE_MESH_GROUPS[g]
+            ? ""
+            : `<button type="button" class="eq-mesh-chip none${current ? "" : " on"}" data-mesh-pick="" data-slot="${esc(slot)}">None</button>`;
+        return `<div class="eq-mesh-group" data-group="${esc(g)}">
+          <h4>${esc(g)}</h4>
+          <div class="eq-mesh-chips">${none}${chips}</div>
+        </div>`;
+      })
+      .join("");
+    const counts = groups.map((g) => meshCatalogGroup(race, g).length).reduce((a, b) => a + b, 0);
+    return `<section class="eq-mesh-kit">
+      <h3>RACE MESHES · ${esc(String(race).toUpperCase())}</h3>
+      <p class="eq-cnft-sub">${counts} kit meshes · unarmed body locked as base · extras optional</p>
+      ${blocks}
+    </section>`;
+  }
+
+  function factionCardHtml(opts) {
+    const race = opts.race || "human";
+    const portrait =
+      opts.portraitUrl ||
+      (global.grudgePortraitForRace && global.grudgePortraitForRace(race)) ||
+      "";
+    const sel = RACES_UI.map((r) => `<option value="${r}"${r === race ? " selected" : ""}>${r[0].toUpperCase() + r.slice(1)}</option>`).join("");
+    return `<article class="eq-card eq-card-faction" data-slot="faction">
+      <header class="eq-card-h">FACTION</header>
+      <select class="eq-card-select" data-faction="1">${sel}</select>
+      <div class="eq-card-body eq-card-body-center">
+        ${portrait ? `<img class="eq-faction-shot" src="${esc(portrait)}" alt="" />` : ""}
+      </div>
+    </article>`;
+  }
+
+  function classCardHtml(opts) {
+    const classId = String(opts.classId || "warrior").toLowerCase();
+    const cls = CLASSES_CACHE?.classes?.[classId] || CLASSES_CACHE?.classes?.warrior || {};
+    const sel = CLASSES_UI.map((c) => {
+      const n = CLASSES_CACHE?.classes?.[c]?.name || c;
+      return `<option value="${c}"${c === classId ? " selected" : ""}>${esc(n)}</option>`;
+    }).join("");
+    const passives = classPassives(cls);
+    const skills = classSkills(cls);
+    const color = cls.color || "#22c55e";
+    const skillsHtml = skills
+      .map((sk) => {
+        const ic = cdnIcon(sk.iconUrl || sk.icon);
+        return `<button type="button" class="eq-skill" data-tip="${esc(skillTip(sk))}" title="${esc(sk.name || sk.id)}">
+          ${ic ? `<img src="${esc(ic)}" alt="" />` : `<span>${esc((sk.name || "SK").slice(0, 2))}</span>`}
+        </button>`;
+      })
+      .join("");
+    return `<article class="eq-card eq-card-class" data-slot="class">
+      <header class="eq-card-h">CLASS</header>
+      <select class="eq-card-select" data-class="1">${sel}</select>
+      <div class="eq-card-body eq-class-body">
+        ${cls.iconUrl ? `<img class="eq-class-icon" src="${esc(cdnIcon(cls.iconUrl))}" alt="" />` : ""}
+        <div class="eq-class-name" style="color:${esc(color)}">${esc((cls.name || classId).toUpperCase())}</div>
+        <div class="eq-class-pass">${passives.map((p) => esc(p)).join("<br>") || esc(cls.description || "")}</div>
+        <div class="eq-class-sk-label">-PASSIVE SKILLS-</div>
+        <div class="eq-class-skills">${skillsHtml}</div>
+      </div>
+    </article>`;
+  }
+
+  function renderUnity(el, opts) {
+    opts = opts || {};
+    const mode = opts.mode === "inspect" ? "inspect" : "self";
+    const readOnly = mode === "inspect" || !!opts.readOnly;
+    const equipped = unityEquipped(opts.equipped);
+    const race = opts.race || "human";
+    const classId = opts.classId || "warrior";
+    const era = opts.era || "warlords";
+    const title = opts.title || "GRUDGE WARLORD";
+
+    el.classList.add("eq-paperdoll", "eq-unity-host");
+    el.dataset.mode = mode;
+    el.dataset.layout = "unity";
+
+    const left = UNITY_DOLL_LEFT.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
+    const right = UNITY_DOLL_RIGHT.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
+    const cards = UNITY_CARDS.map((def) => {
+      if (def.kind === "faction") return factionCardHtml(opts);
+      if (def.kind === "class") return classCardHtml(opts);
+      return equipCardHtml(def, equipped[def.id], opts);
+    }).join("");
+
+    const ocean = "https://info.grudge-studio.com/backgrounds/hero_creation_ocean.png";
+
+    el.innerHTML = `
+      <div class="eq-unity">
+        <div class="eq-unity-left">
+          <section class="eq-collection">
+            <h3>YOUR COLLECTION</h3>
+            <p class="eq-cnft-sub">cNFT roster · ${esc(era)} era · 4 slots</p>
+            <div class="eq-collection-grid">${collectionHtml(opts.collection, opts.characterId, era)}</div>
+          </section>
+          <section class="eq-hero-stage">
+            <div class="eq-hero-banner">${esc(title)}</div>
+            <div class="eq-hero-pills">
+              <span class="eq-pill race">${esc(String(race).toUpperCase())}</span>
+              <span class="eq-pill class">${esc(String(classId).toUpperCase())}</span>
+            </div>
+            <div class="eq-hero-body">
+              <div class="eq-col left">${left}</div>
+              <div class="eq-portrait-wrap" style="background-image:url('${ocean}')">
+                <img class="eq-portrait" src="${esc(opts.portraitUrl || "")}" alt="" draggable="false" />
+              </div>
+              <div class="eq-col right">${right}</div>
+            </div>
+          </section>
+        </div>
+        <div class="eq-unity-cards">${cards}</div>
+        ${meshKitHtml(opts)}
+      </div>
+    `;
+
+    const wrap = el.querySelector(".eq-portrait-wrap");
+    if (wrap && global.MainPanelMesh?.renderMeshOverlay) {
+      global.MainPanelMesh.renderMeshOverlay(wrap, {
+        race,
+        classId,
+        equipment: equipped,
+        meshIds: opts.meshIds,
+        unarmed: opts.unarmed,
+      });
+    }
+    if (global.Grudge6Viewport?.mount) {
+      global.Grudge6Viewport.mount(el, {
+        race,
+        classId,
+        meshIds: opts.meshIds,
+        unarmed: opts.unarmed,
+      }).catch((e) => console.warn("[trait-store] viewport", e));
+    }
+
+    el.onclick = (e) => {
+      const cnft = e.target.closest("[data-cid]");
+      if (cnft) {
+        opts.onSelectCharacter?.(cnft.dataset.cid);
+        return;
+      }
+      const chip = e.target.closest("[data-mesh-pick]");
+      if (chip) {
+        opts.onCatalogPick?.(chip.dataset.slot, chip.dataset.meshPick || "", chip.dataset.gear || null);
+        return;
+      }
+      const btn = e.target.closest(".eq-slot");
+      if (btn && btn.dataset.readonly !== "1") {
+        opts.onSlotClick?.(btn.dataset.slot, btn.dataset.gear || null);
+        global.dispatchEvent(
+          new CustomEvent("grudge:equip:slot", {
+            detail: { slotId: btn.dataset.slot, gearKey: btn.dataset.gear || null, mode, entityId: opts.entityId || null },
+          }),
+        );
+      }
+    };
+
+    el.onchange = (e) => {
+      const sel = e.target.closest("select");
+      if (!sel) return;
+      if (sel.dataset.faction) {
+        opts.onFactionChange?.(sel.value);
+        return;
+      }
+      if (sel.dataset.class) {
+        opts.onClassChange?.(sel.value);
+        return;
+      }
+      const card = sel.closest(".eq-card");
+      if (!card) return;
+      opts.onCatalogPick?.(card.dataset.slot, sel.value, card.dataset.gear || null);
+    };
+
+    return {
+      el,
+      layout: "unity",
+      setEquipped(next) {
+        renderUnity(el, { ...opts, equipped: next });
+      },
+      setPortrait(url) {
+        renderUnity(el, { ...opts, portraitUrl: url });
+      },
+      setMode(m) {
+        renderUnity(el, { ...opts, mode: m });
+      },
+      setMesh(meshOpts) {
+        renderUnity(el, { ...opts, ...meshOpts });
+      },
+      getEquipped() {
+        return { ...equipped };
+      },
+    };
+  }
+
   /**
    * Render paperdoll into a container.
-   * @param {HTMLElement} el
-   * @param {object} opts
-   * @param {string} [opts.portraitUrl]
-   * @param {string} [opts.title]
-   * @param {string} [opts.subtitle]
-   * @param {object} [opts.equipped] — slot bag or EquippedMap
-   * @param {'self'|'inspect'} [opts.mode]
-   * @param {(slotId:string, gearKey:string|null)=>void} [opts.onSlotClick]
-   * @param {number} [opts.width]
+   * layout: "unity" (Trait Store / Character Creation) or "tactical"
    */
   function render(el, opts) {
+    if (!el) return null;
+    opts = opts || {};
+    const layout = opts.layout || "unity";
+    if (layout === "tactical") return renderTactical(el, opts);
+    const run = () => renderUnity(el, opts);
+    const meshReady = !!(global.__grudgeMeshCatalog || global.WarlordsCharacter?.meshCatalog);
+    if (SOCKETS_CACHE && CLASSES_CACHE && meshReady) return run();
+    Promise.all([
+      loadNamedSockets(),
+      loadClassCatalog(),
+      global.WarlordsCharacter?.loadMeshCatalog?.() || Promise.resolve(),
+    ]).then((res) => {
+      if (res[2]) global.__grudgeMeshCatalog = res[2];
+      run();
+    });
+    el.classList.add("eq-paperdoll", "eq-unity-host");
+    if (!el.innerHTML) el.innerHTML = `<div class="eq-unity"><p class="eq-loading">Loading Trait Store catalogs…</p></div>`;
+    return { el, layout: "unity", pending: true };
+  }
+
+  /**
+   * Tactical Infinity paperdoll (portrait + left/right slots).
+   */
+  function renderTactical(el, opts) {
     if (!el) return null;
     opts = opts || {};
     const mode = opts.mode === "inspect" ? "inspect" : "self";
@@ -276,6 +848,14 @@
         unarmed: opts.unarmed,
       });
     }
+    if (global.Grudge6Viewport?.mount) {
+      global.Grudge6Viewport.mount(el, {
+        race: opts.race || "human",
+        classId: opts.classId || "warrior",
+        meshIds: opts.meshIds,
+        unarmed: opts.unarmed,
+      }).catch((e) => console.warn("[paperdoll] viewport", e));
+    }
 
     el.onclick = (e) => {
       const btn = e.target.closest(".eq-slot");
@@ -321,10 +901,17 @@
     render,
     mount: mountPaperdoll,
     normalizeEquipped,
+    unityEquipped,
+    loadNamedSockets,
+    loadClassCatalog,
+    socketsFor,
     SLOTS_LEFT,
     SLOTS_RIGHT,
     SLOT_SECONDARY,
     SLOT_OFF2,
     SLOT_ADD,
+    UNITY_CARDS,
+    UNITY_DOLL_LEFT,
+    UNITY_DOLL_RIGHT,
   };
 })(typeof window !== "undefined" ? window : globalThis);

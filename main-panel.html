@@ -62,6 +62,15 @@
           <div id="char-list" class="char-list"></div>
           <button type="button" class="mp-btn ghost" id="btn-refresh-chars">> Refresh roster</button>
         </div>
+        <div class="stat-section" id="identity-section">
+          <h3>Character info</h3>
+          <div class="stat-row"><span class="k">Name</span><span class="v" id="id-name">-</span></div>
+          <div class="stat-row"><span class="k">Hero UUID</span><span class="v font-mono" id="id-uuid" title="characters.id">-</span></div>
+          <div class="stat-row"><span class="k">Hero code</span><span class="v font-mono" id="id-code" title="grudge_code">-</span></div>
+          <div class="stat-row"><span class="k">Grudge ID</span><span class="v font-mono" id="id-account" title="account grudge_id">-</span></div>
+          <div class="stat-row"><span class="k">Era</span><span class="v" id="id-era">-</span></div>
+          <div class="stat-row"><span class="k">Mesh bake</span><span class="v" id="id-bake">-</span></div>
+        </div>
         <div class="stat-section">
           <h3>Combat Power</h3>
           <div class="stat-row"><span class="k">Rating</span><span class="v" id="cp-rating" style="color:var(--gold)">-</span></div>
@@ -102,11 +111,12 @@
               <button type="button" class="mp-btn" id="btn-unarmed">Unarmed kit</button>
               <button type="button" class="mp-btn" id="btn-class-kit">Class starting kit</button>
               <button type="button" class="mp-btn primary" id="btn-save-mesh">Save mesh -> character</button>
+              <a class="mp-btn" href="./mesh-showcase.html">All races mesh showcase</a>
               <span class="mesh-toolbar-hint">Click slots to cycle mesh variants  ·  race atlas texture</span>
             </div>
             <p class="center-hint">
-              Layout: tactical paperdoll  ·  Host: ui.grudge-studio.com  ·  Era: <span id="era-label">warlords</span>
-               ·  grudge6 mesh visibility (Unity parity)
+              Layout: Unity Trait Store  ·  Host: ui.grudge-studio.com  ·  Era: <span id="era-label">warlords</span>
+               ·  cNFT collection  ·  named Toon RTS sockets  ·  info.grudge-studio.com catalogs
             </p>
           </div>
 
@@ -259,6 +269,7 @@
     const MPM = window.MainPanelMesh;
 
     if (EMBED) document.body.classList.add("embed-mode");
+    document.body.classList.add("tab-" + TAB);
     if (document.getElementById("era-label")) document.getElementById("era-label").textContent = ERA;
 
     let eraContract = null;
@@ -398,31 +409,74 @@
       return kit?.weaponType || "sword";
     }
 
-    function applyClassKit(ent, unarmed) {
-      if (!MPC) return ent;
-      const built = MPC.meshIdsFor(ent.race, ent.classId, unarmed);
+    const MESH_SLOT = {
+      head: "helmet",
+      body: "chest",
+      arms: "gloves",
+      legs: "boots",
+      shoulders: "shoulders",
+      weapons: "weapon",
+      shields: "offhand",
+      utility: "back",
+    };
+
+    function prettyMesh(id) {
+      return String(id || "")
+        .replace(/^WK_|^BRB_|^ELF_|^DWF_|^ORC_|^UD_/i, "")
+        .replace(/^Units_/i, "")
+        .replace(/^Xtra_/i, "")
+        .replace(/_/g, " ")
+        .trim();
+    }
+
+    function equipmentFromMeshIds(meshIds) {
+      const WC = window.WarlordsCharacter;
       const eq = {};
-      const k = built.kit;
-      if (k.head) eq.helmet = { id: `head_${k.head}`, name: `Head ${k.head}`, rarity: "common", meshSlot: "head", meshVar: k.head };
-      if (k.body) eq.chest = { id: `body_${k.body}`, name: `Body ${k.body}`, rarity: "common", meshSlot: "body", meshVar: k.body };
-      if (k.arms) eq.gloves = { id: `arms_${k.arms}`, name: `Arms ${k.arms}`, rarity: "common", meshSlot: "arms", meshVar: k.arms };
-      if (k.legs) eq.legs = { id: `legs_${k.legs}`, name: `Legs ${k.legs}`, rarity: "common", meshSlot: "legs", meshVar: k.legs };
-      if (k.shoulders) eq.cloak = { id: `sh_${k.shoulders}`, name: `Pads ${k.shoulders}`, rarity: "uncommon", meshSlot: "shoulders", meshVar: k.shoulders };
-      if (k.weapon) {
-        eq.weapon = {
-          id: `${k.weapon}_${k.weaponVar}`,
-          name: `${k.weapon} ${k.weaponVar || ""}`.trim(),
-          rarity: "uncommon",
-          meshSlot: k.weapon,
-          meshVar: k.weaponVar || "_default",
-          weaponType: k.weaponType,
+      (meshIds || []).forEach((id) => {
+        const g = WC?.groupOfMesh?.(id);
+        if (!g || g === "bone" || g === "other") return;
+        const slot = MESH_SLOT[g];
+        if (!slot) return;
+        eq[slot] = {
+          id,
+          name: prettyMesh(id),
+          meshId: id,
+          meshSlot: g === "weapons" ? "weapon" : g === "shields" ? "shield" : g,
+          rarity: "common",
         };
+      });
+      return eq;
+    }
+
+    function rebuildMeshFromEquip(ent) {
+      const WC = window.WarlordsCharacter;
+      const eq = ent.equipment || {};
+      const slots = {
+        head: eq.helmet?.meshId || eq.helmet?.id,
+        body: eq.chest?.meshId || eq.chest?.id,
+        arms: eq.gloves?.meshId || eq.gloves?.id,
+        legs: eq.boots?.meshId || eq.boots?.id,
+        shoulders: eq.shoulders?.meshId || eq.shoulders?.id,
+        weapon: eq.weapon?.meshId || eq.weapon?.id,
+        offhand: eq.offhand?.meshId || eq.offhand?.id,
+        utility: eq.back?.meshId || eq.back?.id,
+      };
+      if (WC?.paperdollToMeshIds) {
+        lastMeshIds = WC.paperdollToMeshIds(ent.race, slots).meshIds;
+      } else {
+        lastMeshIds = Object.values(slots).filter(Boolean);
       }
-      if (k.offhand === "shield") {
-        eq.offhand = { id: `shield_${k.offhandVar}`, name: `Shield ${k.offhandVar}`, rarity: "uncommon", meshSlot: "shield", meshVar: k.offhandVar };
-      }
-      ent.equipment = eq;
-      lastMeshIds = built.meshIds;
+      return lastMeshIds;
+    }
+
+    function applyClassKit(ent, unarmed) {
+      const WC = window.WarlordsCharacter;
+      const built =
+        WC?.meshIdsFor(ent.race, ent.classId, unarmed) ||
+        MPC?.meshIdsFor(ent.race, ent.classId, unarmed);
+      if (!built) return ent;
+      lastMeshIds = (built.meshIds || []).slice();
+      ent.equipment = equipmentFromMeshIds(lastMeshIds);
       return ent;
     }
 
@@ -437,9 +491,11 @@
       document.getElementById("weapon-type").textContent = weaponTypeOf(ent);
 
       const built = MPC?.meshIdsFor(ent.race, ent.classId, state.unarmed && mode === "self");
-      lastMeshIds = MPM?.meshIdsFromEquipment?.(ent.equipment, ent.race) || built?.meshIds || [];
+      if (ent.equipment && Object.keys(ent.equipment).length) rebuildMeshFromEquip(ent);
+      else lastMeshIds = MPM?.meshIdsFromEquipment?.(ent.equipment, ent.race) || built?.meshIds || [];
       if (!lastMeshIds.length && built) lastMeshIds = built.meshIds;
       document.getElementById("mesh-count").textContent = String(lastMeshIds.length);
+      renderIdentity();
       document.getElementById("mesh-id-list").innerHTML = lastMeshIds
         .map((id) => `<div>${esc(id)}</div>`)
         .join("") || "<div class='muted'>-</div>";
@@ -449,19 +505,25 @@
         window.grudgeHeroImage?.(ent) ||
         window.grudgePortraitForRace?.(ent.race);
 
-      // Live grudge6 kit (GLB + mesh_ids) in paperdoll
-      if (window.Grudge6Viewport?.mount) {
-        Grudge6Viewport.mount(host, {
-          race: ent.race || "human",
-          classId: ent.classId || "warrior",
-          meshIds: lastMeshIds,
-          unarmed: state.unarmed,
-        }).catch((e) => console.warn("[main-panel] grudge6 viewport", e));
-      }
+      const roster = window.GrudgeEngine?.getCharacters?.() || [];
+      const collection = (Array.isArray(roster) ? roster : [])
+        .filter((c) => !c.gameEra || c.gameEra === ERA || c.era === ERA)
+        .slice(0, 4)
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          race: c.raceId || c.race,
+          classId: c.classId || c.class,
+          portraitUrl: window.grudgeHeroImage?.(c) || window.grudgePortraitForRace?.(c.raceId || c.race),
+        }));
 
       paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
+        layout: params.get("layout") === "tactical" ? "tactical" : "unity",
         title: (eraContract?.heading || "GRUDGE WARLORD").toUpperCase(),
-        slots: eraContract?.slots || null,
+        slots: eraContract?.slots || eraContract?.slotIds || null,
+        era: ERA,
+        characterId: ent.characterId || ent.id || FORCE_ID,
+        collection,
         subtitle:
           (ent.race || "hero").toUpperCase() +
           "  ·  " +
@@ -476,6 +538,55 @@
         mode,
         entityId: state.activeEntity,
         width: 440,
+        onSelectCharacter: (cid) => {
+          window.GrudgeEngine?.selectCharacter?.(cid);
+          const c = window.GrudgeEngine?.getActiveCharacter?.();
+          if (c) mergeFleetCharacter(c);
+        },
+        onFactionChange: (race) => {
+          if (mode === "inspect") return;
+          const p = playerEnt();
+          p.race = race;
+          p.portrait = window.grudgePortraitForRace?.(race);
+          applyClassKit(p, state.unarmed);
+          renderPaperdoll();
+          renderWeaponSkills();
+          scheduleSave();
+          toast("Faction " + race);
+        },
+        onClassChange: (classId) => {
+          if (mode === "inspect") return;
+          const p = playerEnt();
+          p.classId = classId;
+          applyClassKit(p, state.unarmed);
+          renderPaperdoll();
+          renderClassSkills();
+          renderWeaponSkills();
+          scheduleSave();
+          toast("Class " + classId);
+        },
+        onCatalogPick: (slotId, meshId, gearKey) => {
+          if (mode === "inspect") return;
+          const p = playerEnt();
+          const core = { helmet: 1, chest: 1, gloves: 1, boots: 1 };
+          if (core[slotId] && !meshId) {
+            toast("Unarmed base body cannot be cleared");
+            return;
+          }
+          const sock = window.GrudgeEquipmentPaperdoll.socketsFor?.(p.race || "human")?.find((x) => x.id === meshId);
+          const named = meshId
+            ? sock || { id: meshId, name: prettyMesh(meshId), kind: slotId, onAsset: true }
+            : null;
+          p.equipment = MPM.applyCatalogMesh(p.equipment, slotId, meshId, named);
+          if (meshId && p.equipment[slotId]) p.equipment[slotId].meshId = meshId;
+          rebuildMeshFromEquip(p);
+          state.unarmed = !p.equipment.weapon && !p.equipment.offhand && !p.equipment.shoulders;
+          renderPaperdoll();
+          renderWeaponSkills();
+          renderHotbar();
+          scheduleSave();
+          toast(meshId ? `Mesh ${prettyMesh(meshId)}` : `Clear ${slotId}`);
+        },
         onSlotClick: (slotId, gearKey) => {
           if (mode === "inspect") return;
           const p = playerEnt();
@@ -634,6 +745,8 @@
         tierLabel: enriched.tierLabel,
         weaponType: enriched.weaponType,
         slotType: enriched.slotType,
+        grudgeUuid: enriched.grudgeUuid || enriched.uuid || null,
+        owned: true,
       };
       if (prev) {
         bagAdd({
@@ -1377,6 +1490,8 @@
     function applyTab(tab) {
       if (tab === "weapon-mastery" || tab === "weaponmastery") tab = "mastery";
       state.activeTab = tab;
+      document.body.classList.remove("tab-equipment", "tab-inventory", "tab-class-skills", "tab-weapon-skills", "tab-professions", "tab-craft", "tab-quests");
+      document.body.classList.add("tab-" + tab);
       document.querySelectorAll("#tabs .tab-btn").forEach((b) => {
         b.classList.toggle("active", b.dataset.tab === tab);
       });
@@ -1419,6 +1534,9 @@
         equipment,
         mode: "self",
         characterId: char.id,
+        grudgeCode: char.grudge_code || char.grudgeCode || "",
+        gameEra: char.gameEra || char.game_era || char.era || ERA,
+        model3d: char.model3d || char.model_3d || null,
         attributes: {
           strength: attrs.strength ?? attrs.str,
           vitality: attrs.vitality ?? attrs.vit,
@@ -1430,8 +1548,32 @@
       };
       state.unarmed = false;
       if (char.model3d?.meshIds) lastMeshIds = char.model3d.meshIds;
+      else if (char.model_3d?.meshIds) lastMeshIds = char.model_3d.meshIds;
+      renderIdentity();
       if (state.activeEntity === "player") applyEntity("player");
       scheduleSave();
+    }
+
+    function renderIdentity() {
+      const p = playerEnt();
+      const account = window.GrudgeCloud?.getGrudgeId?.() || window.GrudgeCloud?.getUser?.()?.grudgeId || "-";
+      const bake = lastMeshIds?.length
+        ? lastMeshIds.length + " mesh_ids"
+        : p.model3d?.kitGlb
+          ? "kit · no mesh_ids"
+          : "not baked";
+      const set = (id, v) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = v || "-";
+      };
+      set("id-name", p.name);
+      set("id-uuid", p.characterId || "-");
+      set("id-code", p.grudgeCode || "-");
+      set("id-account", account);
+      set("id-era", p.gameEra || ERA);
+      set("id-bake", bake);
+      const uuidEl = document.getElementById("id-uuid");
+      if (uuidEl) uuidEl.title = p.characterId || "no character UUID";
     }
 
     function mergeInventory(items) {
@@ -1448,7 +1590,10 @@
           iconUrl: it.iconUrl || it.icon,
           type: it.type,
           category: it.category,
-          uuid: it.uuid,
+          uuid: it.uuid || it.grudgeUuid,
+          grudgeUuid: it.grudgeUuid || it.uuid,
+          owned: it.owned !== false,
+          source: it.source || "account",
         };
         return cat?.enrichBagItem?.(row) || row;
       });
@@ -1521,7 +1666,12 @@
       }
       const model3d = MPM.equipmentToModel3dPatch(p.equipment, p.race, p.classId);
       model3d.meshIds = lastMeshIds;
-      const ok = await window.GrudgeEngine?.patchCharacterModel3d?.(p.characterId, model3d);
+      model3d.bakedAt = new Date().toISOString();
+      const ok = await window.GrudgeEngine?.patchCharacterModel3d?.(p.characterId, model3d, {
+        equipment: p.equipment,
+      });
+      p.model3d = model3d;
+      renderIdentity();
       toast(ok ? "Mesh saved to character" : "Save attempted (check auth)");
       if (window.parent !== window) {
         window.parent.postMessage(
@@ -1541,9 +1691,10 @@
 
     document.getElementById("btn-refresh-inv")?.addEventListener("click", async () => {
       await window.GrudgeEngine?.fetchInventory?.();
-      const inv = window.GrudgeEngine?.getInventory?.() || [];
-      if (inv.length) mergeInventory(inv);
-      else toast("No account bag - using local craft bag");
+      await window.GrudgeEngine?.fetchLedger?.();
+      const owned = window.GrudgeEngine?.ownedItems?.() || window.GrudgeEngine?.getInventory?.() || [];
+      if (owned.length) mergeInventory(owned);
+      else toast("No owned bag / ledger items");
     });
 
     window.addEventListener("grudge:engine:character", (e) => mergeFleetCharacter(e.detail));
@@ -1552,7 +1703,11 @@
       const c = window.GrudgeEngine?.getActiveCharacter?.();
       if (c) mergeFleetCharacter(c);
     });
-    window.addEventListener("grudge:engine:inventory", (e) => mergeInventory(e.detail));
+    window.addEventListener("grudge:engine:inventory", (e) => mergeInventory(window.GrudgeEngine?.ownedItems?.() || e.detail));
+    window.addEventListener("grudge:engine:ledger", () => {
+      const owned = window.GrudgeEngine?.ownedItems?.();
+      if (owned?.length) mergeInventory(owned);
+    });
     window.addEventListener("grudge:engine:resources", (e) => renderResources(e.detail));
     window.addEventListener("grudge:auth:ready", () => {
       document.getElementById("auth-pill").textContent =

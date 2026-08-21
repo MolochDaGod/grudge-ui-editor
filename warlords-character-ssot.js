@@ -546,6 +546,8 @@
     if (slots.weapon) replaceGroup(function (id) { return /weapon/i.test(id); }, slots.weapon);
     if (slots.offhand || slots.shield)
       replaceGroup(function (id) { return /shield|Shield/i.test(id); }, slots.offhand || slots.shield);
+    if (slots.utility || slots.back)
+      replaceGroup(function (id) { return /bag|quiver|wood|Xtra/i.test(id); }, slots.utility || slots.back);
     return {
       raceId: raceN,
       prefix: def.prefix,
@@ -554,6 +556,32 @@
       meshIds: ids,
     };
   }
+
+  function catalogFor(race) {
+    var raceN = normalizeRace(race);
+    var rec = _meshCatalog && _meshCatalog.races && _meshCatalog.races[raceN];
+    return (rec && rec.catalog) || null;
+  }
+
+  function unarmedMeshIds(race) {
+    return getLoadout(race, "unarmed", true).meshIds.slice();
+  }
+
+  function groupOfMesh(id) {
+    var n = String(id || "");
+    if (/container/i.test(n)) return "bone";
+    if (/shoulder/i.test(n)) return "shoulders";
+    if (/head/i.test(n)) return "head";
+    if (/Arms|arms/i.test(n)) return "arms";
+    if (/Legs|legs/i.test(n)) return "legs";
+    if (/Body|body/i.test(n)) return "body";
+    if (/shield|Shield/i.test(n)) return "shields";
+    if (/weapon/i.test(n)) return "weapons";
+    if (/bag|quiver|wood|Xtra/i.test(n)) return "utility";
+    return "other";
+  }
+
+  loadMeshCatalog();
 
   global.WarlordsCharacter = {
     VERSION: VERSION,
@@ -577,6 +605,9 @@
     BLOCKED: BLOCKED,
     loadMeshCatalog: loadMeshCatalog,
     paperdollToMeshIds: paperdollToMeshIds,
+    catalogFor: catalogFor,
+    unarmedMeshIds: unarmedMeshIds,
+    groupOfMesh: groupOfMesh,
     get meshCatalog() {
       return _meshCatalog;
     },

@@ -4,6 +4,16 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "trait.grudge.studio" }],
+      "destination": "/mesh-showcase.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "trait.grudge-studio.com" }],
+      "destination": "/mesh-showcase.html"
+    },
+    {
       "source": "/GRUDGE6_Characters",
       "destination": "/GRUDGE6_Characters.html"
     },
@@ -14,6 +24,14 @@
     {
       "source": "/grudge6-characters",
       "destination": "/GRUDGE6_Characters.html"
+    },
+    {
+      "source": "/mesh-showcase",
+      "destination": "/mesh-showcase.html"
+    },
+    {
+      "source": "/mesh-showcase.html",
+      "destination": "/mesh-showcase.html"
     },
     {
       "source": "/api/auth/me",
@@ -212,7 +230,7 @@
       "destination": "/eras/index.json"
     },
     {
-      "source": "/((?!hotkeys|studio|games|assets|craftpix|main-panel|spellbook|equipment|eras|favicon|grudge-shell|prim-packs|game-ui|equipment-paperdoll|craftpix-|systems\\.json|ui-assets|data/|docs|api|auth).*)",
+      "source": "/((?!hotkeys|studio|games|assets|craftpix|main-panel|spellbook|equipment|eras|favicon|grudge-shell|prim-packs|game-ui|equipment-paperdoll|craftpix-|systems\\.json|ui-assets|data/|docs|api|auth|mesh-showcase|GRUDGE6).*)",
       "destination": "/index.html"
     }
   ],
@@ -257,7 +275,7 @@
       ]
     },
     {
-      "source": "/data/main-panel-contract.json",
+      "source": "/data/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

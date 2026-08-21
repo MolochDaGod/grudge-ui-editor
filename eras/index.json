@@ -1,9 +1,12 @@
 {
   "version": "1.1.0",
-  "updated": "2026-08-14",
+  "updated": "2026-08-21",
   "description": "Era main-panel + UI host registry. ui.grudge-studio.com is SSOT for edit/host.",
   "host": "https://ui.grudge-studio.com",
   "legacyInfoPanel": "https://info.grudge-studio.com/main-panel.html",
+  "equipmentLayout": "unity-trait-store",
+  "unityReference": "FRESH GRUDGE/Assets/uMMORPG/!TRAIT STORE + Character Creation paperdoll",
+  "namedSockets": "https://info.grudge-studio.com/api/v1/toon-rts-named-sockets.json",
   "api": {
     "eras": "/api/eras",
     "contract": "/api/main-panel",
@@ -33,7 +36,8 @@
         "https://client.grudge-studio.com",
         "https://grudgewarlords.com"
       ],
-      "equipmentLayout": "paperdoll-tactical",
+      "equipmentLayout": "unity-trait-store",
+      "meshPipeline": "grudge6",
       "slotIds": [
         "helmet",
         "chest",
@@ -48,10 +52,23 @@
         "ring",
         "add"
       ],
+      "slots": [
+        "helmet",
+        "shoulders",
+        "chest",
+        "back",
+        "gloves",
+        "ring",
+        "boots",
+        "relic",
+        "weapon",
+        "offhand"
+      ],
       "dataBindings": {
         "characters": "/api/characters?era=warlords",
         "equipment": "/api/characters/:id",
-        "accountBag": "/api/account/resources"
+        "accountBag": "/api/account/resources",
+        "cnftCollection": "/api/characters?era=warlords"
       }
     },
     {
@@ -62,15 +79,30 @@
       "mainPanel": "/main-panel.html?era=nexus",
       "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus",
       "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus&embed=1",
+      "equipmentUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus&tab=equipment",
       "contractUrl": "/eras/nexus.json",
       "packId": "grudox",
       "packUrl": "/game-ui-packs/grudox.json",
       "playUrls": ["https://grudox.grudge-studio.com"],
-      "equipmentLayout": "paperdoll-tactical",
+      "equipmentLayout": "unity-trait-store",
+      "meshPipeline": "nexus",
+      "slots": [
+        "helmet",
+        "shoulders",
+        "chest",
+        "back",
+        "gloves",
+        "ring",
+        "boots",
+        "relic",
+        "weapon",
+        "offhand"
+      ],
       "dataBindings": {
         "characters": "/api/characters?era=nexus",
         "equipment": "/api/characters/:id",
-        "accountBag": "/api/account/resources"
+        "accountBag": "/api/account/resources",
+        "cnftCollection": "/api/characters?era=nexus"
       }
     },
     {
@@ -81,15 +113,33 @@
       "mainPanel": "/main-panel.html?era=voxel",
       "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=voxel",
       "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=voxel&embed=1",
+      "equipmentUrl": "https://ui.grudge-studio.com/main-panel.html?era=voxel&tab=equipment",
       "contractUrl": "/eras/voxel.json",
       "packId": "grudox",
       "packUrl": "/game-ui-packs/grudox.json",
-      "playUrls": ["https://mine-loader.vercel.app/#/play"],
-      "equipmentLayout": "paperdoll-explorer",
+      "playUrls": [
+        "https://mineloader.grudge-studio.com",
+        "https://open.grudge-studio.com"
+      ],
+      "equipmentLayout": "unity-trait-store",
+      "meshPipeline": "voxel",
+      "slots": [
+        "helmet",
+        "shoulders",
+        "chest",
+        "back",
+        "gloves",
+        "ring",
+        "boots",
+        "relic",
+        "weapon",
+        "offhand"
+      ],
       "dataBindings": {
         "characters": "/api/characters?era=voxel",
         "equipment": "/api/characters/:id",
-        "accountBag": "/api/account/resources"
+        "accountBag": "/api/account/resources",
+        "cnftCollection": "/api/characters?era=voxel"
       }
     },
     {
@@ -100,15 +150,30 @@
       "mainPanel": "/main-panel.html?era=armada",
       "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=armada",
       "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=armada&embed=1",
+      "equipmentUrl": "https://ui.grudge-studio.com/main-panel.html?era=armada&tab=equipment",
       "contractUrl": "/eras/armada.json",
       "packId": "mech",
       "packUrl": "/game-ui-packs/mech.json",
       "playUrls": ["https://mech-playground.vercel.app"],
-      "equipmentLayout": "hardpoints",
+      "equipmentLayout": "unity-trait-store",
+      "meshPipeline": "armada",
+      "slots": [
+        "helmet",
+        "shoulders",
+        "chest",
+        "back",
+        "gloves",
+        "ring",
+        "boots",
+        "relic",
+        "weapon",
+        "offhand"
+      ],
       "dataBindings": {
         "characters": "/api/characters?era=armada",
         "equipment": "/api/characters/:id",
-        "accountBag": "/api/account/resources"
+        "accountBag": "/api/account/resources",
+        "cnftCollection": "/api/characters?era=armada"
       }
     }
   ]

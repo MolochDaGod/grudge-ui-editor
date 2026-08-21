@@ -123,6 +123,10 @@
     };
     for (const [slot, item] of Object.entries(equipment || {})) {
       if (!item) continue;
+      if (item.meshId && !item.placeholder) {
+        ids.push(item.meshId);
+        continue;
+      }
       if (item.meshSlot && item.meshVar) {
         if (item.meshSlot === "shield") ids.push(`${prefix}Shield_${item.meshVar}`);
         else if (["sword", "axe", "hammer", "staff", "bow", "spear", "dagger"].includes(item.meshSlot)) {
@@ -156,6 +160,7 @@
       legs: "legs",
       boots: "legs",
       cloak: "shoulders",
+      shoulders: "shoulders",
     };
     const letters = ["A", "B", "C", "D", "E", "F"];
     if (armorSlots[slotId] || armorSlots[gearKey]) {
@@ -219,6 +224,33 @@
     return next;
   }
 
+  /** Apply a named Toon RTS socket / mesh id onto a paperdoll slot. */
+  function applyCatalogMesh(equipment, slotId, meshId, socketItem) {
+    const next = { ...(equipment || {}) };
+    if (!meshId) {
+      delete next[slotId];
+      return next;
+    }
+    const it = socketItem || { id: meshId, name: meshId };
+    const kind = it.kind || "";
+    const letter = (String(it.id).match(/_([A-Z])$/i) || [])[1] || "";
+    next[slotId] = {
+      id: it.id,
+      name: it.name || it.id,
+      meshId: it.id,
+      kind,
+      bone: it.bone || null,
+      animPack: it.animPack || null,
+      placeholder: !!it.placeholder,
+      onAsset: it.onAsset !== false,
+      meshSlot: kind === "shield" ? "shield" : kind,
+      meshVar: letter || "_default",
+      weaponType: kind,
+      rarity: it.placeholder ? "common" : "uncommon",
+    };
+    return next;
+  }
+
   /** Build model3d patch for Railway / client handoff. */
   function equipmentToModel3dPatch(equipment, race, classId) {
     const MPC = global.MainPanelContent;
@@ -251,7 +283,10 @@
       era: "warlords",
       equippedMeshes,
       weaponSlots,
-      meshIds: built?.meshIds || [],
+      meshIds: (function () {
+        const fromEq = meshIdsFromEquipment(equipment, race);
+        return fromEq.length ? fromEq : built?.meshIds || [];
+      })(),
       sourceUrl: "https://ui.grudge-studio.com/main-panel",
     };
   }
@@ -260,6 +295,7 @@
     renderMeshOverlay,
     meshIdsFromEquipment,
     cycleMeshVariant,
+    applyCatalogMesh,
     equipmentToModel3dPatch,
     VARIANT_COLORS,
   };

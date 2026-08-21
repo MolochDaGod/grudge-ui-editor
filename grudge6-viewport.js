@@ -92,6 +92,33 @@
     return null;
   }
 
+  var HAND_BONES = {
+    mainhand: ["R_hand_container", "Bone_R_weapon", "Bip001 R Hand"],
+    offhand: ["L_hand_container", "Bone_L_weapon", "Bip001 L Hand"],
+    shield: ["L_shield_container", "Bone_L_Shield"],
+    bag: ["Bone_bag"],
+    wood: ["Bone_wood"],
+    quiver: ["Quiver_container", "WK_Units_quiver", "quiver", "Quiver"],
+  };
+
+  function stampHandBones(root) {
+    var found = {};
+    var names = [];
+    for (var slot in HAND_BONES) {
+      var bone = findNamed(root, HAND_BONES[slot]);
+      found[slot] = bone ? bone.name : null;
+      if (bone) names.push(slot + "=" + bone.name);
+    }
+    root.userData.handBones = found;
+    root.userData.warlordsPlayContract = root.userData.warlordsPlayContract || {
+      stamp: "2026-08-20.trait-store.1",
+      si: 1.8,
+      mixer: "one",
+      feet: "bone-box",
+    };
+    return names;
+  }
+
   /** Bone-driven structural AABB — required for modular skinned kits. */
   function measureBoneBox(root) {
     root.updateMatrixWorld(true);
@@ -345,6 +372,7 @@
     normalizeMaps(model);
     var result = applyMeshIds(model, meshIds);
     fitAndGround(model);
+    var bones = stampHandBones(model);
 
     if (state.model && state.scene) {
       state.scene.remove(state.model);
@@ -359,13 +387,15 @@
     state.equip = result;
 
     var miss = result.missing.length ? " · miss " + result.missing.length : "";
+    var boneBit = bones.length ? " · " + bones.length + " sockets" : " · no hand bones";
     setStatus(
       RACES[raceKey].prefix +
         " · " +
         result.matched.length +
         " meshes" +
         miss +
-        " · SI 1.8 m",
+        " · SI 1.8 m" +
+        boneBit,
     );
     return result;
   }
@@ -405,8 +435,9 @@
       if (state.model && state.raceKey === raceKey) {
         var r = applyMeshIds(state.model, meshIds);
         fitAndGround(state.model);
+        var bn = stampHandBones(state.model);
         setStatus(
-          RACES[raceKey].prefix + " · " + r.matched.length + " meshes · SI 1.8 m",
+          RACES[raceKey].prefix + " · " + r.matched.length + " meshes · SI 1.8 m · " + bn.length + " sockets",
         );
         return r;
       }
@@ -441,6 +472,8 @@
     kitUrl: kitUrl,
     atlasUrl: atlasUrl,
     applyMeshIds: applyMeshIds,
+    stampHandBones: stampHandBones,
+    HAND_BONES: HAND_BONES,
     RACES: RACES,
     CDN: CDN,
   };
