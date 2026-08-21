@@ -1,0 +1,13 @@
+name = "grudge-traits"
+main = "src/index.js"
+compatibility_date = "2026-08-21"
+account_id = "ee475864561b02d4588180b8b9acf694"
+workers_dev = true
+
+# custom_domain writes Cloudflare DNS (proxied) — wrangler OAuth has workers_routes.
+routes = [
+  { pattern = "traits.grudge.studio", custom_domain = true },
+  { pattern = "trait.grudge.studio", custom_domain = true },
+  { pattern = "traits.grudge-studio.com", custom_domain = true },
+  { pattern = "trait.grudge-studio.com", custom_domain = true },
+]

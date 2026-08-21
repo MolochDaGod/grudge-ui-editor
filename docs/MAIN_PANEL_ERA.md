@@ -5,6 +5,7 @@
 | Surface | Role |
 |---------|------|
 | **ui.grudge-studio.com** | **SSOT host** — edit, host, era versions, packs |
+| **traits.grudge.studio** | **Trait Store** — same Main Panel, `/` → equipment Unity paperdoll. Aliases `trait.*` 301 here. |
 | `main-panel.html?era=warlords` | Full main panel (equipment / bag / skills / **weapon mastery** / craft / quests) |
 | `equipment-paperdoll.js` | Tactical paperdoll (portrait + 12 slots) |
 | `game-ui-packs/warlords.json` | HYDRA pack with `paperdoll-equipment` |
@@ -27,7 +28,8 @@
 - **cNFT collection:** Railway `/api/characters?era=` — 4 slots per era; empty cells → Foundry create  
 - **Identity:** Railway `characters.id` UUID · `grudge_code` · account `grudge_id` · `model3d.meshIds` bake  
 - **Owned gear only:** account bag + `/api/ledger` `grudge_uuid` — catalog defs are not ownership  
-- **Open:** `https://open.grudge-studio.com/equipment?era=&characterId=` embeds this panel + SSO `GRUDGE_AUTH`  
+- **Open:** `https://open.grudge-studio.com/equipment?era=&characterId=` embeds this panel + SSO `GRUDGE_AUTH`
+- **Trait Store host:** `https://traits.grudge.studio/` (edge proxy → this panel, tab=equipment). Mesh UUID catalog: `/mesh-showcase`  
 
 ## Embed in games
 

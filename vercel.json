@@ -5,13 +5,23 @@
   "rewrites": [
     {
       "source": "/",
+      "has": [{ "type": "host", "value": "traits.grudge.studio" }],
+      "destination": "/main-panel.html"
+    },
+    {
+      "source": "/",
       "has": [{ "type": "host", "value": "trait.grudge.studio" }],
-      "destination": "/mesh-showcase.html"
+      "destination": "/main-panel.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "traits.grudge-studio.com" }],
+      "destination": "/main-panel.html"
     },
     {
       "source": "/",
       "has": [{ "type": "host", "value": "trait.grudge-studio.com" }],
-      "destination": "/mesh-showcase.html"
+      "destination": "/main-panel.html"
     },
     {
       "source": "/GRUDGE6_Characters",
@@ -509,7 +519,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://*.grudge-studio.com https://*.vercel.app https://grudgewarlords.com"
+          "value": "frame-ancestors 'self' https://*.grudge-studio.com https://*.grudge.studio https://*.vercel.app https://grudgewarlords.com"
         }
       ]
     }

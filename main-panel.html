@@ -257,6 +257,7 @@
 
   <script>
     const params = new URLSearchParams(location.search);
+    const TRAIT_HOST = /^(traits?)\.grudge(-studio)?\.(studio|com)$/i.test(location.hostname);
     const ERA = params.get("era") || "warlords";
     const EMBED = params.get("embed") === "1" || params.get("embed") === "true";
     const TAB_RAW = params.get("tab") || "equipment";
@@ -269,6 +270,10 @@
     const MPM = window.MainPanelMesh;
 
     if (EMBED) document.body.classList.add("embed-mode");
+    if (TRAIT_HOST) {
+      document.body.classList.add("trait-store-host");
+      document.title = "Grudge Trait Store";
+    }
     document.body.classList.add("tab-" + TAB);
     if (document.getElementById("era-label")) document.getElementById("era-label").textContent = ERA;
 

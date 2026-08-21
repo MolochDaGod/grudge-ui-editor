@@ -285,10 +285,10 @@
         if (j) global.__grudgeMeshCatalog = j;
       });
     }
-    return fetchJson(INFO_BASE + "/toon-rts-named-sockets.json")
-      .catch(() => fetchJson("https://objectstore.grudge-studio.com/api/v1/toon-rts-named-sockets.json"))
+    return fetchJson("./data/toon-rts-named-sockets.json")
       .catch(() => fetchJson("https://ui.grudge-studio.com/data/toon-rts-named-sockets.json"))
-      .catch(() => fetchJson("./data/toon-rts-named-sockets.json"))
+      .catch(() => fetchJson(INFO_BASE + "/toon-rts-named-sockets.json"))
+      .catch(() => fetchJson("https://objectstore.grudge-studio.com/api/v1/toon-rts-named-sockets.json"))
       .then((j) => {
         SOCKETS_CACHE = j;
         global.__grudgeNamedSockets = j;
