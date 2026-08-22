@@ -1,6 +1,27 @@
-/** Grudge Studio — unified asset sources (Prim packs, D1/R2 registry, icons). */
+/** Grudge Studio — unified asset sources (Prim packs, D1/R2 registry, icons, game delivery). */
 
-/** D1 asset registry — same-origin proxy on ui.grudge-studio.com avoids CORS drift. */
+import {
+  D1_CATEGORIES as D1_CATEGORY_DEFS,
+  DELIVERY_PACKS,
+  parseDeliveryCatalog,
+  canonicalizeCdnUrl,
+  CDN,
+  INFO_API,
+  D1_API,
+} from './game-delivery-packs.js';
+
+export {
+  D1_CATEGORY_DEFS as D1_CATEGORIES,
+  DELIVERY_PACKS,
+  parseDeliveryCatalog,
+  canonicalizeCdnUrl,
+  CDN,
+  INFO_API,
+  D1_API,
+};
+export { D1_TAB_IDS, packUrl, deliveryPackById } from './game-delivery-packs.js';
+
+/** D1 asset registry — same-origin proxy on ui.grudge-studio.com; direct D1 host as fallback. */
 function resolveRegistryBase() {
   if (typeof location !== 'undefined') {
     const host = location.hostname || '';
@@ -8,33 +29,29 @@ function resolveRegistryBase() {
       return '/api/registry';
     }
   }
-  return 'https://api.grudge-studio.com/assets';
+  return D1_API;
+}
+
+function resolveInfoBase() {
+  if (typeof location !== 'undefined') {
+    const host = location.hostname || '';
+    if (host === 'ui.grudge-studio.com' || host === 'localhost' || host.endsWith('.vercel.app')) {
+      return '/api/info';
+    }
+  }
+  return INFO_API;
 }
 
 export const API_BASE = resolveRegistryBase();
-export const ICON_INDEX_URL = 'https://assets.grudge-studio.com/game-assets/api/v1/icon-path-index.json';
-export const SUPER_DIALOGUE_MANIFEST_URL = 'https://assets.grudge-studio.com/audio/dialogue/super-pack/manifest.json';
+export const INFO_BASE = resolveInfoBase();
+export const ICON_INDEX_URL = `${CDN}/game-assets/api/v1/icon-path-index.json`;
+export const SUPER_DIALOGUE_MANIFEST_URL = `${CDN}/audio/dialogue/super-pack/manifest.json`;
+export const D1_FALLBACK = D1_API;
 
 const AUDIO_EXTS = new Set(['wav', 'mp3', 'ogg', 'm4a', 'flac', 'aac']);
 
 const IMAGE_EXTS = new Set(['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'svg']);
 const MODEL_EXTS = new Set(['fbx', 'glb', 'gltf', 'obj']);
-
-/** D1 asset_registry categories (lazy-loaded from asset-api). */
-export const D1_CATEGORIES = [
-  { id: 'character', label: 'Characters', icon: '🧍', defaultGrid: [1, 1] },
-  { id: 'animation', label: 'Animations', icon: '🎬', defaultGrid: [1, 1] },
-  { id: 'weapon', label: 'Weapons & Gear', icon: '⚔️', defaultGrid: [1, 1] },
-  { id: 'monster', label: 'Monsters', icon: '👹', defaultGrid: [2, 2] },
-  { id: 'building', label: 'Buildings', icon: '🏛️', defaultGrid: [3, 3] },
-  { id: 'environment', label: 'Environment', icon: '🌲', defaultGrid: [2, 2] },
-  { id: 'terrain', label: 'Terrain', icon: '⛰️', defaultGrid: [4, 4] },
-  { id: 'texture', label: 'Textures (R2)', icon: '🖼️', defaultGrid: [1, 1] },
-  { id: 'audio', label: 'Audio (R2)', icon: '🔊', defaultGrid: [1, 1] },
-  { id: 'font', label: 'Fonts (R2)', icon: '🔤', defaultGrid: [1, 1] },
-  { id: 'item', label: 'Items', icon: '📦', defaultGrid: [1, 1] },
-  { id: 'spell', label: 'Spells', icon: '✨', defaultGrid: [1, 1] },
-];
 
 export function packIdD1(category) {
   return `d1-${category}`;
@@ -49,10 +66,44 @@ export function packIdDialogue() {
 }
 
 export function assetUrl(item, cdn) {
-  if (item.url) return item.url;
-  if (item.cdnUrl) return item.cdnUrl;
-  if (item.path?.startsWith('http')) return item.path;
-  return `${cdn}${item.path?.startsWith('/') ? '' : '/'}${item.path || ''}`;
+  const raw = item.url || item.cdnUrl || (item.path?.startsWith('http') ? item.path : '');
+  if (raw) return canonicalizeCdnUrl(raw);
+  const base = cdn || CDN;
+  return `${base}${item.path?.startsWith('/') ? '' : '/'}${item.path || ''}`;
+}
+
+async function fetchJsonWithFallback(urls) {
+  const unique = [...new Set(urls.filter(Boolean))];
+  let lastErr;
+  for (const url of unique) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        lastErr = new Error(`${url} → ${res.status}`);
+        continue;
+      }
+      return await res.json();
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  throw lastErr || new Error('fetch failed');
+}
+
+export async function fetchInfoCatalog(file) {
+  const name = file.replace(/^\//, '');
+  return fetchJsonWithFallback([
+    `${INFO_BASE}/${name}`,
+    `${INFO_API}/${name}`,
+    `https://objectstore.grudge-studio.com/api/v1/${name}`,
+  ]);
+}
+
+export async function fetchDeliveryPack(pack) {
+  const data = pack.source === 'info'
+    ? await fetchInfoCatalog(pack.url.split('/').pop())
+    : await fetchJsonWithFallback([pack.url]);
+  return parseDeliveryCatalog(pack, data);
 }
 
 export function isImageAsset(item) {
@@ -197,12 +248,20 @@ export function iconEntryToItem(relativePath, meta, packFolder) {
   };
 }
 
+async function fetchD1Json(pathAndQuery) {
+  const suffix = pathAndQuery.startsWith('?') || pathAndQuery.startsWith('/')
+    ? pathAndQuery
+    : `/${pathAndQuery}`;
+  return fetchJsonWithFallback([
+    `${API_BASE}${suffix}`,
+    `${D1_API}${suffix}`,
+  ]);
+}
+
 /** Fetch first batch from D1 category route (max 500, no offset on API). */
 export async function fetchD1Category(category, { limit = 500 } = {}) {
   const cap = Math.min(limit, 500);
-  const res = await fetch(`${API_BASE}/category/${encodeURIComponent(category)}?limit=${cap}`);
-  if (!res.ok) throw new Error(`D1 ${category}: ${res.status}`);
-  const data = await res.json();
+  const data = await fetchD1Json(`/category/${encodeURIComponent(category)}?limit=${cap}`);
   const assets = data.assets || [];
   return { assets, hasMore: assets.length >= cap };
 }
@@ -214,9 +273,7 @@ export async function fetchD1CategoryMore(category, knownIds, { scanOffset = 0, 
   let total = Infinity;
 
   while (batch.length < limit && offset < total) {
-    const res = await fetch(`${API_BASE}?limit=500&offset=${offset}`);
-    if (!res.ok) break;
-    const data = await res.json();
+    const data = await fetchD1Json(`?limit=500&offset=${offset}`);
     total = data.total ?? total;
     for (const a of data.assets || []) {
       if (a.category === category && !knownIds.has(a.id)) batch.push(a);
@@ -230,10 +287,12 @@ export async function fetchD1CategoryMore(category, knownIds, { scanOffset = 0, 
 
 /** Fetch total registered assets from asset-api root listing. */
 export async function fetchD1Total() {
-  const res = await fetch(`${API_BASE}?limit=1&offset=0`);
-  if (!res.ok) return 0;
-  const data = await res.json();
-  return data.total ?? 0;
+  try {
+    const data = await fetchD1Json('?limit=1&offset=0');
+    return data.total ?? 0;
+  } catch {
+    return 0;
+  }
 }
 
 /** Load icon-path-index.json and group by pack folder. */

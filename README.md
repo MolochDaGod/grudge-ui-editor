@@ -19,7 +19,7 @@ A visual UI editor and showcase for building game interfaces used across Grudge 
 - `/studio` — drag-and-drop UI scene editor + Craftpix assets
 - `/games` — **game-ready fleet UI packs** (inventory, crafting, combat states per game)
 - `/hotkeys` — input binding configurator
-- `/assets` — 3D / D1 asset browser
+- `/assets` — 3D / D1 / game-delivery asset browser (`?pack=` deep-links)
 - `/main-panel` — character panel preview
 
 ### Game-ready packs
@@ -60,7 +60,9 @@ Push to `main` → Vercel auto-deploys. Static site — no build step.
 Fleet API rewrites live in `vercel.json`:
 - `/api/auth/*`, `/api/characters` → Railway game-data
 - `/api/ai/*` → **ai.grudge-studio.com** (UI/UX agents, JWT)
-- `/api/objectstore/*`, `/api/assets/*` → ObjectStore + R2 CDN
+- `/api/registry` → D1 `api.grudge-studio.com/assets`
+- `/api/info/*` → `info.grudge-studio.com/api/v1`
+- `/api/objectstore/*`, `/api/assets/*` → ObjectStore named JSON + R2 CDN
 
 AI client: `grudge-ai.js` → hub-first with Grudge JWT. Architecture: [docs/UI_API_ARCHITECTURE.md](./docs/UI_API_ARCHITECTURE.md).
 

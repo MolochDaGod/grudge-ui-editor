@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3D Asset Browser — Grudge Studio</title>
   <link rel="stylesheet" href="./grudge-fonts.css" />
-  <meta name="description" content="Browse Prim vehicles, islands, structures and animations — grid-normalized placement editor."/>
+  <meta name="description" content="Browse D1 registry, R2 CDN, Prim packs, and game delivery catalogs — grid-normalized placement editor. Deep-link with ?pack=."/>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
   <link rel="stylesheet" href="./grudge-shell.css"/>
     <script type="importmap">
@@ -294,7 +294,7 @@
     <aside>
       <div class="aside-head">
         <h1>Grudge Assets</h1>
-        <p class="sub">Prim packs, D1 registry, R2 CDN, dialogue voice barks, and icon library — 3D on grid, audio preview, 2D in scene.</p>
+        <p class="sub">D1 registry, R2 CDN, Prim + game delivery packs, dialogue, and icons — 3D on grid, audio preview, 2D in scene. Use <code>?pack=</code> to deep-link.</p>
         <div class="stats" id="stats-bar"><span class="stat">Loading…</span></div>
         <div class="search-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -463,6 +463,9 @@
       fetchSuperDialoguePack,
       isAudioAsset,
       packIdDialogue,
+      DELIVERY_PACKS,
+      D1_TAB_IDS,
+      fetchDeliveryPack,
     } from 'asset-sources';
 
     const { cdn, packs: PACK_DEFS } = window.GRUDGE_PRIM_PACKS;
@@ -540,8 +543,12 @@
     let currentItem = null;
     let packDefMap = Object.fromEntries([
       ...PACK_DEFS.map((p) => [p.id, p]),
+      ...DELIVERY_PACKS.map((p) => [p.id, p]),
       ...D1_CATEGORIES.map((c) => [packIdD1(c.id), { ...c, id: packIdD1(c.id), defaultGrid: c.defaultGrid }]),
     ]);
+    const params = new URLSearchParams(location.search);
+    const wantedPack = params.get('pack') || '';
+    const wantedAsset = params.get('asset') || '';
     const d1LoadedIds = new Map();
     const d1ScanOffsets = new Map();
     const ICON_RENDER_CAP = 80;
@@ -1023,7 +1030,7 @@
       return wrap.body;
     }
 
-    function addPackTab(tabsEl, packId, labelHtml, scrollTarget) {
+    function addPackTab(tabsEl, packId, labelHtml, scrollTarget, onActivate) {
       const tab = document.createElement('button');
       tab.className = 'pack-tab';
       tab.dataset.pack = packId;
@@ -1032,8 +1039,14 @@
         activeFilter = packId;
         tabsEl.querySelectorAll('.pack-tab').forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
+        onActivate?.(packId);
         renderFilter();
         scrollTarget?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        if (packId !== 'all') {
+          history.replaceState(null, '', wantedAsset
+            ? `?pack=${packId}&asset=${encodeURIComponent(wantedAsset)}`
+            : `?pack=${packId}`);
+        }
       };
       tabsEl.appendChild(tab);
       return tab;
@@ -1144,6 +1157,7 @@
       } else if (activeFilter !== 'all') {
         const packLabel = sourceLabels[activeFilter]
           || PACK_DEFS.find((p) => p.id === activeFilter)?.label
+          || DELIVERY_PACKS.find((p) => p.id === activeFilter)?.label
           || D1_CATEGORIES.find((c) => packIdD1(c.id) === activeFilter)?.label
           || activeFilter;
         meta.textContent = `${visible} in ${packLabel}`;
@@ -1196,6 +1210,75 @@
         packDom.get(def.id).el,
       );
     }
+
+    // ── Game delivery packs (R2 catalogs + info.grudge-studio.com definitions) ──
+    const deliveryLoaders = new Map();
+    async function loadDeliveryPack(pack, { force = false } = {}) {
+      if (deliveryLoaders.has(pack.id) && !force) return deliveryLoaders.get(pack.id);
+      const run = (async () => {
+        const body = packDom.get(pack.id)?.body;
+        try {
+          const items = await fetchDeliveryPack(pack);
+          const cap = pack.renderCap || Infinity;
+          items.forEach((item) => registerItem(item));
+          if (body) {
+            body.innerHTML = '';
+            items.slice(0, cap).forEach((item) => addBtn(body, item));
+            if (items.length > cap) {
+              const hint = document.createElement('p');
+              hint.className = 'empty-msg';
+              hint.textContent = `+${items.length - cap} more — search by name`;
+              body.appendChild(hint);
+            }
+          }
+          const wrap = packDom.get(pack.id);
+          if (wrap) wrap.el.querySelector('.pack-cnt').textContent = String(items.length);
+          const tabCnt = tabsEl.querySelector(`[data-pack="${pack.id}"] .cnt`);
+          if (tabCnt) tabCnt.textContent = items.length;
+          totalCount += items.length;
+          renderFilter();
+          return items;
+        } catch (e) {
+          if (body) {
+            body.innerHTML = `<p class="empty-msg">Failed to load ${pack.label}</p>`;
+          }
+          console.warn('delivery pack', pack.id, e);
+          return [];
+        }
+      })();
+      deliveryLoaders.set(pack.id, run);
+      return run;
+    }
+
+    for (const pack of DELIVERY_PACKS) {
+      sourceLabels[pack.id] = pack.label;
+      const body = createPackSection(
+        pack.id,
+        `<h2>${pack.icon} ${pack.label}<span class="pack-source">${pack.source}</span> <span class="pack-cnt">…</span></h2>`,
+        list,
+      );
+      if (pack.lazy && wantedPack !== pack.id) {
+        const loadBtn = document.createElement('button');
+        loadBtn.className = 'load-more';
+        loadBtn.textContent = `Load ${pack.label}`;
+        loadBtn.onclick = () => loadDeliveryPack(pack, { force: true });
+        body.appendChild(loadBtn);
+      }
+      if (pack.tab) {
+        addPackTab(
+          tabsEl,
+          pack.id,
+          `${pack.icon} ${pack.label.split(' ')[0]}<span class="cnt">…</span>`,
+          packDom.get(pack.id).el,
+          () => { if (pack.lazy) loadDeliveryPack(pack); },
+        );
+      }
+    }
+    await Promise.all(
+      DELIVERY_PACKS
+        .filter((pack) => !pack.lazy || wantedPack === pack.id)
+        .map((pack) => loadDeliveryPack(pack)),
+    );
 
     // ── Super Dialogue Audio Pack (R2 CDN) ──
     const dialoguePackId = packIdDialogue();
@@ -1255,6 +1338,7 @@
     let d1Total = 0;
     try { d1Total = await fetchD1Total(); } catch { /* offline */ }
 
+    const d1MoreBtns = new Map();
     for (const catDef of D1_CATEGORIES) {
       const packId = packIdD1(catDef.id);
       sourceLabels[packId] = `D1 · ${catDef.label}`;
@@ -1268,13 +1352,35 @@
       moreBtn.textContent = `Load ${catDef.label} from D1`;
       moreBtn.onclick = () => loadD1Page(catDef, body, moreBtn, { more: (d1LoadedIds.get(packId)?.size || 0) > 0 });
       body.appendChild(moreBtn);
+      d1MoreBtns.set(packId, moreBtn);
 
-      addPackTab(
-        tabsEl,
-        packId,
-        `${catDef.icon}<span class="cnt">0</span>`,
-        packDom.get(packId).el,
-      );
+      if (D1_TAB_IDS.includes(catDef.id)) {
+        addPackTab(
+          tabsEl,
+          packId,
+          `${catDef.icon}<span class="cnt">0</span>`,
+          packDom.get(packId).el,
+          () => {
+            if (!(d1LoadedIds.get(packId)?.size)) {
+              loadD1Page(catDef, body, moreBtn);
+            }
+          },
+        );
+      }
+    }
+
+    if (wantedPack.startsWith('d1-')) {
+      const catDef = D1_CATEGORIES.find((c) => packIdD1(c.id) === wantedPack);
+      const moreBtn = d1MoreBtns.get(wantedPack);
+      if (catDef && moreBtn) {
+        await loadD1Page(catDef, packDom.get(wantedPack).body, moreBtn);
+      }
+    } else if (!wantedPack) {
+      const preload = D1_CATEGORIES.filter((c) => ['character', 'weapon', 'vehicle'].includes(c.id));
+      await Promise.all(preload.map((catDef) => {
+        const packId = packIdD1(catDef.id);
+        return loadD1Page(catDef, packDom.get(packId).body, d1MoreBtns.get(packId));
+      }));
     }
 
     // ── Icon registry (2D images on CDN) ──
@@ -1284,7 +1390,7 @@
     iconHeader.innerHTML = '<h2>🎨 Icon Library <span class="pack-source">icons · r2</span> <span class="pack-cnt">…</span></h2>';
     list.appendChild(iconHeader);
 
-    (async () => {
+    async function loadIconRegistry() {
       try {
         const { packs, total } = await fetchIconRegistry();
         iconHeader.querySelector('.pack-cnt').textContent = total;
@@ -1318,21 +1424,19 @@
           }
         }
         renderFilter();
-        document.getElementById('stats-bar').innerHTML = `
-          <span class="stat">${allAssets.length} indexed</span>
-          <span class="stat">${d1Total || '—'} D1</span>
-          <span class="stat">${total} icons</span>
-        `;
+        return total;
       } catch (e) {
         iconHeader.querySelector('.pack-cnt').textContent = 'err';
         console.warn('Icon registry', e);
+        return 0;
       }
-    })();
+    }
+    const iconTotal = await loadIconRegistry();
 
     document.getElementById('stats-bar').innerHTML = `
-      <span class="stat">${totalCount} prim</span>
-      <span class="stat">${d1Total || '…'} D1/R2</span>
-      <span class="stat">icons loading</span>
+      <span class="stat">${allAssets.length} indexed</span>
+      <span class="stat">${d1Total || '—'} D1</span>
+      <span class="stat">${iconTotal || 0} icons</span>
     `;
 
     const searchInput = document.getElementById('search');
@@ -1482,9 +1586,29 @@
       document.getElementById('status').textContent = 'Placement JSON copied';
     };
 
-    const params = new URLSearchParams(location.search);
-    let target = allAssets.find((a) => a.packId === params.get('pack') && a.name === params.get('asset'));
-    if (!target) target = allAssets.find((a) => a.name === 'vehicle_boat') || allAssets[0];
+    function activatePackTab(packId) {
+      if (!packId) return;
+      activeFilter = packId;
+      tabsEl.querySelectorAll('.pack-tab').forEach((t) => t.classList.toggle('active', t.dataset.pack === packId));
+      if (![...tabsEl.querySelectorAll('.pack-tab')].some((t) => t.dataset.pack === packId && t.classList.contains('active'))) {
+        allTab.classList.remove('active');
+      } else {
+        allTab.classList.remove('active');
+      }
+    }
+
+    if (wantedPack) activatePackTab(wantedPack);
+
+    let target = null;
+    if (wantedPack && wantedAsset) {
+      target = allAssets.find((a) => a.packId === wantedPack && a.name === wantedAsset)
+        || allAssets.find((a) => a.packId === wantedPack && (a.uid === wantedAsset || a.id === wantedAsset));
+    } else if (wantedAsset) {
+      target = allAssets.find((a) => a.name === wantedAsset);
+    } else if (wantedPack) {
+      target = allAssets.find((a) => a.packId === wantedPack);
+    }
+    if (!target && !wantedPack) target = allAssets.find((a) => a.name === 'vehicle_boat') || allAssets[0];
     if (target) {
       const btn = [...document.querySelectorAll('.asset-btn')].find(
         (b) => b.dataset.assetId === (target.uid || `${target.packId}::${target.name}`) || b.dataset.assetId === target.name,

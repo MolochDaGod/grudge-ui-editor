@@ -2,6 +2,7 @@
   "name": "grudge-ui-editor",
   "version": "1.2.0",
   "private": true,
+  "type": "module",
   "description": "HYDRA UI kit + game-ui packs + Warlords main-panel host (ui.grudge-studio.com)",
   "packageManager": "npm@10.9.2",
   "engines": {

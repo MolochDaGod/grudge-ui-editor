@@ -19,7 +19,9 @@ Browser (ui.grudge-studio.com)
   ├─ same-origin /api/characters → Railway game-data SSOT
   ├─ same-origin /api/account/*  → Railway bag / wallet
   ├─ same-origin /api/ai/*       → ai.grudge-studio.com/v1/*  (Workers AI + Gemini BYOK)
-  ├─ same-origin /api/objectstore/* → objectstore.grudge-studio.com/api/v1
+  ├─ same-origin /api/objectstore/* → objectstore.grudge-studio.com/api/v1/<file>.json
+  ├─ same-origin /api/info/*     → info.grudge-studio.com/api/v1/<file>.json  (definition SSOT)
+  ├─ same-origin /api/registry   → api.grudge-studio.com/assets              (D1 asset_registry)
   ├─ same-origin /api/assets/*   → assets.grudge-studio.com (R2 CDN)
   │
   ├─ static JSON APIs (Vercel rewrites, no Node):

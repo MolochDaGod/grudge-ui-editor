@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-08-21",
+  "description": "Game delivery + D1/R2 pack index for the Grudge asset browser. Deep-link: https://ui.grudge-studio.com/assets?pack=<id>",
+  "browser": "https://ui.grudge-studio.com/assets",
+  "authority": {
+    "binaries": "https://assets.grudge-studio.com",
+    "definitions": "https://info.grudge-studio.com/api/v1/<file>.json",
+    "definitionsFallback": "https://objectstore.grudge-studio.com/api/v1/<file>.json",
+    "d1Registry": "https://api.grudge-studio.com/assets",
+    "playerBag": "Railway Postgres (not D1)",
+    "uiProxy": {
+      "registry": "https://ui.grudge-studio.com/api/registry → api.grudge-studio.com/assets",
+      "info": "https://ui.grudge-studio.com/api/info → info.grudge-studio.com/api/v1",
+      "cdn": "https://ui.grudge-studio.com/api/assets → assets.grudge-studio.com"
+    }
+  },
+  "packQuery": "?pack=<id>&asset=<name>",
+  "primPacks": ["prim-vehicles", "prim-islands", "prim-structures", "prim-animations"],
+  "deliveryPacks": [
+    { "id": "toon-soldiers", "catalog": "https://assets.grudge-studio.com/models/toon-soldiers/catalog.json" },
+    { "id": "vehicles", "catalog": "https://assets.grudge-studio.com/models/ummorpg-vehicles-catalog.json" },
+    { "id": "ninja-equipment", "catalog": "https://assets.grudge-studio.com/models/weapons/ninja-equipment/catalog.json" },
+    { "id": "grudge6", "catalog": "https://info.grudge-studio.com/api/v1/grudge6-characters.json" },
+    { "id": "game-models", "catalog": "https://info.grudge-studio.com/api/v1/models3d-game.json" },
+    { "id": "weapon-models", "catalog": "https://info.grudge-studio.com/api/v1/weapon-models.json" },
+    { "id": "def-weapons", "catalog": "https://info.grudge-studio.com/api/v1/weapons.json" },
+    { "id": "def-armor", "catalog": "https://info.grudge-studio.com/api/v1/armor.json" },
+    { "id": "harvest-nodes", "catalog": "https://info.grudge-studio.com/api/v1/master-harvest-nodes.json" },
+    { "id": "benches", "catalog": "https://info.grudge-studio.com/api/v1/bench-mesh-catalog.json" },
+    { "id": "maps", "catalog": "https://info.grudge-studio.com/api/v1/map-registry.json" },
+    { "id": "gltf-optimized", "catalog": "https://info.grudge-studio.com/api/v1/gltf-manifest.json" }
+  ],
+  "d1PackPrefix": "d1-",
+  "d1Examples": ["d1-character", "d1-weapon", "d1-animation", "d1-building", "d1-environment", "d1-vehicle"],
+  "otherPacks": ["super-dialogue", "icon-<folder>"],
+  "doNot": [
+    "Treat objectstore.grudge-studio.com/api/v1 (no file) as an index — 404 by design",
+    "Use api.grudge-studio.com for SSO/auth — that host is D1 asset registry only",
+    "Store player bags or island state in D1",
+    "Hardcode GitHub Pages (molochdagod.github.io/ObjectStore) as the binary CDN"
+  ]
+}

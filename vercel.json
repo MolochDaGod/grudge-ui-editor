@@ -108,12 +108,20 @@
       "destination": "https://objectstore.grudge-studio.com/api/v1/:path*"
     },
     {
+      "source": "/api/info/:path*",
+      "destination": "https://info.grudge-studio.com/api/v1/:path*"
+    },
+    {
+      "source": "/api/info",
+      "destination": "https://info.grudge-studio.com/api/v1/catalog.json"
+    },
+    {
       "source": "/api/registry/:path*",
-      "destination": "https://objectstore.grudge-studio.com/api/v1/:path*"
+      "destination": "https://api.grudge-studio.com/assets/:path*"
     },
     {
       "source": "/api/registry",
-      "destination": "https://objectstore.grudge-studio.com/api/v1/docs-catalog.json"
+      "destination": "https://api.grudge-studio.com/assets"
     },
     {
       "source": "/api/assets/:path*",
@@ -256,7 +264,7 @@
       "destination": "/eras/index.json"
     },
     {
-      "source": "/((?!hotkeys|studio|games|assets|craftpix|main-panel|spellbook|equipment|eras|favicon|grudge-shell|prim-packs|game-ui|equipment-paperdoll|craftpix-|systems\\.json|ui-assets|data/|docs|api|auth|mesh-showcase|GRUDGE6).*)",
+      "source": "/((?!hotkeys|studio|games|assets|craftpix|main-panel|spellbook|equipment|eras|favicon|grudge-shell|prim-packs|game-delivery-packs|asset-sources|asset-grid|asset-scene|game-ui|equipment-paperdoll|craftpix-|systems\\.json|ui-assets|data/|docs|api|auth|mesh-showcase|GRUDGE6).*)",
       "destination": "/index.html"
     }
   ],
@@ -315,6 +323,14 @@
           "key": "Content-Type",
           "value": "application/json; charset=utf-8"
         }
+      ]
+    },
+    {
+      "source": "/game-delivery-packs.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=120" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Content-Type", "value": "application/json; charset=utf-8" }
       ]
     },
     {
