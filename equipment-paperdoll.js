@@ -70,6 +70,7 @@
     const alias = {
       head: "helmet",
       Head: "helmet",
+      helm: "helmet",
       helmet: "helmet",
       chest: "chest",
       Chest: "chest",

@@ -57,7 +57,9 @@ Browser (ui.grudge-studio.com)
 | `GET /api/eras` | Era registry (ids, roster max, panel URLs, pack ids) |
 | `GET /api/main-panel` | Shared chrome + encoding law |
 | `GET /api/main-panel/warlords` | Full Warlords contract: slots, tabs, icons, bindings |
-| `GET /api/main-panel/nexus` | Nexus (Toon / voxel interim) |
+| `GET /api/main-panel/nexus` | Grudges world: Nexus stats (BIO…GRA) + voxel equipment slots |
+| `GET /api/stats/*` | Proxy → Grudges survival-api `/api/stats/*` |
+| `GET /api/grudges/*` | Proxy → Grudges survival-api `/api/*` (characters, accounts) |
 | `GET /api/main-panel/voxel` | Voxel explorer slots |
 | `GET /api/main-panel/armada` | Mech hardpoints |
 | Client | `/main-panel-api.js` → `GrudgeMainPanelApi.loadEra(id)` |

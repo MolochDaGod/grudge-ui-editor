@@ -21,6 +21,7 @@
   <script src="./main-panel-mesh.js"></script>
   <script src="./grudge6-viewport.js"></script>
   <script src="./main-panel-api.js"></script>
+  <script src="./grudges-nexus-panel.js"></script>
   <script src="./equipment-paperdoll.js"></script>
   <script src="./grudge-engine.js"></script>
   <script src="./grudge-shell.js"></script>
@@ -52,6 +53,7 @@
       <a href="https://character.grudge-studio.com/prefab" target="_blank" rel="noopener">Prefab Lab</a>
       <a href="https://ui.grudge-studio.com/games" target="_blank" rel="noopener">Game UI packs</a>
       <a href="https://ui.grudge-studio.com/studio" target="_blank" rel="noopener">Studio</a>
+      <a href="./quaternius-playground.html">Quaternius Trait Store</a>
       <span id="auth-pill" class="auth-pill">Guest</span>
     </div>
 
@@ -79,13 +81,15 @@
           <div class="stat-row"><span class="k">Mode</span><span class="v" id="eq-mode">self</span></div>
           <div class="stat-row"><span class="k">Weapon</span><span class="v" id="weapon-type">unarmed</span></div>
         </div>
-        <div class="stat-section">
-          <h3>Attributes</h3>
-          <div class="stat-row"><span class="k">Strength</span><span class="v" id="attr-str">-</span></div>
-          <div class="stat-row"><span class="k">Vitality</span><span class="v" id="attr-vit">-</span></div>
-          <div class="stat-row"><span class="k">Dexterity</span><span class="v" id="attr-dex">-</span></div>
-          <div class="stat-row"><span class="k">Intelligence</span><span class="v" id="attr-int">-</span></div>
-          <div class="stat-row"><span class="k">Tactics</span><span class="v" id="attr-tac">-</span></div>
+        <div class="stat-section" id="attr-section">
+          <h3 id="attr-heading">Attributes</h3>
+          <div id="attr-host">
+            <div class="stat-row"><span class="k">Strength</span><span class="v" id="attr-str">-</span></div>
+            <div class="stat-row"><span class="k">Vitality</span><span class="v" id="attr-vit">-</span></div>
+            <div class="stat-row"><span class="k">Dexterity</span><span class="v" id="attr-dex">-</span></div>
+            <div class="stat-row"><span class="k">Intelligence</span><span class="v" id="attr-int">-</span></div>
+            <div class="stat-row"><span class="k">Tactics</span><span class="v" id="attr-tac">-</span></div>
+          </div>
         </div>
         <div class="stat-section">
           <h3>Professions</h3>
@@ -95,6 +99,7 @@
 
       <section class="center-col">
         <div class="tab-strip" id="tabs">
+          <button class="tab-btn" data-tab="stats" hidden>Stats</button>
           <button class="tab-btn active" data-tab="equipment">Equipment</button>
           <button class="tab-btn" data-tab="inventory">Inventory</button>
           <button class="tab-btn" data-tab="class-skills">Class skills</button>
@@ -105,6 +110,14 @@
           <button class="tab-btn" data-tab="quests">Quests</button>
         </div>
         <div class="content-area">
+          <div class="tab-panel" id="tab-stats">
+            <div class="skills-head">
+              <h3>Nexus attributes</h3>
+              <p id="nx-stats-sub">Grudges /api/stats · BIO…GRA · voxel-era starter budget 24</p>
+            </div>
+            <div class="nx-attr-grid" id="nx-attr-grid"></div>
+            <p class="nx-ssot" id="nx-stats-ssot">Source: grudges.grudge-studio.com/api/stats/primary</p>
+          </div>
           <div class="tab-panel active" id="tab-equipment">
             <div id="paperdoll-host"></div>
             <div class="mesh-toolbar">
@@ -122,7 +135,7 @@
 
           <div class="tab-panel" id="tab-inventory">
             <div class="inv-header">
-              <p>Shared account bag · Railway / ObjectStore SSOT  ·  <span id="inv-source">loading catalog…</span></p>
+              <p id="inv-header-copy">Shared account bag · Railway / ObjectStore SSOT  ·  <span id="inv-source">loading catalog…</span></p>
               <button type="button" class="mp-btn ghost" id="btn-refresh-inv">> Bag</button>
             </div>
             <div class="inv-grid dense" id="inv-grid"></div>
@@ -247,9 +260,10 @@
           <h3>Resources</h3>
           <div id="res-list" class="res-list"></div>
         </div>
-        <div class="stat-section" style="padding:8px">
-          <h3>Mesh IDs</h3>
+        <div class="stat-section" style="padding:8px" id="rcol-derived">
+          <h3 id="rcol-derived-title">Mesh IDs</h3>
           <div id="mesh-id-list" class="mesh-id-list font-mono"></div>
+          <div id="nx-derived" class="vitals" hidden></div>
         </div>
       </aside>
     </div>
@@ -259,6 +273,8 @@
     const params = new URLSearchParams(location.search);
     const TRAIT_HOST = /^(traits?)\.grudge(-studio)?\.(studio|com)$/i.test(location.hostname);
     const ERA = params.get("era") || "warlords";
+    const IS_NEXUS = ERA === "nexus";
+    const NX = window.GrudgesNexusPanel;
     const EMBED = params.get("embed") === "1" || params.get("embed") === "true";
     const TAB_RAW = params.get("tab") || "equipment";
     const TAB =
@@ -270,6 +286,7 @@
     const MPM = window.MainPanelMesh;
 
     if (EMBED) document.body.classList.add("embed-mode");
+    if (IS_NEXUS) document.body.classList.add("era-nexus");
     if (TRAIT_HOST) {
       document.body.classList.add("trait-store-host");
       document.title = "Grudge Trait Store";
@@ -294,6 +311,19 @@
           create.href = eraContract.createUrl;
           create.textContent = ERA === "armada" ? "Mech hangar" : "Foundry create";
         }
+        let storeLink = document.getElementById("era-trait-store");
+        if (!storeLink) {
+          storeLink = document.createElement("a");
+          storeLink.id = "era-trait-store";
+          document.getElementById("era-bar")?.appendChild(storeLink);
+        }
+        if (ERA === "nexus") {
+          storeLink.href = eraContract.characterPlayground || "./quaternius-playground.html?era=nexus";
+          storeLink.textContent = "Nexus Trait Store";
+          storeLink.hidden = false;
+        } else {
+          storeLink.hidden = true;
+        }
         const pillHost = document.getElementById("era-pills");
         if (pillHost && idx?.eras) {
           const keep = new URLSearchParams(location.search);
@@ -308,8 +338,24 @@
         const allow = new Set(eraContract.tabs || []);
         if (allow.size) {
           document.querySelectorAll("#tabs .tab-btn").forEach((btn) => {
-            btn.hidden = !allow.has(btn.getAttribute("data-tab"));
+            const tab = btn.getAttribute("data-tab");
+            btn.hidden = !allow.has(tab);
           });
+        }
+        if (IS_NEXUS) {
+          const sk = document.querySelector('#tabs .tab-btn[data-tab="class-skills"]');
+          if (sk) sk.textContent = "Skills / Perks";
+          const cr = document.querySelector('#tabs .tab-btn[data-tab="craft"]');
+          if (cr) cr.textContent = "Crafting";
+          const play = document.getElementById("era-create-link");
+          if (play && eraContract.playUrl) {
+            const a = document.createElement("a");
+            a.href = eraContract.playUrl;
+            a.target = "_blank";
+            a.rel = "noopener";
+            a.textContent = "Play Grudges";
+            play.after(a);
+          }
         }
         if (typeof renderPaperdoll === "function") renderPaperdoll();
       } catch (err) {
@@ -475,6 +521,7 @@
     }
 
     function applyClassKit(ent, unarmed) {
+      if (IS_NEXUS) return ent;
       const WC = window.WarlordsCharacter;
       const built =
         WC?.meshIdsFor(ent.race, ent.classId, unarmed) ||
@@ -492,7 +539,7 @@
       const mode = ent.mode === "inspect" || state.activeEntity !== "player" ? "inspect" : "self";
       state.equipMode = mode;
       document.getElementById("eq-mode").textContent = mode;
-      document.getElementById("eq-count").textContent = equipCount(ent.equipment) + "/11";
+      document.getElementById("eq-count").textContent = equipCount(ent.equipment) + (IS_NEXUS ? "/8" : "/11");
       document.getElementById("weapon-type").textContent = weaponTypeOf(ent);
 
       const built = MPC?.meshIdsFor(ent.race, ent.classId, state.unarmed && mode === "self");
@@ -521,6 +568,15 @@
           classId: c.classId || c.class,
           portraitUrl: window.grudgeHeroImage?.(c) || window.grudgePortraitForRace?.(c.raceId || c.race),
         }));
+
+      if (!IS_NEXUS && window.Grudge6Viewport?.mount) {
+        Grudge6Viewport.mount(host, {
+          race: ent.race || "human",
+          classId: ent.classId || "warrior",
+          meshIds: lastMeshIds,
+          unarmed: state.unarmed,
+        }).catch((e) => console.warn("[main-panel] grudge6 viewport", e));
+      }
 
       paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
         layout: params.get("layout") === "tactical" ? "tactical" : "unity",
@@ -618,7 +674,7 @@
               <div class="meta">${esc(playerEnt().meta)}</div>
             </div>
           </div>
-          <p class="muted tiny">Sign in to load Railway roster (4 free / era)</p>`;
+          <p class="muted tiny">${IS_NEXUS ? "Sign in to load Grudges roster · guest kit below" : "Sign in to load Railway roster (4 free / era)"}</p>`;
         return;
       }
       host.innerHTML = chars
@@ -654,7 +710,7 @@
         const slots = Math.max(24, bag.length + 4);
         for (let i = 0; i < slots; i++) {
           const raw = bag[i];
-          const it = raw && cat?.enrichBagItem ? cat.enrichBagItem(raw) : raw;
+          const it = raw && !IS_NEXUS && cat?.enrichBagItem ? cat.enrichBagItem(raw) : raw;
           if (it && bag[i]) bag[i] = it; // keep enriched
           const s = document.createElement("button");
           s.type = "button";
@@ -794,6 +850,10 @@
     }
 
     function renderClassSkills() {
+      if (IS_NEXUS && NX) {
+        renderNexusSkills();
+        return;
+      }
       const ent = playerEnt();
       const tree = MPC?.classTree(ent.classId);
       if (!tree) return;
@@ -855,6 +915,10 @@
     let craftProfFilter = "all";
 
     function renderProfessions() {
+      if (IS_NEXUS && NX) {
+        renderNexusProfessions();
+        return;
+      }
       const levels = playerEnt().professionLevels || {};
       const order = window.WcsProfessions?.PROFESSION_ORDER || Object.keys(MPC?.PROFESSION_TREES || {});
       const trees = MPC?.PROFESSION_TREES || window.WcsProfessions?.getAll?.() || {};
@@ -1063,6 +1127,33 @@
     }
 
     function renderCraft() {
+      if (IS_NEXUS) {
+        const host = document.getElementById("craft-host");
+        const filterEl = document.getElementById("craft-filter");
+        const hint = document.getElementById("craft-account-hint");
+        const sub = document.querySelector("#tab-craft .craft-sub");
+        if (sub) {
+          sub.innerHTML =
+            "Grudges craft stations live in play (C hub) · demo recipes below · <a href=\"https://grudges.grudge-studio.com/arpg-game/\" target=\"_blank\" rel=\"noopener\">Open play</a>";
+        }
+        if (hint) hint.textContent = "Guest kit · full stations in grudges.grudge-studio.com play";
+        if (filterEl) filterEl.innerHTML = "";
+        document.getElementById("craft-quick-panel")?.removeAttribute("hidden");
+        renderCraftMaterials();
+        if (host) {
+          host.innerHTML = [
+            { name: "Iron blade", mats: "scrap metal ×4 · leather strip ×1" },
+            { name: "Field bandage", mats: "cloth ×2 · herb ×1" },
+            { name: "Scrap plate", mats: "iron plate ×3 · rivets ×6" },
+            { name: "Ration pack", mats: "dried meat ×2 · rootstock ×1" },
+          ]
+            .map(
+              (r) => `<div class="qc-card craft-card"><h4>${esc(r.name)}</h4><p>${esc(r.mats)}</p></div>`,
+            )
+            .join("");
+        }
+        return;
+      }
       const host = document.getElementById("craft-host");
       const filterEl = document.getElementById("craft-filter");
       if (!host || !filterEl) return;
@@ -1256,6 +1347,7 @@
     }
 
     function mountCraftFrame(force) {
+      if (IS_NEXUS) return;
       const frame = document.getElementById("craft-suite-frame");
       const overlay = document.getElementById("craft-frame-overlay");
       if (!frame) return;
@@ -1453,6 +1545,140 @@
       document.getElementById("lbl-sp").textContent = `SP ${b.sp ?? 91}/${b.spMax || 100}`;
     }
 
+    function renderNexusAttrs(ent) {
+      if (!NX) return;
+      const stats = NX.nexusAttrs(ent.attributes);
+      const primary = NX.getPrimary() || [];
+      const host = document.getElementById("attr-host");
+      const heading = document.getElementById("attr-heading");
+      if (heading) heading.textContent = "Nexus attributes";
+      if (host) {
+        host.innerHTML = primary
+          .map((m) => {
+            const v = stats[m.key] || 0;
+            return `<div class="nx-stat-row" title="${esc(m.label)}">
+              <span class="nx-dot" style="background:${esc(m.color || "#d4a400")}">${esc(m.abbr || m.key)}</span>
+              <span class="nm">${esc(m.abbr || m.key)}</span>
+              <span class="val">${v}</span>
+            </div>`;
+          })
+          .join("");
+      }
+      const vit = NX.deriveVitals(stats, ent.equipment);
+      const pool = NX.remaining(stats);
+      state.bars = {
+        hp: 78,
+        mp: 62,
+        sp: 88,
+        hpMax: vit.hp,
+        mpMax: vit.mp,
+        spMax: vit.st,
+      };
+      applyBars();
+      const der = document.getElementById("nx-derived");
+      const mesh = document.getElementById("mesh-id-list");
+      const title = document.getElementById("rcol-derived-title");
+      if (title) title.textContent = "Derived vitals";
+      if (mesh) mesh.hidden = true;
+      if (der) {
+        der.hidden = false;
+        der.innerHTML = [
+          ["Max HP", vit.hp],
+          ["Max MP", vit.mp],
+          ["Stamina", vit.st],
+          ["Weapon dmg", "+" + vit.dmg],
+          ["Armor def", "+" + vit.def],
+          ["Move ×", vit.move],
+          ["Crit %", Number(vit.crit).toFixed(1)],
+          ["Budget", pool + " / " + NX.START_BUDGET],
+        ]
+          .map(([k, v]) => `<div class="stat-row"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`)
+          .join("");
+      }
+      renderNexusStatsTab();
+    }
+
+    function renderNexusStatsTab() {
+      if (!IS_NEXUS || !NX) return;
+      const ent = playerEnt();
+      const stats = NX.nexusAttrs(ent.attributes);
+      const grid = document.getElementById("nx-attr-grid");
+      const sub = document.getElementById("nx-stats-sub");
+      const ssot = document.getElementById("nx-stats-ssot");
+      if (sub) sub.textContent = `${NX.getCatalogSource()} · voxel starter BIO/NEU/KIN=1 · budget ${NX.START_BUDGET}`;
+      if (ssot) {
+        ssot.innerHTML =
+          `SSOT: <a href="https://grudges.grudge-studio.com/api/stats/primary" target="_blank" rel="noopener">/api/stats/primary</a>` +
+          ` · items ${NX.getItems().length} · ${esc(NX.getBagSource())}` +
+          ` · play <a href="https://grudges.grudge-studio.com/arpg-game/" target="_blank" rel="noopener">grudges.grudge-studio.com</a>`;
+      }
+      if (!grid) return;
+      grid.innerHTML = (NX.getPrimary() || [])
+        .map((m) => {
+          const v = stats[m.key] || 0;
+          return `<div class="nx-attr-card" style="border-left-color:${esc(m.color || "#d4a400")}">
+            <div class="hd" style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+              <span class="nx-dot" style="background:${esc(m.color || "#d4a400")}">${esc(m.abbr || "")}</span>
+              <h4>${esc(m.label)}</h4>
+            </div>
+            <div class="arch">${esc(m.archetype || "")}</div>
+            <p>${esc(m.description || "")}</p>
+            <div class="lvl">Allocated ${v} / ${NX.STAT_MAX}</div>
+          </div>`;
+        })
+        .join("");
+    }
+
+    function renderNexusProfessions() {
+      const host = document.getElementById("prof-trees-host");
+      const mini = document.getElementById("prof-mini");
+      const tabs = document.getElementById("prof-tabs");
+      const detail = document.getElementById("prof-detail");
+      const levels = playerEnt().professionLevels || {};
+      const list = NX.PROFESSIONS;
+      if (mini) {
+        mini.innerHTML = list
+          .map((p) => {
+            const lv = levels[p.id] || 1;
+            return `<div class="stat-row"><span class="k">${esc(p.name)}</span><span class="v">Lv ${lv}</span></div>`;
+          })
+          .join("");
+      }
+      if (tabs) tabs.innerHTML = "";
+      if (detail) {
+        detail.innerHTML = `<p class="muted tiny">Grudges professions · 7 trees · live XP in play (C hub)</p>`;
+      }
+      if (host) {
+        host.innerHTML = list
+          .map(
+            (p) => `<div class="nx-attr-card"><h4>${esc(p.name)}</h4><p>${esc(p.desc)}</p>
+              <div class="lvl">Lv ${levels[p.id] || 1} demo</div></div>`,
+          )
+          .join("");
+      }
+      const sub = document.getElementById("prof-ssot-sub");
+      if (sub) sub.textContent = "Grudges ProfessionsService · Gathering · Hunting · Crafting · Township · Survival · Chemistry · Combat";
+    }
+
+    function renderNexusSkills() {
+      const host = document.getElementById("class-tree-host");
+      const title = document.getElementById("class-tree-title");
+      const sub = document.getElementById("class-tree-sub");
+      if (title) title.textContent = "Perk tracks";
+      if (sub) sub.textContent = "Hero · Warrior · Smarts · Maker · milestone perks per BIO…GRA tier";
+      if (!host) return;
+      const stats = NX.nexusAttrs(playerEnt().attributes);
+      host.innerHTML = (NX.getPrimary() || [])
+        .map((m) => {
+          const v = stats[m.key] || 0;
+          return `<div class="skill-tier">
+            <div class="skill-tier-h"><span>${esc(m.abbr)}</span> ${esc(m.label)}</div>
+            <p class="muted tiny">Tier ${v} unlocked in play. Affinity: ${(m.affinityEffects || []).slice(0, 4).join(" · ") || m.archetype || ""}</p>
+          </div>`;
+        })
+        .join("");
+    }
+
     function applyEntity(id) {
       const ent = state.entities[id] || playerEnt();
       state.activeEntity = id;
@@ -1464,11 +1690,14 @@
         thumb.src = window.grudgeEmblemForRace?.(ent.race) || "";
       };
       const a = ent.attributes || {};
-      setAttr("attr-str", a.strength ?? a.str);
-      setAttr("attr-vit", a.vitality ?? a.vit);
-      setAttr("attr-dex", a.dexterity ?? a.dex);
-      setAttr("attr-int", a.intelligence ?? a.int);
-      setAttr("attr-tac", a.tactics ?? a.tac);
+      if (IS_NEXUS && NX) renderNexusAttrs(ent);
+      else {
+        setAttr("attr-str", a.strength ?? a.str);
+        setAttr("attr-vit", a.vitality ?? a.vit);
+        setAttr("attr-dex", a.dexterity ?? a.dex);
+        setAttr("attr-int", a.intelligence ?? a.int);
+        setAttr("attr-tac", a.tactics ?? a.tac);
+      }
       const rating = equipCount(ent.equipment) >= 6 ? "A+" : equipCount(ent.equipment) >= 3 ? "B" : "C";
       document.getElementById("cp-rating").textContent = rating;
       renderPaperdoll();
@@ -1494,6 +1723,8 @@
 
     function applyTab(tab) {
       if (tab === "weapon-mastery" || tab === "weaponmastery") tab = "mastery";
+      if (tab === "skills") tab = "class-skills";
+      if (tab === "crafting") tab = "craft";
       state.activeTab = tab;
       document.body.classList.remove("tab-equipment", "tab-inventory", "tab-class-skills", "tab-weapon-skills", "tab-professions", "tab-craft", "tab-quests");
       document.body.classList.add("tab-" + tab);
@@ -1502,6 +1733,7 @@
       });
       document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
       document.getElementById("tab-" + tab)?.classList.add("active");
+      if (tab === "stats" && IS_NEXUS) renderNexusStatsTab();
       if (tab === "equipment") renderPaperdoll();
       if (tab === "inventory") renderInv();
       if (tab === "class-skills") renderClassSkills();
@@ -1517,6 +1749,24 @@
 
     function mergeFleetCharacter(char) {
       if (!char) return;
+      if (IS_NEXUS && NX) {
+        const mapped = NX.fromCharacter(char);
+        if (mapped) {
+          state.entities.player = {
+            ...mapped,
+            portrait: window.grudgeHeroImage?.(char) || window.grudgePortraitForRace?.(mapped.race),
+            mode: "self",
+          };
+          if (mapped.inventory?.length) {
+            bag = mapped.inventory;
+            bagSource = "Grudges character inventory";
+            renderInv();
+          }
+          if (state.activeEntity === "player") applyEntity("player");
+          scheduleSave();
+        }
+        return;
+      }
       const race = window.grudgeNormalizeRace?.(char.raceId || char.race) || char.raceId || "human";
       const classId = MPC?.normalizeClass(char.classId || char.class || "warrior") || "warrior";
       let equipment =
@@ -1688,6 +1938,14 @@
     });
 
     document.getElementById("btn-refresh-chars")?.addEventListener("click", async () => {
+      if (IS_NEXUS && NX) {
+        const gid = window.GrudgeCloud?.getGrudgeId?.();
+        const roster = gid ? await NX.loadRoster(gid) : [];
+        renderCharList(roster);
+        if (roster[0]) mergeFleetCharacter(roster[0]);
+        else toast("No Grudges roster — sign in or use guest kit");
+        return;
+      }
       await window.GrudgeEngine?.fetchCharacters?.(ERA);
       renderCharList(window.GrudgeEngine?.getCharacters?.() || []);
       const c = window.GrudgeEngine?.getActiveCharacter?.();
@@ -1753,10 +2011,55 @@
     (async function boot() {
       bindTooltipLayer();
       wireCraftChrome();
-      applyClassKit(playerEnt(), false);
+
+      if (IS_NEXUS && NX) {
+        await NX.load();
+        const nxEq = NX.starterEquipment();
+        const nxStats = NX.nexusAttrs(NX.VOXEL_STARTER);
+        state.entities.player = {
+          name: "Guest survivor",
+          meta: "Grudges world · Nexus stats · sign in for roster",
+          race: "human",
+          classId: "survivor",
+          level: 1,
+          portrait: window.grudgePortraitForRace?.("human"),
+          equipment: nxEq,
+          mode: "self",
+          attributes: nxStats,
+          professionLevels: {},
+        };
+        bag = NX.starterBag();
+        bagSource = NX.getBagSource();
+        document.getElementById("inv-source").textContent = bagSource;
+        const invCopy = document.getElementById("inv-header-copy");
+        if (invCopy) {
+          invCopy.innerHTML =
+            "Grudges world bag · /api/stats + ObjectStore weapons/armor  ·  <span id=\"inv-source\">" +
+            esc(bagSource) +
+            "</span>";
+        }
+        const quests = document.getElementById("tab-quests");
+        if (quests) {
+          quests.innerHTML = `
+            <div class="qc-card" style="margin-bottom:8px"><h4>Bind a grudge</h4><p>Main  ·  enter play  ·  C hub</p></div>
+            <div class="qc-card" style="margin-bottom:8px"><h4>Scavenge the outskirts</h4><p>Side  ·  loot starter kit</p></div>
+            <div class="qc-card"><h4>Allocate BIO–GRA</h4><p>Side  ·  spend the 24-point budget in play</p></div>`;
+        }
+        const gid = window.GrudgeCloud?.getGrudgeId?.();
+        if (gid) {
+          const roster = await NX.loadRoster(gid);
+          if (roster.length) {
+            renderCharList(roster);
+            const pick = FORCE_ID && roster.find((c) => c.id === FORCE_ID) || roster[0];
+            if (pick) mergeFleetCharacter(pick);
+          }
+        }
+      } else {
+        applyClassKit(playerEnt(), false);
+      }
 
       // ObjectStore master-items + materials (icons → assets CDN)
-      if (window.InfoCatalog?.load) {
+      if (!IS_NEXUS && window.InfoCatalog?.load) {
         const meta = await InfoCatalog.load();
         console.info("[main-panel] InfoCatalog items:", meta?.count ?? 0, meta?.source || InfoCatalog.source);
         if (!bag.length || /loading|demo|catalog/i.test(bagSource)) {
@@ -1782,10 +2085,10 @@
       });
 
       if (window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
-      if (window.GrudgeEngine?.init) await GrudgeEngine.init({ era: ERA });
+      if (!IS_NEXUS && window.GrudgeEngine?.init) await GrudgeEngine.init({ era: ERA });
 
       const saved = window.GrudgeCloud?.loadMainPanel ? await GrudgeCloud.loadMainPanel() : null;
-      if (saved) {
+      if (saved && (!IS_NEXUS || saved.era === "nexus")) {
         state = {
           ...state,
           ...saved,
@@ -1794,7 +2097,7 @@
         };
         if (saved.bag?.length) {
           bag = saved.bag.map((x) => window.InfoCatalog?.enrichBagItem?.(x) || x);
-          bagSource = "cloud save · ObjectStore icons";
+          bagSource = IS_NEXUS ? "cloud save · Grudges items" : "cloud save · ObjectStore icons";
         }
       }
 
@@ -1803,16 +2106,20 @@
           window.GrudgeCloud.getDisplayName?.() || "Signed in";
       }
 
-      const chars = window.GrudgeEngine?.getCharacters?.() || [];
-      renderCharList(chars);
-      if (FORCE_ID && chars.some((c) => c.id === FORCE_ID)) {
-        window.GrudgeEngine.selectCharacter(FORCE_ID);
-      }
-      const c = window.GrudgeEngine?.getActiveCharacter?.();
-      if (c) mergeFleetCharacter(c);
+      if (!IS_NEXUS) {
+        const chars = window.GrudgeEngine?.getCharacters?.() || [];
+        renderCharList(chars);
+        if (FORCE_ID && chars.some((c) => c.id === FORCE_ID)) {
+          window.GrudgeEngine.selectCharacter(FORCE_ID);
+        }
+        const c = window.GrudgeEngine?.getActiveCharacter?.();
+        if (c) mergeFleetCharacter(c);
 
-      const inv = window.GrudgeEngine?.getInventory?.() || [];
-      if (inv.length) mergeInventory(inv);
+        const inv = window.GrudgeEngine?.getInventory?.() || [];
+        if (inv.length) mergeInventory(inv);
+      } else if (!window.GrudgeCloud?.getGrudgeId?.()) {
+        renderCharList([]);
+      }
 
       // WCS profession SSOT (trees + CDN icons)
       if (window.WcsProfessions?.loadCatalog) {

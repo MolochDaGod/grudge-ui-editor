@@ -31,6 +31,22 @@
 .mp-root .stat-section h3{font-family:'Cinzel',serif;font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;border-bottom:1px solid rgba(212,164,0,.25);padding-bottom:4px;margin-bottom:6px}
 .mp-root .stat-row{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.03)}
 .mp-root .stat-row .k{color:var(--muted)}.mp-root .stat-row .v{color:var(--text);font-family:monospace;font-size:10px}
+.mp-root.era-nexus .mesh-toolbar,
+.mp-root.era-nexus .craft-frame-wrap,
+.mp-root.era-nexus #mesh-id-list{display:none}
+.mp-root.era-nexus #craft-quick-panel{display:block}
+.nx-dot{width:1.2rem;height:1.2rem;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:Cinzel,serif;font-size:7px;font-weight:700;color:#fff;flex:0 0 auto;letter-spacing:.02em}
+.nx-stat-row{display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
+.nx-stat-row .nm{flex:1;color:var(--muted)}
+.nx-stat-row .val{font-family:monospace;color:var(--gold);min-width:1.4rem;text-align:right}
+.nx-attr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.nx-attr-card{background:rgba(20,14,8,.8);border:1px solid var(--border-dim);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:10px}
+.nx-attr-card h4{font-family:Cinzel,serif;font-size:12px;color:var(--text);margin:0}
+.nx-attr-card .arch{font-family:Cinzel,serif;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:4px 0}
+.nx-attr-card p{font-size:10px;color:var(--muted);margin:0}
+.nx-attr-card .lvl{font-family:monospace;font-size:10px;color:var(--gold);margin-top:6px}
+.nx-ssot{font-size:10px;color:var(--muted);margin-top:8px}
+.mp-root #nx-derived .stat-row .v{color:var(--gold)}
 .mp-root .entity-chip{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid var(--border-dim);background:#14100a;cursor:pointer;margin-bottom:4px;transition:.12s}
 .mp-root .entity-chip.active{border-color:var(--gold);background:linear-gradient(135deg,#241a0c,#160f06)}
 .mp-root .entity-chip .name{font-size:11px;color:var(--gold);font-family:'Cinzel',serif}

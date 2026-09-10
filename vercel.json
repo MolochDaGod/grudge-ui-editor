@@ -24,6 +24,14 @@
       "destination": "/main-panel.html"
     },
     {
+      "source": "/quaternius-playground",
+      "destination": "/quaternius-playground.html"
+    },
+    {
+      "source": "/trait-store",
+      "destination": "/quaternius-playground.html"
+    },
+    {
       "source": "/GRUDGE6_Characters",
       "destination": "/GRUDGE6_Characters.html"
     },
@@ -74,6 +82,14 @@
     {
       "source": "/api/auth/:path*",
       "destination": "https://grudge-api-production-0d46.up.railway.app/api/auth/:path*"
+    },
+    {
+      "source": "/api/stats/:path*",
+      "destination": "https://survival-api-production.up.railway.app/api/stats/:path*"
+    },
+    {
+      "source": "/api/grudges/:path*",
+      "destination": "https://survival-api-production.up.railway.app/api/:path*"
     },
     {
       "source": "/api/characters",

@@ -12,6 +12,7 @@
 | `eras/index.json` | Era registry |
 | `eras/{warlords,nexus,voxel,armada}.json` | Per-era slots · tabs · icons |
 | `GET /api/eras` · `/api/main-panel/:era` | Static API for fleet games |
+| `main-panel.html?era=nexus` | **Grudges world sheet** — BIO…GRA from `/api/stats`, ObjectStore weapons/armor, voxel 8-slot paperdoll. Play: `grudges.grudge-studio.com/arpg-game/`. Characters on Grudges stay `era=voxel`. |
 | `main-panel-api.js` | `GrudgeMainPanelApi.loadEra(id)` |
 | info.grudge-studio.com/main-panel.html | **Legacy** — migrate consumers to UI host |
 | tactical-infinity `/equipment` | **Layout reference** (not production host) |
@@ -70,6 +71,7 @@ Routes:
 - `https://client.grudge-studio.com/main-panel`
 - `https://client.grudge-studio.com/equipment`
 - `https://ui.grudge-studio.com/main-panel.html?era=warlords&tab=mastery&characterId=`
+- `https://ui.grudge-studio.com/main-panel.html?era=nexus` — Grudges BIO…GRA + items (guest kit; roster via Grudges API)
 - Standalone `grudgewarlords.com/weaponmastery.html` **redirects** here (`?embed=1` stays for the iframe)
 
 ## Fleet adoption checklist

@@ -76,32 +76,36 @@
       "name": "Nexus",
       "status": "shipping",
       "rosterMax": 12,
+      "characterPlayground": "/quaternius-playground.html?era=nexus",
+      "traitStore": "/trait-store?era=nexus",
       "mainPanel": "/main-panel.html?era=nexus",
       "mainPanelUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus",
       "embedUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus&embed=1",
       "equipmentUrl": "https://ui.grudge-studio.com/main-panel.html?era=nexus&tab=equipment",
       "contractUrl": "/eras/nexus.json",
-      "packId": "grudox",
-      "packUrl": "/game-ui-packs/grudox.json",
-      "playUrls": ["https://grudox.grudge-studio.com"],
+      "packId": "nexus",
+      "packUrl": "/game-ui-packs/nexus.json",
+      "playUrls": [
+        "https://grudges.grudge-studio.com/arpg-game/",
+        "https://grudox.grudge-studio.com"
+      ],
       "equipmentLayout": "unity-trait-store",
       "meshPipeline": "nexus",
       "slots": [
         "helmet",
-        "shoulders",
         "chest",
-        "back",
-        "gloves",
-        "ring",
+        "legs",
         "boots",
-        "relic",
         "weapon",
-        "offhand"
+        "offhand",
+        "amulet",
+        "ring"
       ],
       "dataBindings": {
-        "characters": "/api/characters?era=nexus",
-        "equipment": "/api/characters/:id",
-        "accountBag": "/api/account/resources",
+        "stats": "/api/stats/primary",
+        "weapons": "https://objectstore.grudge-studio.com/api/v1/weapons.json",
+        "characters": "/api/grudges/characters",
+        "equipment": "/api/grudges/characters/:id",
         "cnftCollection": "/api/characters?era=nexus"
       }
     },
