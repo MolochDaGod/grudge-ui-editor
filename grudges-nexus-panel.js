@@ -34,6 +34,28 @@
     { key: "gra", abbr: "GRA", label: "Gravitic Harmony", color: "#009688", description: "Fall resist, wall-run, zero-G.", archetype: "Orbital" },
   ];
 
+  var FACTION_ICON = GRUDGES + "/icons/factions/";
+  var FACTIONS = [
+    { id: "unaligned", name: "Unaligned", shortName: "None", color: "#9a8870", creed: "Trade with all. Pledge later.", signature: "No banner · no enemies", iconUrl: CDN + "/icons/pack/misc/Effect.png" },
+    { id: "keepers", name: "Keepers of the Old Faith", shortName: "Keepers", color: "#d4b870", creed: "The land is alive. The Way is a parasite.", signature: "Relic-hammers, hallowed armor.", iconUrl: FACTION_ICON + "keepers.png" },
+    { id: "tech_scavengers", name: "Tech-Scavengers", shortName: "Scavengers", color: "#c87060", creed: "Every wreck is a workshop.", signature: "Gunsmithing, tinkering, gadgets.", iconUrl: FACTION_ICON + "tech_scavengers.png" },
+    { id: "hollow_lords", name: "Hollow Lords", shortName: "Hollow Lords", color: "#7a2828", creed: "The deep shafts answer to us.", signature: "Warbands, rail rifles, iron law.", iconUrl: FACTION_ICON + "hollow_lords.png" },
+    { id: "network", name: "The Network", shortName: "Network", color: "#3d7eb8", creed: "Warnings before food.", signature: "Comms, trade, no raids.", iconUrl: FACTION_ICON + "network.png" },
+    { id: "forgotten", name: "The Forgotten", shortName: "Forgotten", color: "#5a7028", creed: "Left to drown. Learned the silt.", signature: "Poisons, ambushes, tidal raids.", iconUrl: FACTION_ICON + "forgotten.png" },
+  ];
+
+  /** Origins from CharacterConfig.BACKGROUNDS — CLASS dropdown on this panel. */
+  var ORIGINS = [
+    { id: "street", name: "Street Survivor", emphasis: "KIN · SYN", description: "Collapsed sprawls. Instinct, parkour, improvised tech.", armor: { helmet: "leather_cap", chest: "cloth_tunic", legs: "leather_pants", boots: "leather_boots" }, weaponHint: "dagger" },
+    { id: "military", name: "Military Veteran", emphasis: "KIN · ENT", description: "Conventional and augmented warfare. Minimal-resource survival.", armor: { helmet: "iron_helm", chest: "iron_breastplate", legs: "iron_greaves", boots: "swift_treads" }, weaponHint: "sword", offhand: "iron_shield" },
+    { id: "scientist", name: "Research Scientist", emphasis: "QNT · NEU", description: "Quantum fabric, lab fabrication, data.", armor: { chest: "cloth_tunic", legs: "leather_pants", boots: "leather_boots" }, weaponHint: "dagger", amulet: "amulet_of_focus" },
+    { id: "medic", name: "Combat Medic", emphasis: "BIO · NEU", description: "Heal under fire. Biology and organic augs.", armor: { chest: "cloth_tunic", legs: "leather_pants", boots: "leather_boots" }, weaponHint: "dagger" },
+    { id: "engineer", name: "Systems Engineer", emphasis: "SYN · ENT", description: "Repair, build, hack field systems.", armor: { helmet: "leather_cap", chest: "iron_breastplate", legs: "leather_pants", boots: "leather_boots" }, weaponHint: "hammer", offhand: "wooden_shield" },
+    { id: "drifter", name: "Void Drifter", emphasis: "GRA · CHR", description: "Deep-space fringe. Zero-G and temporal anomalies.", armor: { helmet: "leather_cap", chest: "cloth_tunic", legs: "leather_pants", boots: "swift_treads" }, weaponHint: "dagger" },
+    { id: "psionic", name: "Psionic Adept", emphasis: "NEU · QNT", description: "Neural architecture beyond baseline.", armor: { chest: "mage_robe", legs: "shadowsilk_pants", boots: "leather_boots" }, weaponHint: "dagger", amulet: "amulet_of_focus" },
+    { id: "chrono", name: "Chrono-Marine", emphasis: "CHR · GRA", description: "Temporal warfare. Echoes of erased futures.", armor: { helmet: "iron_helm", chest: "void_plate", legs: "iron_greaves", boots: "warlords_sabatons" }, weaponHint: "axe" },
+  ];
+
   var PROFESSIONS = [
     { id: "gathering", name: "Gathering", desc: "Forestry, mining, salvage nodes" },
     { id: "hunting", name: "Hunting", desc: "Skinning, tracking, bait" },
@@ -61,6 +83,14 @@
     { id: "amulet_of_focus", name: "Amulet of Focus", slot: "amulet", rarity: "uncommon", icon: "/icons/genetics/Icon11_15.png", stats: { mana: 25 }, description: "Sharpens the mind." },
     { id: "field_bandage", name: "Field Bandage", slot: null, rarity: "common", icon: "/icons/pack/misc/Effect.png", stats: { health: 40 }, description: "BIO-driven field heal.", qty: 4 },
     { id: "ration", name: "Ration Pack", slot: null, rarity: "common", icon: "/icons/pack/misc/Effect.png", stats: {}, description: "Dried meat + rootstock.", qty: 3 },
+    { id: "mage_robe", name: "Mage Robe", slot: "chest", rarity: "rare", icon: "/icons/cyberpunk-artifacts/Icon22_10.png", stats: { armor: 12, mana: 40 }, description: "Robes woven with arcane thread." },
+    { id: "shadowsilk_pants", name: "Shadowsilk Pants", slot: "legs", rarity: "rare", icon: "/icons/cyberpunk-artifacts/Icon22_08.png", stats: { armor: 10, moveSpeed: 8 }, description: "Silken pants of the night." },
+    { id: "void_plate", name: "Voidplate", slot: "chest", rarity: "epic", icon: "/icons/cyberpunk-artifacts/Icon22_20.png", stats: { armor: 35, health: 60 }, description: "Plate forged in the void." },
+    { id: "warlords_sabatons", name: "Warlord's Sabatons", slot: "boots", rarity: "epic", icon: "/icons/cyberpunk-artifacts/Icon22_15.png", stats: { armor: 18, health: 40 }, description: "Boots of an ancient warlord." },
+    { id: "shadow_hood", name: "Shadow Hood", slot: "helmet", rarity: "rare", icon: "/icons/cyberpunk-artifacts/Icon22_05.png", stats: { armor: 8 }, description: "Hood of the dusk-walker." },
+    { id: "dragon_crown", name: "Dragon Crown", slot: "helmet", rarity: "legendary", icon: "/icons/cyberpunk-artifacts/Icon22_01.png", stats: { armor: 25, health: 50 }, description: "Forged from a dragon skull." },
+    { id: "ring_of_might", name: "Ring of Might", slot: "ring", rarity: "rare", icon: "/icons/cyberpunk-artifacts/Icon22_06.png", stats: { damage: 5 }, description: "A warrior's ring." },
+    { id: "heartstone_pendant", name: "Heartstone Pendant", slot: "amulet", rarity: "epic", icon: "/icons/cyberpunk-artifacts/Icon22_02.png", stats: { health: 80, armor: 5 }, description: "Pulses with vital energy." },
   ];
 
   var STARTER_EQUIP_IDS = {
@@ -427,18 +457,112 @@
     return { hp: hp, mp: mp, st: st, dmg: dmg, def: def, move: move, crit: crit };
   }
 
+  function factionOf(id) {
+    var key = String(id || "unaligned").toLowerCase();
+    return FACTIONS.find(function (f) { return f.id === key; }) || FACTIONS[0];
+  }
+
+  function originOf(id) {
+    var key = String(id || "street").toLowerCase();
+    return ORIGINS.find(function (o) { return o.id === key; }) || ORIGINS[0];
+  }
+
+  function itemsForSlot(slot) {
+    var key = slot === "helm" ? "helmet" : slot === "mainhand" ? "weapon" : slot;
+    return state.items
+      .filter(function (it) { return (it.equipSlot || it.slot) === key; })
+      .slice(0, 32)
+      .map(function (it) {
+        return {
+          id: it.id,
+          name: it.name,
+          iconUrl: it.iconUrl,
+          rarity: it.rarity,
+          stats: it.stats,
+          description: it.description,
+          slot: key,
+        };
+      });
+  }
+
+  function firstWeapon(hint) {
+    var re = hint ? new RegExp(hint, "i") : /sword|blade/;
+    var hit = state.items.find(function (it) {
+      if ((it.equipSlot || it.slot) !== "weapon") return false;
+      return re.test(String(it.id || "") + it.name + (it.category || "") + (it.weaponType || ""));
+    });
+    return hit || state.items.find(function (it) { return (it.equipSlot || it.slot) === "weapon"; }) || null;
+  }
+
+  function applyOrigin(originId) {
+    var o = originOf(originId);
+    var eq = {};
+    var armor = o.armor || {};
+    Object.keys(armor).forEach(function (slot) {
+      var it = lookup(armor[slot]);
+      if (it) eq[slot] = paperdollItem(it);
+    });
+    if (o.offhand) {
+      var off = lookup(o.offhand);
+      if (off) eq.offhand = paperdollItem(off);
+    }
+    if (o.amulet) {
+      var am = lookup(o.amulet);
+      if (am) eq.amulet = paperdollItem(am);
+    }
+    var wpn = firstWeapon(o.weaponHint);
+    if (wpn) eq.weapon = paperdollItem(wpn);
+    return {
+      originId: o.id,
+      classId: o.id,
+      equipment: eq,
+      bag: starterBag(),
+    };
+  }
+
+  function paperdollOpts(ent) {
+    ent = ent || {};
+    var fac = factionOf(ent.faction);
+    return {
+      era: "nexus",
+      nexus: true,
+      factions: FACTIONS,
+      origins: ORIGINS,
+      faction: fac.id,
+      classId: ent.originId || ent.classId || "street",
+      portraitUrl: fac.iconUrl,
+      itemsBySlot: {
+        helmet: itemsForSlot("helmet"),
+        chest: itemsForSlot("chest"),
+        legs: itemsForSlot("legs"),
+        boots: itemsForSlot("boots"),
+        weapon: itemsForSlot("weapon"),
+        offhand: itemsForSlot("offhand"),
+        ring: itemsForSlot("ring"),
+        amulet: itemsForSlot("amulet"),
+      },
+    };
+  }
+
   function fromCharacter(char) {
     if (!char) return null;
+    var cfg = (char.config && typeof char.config === "object") ? char.config : {};
     var attrs = nexusAttrs(char.attributes || char.stats || (char.saveData && char.saveData.stats) || {});
     var eq = toPaperdollEquipment(char.equipment || (char.saveData && char.saveData.equipment) || {});
     if (!Object.keys(eq).length) eq = starterEquipment();
+    var originId = cfg.originId || char.originId || char.classId || "street";
+    var faction = char.faction || cfg.faction || "unaligned";
+    var fac = factionOf(faction);
     return {
       name: char.name || "Survivor",
-      meta: "Lv." + (char.level || 1) + " · Grudges · " + (char.classId || char.raceId || "survivor"),
+      meta: "Lv." + (char.level || 1) + " · " + fac.shortName + " · " + originOf(originId).name,
       race: char.raceId || char.race || "human",
-      classId: char.classId || "survivor",
+      classId: originId,
+      originId: originId,
+      faction: fac.id,
       level: char.level || 1,
       characterId: char.id,
+      portrait: fac.iconUrl,
       attributes: attrs,
       equipment: eq,
       inventory: inventoryFromCharacter(char),
@@ -486,6 +610,13 @@
     START_BUDGET: START_BUDGET,
     VOXEL_STARTER: VOXEL_STARTER,
     PROFESSIONS: PROFESSIONS,
+    FACTIONS: FACTIONS,
+    ORIGINS: ORIGINS,
+    factionOf: factionOf,
+    originOf: originOf,
+    itemsForSlot: itemsForSlot,
+    applyOrigin: applyOrigin,
+    paperdollOpts: paperdollOpts,
     iconUrl: iconUrl,
     load: load,
     loadPrimary: loadPrimary,

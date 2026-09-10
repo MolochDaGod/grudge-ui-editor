@@ -237,6 +237,34 @@
     { id: "mount", kind: "equip", title: "MOUNT", gear: "Mount", slotFilter: "mount" },
     { id: "boat", kind: "equip", title: "BOAT", gear: "Boat", slotFilter: "boat" },
   ];
+  const NEXUS_DOLL_LEFT = [
+    { id: "helmet", gear: "Head", label: "Helmet", abbr: "HEL", icon: I496 + "/C_Hat01.png" },
+    { id: "chest", gear: "Chest", label: "Chest", abbr: "CHS", icon: I496 + "/A_Armour01.png" },
+    { id: "legs", gear: "Legs", label: "Legs", abbr: "LEG", icon: I496 + "/A_Armour03.png" },
+    { id: "boots", gear: "Feet", label: "Boots", abbr: "BT", icon: I496 + "/A_Shoes01.png" },
+  ];
+  const NEXUS_DOLL_RIGHT = [
+    { id: "weapon", gear: "MainHand", label: "Main hand", abbr: "WPN", icon: I496 + "/W_Sword001.png" },
+    { id: "offhand", gear: "OffHand", label: "Off hand", abbr: "OFF", icon: I496 + "/E_Wood01.png" },
+    { id: "amulet", gear: "Accessory2", label: "Amulet", abbr: "AML", icon: I496 + "/I_Gem01.png" },
+    { id: "ring", gear: "Accessory1", label: "Ring", abbr: "RNG", icon: I496 + "/I_Gem01.png" },
+  ];
+  const NEXUS_CARDS = [
+    { id: "faction", kind: "faction", title: "FACTION" },
+    { id: "class", kind: "class", title: "ORIGIN" },
+    { id: "weapon", kind: "equip", title: "MAINHAND", gear: "MainHand" },
+    { id: "offhand", kind: "equip", title: "OFFHAND", gear: "OffHand" },
+    { id: "helmet", kind: "equip", title: "HELMET", gear: "Head" },
+    { id: "chest", kind: "equip", title: "CHEST", gear: "Chest" },
+    { id: "legs", kind: "equip", title: "LEGS", gear: "Legs" },
+    { id: "boots", kind: "equip", title: "BOOTS", gear: "Feet" },
+    { id: "ring", kind: "equip", title: "RING", gear: "Accessory1" },
+    { id: "amulet", kind: "equip", title: "AMULET", gear: "Accessory2" },
+  ];
+  function isNexusEra(opts) {
+    const e = String((opts && opts.era) || "").toLowerCase();
+    return e === "nexus" || !!(opts && opts.nexus);
+  }
   const RACES_UI = ["human", "barbarian", "elf", "dwarf", "orc", "undead"];
   const CLASSES_UI = ["warrior", "ranger", "mage", "worge"];
   const KIND_ICON = {
@@ -519,6 +547,29 @@
   }
 
   function equipCardHtml(def, item, opts) {
+    if (isNexusEra(opts) && opts.itemsBySlot) {
+      const slot = def.id;
+      const choices = (opts.itemsBySlot[slot] || []).slice();
+      const val = item?.id || "";
+      if (val && !choices.some((c) => c.id === val)) {
+        choices.unshift({ id: val, name: item.name || val, iconUrl: item.iconUrl, stats: item.stats });
+      }
+      const chosen = choices.find((c) => c.id === val) || item;
+      const icon = chosen?.iconUrl || iconForItem(chosen, slot, opts.race);
+      const lines = statsLines(item || chosen);
+      return `<article class="eq-card" data-slot="${esc(slot)}" data-gear="${esc(def.gear || "")}">
+        <header class="eq-card-h">${esc(def.title)}</header>
+        ${cardSelect(choices, val, { allowNone: true })}
+        <div class="eq-card-body">
+          <div class="eq-card-icon">${icon ? `<img src="${esc(icon)}" alt="" />` : `<span>ITEM</span>`}</div>
+          <div class="eq-card-info">
+            ${val ? `<div class="eq-card-name">${esc(chosen?.name || val)}</div>` : `<div class="eq-card-name muted">Empty</div>`}
+            ${chosen?.rarity ? `<div class="eq-stat">${esc(chosen.rarity)}</div>` : ""}
+            ${lines.slice(0, 4).map((l) => `<div class="eq-stat">${esc(l)}</div>`).join("")}
+          </div>
+        </div>
+      </article>`;
+    }
     const race = opts.race || "human";
     const core = !!(def.meshGroup && CORE_MESH_GROUPS[def.meshGroup]);
     const baseIds = unarmedSet(race);
@@ -568,6 +619,12 @@
   }
 
   function meshKitHtml(opts) {
+    if (isNexusEra(opts)) {
+      return `<section class="eq-mesh-kit">
+        <h3>GRUDGES ITEMS</h3>
+        <p class="eq-cnft-sub">Dropdowns are ObjectStore weapons/armor + ITEM_DATABASE · not Toon mesh_ids</p>
+      </section>`;
+    }
     const race = opts.race || "human";
     const cat = meshCatalogAll(race);
     if (!cat) return `<section class="eq-mesh-kit"><p class="eq-loading">Loading race meshes…</p></section>`;
@@ -614,6 +671,24 @@
   }
 
   function factionCardHtml(opts) {
+    if (isNexusEra(opts) && Array.isArray(opts.factions) && opts.factions.length) {
+      const cur = opts.faction || "unaligned";
+      const fac = opts.factions.find((f) => f.id === cur) || opts.factions[0];
+      const sel = opts.factions
+        .map((f) => `<option value="${esc(f.id)}"${f.id === fac.id ? " selected" : ""}>${esc(f.shortName || f.name)}</option>`)
+        .join("");
+      const shot = fac.iconUrl || opts.portraitUrl || "";
+      return `<article class="eq-card eq-card-faction" data-slot="faction">
+        <header class="eq-card-h">FACTION</header>
+        <select class="eq-card-select" data-faction="1">${sel}</select>
+        <div class="eq-card-body eq-card-body-center">
+          ${shot ? `<img class="eq-faction-shot" src="${esc(shot)}" alt="" />` : ""}
+          <div class="eq-class-name" style="color:${esc(fac.color || "#d4a400")}">${esc((fac.shortName || fac.name || "").toUpperCase())}</div>
+          <div class="eq-class-pass">${esc(fac.creed || "")}</div>
+          <div class="eq-stat">${esc(fac.signature || "")}</div>
+        </div>
+      </article>`;
+    }
     const race = opts.race || "human";
     const portrait =
       opts.portraitUrl ||
@@ -630,6 +705,22 @@
   }
 
   function classCardHtml(opts) {
+    if (isNexusEra(opts) && Array.isArray(opts.origins) && opts.origins.length) {
+      const classId = String(opts.classId || opts.originId || "street").toLowerCase();
+      const origin = opts.origins.find((o) => o.id === classId) || opts.origins[0];
+      const sel = opts.origins
+        .map((o) => `<option value="${esc(o.id)}"${o.id === origin.id ? " selected" : ""}>${esc(o.name)}</option>`)
+        .join("");
+      return `<article class="eq-card eq-card-class" data-slot="class">
+        <header class="eq-card-h">ORIGIN</header>
+        <select class="eq-card-select" data-class="1">${sel}</select>
+        <div class="eq-card-body eq-class-body">
+          <div class="eq-class-name" style="color:#d4a400">${esc((origin.name || "").toUpperCase())}</div>
+          <div class="eq-class-pass">${esc(origin.description || "")}</div>
+          <div class="eq-class-sk-label">${esc(origin.emphasis || "")}</div>
+        </div>
+      </article>`;
+    }
     const classId = String(opts.classId || "warrior").toLowerCase();
     const cls = CLASSES_CACHE?.classes?.[classId] || CLASSES_CACHE?.classes?.warrior || {};
     const sel = CLASSES_UI.map((c) => {
@@ -664,19 +755,31 @@
     opts = opts || {};
     const mode = opts.mode === "inspect" ? "inspect" : "self";
     const readOnly = mode === "inspect" || !!opts.readOnly;
-    const equipped = unityEquipped(opts.equipped);
+    const nexus = isNexusEra(opts);
+    const equipped = nexus
+      ? (function () {
+          const n = unityEquipped(opts.equipped);
+          if (n.relic && !n.amulet) n.amulet = n.relic;
+          if (n.offhand2 && !n.ring) n.ring = n.offhand2;
+          return n;
+        })()
+      : unityEquipped(opts.equipped);
     const race = opts.race || "human";
-    const classId = opts.classId || "warrior";
+    const classId = opts.classId || (nexus ? "street" : "warrior");
     const era = opts.era || "warlords";
-    const title = opts.title || "GRUDGE WARLORD";
+    const title = opts.title || (nexus ? "GRUDGES" : "GRUDGE WARLORD");
 
     el.classList.add("eq-paperdoll", "eq-unity-host");
     el.dataset.mode = mode;
     el.dataset.layout = "unity";
+    el.dataset.era = era;
 
-    const left = UNITY_DOLL_LEFT.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
-    const right = UNITY_DOLL_RIGHT.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
-    const cards = UNITY_CARDS.map((def) => {
+    const dollLeft = nexus ? NEXUS_DOLL_LEFT : UNITY_DOLL_LEFT;
+    const dollRight = nexus ? NEXUS_DOLL_RIGHT : UNITY_DOLL_RIGHT;
+    const cardDefs = nexus ? NEXUS_CARDS : UNITY_CARDS;
+    const left = dollLeft.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
+    const right = dollRight.map((s) => slotHtml(s, equipped[s.id], { readOnly })).join("");
+    const cards = cardDefs.map((def) => {
       if (def.kind === "faction") return factionCardHtml(opts);
       if (def.kind === "class") return classCardHtml(opts);
       return equipCardHtml(def, equipped[def.id], opts);
@@ -689,7 +792,7 @@
         <div class="eq-unity-left">
           <section class="eq-collection">
             <h3>YOUR COLLECTION</h3>
-            <p class="eq-cnft-sub">cNFT roster · ${esc(era)} era · 4 slots</p>
+            <p class="eq-cnft-sub">${nexus ? "Grudges roster · Nexus stats · 4 slots" : "cNFT roster · " + esc(era) + " era · 4 slots"}</p>
             <div class="eq-collection-grid">${collectionHtml(opts.collection, opts.characterId, era)}</div>
           </section>
           <section class="eq-hero-stage">
@@ -713,7 +816,7 @@
     `;
 
     const wrap = el.querySelector(".eq-portrait-wrap");
-    if (wrap && global.MainPanelMesh?.renderMeshOverlay) {
+    if (!nexus && wrap && global.MainPanelMesh?.renderMeshOverlay) {
       global.MainPanelMesh.renderMeshOverlay(wrap, {
         race,
         classId,
@@ -722,7 +825,7 @@
         unarmed: opts.unarmed,
       });
     }
-    if (global.Grudge6Viewport?.mount) {
+    if (!nexus && global.Grudge6Viewport?.mount) {
       global.Grudge6Viewport.mount(el, {
         race,
         classId,
@@ -800,6 +903,7 @@
     const layout = opts.layout || "unity";
     if (layout === "tactical") return renderTactical(el, opts);
     const run = () => renderUnity(el, opts);
+    if (isNexusEra(opts)) return run();
     const meshReady = !!(global.__grudgeMeshCatalog || global.WarlordsCharacter?.meshCatalog);
     if (SOCKETS_CACHE && CLASSES_CACHE && meshReady) return run();
     Promise.all([

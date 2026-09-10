@@ -543,7 +543,8 @@
       document.getElementById("weapon-type").textContent = weaponTypeOf(ent);
 
       const built = MPC?.meshIdsFor(ent.race, ent.classId, state.unarmed && mode === "self");
-      if (ent.equipment && Object.keys(ent.equipment).length) rebuildMeshFromEquip(ent);
+      if (IS_NEXUS) lastMeshIds = [];
+      else if (ent.equipment && Object.keys(ent.equipment).length) rebuildMeshFromEquip(ent);
       else lastMeshIds = MPM?.meshIdsFromEquipment?.(ent.equipment, ent.race) || built?.meshIds || [];
       if (!lastMeshIds.length && built) lastMeshIds = built.meshIds;
       document.getElementById("mesh-count").textContent = String(lastMeshIds.length);
@@ -557,9 +558,11 @@
         window.grudgeHeroImage?.(ent) ||
         window.grudgePortraitForRace?.(ent.race);
 
-      const roster = window.GrudgeEngine?.getCharacters?.() || [];
+      const roster = IS_NEXUS
+        ? (window.GrudgeEngine?.getCharacters?.() || [])
+        : (window.GrudgeEngine?.getCharacters?.() || []);
       const collection = (Array.isArray(roster) ? roster : [])
-        .filter((c) => !c.gameEra || c.gameEra === ERA || c.era === ERA)
+        .filter((c) => IS_NEXUS || !c.gameEra || c.gameEra === ERA || c.era === ERA)
         .slice(0, 4)
         .map((c) => ({
           id: c.id,
@@ -578,6 +581,7 @@
         }).catch((e) => console.warn("[main-panel] grudge6 viewport", e));
       }
 
+      const nxOpts = IS_NEXUS && NX?.paperdollOpts ? NX.paperdollOpts(ent) : {};
       paperdollApi = GrudgeEquipmentPaperdoll.render(host, {
         layout: params.get("layout") === "tactical" ? "tactical" : "unity",
         title: (eraContract?.heading || "GRUDGE WARLORD").toUpperCase(),
@@ -586,19 +590,20 @@
         characterId: ent.characterId || ent.id || FORCE_ID,
         collection,
         subtitle:
-          (ent.race || "hero").toUpperCase() +
+          (ent.faction || ent.race || "hero").toUpperCase() +
           "  ·  " +
-          (ent.classId || "warrior").toUpperCase() +
+          (ent.originId || ent.classId || "warrior").toUpperCase() +
           (mode === "inspect" ? "  ·  INSPECT" : "  ·  LOADOUT"),
         race: ent.race || "human",
-        classId: ent.classId || "warrior",
-        portraitUrl: portrait,
+        classId: ent.originId || ent.classId || "warrior",
+        portraitUrl: IS_NEXUS ? (nxOpts.portraitUrl || portrait) : portrait,
         equipped: ent.equipment || {},
         meshIds: lastMeshIds,
         unarmed: state.unarmed,
         mode,
         entityId: state.activeEntity,
         width: 440,
+        ...nxOpts,
         onSelectCharacter: (cid) => {
           window.GrudgeEngine?.selectCharacter?.(cid);
           const c = window.GrudgeEngine?.getActiveCharacter?.();
@@ -607,6 +612,16 @@
         onFactionChange: (race) => {
           if (mode === "inspect") return;
           const p = playerEnt();
+          if (IS_NEXUS && NX) {
+            const fac = NX.factionOf(race);
+            p.faction = fac.id;
+            p.portrait = fac.iconUrl;
+            p.meta = `Lv.${p.level || 1} · ${fac.shortName} · ${NX.originOf(p.originId || p.classId).name}`;
+            applyEntity("player");
+            toast("Faction " + fac.shortName);
+            scheduleSave();
+            return;
+          }
           p.race = race;
           p.portrait = window.grudgePortraitForRace?.(race);
           applyClassKit(p, state.unarmed);
@@ -618,6 +633,21 @@
         onClassChange: (classId) => {
           if (mode === "inspect") return;
           const p = playerEnt();
+          if (IS_NEXUS && NX) {
+            const kit = NX.applyOrigin(classId);
+            p.originId = kit.originId;
+            p.classId = kit.classId;
+            p.equipment = kit.equipment;
+            bag = kit.bag;
+            bagSource = NX.getBagSource();
+            const fac = NX.factionOf(p.faction);
+            p.meta = `Lv.${p.level || 1} · ${fac.shortName} · ${NX.originOf(kit.originId).name}`;
+            renderInv();
+            applyEntity("player");
+            toast("Origin " + NX.originOf(classId).name);
+            scheduleSave();
+            return;
+          }
           p.classId = classId;
           applyClassKit(p, state.unarmed);
           renderPaperdoll();
@@ -629,6 +659,31 @@
         onCatalogPick: (slotId, meshId, gearKey) => {
           if (mode === "inspect") return;
           const p = playerEnt();
+          if (IS_NEXUS && NX) {
+            const eq = { ...(p.equipment || {}) };
+            if (!meshId) {
+              const prev = eq[slotId];
+              if (prev) bagAdd({ id: prev.id, name: prev.name, qty: 1, iconUrl: prev.iconUrl, type: prev.type });
+              delete eq[slotId];
+            } else {
+              const it = NX.lookup(meshId);
+              if (!it) {
+                toast("Unknown item " + meshId);
+                return;
+              }
+              const prev = eq[slotId];
+              if (prev && prev.id !== it.id) {
+                bagAdd({ id: prev.id, name: prev.name, qty: 1, iconUrl: prev.iconUrl, type: prev.type });
+              }
+              eq[slotId] = NX.paperdollItem(it);
+            }
+            p.equipment = eq;
+            renderInv();
+            applyEntity("player");
+            toast(meshId ? (NX.lookup(meshId)?.name || meshId) : "Cleared " + slotId);
+            scheduleSave();
+            return;
+          }
           const core = { helmet: 1, chest: 1, gloves: 1, boots: 1 };
           if (core[slotId] && !meshId) {
             toast("Unarmed base body cannot be cleared");
@@ -650,6 +705,7 @@
         },
         onSlotClick: (slotId, gearKey) => {
           if (mode === "inspect") return;
+          if (IS_NEXUS) return;
           const p = playerEnt();
           p.equipment = MPM.cycleMeshVariant(p.equipment, slotId, gearKey);
           state.unarmed = false;
@@ -2016,14 +2072,18 @@
         await NX.load();
         const nxEq = NX.starterEquipment();
         const nxStats = NX.nexusAttrs(NX.VOXEL_STARTER);
+        const originKit = NX.applyOrigin("street");
+        const fac0 = NX.factionOf("unaligned");
         state.entities.player = {
           name: "Guest survivor",
-          meta: "Grudges world · Nexus stats · sign in for roster",
+          meta: "Lv.1 · " + fac0.shortName + " · " + NX.originOf("street").name,
           race: "human",
-          classId: "survivor",
+          classId: "street",
+          originId: "street",
+          faction: "unaligned",
           level: 1,
-          portrait: window.grudgePortraitForRace?.("human"),
-          equipment: nxEq,
+          portrait: fac0.iconUrl,
+          equipment: originKit.equipment && Object.keys(originKit.equipment).length ? originKit.equipment : nxEq,
           mode: "self",
           attributes: nxStats,
           professionLevels: {},
