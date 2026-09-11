@@ -138,7 +138,12 @@ input,select,textarea{font-family:inherit;}
 /* component inner CSS */
 .gtitle{font-size:.57rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca);padding:4px 6px 3px;border-bottom:1px solid var(--sb);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sgrid{display:grid;gap:3px;padding:5px;}
-.gslot{background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;align-items:center;justify-content:center;}
+.gslot{background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;align-items:center;justify-content:center;background-size:100% 100%;background-repeat:no-repeat;image-rendering:pixelated;}
+.gslot.cpx{border:none;background-color:transparent;}
+.hbsl.cpx{border:none;background-color:transparent;background-size:100% 100%;background-repeat:no-repeat;image-rendering:pixelated;}
+.mdbtn.cpx-ico{padding:2px 4px;background:transparent;border:none;}
+.mdbtn.cpx-ico img{width:22px;height:22px;object-fit:contain;image-rendering:pixelated;display:block;}
+.mdbtn.cpx-ico span{font-size:.42rem;color:rgba(255,255,255,.65);}
 .hbrow{display:flex;gap:3px;padding:5px;align-items:center;justify-content:center;height:100%;}
 .hbsl{background:var(--slot);border:1px solid var(--sb);border-radius:3px;display:flex;align-items:flex-end;justify-content:flex-end;padding:2px;flex-shrink:0;}
 .hbnum{font-size:.46rem;color:var(--ca);line-height:1;}
@@ -662,6 +667,28 @@ function lsGet(k){try{return localStorage.getItem(k)||''}catch{return ''}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch{}}
 function escHtml(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
+/** CraftPix texture URL (encode path segments — spaces in Action Bar/, etc.). */
+function cpxUrl(rel){
+  return '/assets/craftpix/'+String(rel||'').replace(/^\/+/,'').split('/').map(encodeURIComponent).join('/');
+}
+const CPX={
+  slotBg:()=>cpxUrl('Action Bar/Slots/ActionBar_Slot_Background.png'),
+  slotExtra:()=>cpxUrl('Action Bar/Slots/ActionBar_Extra_Slot_Background.png'),
+  invSlot:()=>cpxUrl('Inventory/Inventory_Slot_Background.png'),
+  btnBg:()=>cpxUrl('Action Bar/Buttons/ActionBar_Buttons_Background.png'),
+  menuIco:{
+    Spellbook:()=>cpxUrl('Action Bar/Buttons/ActionBar_Buttons_Icon_Book.png'),
+    Character:()=>cpxUrl('Action Bar/Buttons/ActionBar_Buttons_Icon_Profile.png'),
+    Inventory:()=>cpxUrl('Inventory/Coins/Coin_Gold.png'),
+    Panel:()=>cpxUrl('Action Bar/Buttons/ActionBar_Buttons_Icon_Settings.png'),
+    Settings:()=>cpxUrl('Action Bar/Buttons/ActionBar_Buttons_Icon_Settings.png'),
+    Menu:()=>cpxUrl('Minimap/Menu Button/Minimap_Menu_Button_Icon.png'),
+    Map:()=>cpxUrl('Minimap/Menu Button/Minimap_Menu_Button_Icon.png'),
+    Quest:()=>cpxUrl('Action Bar/Buttons/ActionBar_Buttons_Icon_Flame.png'),
+    Skills:()=>cpxUrl('Action Bar/Buttons/ActionBar_Buttons_Icon_Flame.png'),
+  },
+};
+
 /* ─── DEFS ─── */
 const D={
   'inventory-grid':{l:'Inventory Grid',i:'fa-grip',cat:'Storage',col:'#4ade80',d:'N×M item slots',w:320,h:256,p:{cols:5,rows:4,slotSize:52,gap:3,label:'Inventory'}},
@@ -760,8 +787,9 @@ function compInner(c){
   switch(c.type){
     case 'inventory-grid':{
       const cols=p.cols||5,rows=p.rows||4,ss=Math.min(p.slotSize||52,Math.floor((c.w-14)/cols)-4);
+      const bg=CPX.invSlot();
       return `${p.label?`<div class="gtitle">${p.label}</div>`:''}
-        <div class="sgrid" style="grid-template-columns:repeat(${cols},${ss}px);gap:${p.gap||3}px">${Array.from({length:cols*rows},(_,i)=>`<div class="gslot" style="width:${ss}px;height:${ss}px"></div>`).join('')}</div>`;
+        <div class="sgrid" style="grid-template-columns:repeat(${cols},${ss}px);gap:${p.gap||3}px">${Array.from({length:cols*rows},(_,i)=>`<div class="gslot cpx" style="width:${ss}px;height:${ss}px;background-image:url('${bg}')"></div>`).join('')}</div>`;
     }
     case 'equipment-slots':{
       // Functional plate matching assets/equipment/equipment-panel.png — 5 left + silhouette + 5 right
@@ -815,7 +843,8 @@ function compInner(c){
     }
     case 'hotbar':{
       const n=p.slots||8,ss=Math.min(p.slotSize||54,Math.floor((c.w-14)/n)-4);
-      return `<div class="hbrow">${Array.from({length:n},(_,i)=>`<div class="hbsl" style="width:${ss}px;height:${ss}px"><span class="hbnum">${i+1}</span></div>`).join('')}</div>`;
+      const bg=CPX.slotBg();
+      return `<div class="hbrow">${Array.from({length:n},(_,i)=>`<div class="hbsl cpx" style="width:${ss}px;height:${ss}px;background-image:url('${bg}')"><span class="hbnum">${i+1}</span></div>`).join('')}</div>`;
     }
     case 'healthbar':case 'manabar':case 'xp-bar':{
       const pct=clamp(((p.value||75)/(p.max||100))*100,0,100);
@@ -874,14 +903,21 @@ function compInner(c){
     }
     case 'hotbar-2row':{
       const n=p.slots||10, ss=Math.min(p.slotSize||52,Math.floor((c.w-10)/5)-4);
-      const row1=Array.from({length:Math.ceil(n/2)},(_,i)=>`<div class="hbsl" style="width:${ss}px;height:${ss}px"><span class="hbnum">${i+1}</span></div>`).join('');
-      const row2=Array.from({length:Math.floor(n/2)},(_,i)=>`<div class="hbsl" style="width:${ss}px;height:${ss}px"><span class="hbnum">${Math.ceil(n/2)+i+1}</span></div>`).join('');
+      const bg=CPX.slotBg();
+      const mkSl=(i)=>`<div class="hbsl cpx" style="width:${ss}px;height:${ss}px;background-image:url('${bg}')"><span class="hbnum">${i}</span></div>`;
+      const row1=Array.from({length:Math.ceil(n/2)},(_,i)=>mkSl(i+1)).join('');
+      const row2=Array.from({length:Math.floor(n/2)},(_,i)=>mkSl(Math.ceil(n/2)+i+1)).join('');
       return `<div class="hb2wrap"><div class="hbrow">${row1}</div><div class="hbrow">${row2}</div></div>`;
     }
     case 'menu-dock':{
       const btns=(p.buttons||'Spellbook,Character,Inventory,Panel').split(',');
-      const icons={'Spellbook':'fa-book-sparkles','Character':'fa-person','Inventory':'fa-backpack','Panel':'fa-table-columns','Map':'fa-map','Settings':'fa-gear','Quest':'fa-scroll'};
-      return `<div class="mdwrap">${btns.map(b=>`<div class="mdbtn"><i class="fa ${icons[b.trim()]||'fa-star'}"></i><span>${b.trim()}</span></div>`).join('')}</div>`;
+      const faFallback={'Spellbook':'fa-book-sparkles','Character':'fa-person','Inventory':'fa-backpack','Panel':'fa-table-columns','Map':'fa-map','Settings':'fa-gear','Menu':'fa-bars','Quest':'fa-scroll','Skills':'fa-fire'};
+      return `<div class="mdwrap">${btns.map(raw=>{
+        const b=raw.trim();
+        const src=(CPX.menuIco[b]||CPX.menuIco.Settings)();
+        const fa=faFallback[b]||'fa-star';
+        return `<div class="mdbtn cpx-ico" title="${escHtml(b)}"><img src="${src}" alt="${escHtml(b)}" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline')"/><i class="fa ${fa}" style="display:none"></i><span>${escHtml(b)}</span></div>`;
+      }).join('')}</div>`;
     }
     case 'combat-log':
       return `${p.label?`<div class="gtitle">${p.label}</div>`:''}<div class="clwrap"><div class="clmsgs"><div class="clm dmg"><span class="clt">You</span> hit <span class="clt">Wolf</span> for <span class="cldmg">342</span></div><div class="clm heal"><span class="clt">Priest</span> heals <span class="clheal">+580 HP</span></div><div class="clm dmg"><span class="clt">Wolf</span> hit you for <span class="cldmg">91</span></div><div class="clm sys">Entered combat zone</div></div></div>`;

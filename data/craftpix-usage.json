@@ -1,0 +1,205 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-11",
+  "pack": "craftpix-ui4",
+  "baseUrl": "/assets/craftpix/",
+  "cdnCss": "https://assets.grudge-studio.com/ui/craftpix-rpg/craftpix-rpg-ui.css",
+  "manifest": "/craftpix-manifest.json",
+  "license": "https://craftpix.net/file-licenses/",
+  "renderRules": {
+    "imageRendering": "pixelated",
+    "slotStack": ["bg", "icon", "border", "cooldown", "press"],
+    "barStack": ["track", "fill"],
+    "designSpace": { "w": 1920, "h": 1080 }
+  },
+  "usageOptions": [
+    {
+      "id": "combat-hud",
+      "label": "Combat HUD",
+      "outline": "combat-2bar",
+      "states": ["explore", "combat", "casting"],
+      "components": ["player-frame", "target-frame", "hotbar-2row", "cast-bar", "minimap", "xp-bar", "health-orb", "mana-orb"]
+    },
+    {
+      "id": "harvest-hud",
+      "label": "Harvest / Dialogue",
+      "outline": "harvesting",
+      "states": ["explore", "dialogue", "harvest"],
+      "components": ["player-frame", "hotbar-2row", "dialogue-box", "quest-tracker", "minimap"]
+    },
+    {
+      "id": "inventory",
+      "label": "Inventory grid",
+      "states": ["inventory", "panel"],
+      "components": ["inventory-slot", "currency"]
+    },
+    {
+      "id": "spellbook",
+      "label": "Spellbook slots",
+      "states": ["spellbook", "menu"],
+      "components": ["spell-slot"]
+    }
+  ],
+  "hydraToLayers": {
+    "hotbar": {
+      "role": "action-bar slots",
+      "layers": {
+        "bg": "Action Bar/Slots/ActionBar_Slot_Background.png",
+        "hover": "Action Bar/Slots/ActionBar_Slot_Hover.png",
+        "press": "Action Bar/Slots/ActionBar_Slot_Press.png",
+        "cooldown": "Action Bar/Slots/ActionBar_Slot_Cooldown.png",
+        "cooldownDone": "Action Bar/Slots/ActionBar_Slot_Cooldown_Finish.png",
+        "overlay": "Action Bar/Slots/ActionBar_Slot_Overlay.png",
+        "extraBg": "Action Bar/Slots/ActionBar_Extra_Slot_Background.png"
+      },
+      "swaps": {
+        "slotStyle": [
+          { "id": "main", "bg": "Action Bar/Slots/ActionBar_Slot_Background.png" },
+          { "id": "extra", "bg": "Action Bar/Slots/ActionBar_Extra_Slot_Background.png" }
+        ]
+      },
+      "usage": "Stack: bg → skill icon (center 70%) → overlay → cooldown mask → press on pointerdown"
+    },
+    "hotbar-2row": {
+      "extends": "hotbar",
+      "usage": "Two rows of main slots; design ~384×130 at 1920×1080"
+    },
+    "player-frame": {
+      "role": "unit frame self",
+      "layers": {
+        "bg": "Unit Frames/Main/UnitFrame_Background.png",
+        "borderElite": "Unit Frames/Main/UnitFrame_Elite.png",
+        "borderRed": "Unit Frames/Main/UnitFrame_Red_Border.png",
+        "avatarMask": "Unit Frames/Main/Avatar/UnitFrame_Avatar_Mask.png",
+        "avatarOverlay": "Unit Frames/Main/Avatar/UnitFrame_Avatar_Overlay.png",
+        "hpFill": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Red.png",
+        "hpFillGray": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Grayscale.png",
+        "mpFill": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Green.png",
+        "mpFillGray": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Grayscale.png",
+        "mpFillBrown": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Brown.png"
+      },
+      "swaps": {
+        "hpFill": [
+          { "id": "red", "path": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Red.png" },
+          { "id": "gray-tint", "path": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Grayscale.png", "css": "filter:hue-rotate(0deg) saturate(2)" }
+        ],
+        "mpFill": [
+          { "id": "green", "path": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Green.png" },
+          { "id": "brown", "path": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Brown.png" },
+          { "id": "gray-blue", "path": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Grayscale.png", "css": "filter:hue-rotate(180deg) saturate(1.5)" }
+        ],
+        "border": [
+          { "id": "default", "path": null },
+          { "id": "elite", "path": "Unit Frames/Main/UnitFrame_Elite.png" },
+          { "id": "hostile", "path": "Unit Frames/Main/UnitFrame_Red_Border.png" }
+        ]
+      },
+      "usage": "Portrait under mask; HP/MP as overflow:hidden track + fill width %"
+    },
+    "target-frame": {
+      "extends": "player-frame",
+      "defaultSwaps": { "border": "hostile", "hpFill": "red" },
+      "usage": "Same as player-frame; prefer red border + red HP fill"
+    },
+    "boss-frame": {
+      "extends": "player-frame",
+      "defaultSwaps": { "border": "elite", "hpFill": "red" }
+    },
+    "health-orb": {
+      "layers": {
+        "bg": "Action Bar/Globes/ActionBar_Globe_Background.png",
+        "fill": "Action Bar/Globes/ActionBar_Globe_Fill_Red.png",
+        "empty": "Action Bar/Globes/ActionBar_Globe_Fill_Empty.png"
+      },
+      "swaps": {
+        "fill": [
+          { "id": "red", "path": "Action Bar/Globes/ActionBar_Globe_Fill_Red.png" },
+          { "id": "blue", "path": "Action Bar/Globes/ActionBar_Globe_Fill_Blue.png" }
+        ]
+      },
+      "usage": "Clip fill height % from bottom for HP globe"
+    },
+    "mana-orb": {
+      "extends": "health-orb",
+      "defaultSwaps": { "fill": "blue" }
+    },
+    "healthbar": {
+      "layers": {
+        "fill": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Red.png",
+        "fillGray": "Unit Frames/Main/Bars/UnitFrame_HP_Fill_Grayscale.png"
+      },
+      "usage": "Thin bar; pair with .cpx-bar CSS or bars-hud pack for track chrome"
+    },
+    "manabar": {
+      "layers": {
+        "fill": "Unit Frames/Main/Bars/UnitFrame_MP_Fill_Green.png"
+      }
+    },
+    "xp-bar": {
+      "layers": {
+        "bg": "Action Bar/XP Bar/ActionBar_XP_Background.png",
+        "fill": "Action Bar/XP Bar/ActionBar_XP_Fill.png"
+      },
+      "usage": "Track bg + fill width %"
+    },
+    "cast-bar": {
+      "layers": {
+        "bg": "Cast Bars/CastBar_Background.png",
+        "track": "Cast Bars/CastBar_Bar_Background.png",
+        "fill": "Cast Bars/CastBar_Bar_Fill.png",
+        "fillGray": "Cast Bars/CastBar_Bar_Fill_Grayscale.png",
+        "iconFrame": "Cast Bars/CastBar_Icon_Frame.png"
+      },
+      "swaps": {
+        "fill": [
+          { "id": "color", "path": "Cast Bars/CastBar_Bar_Fill.png" },
+          { "id": "gray", "path": "Cast Bars/CastBar_Bar_Fill_Grayscale.png" }
+        ]
+      }
+    },
+    "minimap": {
+      "layers": {
+        "bg": "Minimap/Minimap_Background.png",
+        "overlay": "Minimap/Minimap_Overlay.png",
+        "example": "Minimap/Minimap_Example.png",
+        "markGreen": "Minimap/Marks/Minimap_Mark_Green.png",
+        "markRed": "Minimap/Marks/Minimap_Mark_Red.png",
+        "markOrange": "Minimap/Marks/Minimap_Mark_Orange.png",
+        "markPurple": "Minimap/Marks/Minimap_Mark_Purple.png",
+        "markSkull": "Minimap/Marks/Minimap_Mark_Skull_Red.png"
+      },
+      "usage": "bg + canvas map + overlay; markers absolute"
+    },
+    "inventory-slot": {
+      "layers": {
+        "bg": "Inventory/Inventory_Slot_Background.png"
+      },
+      "usage": "bg → item icon → optional rarity border"
+    },
+    "currency": {
+      "layers": {
+        "gold": "Inventory/Coins/Coin_Gold.png",
+        "silver": "Inventory/Coins/Coin_Silver.png",
+        "copper": "Inventory/Coins/Coin_Copper.png"
+      }
+    },
+    "action-bar": {
+      "layers": {
+        "mainBg": "Action Bar/ActionBar_Main_Background.png"
+      },
+      "usage": "Full hotbar plate under slots"
+    }
+  },
+  "iconFallbacks": {
+    "dir": "Icons 128x128/",
+    "files": [
+      "Icon_Sword_128.png",
+      "Icon_Shield_128.png",
+      "Icon_Fireball_128.png",
+      "Icon_Leafs_128.png",
+      "Icon_Arrows_128.png",
+      "Icon_Deathkiss_128.png"
+    ],
+    "note": "Prefer ObjectStore / game-assets skill icons; CraftPix 128 only as fallback"
+  }
+}
