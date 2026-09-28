@@ -916,7 +916,7 @@
       const src = tree.source || "local stub";
       document.getElementById("class-tree-title").textContent = tree.name + " skill tree";
       document.getElementById("class-tree-sub").textContent =
-        `ObjectStore master-skillTrees · ${src} · hotbar unlocks in play`;
+        `${src} · same catalog as info.grudge-studio.com`;
       const host = document.getElementById("class-tree-host");
       host.innerHTML = tree.tiers
         .map(
@@ -931,7 +931,7 @@
                 ${skillIconHtml(s, 40)}
                 <div>
                   <div class="sk-n">${esc(s.n)}</div>
-                  <div class="sk-d">${esc(s.d)}</div>
+                  <div class="sk-d">${esc(s.effect || s.d)}</div>
                   ${s.slot != null ? `<div class="sk-slot">Hotbar ${s.slot}</div>` : ""}
                   ${s.passive ? `<div class="sk-slot">Passive</div>` : ""}
                 </div>
@@ -2142,6 +2142,7 @@
         renderClassSkills();
         renderWeaponSkills();
         renderHotbar();
+        renderPaperdoll();
       });
 
       if (window.GrudgeCloud?.bootstrapAuth) await GrudgeCloud.bootstrapAuth();
@@ -2204,6 +2205,7 @@
       }
     })();
   </script>
+<script src="https://nemesis.grudge-studio.com/friends-widget.js" data-app="ui-panel" defer></script>
 </body>
 </html>
 

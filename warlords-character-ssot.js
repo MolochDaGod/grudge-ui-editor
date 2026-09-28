@@ -373,12 +373,63 @@
   };
 
   // Class aliases (Warlords UI)
+  var PRODUCT_CLASSES = {
+    warrior: 1, raider: 1, mage: 1, priest: 1, ranger: 1, thief: 1, worge: 1, verduror: 1, unarmed: 1,
+  };
+  /** Classes whose kit weapon is not in the four original rows. Mesh ids match grudge6-characters.json. */
+  var EXTRA_LOADOUTS = {
+    human: {
+      priest: { animPack: "magic", weaponType: "staff", meshIds: ["WK_Units_head_A", "WK_Units_Body_A", "WK_Units_Arms_A", "WK_Units_Legs_A", "WK_weapon_staff_A"] },
+      raider: { animPack: "2h_melee", weaponType: "axe", meshIds: ["WK_Units_head_D", "WK_Units_Body_C", "WK_Units_Arms_B", "WK_Units_Legs_B", "WK_Units_shoulderpads_B", "WK_weapon_axe_B"] },
+      thief: { animPack: "dual_wield", weaponType: "sword", meshIds: ["WK_Units_head_C", "WK_Units_Body_B", "WK_Units_Arms_A", "WK_Units_Legs_A", "WK_weapon_sword_A"] },
+      worge: { animPack: "2h_melee", weaponType: "spear", meshIds: ["WK_Units_head_E", "WK_Units_Body_C", "WK_Units_Arms_B", "WK_Units_Legs_B", "WK_weapon_spear"] },
+      verduror: { animPack: "magic", weaponType: "staff", meshIds: ["WK_Units_head_B", "WK_Units_Body_A", "WK_Units_Arms_A", "WK_Units_Legs_A", "WK_weapon_staff_B"] },
+    },
+    barbarian: {
+      priest: { animPack: "magic", weaponType: "staff", meshIds: ["BRB_head_A", "BRB_body_A", "BRB_arms_A", "BRB_legs_A", "BRB_weapon_staff_A"] },
+      raider: { animPack: "2h_melee", weaponType: "axe", meshIds: ["BRB_head_B", "BRB_body_C", "BRB_arms_B", "BRB_legs_B", "BRB_shoulderpads_B", "BRB_weapon_axe_C"] },
+      thief: { animPack: "dual_wield", weaponType: "dagger", meshIds: ["BRB_head_C", "BRB_body_B", "BRB_arms_A", "BRB_legs_A", "BRB_weapon_Dagger"] },
+      worge: { animPack: "2h_melee", weaponType: "spear", meshIds: ["BRB_head_B", "BRB_body_C", "BRB_arms_B", "BRB_legs_B", "BRB_weapon_spear"] },
+      verduror: { animPack: "magic", weaponType: "staff", meshIds: ["BRB_head_A", "BRB_body_A", "BRB_arms_A", "BRB_legs_A", "BRB_weapon_staff_B"] },
+    },
+    elf: {
+      priest: { animPack: "magic", weaponType: "staff", meshIds: ["ELF_Units_Head_B", "ELF_Units_Body_A", "ELF_Units_Arms_A", "ELF_Units_Legs_A", "ELF_weapon_staff_A"] },
+      raider: { animPack: "2h_melee", weaponType: "axe", meshIds: ["ELF_Units_Head_D", "ELF_Units_Body_C", "ELF_Units_Arms_B", "ELF_Units_Legs_B", "ELF_Units_Shoulderpads_B", "ELF_weapon_axe"] },
+      thief: { animPack: "dual_wield", weaponType: "dagger", meshIds: ["ELF_Units_Head_C", "ELF_Units_Body_B", "ELF_Units_Arms_A", "ELF_Units_Legs_A", "ELF_weapon_dagger"] },
+      worge: { animPack: "2h_melee", weaponType: "spear", meshIds: ["ELF_Units_Head_E", "ELF_Units_Body_C", "ELF_Units_Arms_B", "ELF_Units_Legs_B", "ELF_weapon_spear"] },
+      verduror: { animPack: "magic", weaponType: "staff", meshIds: ["ELF_Units_Head_A", "ELF_Units_Body_A", "ELF_Units_Arms_A", "ELF_Units_Legs_A", "ELF_weapon_staff_B"] },
+    },
+    dwarf: {
+      priest: { animPack: "magic", weaponType: "staff", meshIds: ["DWF_Units_Head_A", "DWF_Units_Body_A", "DWF_Units_Arms_A", "DWF_Units_Legs_A", "DWF_Weapon_staff_A"] },
+      raider: { animPack: "2h_melee", weaponType: "axe", meshIds: ["DWF_Units_Head_G", "DWF_Units_Body_C", "DWF_Units_Arms_B", "DWF_Units_Legs_B", "DWF_Units_Shoulderpads_B", "DWF_Weapon_axe_C"] },
+      thief: { animPack: "dual_wield", weaponType: "dagger", meshIds: ["DWF_Units_Head_C", "DWF_Units_Body_B", "DWF_Units_Arms_A", "DWF_Units_Legs_A", "DWF_Weapon_dagger"] },
+      worge: { animPack: "2h_melee", weaponType: "spear", meshIds: ["DWF_Units_Head_E", "DWF_Units_Body_C", "DWF_Units_Arms_B", "DWF_Units_Legs_B", "DWF_Weapon_spear"] },
+      verduror: { animPack: "2h_melee", weaponType: "hammer", meshIds: ["DWF_Units_Head_B", "DWF_Units_Body_A", "DWF_Units_Arms_A", "DWF_Units_Legs_A", "DWF_Weapon_hammer_A"] },
+    },
+    orc: {
+      priest: { animPack: "magic", weaponType: "staff", meshIds: ["ORC_Units_Head_A", "ORC_Units_Body_A", "ORC_Units_Arms_A", "ORC_Units_Legs_A", "ORC_weapon_staff_A"] },
+      raider: { animPack: "2h_melee", weaponType: "axe", meshIds: ["ORC_Units_Head_E", "ORC_Units_Body_C", "ORC_Units_Arms_B", "ORC_Units_Legs_B", "ORC_Units_Shoulderpads_C", "ORC_weapon_Axe_C"] },
+      thief: { animPack: "dual_wield", weaponType: "dagger", meshIds: ["ORC_Units_Head_B", "ORC_Units_Body_B", "ORC_Units_Arms_A", "ORC_Units_Legs_A", "ORC_weapon_Dagger"] },
+      worge: { animPack: "2h_melee", weaponType: "spear", meshIds: ["ORC_Units_Head_E", "ORC_Units_Body_C", "ORC_Units_Arms_B", "ORC_Units_Legs_B", "ORC_weapon_spear"] },
+      verduror: { animPack: "magic", weaponType: "staff", meshIds: ["ORC_Units_Head_A", "ORC_Units_Body_A", "ORC_Units_Arms_A", "ORC_Units_Legs_A", "ORC_weapon_staff_B"] },
+    },
+    undead: {
+      priest: { animPack: "magic", weaponType: "staff", meshIds: ["UD_Units_head_A", "UD_Units_body_A", "UD_Units_arms_A", "UD_Units_legs_A", "UD_weapon_staff_A"] },
+      raider: { animPack: "2h_melee", weaponType: "axe", meshIds: ["UD_Units_head_G", "UD_Units_body_D", "UD_Units_arms_C", "UD_Units_legs_C", "UD_weapon_Axe_B"] },
+      thief: { animPack: "dual_wield", weaponType: "sword", meshIds: ["UD_Units_head_C", "UD_Units_body_B", "UD_Units_arms_A", "UD_Units_legs_A", "UD_weapon_Sword_A"] },
+      worge: { animPack: "2h_melee", weaponType: "spear", meshIds: ["UD_Units_head_E", "UD_Units_body_C", "UD_Units_arms_B", "UD_Units_legs_B", "UD_weapon_Spear"] },
+      verduror: { animPack: "magic", weaponType: "staff", meshIds: ["UD_Units_head_B", "UD_Units_body_A", "UD_Units_arms_A", "UD_Units_legs_A", "UD_weapon_staff_B"] },
+    },
+  };
+
   function normalizeClass(cls) {
     var c = String(cls || "warrior").toLowerCase();
-    if (c === "worg" || c === "worge" || c === "knight" || c === "berserker") return "warrior";
+    if (c === "worg") return "worge";
+    if (c === "knight" || c === "berserker") return "warrior";
     if (c === "archer" || c === "hunter") return "ranger";
     if (c === "wizard" || c === "lich" || c === "shaman") return "mage";
-    if (c === "unarmed" || c === "brawler" || c === "risen") return "unarmed";
+    if (c === "brawler" || c === "risen") return "unarmed";
+    if (PRODUCT_CLASSES[c]) return c;
     if (LOADOUTS.human[c]) return c;
     return "warrior";
   }
@@ -402,7 +453,8 @@
     var raceN = normalizeRace(race);
     var classN = unarmed ? "unarmed" : normalizeClass(classId);
     var byRace = LOADOUTS[raceN] || LOADOUTS.human;
-    var lo = byRace[classN] || byRace.warrior || byRace.unarmed;
+    var extra = (EXTRA_LOADOUTS[raceN] || {})[classN];
+    var lo = byRace[classN] || extra || byRace.warrior || byRace.unarmed;
     return {
       raceId: raceN,
       classId: classN,

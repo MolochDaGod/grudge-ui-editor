@@ -2,15 +2,16 @@
  * fleet-game-systems.js — class + weapon skill trees from ObjectStore SSOT.
  *
  * Replaces hard-coded emoji skill stubs in MainPanelContent with:
- *   GET objectstore…/master-skillTrees.json
- *   GET objectstore…/master-weaponSkills.json
+ *   GET info…/api/v1/master-skillTrees.json  (canonical)
+ *   GET objectstore…/master-skillTrees.json  (same JSON, proxied)
+ *   GET the same hosts for master-weaponSkills.json
  * Icons: assets.grudge-studio.com (via InfoCatalog.resolveIconPath when present).
  */
 (function (global) {
   "use strict";
 
+  var INFO = "https://info.grudge-studio.com/api/v1";
   var OS = "https://objectstore.grudge-studio.com/api/v1";
-  var OS_MIRROR = "https://molochdagod.github.io/ObjectStore/api/v1";
   var CDN = "https://assets.grudge-studio.com";
 
   var _trees = null;
@@ -18,27 +19,13 @@
   var _meta = { skillTrees: null, weaponSkills: null };
   var _loadPromise = null;
 
+  /** Same rule as info main-panel skillIcon: absolute catalog URL, else assets CDN + path. */
   function iconUrl(raw) {
     if (!raw) return null;
-    if (global.InfoCatalog && global.InfoCatalog.resolveIconPath) {
-      return global.InfoCatalog.resolveIconPath(raw);
-    }
     var u = String(raw).trim();
-    if (/^https?:\/\//i.test(u)) {
-      return u
-        .replace(/https?:\/\/info\.grudge-studio\.com\/icons\//gi, CDN + "/icons/")
-        .replace(/https?:\/\/molochdagod\.github\.io\/ObjectStore/gi, CDN)
-        .replace(
-          /^(https?:\/\/assets\.grudge-studio\.com)\/icons\/(skill_nobg|496_rpg)\//i,
-          "$1/game-assets/icons/$2/",
-        );
-    }
-    var path = u.replace(/^\/+/, "");
-    if (path.indexOf("icons/") !== 0) path = "icons/" + path;
-    if (/^icons\/(skill_nobg|496_rpg|pack)\//i.test(path)) {
-      return CDN + "/game-assets/" + path;
-    }
-    return CDN + "/" + path;
+    if (!u) return null;
+    if (/^https?:\/\//i.test(u)) return u;
+    return CDN + (u.charAt(0) === "/" ? u : "/" + u);
   }
 
   function fetchJson(urls) {
@@ -46,7 +33,7 @@
     function next() {
       if (i >= urls.length) return Promise.reject(new Error("fetch failed"));
       var url = urls[i++];
-      return fetch(url, { mode: "cors", credentials: "omit", cache: "force-cache" })
+      return fetch(url, { mode: "cors", credentials: "omit", cache: "no-cache" })
         .then(function (r) {
           if (!r.ok) return next();
           var ct = (r.headers.get("content-type") || "").toLowerCase();
@@ -109,7 +96,7 @@
       color: color,
       uuid: raw.uuid,
       tiers: tiers,
-      source: "objectstore.master-skillTrees",
+      source: "https://info.grudge-studio.com/api/v1/master-skillTrees.json",
     };
   }
 
@@ -193,8 +180,8 @@
     }
     if (_loadPromise) return _loadPromise;
     _loadPromise = Promise.all([
-      fetchJson([OS + "/master-skillTrees.json", OS_MIRROR + "/master-skillTrees.json"]),
-      fetchJson([OS + "/master-weaponSkills.json", OS_MIRROR + "/master-weaponSkills.json"]),
+      fetchJson([OS + "/master-skillTrees.json", INFO + "/master-skillTrees.json"]),
+      fetchJson([OS + "/master-weaponSkills.json", INFO + "/master-weaponSkills.json"]),
     ])
       .then(function (pair) {
         var st = pair[0];

@@ -266,7 +266,8 @@
     return e === "nexus" || !!(opts && opts.nexus);
   }
   const RACES_UI = ["human", "barbarian", "elf", "dwarf", "orc", "undead"];
-  const CLASSES_UI = ["warrior", "ranger", "mage", "worge"];
+  /** Same eight classes as info.grudge-studio.com classes.json / master-skillTrees.json. */
+  const CLASS_ORDER = ["warrior", "raider", "mage", "priest", "ranger", "thief", "worge", "verduror"];
   const KIND_ICON = {
     sword: I496 + "/W_Sword001.png",
     axe: I496 + "/W_Axe001.png",
@@ -486,7 +487,34 @@
       .map(([k]) => map[k] || k);
   }
 
-  function classSkills(cls) {
+  function classIdsFromCatalog() {
+    const keys = Object.keys(CLASSES_CACHE?.classes || {});
+    if (!keys.length) return CLASS_ORDER.slice();
+    const ordered = CLASS_ORDER.filter((id) => keys.indexOf(id) >= 0);
+    keys.forEach((id) => {
+      if (ordered.indexOf(id) < 0) ordered.push(id);
+    });
+    return ordered;
+  }
+
+  function classSkills(cls, classId) {
+    const trees = global.FleetGameSystems?.trees;
+    const tree = trees && trees[String(classId || "").toLowerCase()];
+    if (tree?.tiers) {
+      const fromTree = [];
+      tree.tiers.forEach((tier) => {
+        (tier.skills || []).forEach((s) => {
+          if (s.passive || fromTree.length >= 4) return;
+          fromTree.push({
+            id: s.id,
+            name: s.n || s.name,
+            description: s.effect || s.d || s.description,
+            iconUrl: s.iconUrl,
+          });
+        });
+      });
+      if (fromTree.length) return fromTree;
+    }
     const list = [];
     (cls?.abilities || []).slice(0, 4).forEach((a) => list.push(a));
     if (cls?.signatureAbility) list.push(cls.signatureAbility);
@@ -723,12 +751,12 @@
     }
     const classId = String(opts.classId || "warrior").toLowerCase();
     const cls = CLASSES_CACHE?.classes?.[classId] || CLASSES_CACHE?.classes?.warrior || {};
-    const sel = CLASSES_UI.map((c) => {
+    const sel = classIdsFromCatalog().map((c) => {
       const n = CLASSES_CACHE?.classes?.[c]?.name || c;
       return `<option value="${c}"${c === classId ? " selected" : ""}>${esc(n)}</option>`;
     }).join("");
     const passives = classPassives(cls);
-    const skills = classSkills(cls);
+    const skills = classSkills(cls, classId);
     const color = cls.color || "#22c55e";
     const skillsHtml = skills
       .map((sk) => {
